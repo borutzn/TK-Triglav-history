@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if players %}
+        <table>
+        {% for player in players %}
+            {% if (loop.index % 6 == 1) %}
+                <tr>
+            {% endif %}
+            <td><a href="/player?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
+            {% if (loop.index % 6 == 0) %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tr></table>
+    {% endif %}
+    
+
+{% endblock %}		

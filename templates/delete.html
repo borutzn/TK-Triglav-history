@@ -1,0 +1,27 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="/delete" method="post">
+        <table id="player-table">
+		<tr><th>Datum:</th> <td>{{ date }}</td></tr>
+		<tr><th>Dogodek:</th> <td>{{ event.event }}</td></tr>
+		<tr><th>Kraj:</th> <td>{{ event.place }}</td></tr>
+		<tr><th>Kategorija:</th> <td>{{ event.category }}</td></tr>
+		<tr><th>Rezultat:</th> <td>{{ event.result }}</td></tr>
+		<tr><th>Igralec:</th> <td>{{ event.player }}</td></tr>
+                <tr><th>Komentar:</th> <td>{{ event.comment }}</td></tr>
+		<tr><th>Dokument 1:</th> <td>{{ event.att1 }}</td></tr>
+		<tr><th>Dokument 2:</th> <td>{{ event.att2 }}</td></tr>
+		<tr><th>Dokument 3:</th> <td>{{ event.att3 }}</td></tr>
+		<tr><th>Dokument 4:</th> <td>{{ event.att4 }}</td></tr>
+		<tr><th>Vir:</th> <td>{{ event.source }}</td></tr>
+	</table> <br>
+	<input type="hidden" name="Id" value="{{ event.id }}">
+	<input type="Submit" name="Status" id="button" value="Izbriši">
+	<input type="Submit" name="Status" id="button" value="Prekliči">
+</form>
+
+{% endblock %}	

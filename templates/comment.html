@@ -1,0 +1,35 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="/comment" method="post">
+        <table id="player-table">
+		<tr><td>Datum:</td> <td>{{ event.date }}</td></tr>
+		<tr><td>Dogodek:</td> <td>{{ event.event }}</td></tr>
+		<tr><td>Kraj:</td> <td>{{ event.place }}</td></tr>
+		<tr><td>Kategorija:</td> <td>{{ event.category }}</td></tr>
+		<tr><td>Rezultat:</td> <td>{{ event.result }}</td></tr>
+		<tr><td>Igralec:</td> <td>{{ event.player }}</td></tr>
+		{% if current_user.is_authenticated() %}
+                    <tr><td>Komentar:</td> <td><textarea rows="4" cols="60" name="comment">{{ event.comment }}</textarea></td></tr>
+                    <input type="hidden" name="addcomment" value="">
+                {% else %}
+                    <tr><td>Komentar:</td> <td>{{ event.comment }}</td></tr>
+                    <input type="hidden" name="comment" value="{{ event.comment }}">
+                    <tr><td></td> <td><textarea rows="4" cols="60" name="addcomment"></textarea></td></tr>
+                {% endif %}
+		<tr><td>Dokument 1:</td> <td>{{ event.att1 }}</td></tr>
+		<tr><td>Dokument 2:</td> <td>{{ event.att2 }}</td></tr>
+		<tr><td>Dokument 3:</td> <td>{{ event.att3 }}</td></tr>
+		<tr><td>Dokument 4:</td> <td>{{ event.att4 }}</td></tr>
+		<tr><td>Vir:</td> <td>{{ event.source }}</td></tr>
+	</table> <br>
+	<input type="hidden" name="Id" value="{{ event.id }}">
+	<input type="Submit" name="Status" id="button" value="Shrani>
+	<input type="Submit" name="Status" id="button" value="Prekliči">
+	<button type="Reset"               id="button" value="Reset">Obnovi</button>
+</form>
+
+{% endblock %}	

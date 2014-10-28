@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+    <h1>Login</h1><br>
+    <table>
+        <tr>
+            <td style="text-align:right;">Username</td>
+            <td><input type="text" name="username" value="{{username}}"></td>
+        </tr><tr>
+            <td style="text-align:right;">Password</td>
+            <td><input type="password" name="password"></td><br>
+            <td style="color:red;">{{loginMsg}}</td>
+        </tr>
+    </table>
+    <input type="hidden" value="0" name="remember" >
+    <input type="checkbox" value="1" name="remember">Zapomni si prijavo<br>
+    <br>
+    <input type="submit">
+</form>
+
+{% endblock %}

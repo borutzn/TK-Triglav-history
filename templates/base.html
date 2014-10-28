@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="/static/main.css" />
+        <link rel="shortcut icon" href="{{ url_for('static', filename='tenis1.ico') }}">
+
+	<title>rezultati TK Triglav od l. 1954 do l. 1984 </title>
+</head>
+	
+<body>
+    <div style="position:relative; text-align:right; height:50px;">
+	{% if l1label %}
+		<a href="{{l1page}}">{{l1label}}</a>
+	{% endif %}
+	{% if l1label and l2label %}
+		| 
+	{% endif %}
+	{% if l2label %}
+		<a href="{{l2page}}" >{{l2label}}</a> 
+	{% endif %}
+	&nbsp;&nbsp;&nbsp; 
+	{% if current_user.is_authenticated() %}
+		{{current_user.username}} |
+		<a href="/logout"><img src="static/1414455023_editor_unlock_lock-24.png" title="Odjava uporabnika"></a>
+	{% else %}
+		<a href="/login"><img src="static/1414454957_editor_lock-24.png" title="Prijava uporabnika"></a> | 
+		<a href="/signup" ><img src="static/1414455652_common_new_edit_compose-24.png" title="Registracija uporabnika"></a> 
+	{% endif %}
+    </div>
+
+    <div style="position:relative;">	
+    {% block content %}
+    {% endblock %}
+    </div>
+    
+    <div style="clear:both;">
+        <br>Podatke zbral in obdelal Davor Žnidar, 2013-14.
+    </div>
+
+</body)
+
+</html>
