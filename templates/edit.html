@@ -6,18 +6,18 @@
 
 <form action="/edit" method="post">
         <table id="player-table">
-		<tr><td>Datum:</td> <td><input style="width:3cm" type="date" name="date" value="{{ date }}"></td></tr>
-		<tr><td>Dogodek:</td> <td><input style="width:10cm" type="text" name="event" value="{{ event.event }}"></td></tr>
-		<tr><td>Kraj:</td> <td><input type="text" name="place" value="{{ event.place }}"></td></tr>
-		<tr><td>Kategorija:</td> <td><input style="width:3cm" type="text" name="category" value="{{ event.category }}"></td></tr>
-		<tr><td>Rezultat:</td> <td><input style="width:3cm" type="text" name="result" value="{{ event.result }}"></td></tr>
-		<tr><td>Igralec:</td> <td><input type="text" name="player" value="{{ event.player }}"></td></tr>
-		<tr><td>Komentar:</td> <td><textarea rows="4" cols="60" name="comment">{{ event.comment }}</textarea></td></tr>
-		<tr><td>Dokument 1:</td> <td><input style="width:10cm" type="text" name="att1" value="{{ event.att1 }}"></td></tr>
-		<tr><td>Dokument 2:</td> <td><input style="width:10cm" type="text" name="att2" value="{{ event.att2 }}"></td></tr>
-		<tr><td>Dokument 3:</td> <td><input style="width:10cm" type="text" name="att3" value="{{ event.att3 }}"></td></tr>
-		<tr><td>Dokument 4:</td> <td><input style="width:10cm" type="text" name="att4" value="{{ event.att4 }}"></td></tr>
-		<tr><td>Vir:</td> <td><input type="text" name="source" value="{{ event.source }}"></td></tr>
+		<tr><th>Datum:</th> <td><input style="width:3cm" type="date" name="date" value="{{ date }}"></td></tr>
+		<tr><th>Dogodek:</th> <td><input style="width:10cm" type="text" name="event" value="{{ event.event }}"></td></tr>
+		<tr><th>Kraj:</td> <th><input type="text" name="place" value="{{ event.place }}"></td></tr>
+		<tr><th>Kategorija:</th> <td><input style="width:3cm" type="text" name="category" value="{{ event.category }}"></td></tr>
+		<tr><th>Rezultat:</th> <td><input style="width:3cm" type="text" name="result" value="{{ event.result }}"></td></tr>
+		<tr><th>Igralec:</th> <td><input type="text" name="player" value="{{ event.player }}"></td></tr>
+		<tr><th>Komentar:</th> <td><textarea rows="4" cols="60" name="comment">{{ event.comment }}</textarea></td></tr>
+		<tr><th>Dokument 1:</th> <td><input style="width:10cm" type="text" name="att1" value="{{ event.att1 }}"></td></tr>
+		<tr><th>Dokument 2:</th> <td><input style="width:10cm" type="text" name="att2" value="{{ event.att2 }}"></td></tr>
+		<tr><th>Dokument 3:</th> <td><input style="width:10cm" type="text" name="att3" value="{{ event.att3 }}"></td></tr>
+		<tr><th>Dokument 4:</th> <td><input style="width:10cm" type="text" name="att4" value="{{ event.att4 }}"></td></tr>
+		<tr><th>Vir:</th> <td><input type="text" name="source" value="{{ event.source }}"></td></tr>
 	</table> <br>
 	<input type="hidden" name="Id" value="{{ event.id }}">
 	<input type="Submit" name="Status" id="button" value="Shrani">

@@ -10,33 +10,29 @@
 </head>
 	
 <body>
-    <div style="position:relative; text-align:right; height:50px;">
-	{% if l1label %}
-		<a href="{{l1page}}">{{l1label}}</a>
-	{% endif %}
-	{% if l1label and l2label %}
-		| 
-	{% endif %}
-	{% if l2label %}
-		<a href="{{l2page}}" >{{l2label}}</a> 
-	{% endif %}
-	&nbsp;&nbsp;&nbsp; 
-	{% if current_user.is_authenticated() %}
+    <div style="position:relative; float:left; width:90%; height:140px; margin:0px; overflow:hidden;">
+        <img src="static/TH.jpg" style="width:1224px; height:130px;">
+    </div>
+    <div style="position:relative; float:left; width:10%; righttext-align:center;">
+        <div style="display:block; margin-left:20px; margin-top:40px;">
+            {% if current_user.is_authenticated() %}
 		{{current_user.username}} |
 		<a href="/logout"><img src="static/1414455023_editor_unlock_lock-24.png" title="Odjava uporabnika"></a>
-	{% else %}
+            {% else %}
 		<a href="/login"><img src="static/1414454957_editor_lock-24.png" title="Prijava uporabnika"></a> | 
 		<a href="/signup" ><img src="static/1414455652_common_new_edit_compose-24.png" title="Registracija uporabnika"></a> 
-	{% endif %}
-    </div>
+            {% endif %}
+	</div>
+    </div><br>
 
-    <div style="position:relative;">	
+    <div style="clear:both; position:relative;">	
     {% block content %}
     {% endblock %}
     </div>
-    
-    <div style="clear:both;">
-        <br>Podatke zbral in obdelal Davor Žnidar, 2013-14.
+
+    <p>
+    <div class="copyright" style="clear:both; height:20px">
+        Podatke zbral in obdelal Davor Žnidar, 2013-14.
     </div>
 
 </body)

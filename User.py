@@ -15,7 +15,10 @@ DELETE FROM Users;
 '''
 class User(object):
 
-    def __init__( self, username, utyp=None, password=None, pw_hash=None, email=None, ident=None, born=None, description=None):
+    '''
+        utype - user type: 0-reader, 1-editor, 2-admin
+    '''
+    def __init__( self, username, utype=0, password=None, pw_hash=None, email=None, ident=None):
         self.ident = ident
         self.username = username
         self.utype=utype
@@ -26,8 +29,6 @@ class User(object):
         else:
             self.pw_hash = None
         self.email = email
-        self.born = born
-        self.description = description
 
     def check_password( self, password ):
         return check_password_hash( self.pw_hash, password )

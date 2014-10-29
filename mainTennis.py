@@ -61,7 +61,7 @@ def EditComment():
             return redirect(url_for("TennisMain"))
 
 	event = TennisEvent.get( id )
-	return render_template("comment.html", event=event )
+	return render_template("comment.html", event=event, date=TennisEvent.date2user(event['date']) )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -114,7 +114,7 @@ def Edit( update ):
                          result=request.form["result"], player=request.form["player"],
                          att1=request.form["att1"], att2=request.form["att2"],
                          att3=request.form["att3"], att4=request.form["att4"], 
-                         comment=request.form["comment"])
+                         comment=request.form["comment"], source=request.form["vir"])
             logging.error( "Update: "+str(update) )
             if update:
                 e.update( request.form["Id"] )
