@@ -9,7 +9,6 @@ program by Borut Žnidar
 
 Production = False
 
-
 import os
 import logging
 import re
@@ -127,16 +126,38 @@ def Edit( update ):
 def Delete():
     if request.method == 'GET':
         try:
-                id = int(request.args.get('id'))
+            id = int(request.args.get('id'))
         except ValueError:
             return redirect(url_for("TennisMain"))
 
 	event = TennisEvent.get( id )
 	return render_template("delete.html", event=event, date=TennisEvent.date2user(event['date']) )
-
+        # CORRECT date=...
+        
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             TennisEvent.delete( request.form["Id"] )
+        return redirect(url_for("TennisMain"))
+
+
+@app.route("/correct", methods=['GET', 'POST'])
+@login_required
+def Correct():
+    if request.method == 'GET':
+        try:
+            fdir = request.args.get('d')
+            fname = request.args.get('f')
+        except ValueError:
+            return redirect(url_for("TennisMain"))
+
+        fnames = []
+        for f in os.listdir(fdir):
+            logging.error( f )
+            fnames.append( { 'fname':unicode(f), 'fit':0 } )
+
+	return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames )
+
+    elif request.method == 'POST':
         return redirect(url_for("TennisMain"))
 
 
@@ -154,9 +175,14 @@ def TennisMain():
 	events = TennisEvent.getEventsPage(pos, PAGELEN)
 	eventsLen = TennisEvent.count()
 	for e in events: # check appendixes
-            if e['att1'] != "" and not os.path.exists(e['att1']):
-                logging.error( "Error: "+e['att1'] )
-                e['att1'] = "err_"+e['att1']
+            if e['Att1'] != "" and not os.path.exists(e['Att1']):
+                e['Att1'] = "err_"+e['Att1']
+            if e['Att2'] != "" and not os.path.exists(e['Att2']):
+                e['Att2'] = "err_"+e['Att2']
+            if e['Att3'] != "" and not os.path.exists(e['Att3']):
+                e['Att3'] = "err_"+e['Att3']
+            if e['Att4'] != "" and not os.path.exists(e['Att4']):
+                e['Att4'] = "err_"+e['Att4']
 	return render_template("main.html", events=events, production=Production,
                 players=TennisEvent.players[:20],
                 prevPage=pos-PAGELEN if pos>PAGELEN else 0,

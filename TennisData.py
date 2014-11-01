@@ -133,40 +133,42 @@ class TennisEvent:
 
         @classmethod
         def fetchData(cls):
-                if cls.EventsCache == None:
-                        conn = sqlite3.connect(DbName)
-                        with conn:
-                                conn.row_factory = sqlite3.Row
-                                curs = conn.cursor()
-                                curs.execute( "SELECT * FROM TennisEvents ORDER by date" )
-                                cls.EventsCache = curs.fetchall()
-                                conn.commit()
+            if cls.EventsCache != None:
+                return
+            
+            conn = sqlite3.connect(DbName)
+            with conn:
+                conn.row_factory = sqlite3.Row
+                curs = conn.cursor()
+                curs.execute( "SELECT * FROM TennisEvents ORDER by date" )
+                cls.EventsCache = [ dict(row) for row in curs ]
+                conn.commit()
 
-                        for idx, val in enumerate(cls.EventsCache):
-                                ''' correct date - remove leading 0 '''
-                                '''nval = cls.cleanDate( val['Date'] )
-                                logging.error( "%s -> %s" % (val['Date'], nval) )
-                                val['Date'] = nval
-                                cls.EventsCache[idx] = val
-                                logging.error( str(cls.EventsCache[idx]) )'''
-                                ''' create index dictionary '''
-                                cls.EventsIndex[val['Id']] = idx
+            for idx, val in enumerate(cls.EventsCache):
+                cls.EventsIndex[val['Id']] = idx
+                ''' correct date - remove leading 0 '''
+                '''nval = cls.cleanDate( val['Date'] )
+                    logging.error( "%s -> %s" % (val['Date'], nval) )
+                    val['Date'] = nval
+                    cls.EventsCache[idx] = val
+                    logging.error( str(cls.EventsCache[idx]) )'''
+                ''' create index dictionary -- ZAKAJ GA UPORABLJAM?? '''
 
-                        p = dict()
-                        for i in cls.EventsCache:
-                                pName = i['Player']
-                                pResult = cls.resultValue(i['Result'])
-                                if pName in p:
-                                        p[pName][0] += 1
-                                        p[pName][1] += pResult
-                                else:
-                                        p[pName] = list( (1, pResult) )
-                        cls.players = list()
-                        for k, v in p.iteritems():
-                                cls.players.append( (k, v[0], v[1]) )
-                        cls.players.sort(key=lambda player: player[2], reverse=True)
+            p = dict()
+            for i in cls.EventsCache:
+                pName = i['Player']
+                pResult = cls.resultValue(i['Result'])
+                if pName in p:
+                    p[pName][0] += 1
+                    p[pName][1] += pResult
+                else:
+                    p[pName] = list( (1, pResult) )
+            cls.players = list()
+            for k, v in p.iteritems():
+                cls.players.append( (k, v[0], v[1]) )
+            cls.players.sort(key=lambda player: player[2], reverse=True)
 
-                        logging.warning( "Cache reloaded (%d entries)" % len(cls.EventsCache) )
+            logging.warning( "Cache reloaded (%d entries)" % len(cls.EventsCache) )
 
         @classmethod
         def clearData(cls):
