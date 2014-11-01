@@ -153,11 +153,15 @@ def TennisMain():
 
 	events = TennisEvent.getEventsPage(pos, PAGELEN)
 	eventsLen = TennisEvent.count()
+	for e in events: # check appendixes
+            if e['att1'] != "" and not os.path.exists(e['att1']):
+                logging.error( "Error: "+e['att1'] )
+                e['att1'] = "err_"+e['att1']
 	return render_template("main.html", events=events, production=Production,
-                                players=TennisEvent.players[:20],
-                                prevPage=pos-PAGELEN if pos>PAGELEN else 0,
-                                nextPage=pos+PAGELEN if pos<eventsLen-PAGELEN else eventsLen-PAGELEN,
-                                start=pos, count=eventsLen )
+                players=TennisEvent.players[:20],
+                prevPage=pos-PAGELEN if pos>PAGELEN else 0,
+                nextPage=pos+PAGELEN if pos<eventsLen-PAGELEN else eventsLen-PAGELEN,
+                start=pos, count=eventsLen )
 
         
 

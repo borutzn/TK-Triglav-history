@@ -26,11 +26,10 @@
                 {% endif %}
                 <br><a href="/?p={{pos}}" class="year">{{ event.date[:4] }}</a>
                 {% set year = event.date[:4] %}
-                <table id="main-table">
+                <table class="main-table" style="width:95%">
                   <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th></th><th></th></tr>
             {% endif %}
-            <tr>
-            <td style="width:10em;">
+            <tr><td>
             {% if event.date[4:] == "/00/00" %}
                 {{ event.date[:4] }}
             {% elif event.date[7:] == "/00" %}
@@ -39,11 +38,11 @@
                 {{ event.date[8:] }}.{{ event.date[5:7] }}.{{ event.date[:4] }}
             {% endif %}
             </td>
-            <td style="width:30em;"> {{ event.event }} </td>
-            <td style="width:15em;"> {{ event.place }} </td>
-            <td style="width:10em;"> {{ event.category }} </td>
-            <td style="width:3em;"> {{ event.result }} </td>
-            <td style="width:7em;">
+            <td> {{ event.event }} </td>
+            <td> {{ event.place }} </td>
+            <td> {{ event.category }} </td>
+            <td> {{ event.result }} </td>
+            <td>
                 {% if event.att1 != "" %}
                     <a href="static/files/{{year}}/{{event.att1}}" target="_blank"><img src="static/1.png"></a>
                 {% endif %}
@@ -57,7 +56,7 @@
                     <a href="static/files/{{year}}/{{event.att4}}" target="_blank"><img src="static/4.png"></a>
                 {% endif %}
             </td>
-            <td style="width:5em; text-align:right;"
+            <td style="text-align:right;"
                     {% if event.comment != "" %}
                         rowspan="2"
                     {% endif %}>
@@ -71,9 +70,8 @@
                     {% endif %}
             </td></tr>
                 {% if event.comment != "" %}
-                    <tr><td colspan="7" id="main-table-comment">{{ event.comment }}<td></tr>
+                    <tr><td class="main-table-comment" colspan="6">{{ event.comment }}<td></tr>
                 {% endif %}
-            <tr><td colspan="7" id="main-table-cell-line"><td></tr>
         {% endfor %}
         </table>
     {% endif %}

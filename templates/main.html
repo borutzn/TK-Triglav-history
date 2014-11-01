@@ -30,11 +30,11 @@
                     {% endif %}
                     <br><a href="/?p={{pos}}" class="year">{{ event.date[:4] }}</a>
                     {% set year = event.date[:4] %}
-                    <table class="main-table">
+                    <table class="main-table" style="width:95%">
                       <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th>igralec</th><th></th><th></th></tr>
                 {% endif %}
                 <tr>
-                <td style="width:10em;">
+                <td style="">
                 {% if event.date[4:] == "/00/00" %}
                     {{ event.date[:4] }}
                 {% elif event.date[7:] == "/00" %}
@@ -43,12 +43,12 @@
                     {{ event.date[8:] }}.{{ event.date[5:7] }}.{{ event.date[:4] }}
                 {% endif %}
                 </td>
-                <td style="width:30em;"> {{ event.event }} </td>
-                <td style="width:15em;"> {{ event.place }} </td>
-                <td style="width:10em;"> {{ event.category }} </td>
-                <td style="width:3em;"> {{ event.result }} </td>
-                <td style="width:15em;"> {{ event.player }} </td>
-                <td style="width:7em;">
+                <td style=""> {{ event.event }} </td>
+                <td style=""> {{ event.place }} </td>
+                <td style=""> {{ event.category }} </td>
+                <td style=""> {{ event.result }} </td>
+                <td style=""> {{ event.player }} </td>
+                <td style="">
                 {% if event.att1 != "" %}
                     <a href="static/files/{{year}}/{{event.att1}}" target="_blank"><img src="static/1.png"></a>
                 {% endif %}
@@ -62,7 +62,7 @@
                     <a href="static/files/{{year}}/{{event.att4}}" target="_blank"><img src="static/4.png"></a>
                 {% endif %}
                 </td>
-                <td style="width:5em; text-align:right;"
+                <td style="text-align:right;"
                     {% if event.comment != "" %}
                         rowspan="2"
                     {% endif %}>
