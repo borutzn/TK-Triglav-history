@@ -2,6 +2,7 @@ import datetime
 import logging
 import string
 import re
+import os
 
 import sqlite3
 
@@ -44,8 +45,30 @@ class TennisEvent:
                 return 0
         
         @classmethod
+        def getFname( cls, year, att ):
+            return "static/files/" + year + "/" + year + "_" + att
+        
+        @classmethod
+        def correctAtt( cls, year, att ):
+            if att == "":
+                return ""
+            
+            s = list(att)
+            for i, c in enumerate(s):
+                if ord(c) >= 128:
+                    s[i] = "_"
+            att = "".join(s)
+            fname = "static/files/" + year + "/" + year + "_" + att
+            #logging.error( "correct: " + str(fname) +" - "+ str(os.path.exists(fname)) )
+            if os.path.exists(fname):
+                return att
+            else:
+                return "err_"+att
+
+                
+        @classmethod
         def date2user( cls, date ):
-                logging.error( "date2user from : "+str(type(date))+", "+str(date) )
+                #logging.error( "date2user from : "+str(type(date))+", "+str(date) )
                 match=re.search(r"(\d{4})/(\d{0,2})/?(\d{0,2})",date)
                 if match:
                         (d,m,y) = (int(match.group(3)), int(match.group(2)), int(match.group(1)))
@@ -59,7 +82,6 @@ class TennisEvent:
         
         @classmethod
         def date2Db( cls, d ):
-                #logging.error( "date2Db from: "+str(type(d))+", "+str(d) )
                 match=re.search(r"(\d{1,2})\.(\d{1,2})\.(\d{4})",d)
                 if match:
                         d = "%04d/%02d/%02d" % (int(match.group(3)),int(match.group(2)),int(match.group(1)))
@@ -103,7 +125,6 @@ class TennisEvent:
                               { 'Id':Id, 'Date':TennisEvent.date2Db(self.date), 'Event':self.event, 'Place':self.place,
                                 'Result':self.result, 'Player':self.player, 'Comment':self.comment,
                                 'Att1':self.att1, 'Att2':self.att2, 'Att3':self.att3, 'Att4':self.att4 } )
-                logging.error("update"+self.comment)
                 conn.commit()                
                 self.clearData()
                 
@@ -112,10 +133,20 @@ class TennisEvent:
                 conn = sqlite3.connect(DbName)
                 curs = conn.cursor()
 
-                logging.error("update")
                 curs.execute( """UPDATE TennisEvents SET Comment=:Comment, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                               { 'Comment':self.comment, 'Id':Id } )
-                logging.error("update"+self.comment)
+                conn.commit()                
+                self.clearData()
+                
+
+        @classmethod
+        def updateAtt(self, Id, Att, fname):
+                conn = sqlite3.connect(DbName)
+                curs = conn.cursor()
+
+                logging.error("update"+str(Att))
+                curs.execute( """UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                              { 'fname':fname, 'Id':Id, 'Att':Att } )
                 conn.commit()                
                 self.clearData()
                 
@@ -126,7 +157,7 @@ class TennisEvent:
                 curs = conn.cursor()
 
                 curs.execute( """DELETE FROM TennisEvents WHERE Id=:Id""", { 'Id':Id } )
-                logging.error("DELETE Id="+str(Id))
+                #logging.error("DELETE Id="+str(Id))
                 conn.commit()                
                 self.clearData()
                 
@@ -145,14 +176,12 @@ class TennisEvent:
                 conn.commit()
 
             for idx, val in enumerate(cls.EventsCache):
+                cls.EventsCache[idx]['LocalDate'] = cls.date2user( cls.EventsCache[idx]['Date'] )
+                cls.EventsCache[idx]['Att1'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'] )
+                cls.EventsCache[idx]['Att2'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'] )
+                cls.EventsCache[idx]['Att3'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'] )
+                cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
                 cls.EventsIndex[val['Id']] = idx
-                ''' correct date - remove leading 0 '''
-                '''nval = cls.cleanDate( val['Date'] )
-                    logging.error( "%s -> %s" % (val['Date'], nval) )
-                    val['Date'] = nval
-                    cls.EventsCache[idx] = val
-                    logging.error( str(cls.EventsCache[idx]) )'''
-                ''' create index dictionary -- ZAKAJ GA UPORABLJAM?? '''
 
             p = dict()
             for i in cls.EventsCache:

@@ -14,6 +14,7 @@ import logging
 import re
 import hmac
 import datetime
+import difflib
 
 import jinja2
 
@@ -64,12 +65,10 @@ def EditComment():
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            logging.error("POST")
             comment = request.form["comment"]
             if request.form["addcomment"] != "":
                 comment += "; " + request.form["addcomment"]
             e = TennisEvent( comment=comment )
-            logging.error("before update")
             e.updateComment( request.form["Id"] )
         return redirect(url_for("TennisMain"))
 
@@ -104,7 +103,7 @@ def Edit( update ):
             return redirect(url_for("TennisMain"))
 
 	event = TennisEvent.get( id )
-	return render_template("edit.html", event=event, date=TennisEvent.date2user(event['date']) )
+	return render_template("edit.html", event=event )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -114,7 +113,6 @@ def Edit( update ):
                          att1=request.form["att1"], att2=request.form["att2"],
                          att3=request.form["att3"], att4=request.form["att4"], 
                          comment=request.form["comment"], source=request.form["vir"])
-            logging.error( "Update: "+str(update) )
             if update:
                 e.update( request.form["Id"] )
             else:
@@ -145,19 +143,35 @@ def Delete():
 def Correct():
     if request.method == 'GET':
         try:
+            id = int(request.args.get('id'))
+            att = int(request.args.get('att'))
             fdir = request.args.get('d')
             fname = request.args.get('f')
         except ValueError:
             return redirect(url_for("TennisMain"))
 
         fnames = []
-        for f in os.listdir(fdir):
-            logging.error( f )
-            fnames.append( { 'fname':unicode(f), 'fit':0 } )
-
-	return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames )
+        try:
+            for f in os.listdir("static/files/"+fdir):
+                s = list(f)
+                for i, c in enumerate(s):
+                    if ord(c) >= 128:
+                        s[i] = "_"
+                f = "".join(s)
+                fnames.append( { 'fname':f, 'fit':("%d%%" % (100.0*difflib.SequenceMatcher(None,fname,f).ratio())) } )
+        except ValueError:
+            # No files in directory - nothing to select from
+            return redirect(url_for("TennisMain"))
+            
+        fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
+        if len(fnames) > 15:
+            fnames= fnames[:15]
+	return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, id=id, att=att )
 
     elif request.method == 'POST':
+        logging.error( "UPDATE ATT" )
+        TennisEvent.updateAtt( request.form["id"],request.form["att"], request.form["fname"] )
+        logging.error( "UPDATE ATT DONE" )
         return redirect(url_for("TennisMain"))
 
 
@@ -167,22 +181,16 @@ PAGELEN = 15
 @app.route("/")
 def TennisMain():
         try:
-		p = request.args.get('p')
-                pos = int(p) if p else 0
+	    p = request.args.get('p')
+            pos = int(p) if p else 0
 	except ValueError:
-		pos = 0
+	    pos = 0
 
 	events = TennisEvent.getEventsPage(pos, PAGELEN)
 	eventsLen = TennisEvent.count()
-	for e in events: # check appendixes
-            if e['Att1'] != "" and not os.path.exists(e['Att1']):
-                e['Att1'] = "err_"+e['Att1']
-            if e['Att2'] != "" and not os.path.exists(e['Att2']):
-                e['Att2'] = "err_"+e['Att2']
-            if e['Att3'] != "" and not os.path.exists(e['Att3']):
-                e['Att3'] = "err_"+e['Att3']
-            if e['Att4'] != "" and not os.path.exists(e['Att4']):
-                e['Att4'] = "err_"+e['Att4']
+	for e in events:
+            if e['Att1'] == None:
+                logging.error( "err: "+e['Event']+", "+str(e['Att1']) )
 	return render_template("main.html", events=events, production=Production,
                 players=TennisEvent.players[:20],
                 prevPage=pos-PAGELEN if pos>PAGELEN else 0,
