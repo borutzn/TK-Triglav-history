@@ -4,7 +4,7 @@
 Show Tenis history data of TK Triglav Kranj
 
 data collected by Davor Žnidar
-program by Borut Žnidar
+program by Borut Žnidar on 7.11.2014
 """
 
 Production = False
