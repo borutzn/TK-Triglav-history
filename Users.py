@@ -1,12 +1,8 @@
 import string
 import random
-import re
 import hashlib
-import hmac
 
-import jinja2
-
-from Utils import valid_username, valid_password, valid_email
+from Utils import valid_username
 
 #global jinja_env
 
@@ -24,19 +20,19 @@ def valid_pw(name, password, h):
 	salt = h.split('|')[0]
 	return h == make_pw_hash(name, password, salt)
 
-def users_key(group = 'default'):
-	return db.Key.from_path('users', group)				
+#def users_key(group = 'default'):
+#	return db.Key.from_path('users', group)				
 
 
 login_user = ""
 
 class Users():
-        '''
+	'''
 	username = db.StringProperty(required = True)
 	password = db.StringProperty(required = True)
 	email = db.StringProperty()
         '''
-        
+
 	@classmethod
 	def by_id(cls, uid):
 		#if Users.get_by_id( int(uid), parent=users_key() ):

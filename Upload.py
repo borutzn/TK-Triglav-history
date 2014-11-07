@@ -1,11 +1,7 @@
-import logging
-import StringIO
 import string
 import re
 import csv
-import datetime
 
-from Utils import Handler
 from Utils import app
 
 from TennisData import TennisEvent
@@ -26,7 +22,7 @@ def convertEntry( row ):
         m = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})\s*", row[1])
         if m:
             entry["date"] = unicode("%02d.%02d.%04d" % (int(m.group(1)),int(m.group(2)),int(m.group(3))))
-	    entry["event"] = unicode(row[1][m.end():], "utf-8")
+        entry["event"] = unicode(row[1][m.end():], "utf-8")
         entry["place"] = unicode(row[2], "utf-8")
         entry["category"] = unicode(row[3], "utf-8")
         entry["result"] = unicode(row[4], "utf-8")

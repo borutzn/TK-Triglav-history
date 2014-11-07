@@ -1,6 +1,5 @@
 import datetime
 import logging
-import string
 import re
 import os
 
@@ -20,7 +19,8 @@ class TennisEvent:
 
         EventsCache = None
         EventsIndex = {}
-
+        players = list()
+        
         def __init__(self, date="", event="", place="", category="", result="",
                      player="", comment="", att1="", att2="", att3="", att4="", source=""):
                 self.date = date
