@@ -13,7 +13,7 @@ DELETE FROM Users;
 class User(object):
 
     '''
-        utype - user type: 0-reader, 1-editor, 2-admin
+        utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 5-admin (+delete)
     '''
     def __init__( self, username, utype=0, password=None, pw_hash=None, email=None, ident=None):
         self.ident = ident
@@ -73,8 +73,8 @@ class User(object):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        curs.execute( """INSERT INTO Users (username,pw_hash,email)
-                        VALUES (:username, :pw_hash, :email)""",
-                        {"username":self.username, "pw_hash":self.pw_hash, "email":self.email} )
+        curs.execute( """INSERT INTO Users (username, pw_hash, email, utype)
+                        VALUES (:username, :pw_hash, :email, :utype)""",
+                        {"username":self.username, "pw_hash":self.pw_hash, "email":self.email, "utype":self.utype} )
         self.id = curs.lastrowid
         conn.commit()                
