@@ -7,7 +7,7 @@ DbName = "TennisHistory.db"
 
 '''
 DROP TABLE Users;
-CREATE TABLE Users( Id-->Ident INTEGER PRIMARY KEY, Username TEXT, Pw_hash TEXT, Email TEXT);
+CREATE TABLE Users( Id-->Ident INTEGER PRIMARY KEY, Username TEXT, utype INTEGER, Pw_hash TEXT, Email TEXT);
 DELETE FROM Users;
 '''
 class User(object):
