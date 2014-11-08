@@ -7,7 +7,7 @@ data collected by Davor Žnidar
 program by Borut Žnidar on 7.11.2014
 """
 
-Production = False
+Production = True
 
 import os
 import logging
@@ -265,6 +265,7 @@ def Logout():
 
 if __name__ == "__main__":
     if Production:
-        app.run(host='0.0.0.0', port=80, debug=False)
+        WSGIServer(app).run()
+	#app.run(host='0.0.0.0', port=80, debug=False)
     else:        
         app.run(host='127.0.0.1', port=80, debug=True)
