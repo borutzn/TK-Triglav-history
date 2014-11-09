@@ -74,7 +74,7 @@
                     {% if event.Comment != "" %}
                         rowspan="2"
                     {% endif %}>
-                    {% if current_user.is_authenticated() %}
+                    {% if current_user.is_authenticated() and current_user.utype >= User.comment%}
                         <a href="/edit?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
                     {% endif %}
                     <a href="/comment?id={{ event.Id }}"><img src="static/1413927480_other_conversation_review_comment_bubble_talk-24.png" title="Komentiraj dogodek"></a>
