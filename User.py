@@ -6,15 +6,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 DbName = "TennisHistory.db"
 
 '''
-DROP TABLE Users;
-CREATE TABLE Users( Id-->Ident INTEGER PRIMARY KEY, Username TEXT, utype INTEGER, Pw_hash TEXT, Email TEXT);
-DELETE FROM Users;
+DROP TABLE Users_toDelete;
+CREATE TABLE Users_toDelete( Id-->Ident INTEGER PRIMARY KEY, Username TEXT, utype INTEGER, Pw_hash TEXT, Email TEXT);
+DELETE FROM Users_toDelete;
 '''
 class User(object):
 
     '''
-        utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 5-admin (+delete)
+        utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 4-admin (+delete)
     '''
+    reader = 0
+    comenter = 1
+    author = 2
+    editor = 3
+    admin = 4
+    
     def __init__( self, username, utype=0, password=None, pw_hash=None, email=None, ident=None):
         self.ident = ident
         self.username = username
@@ -50,7 +56,7 @@ class User(object):
         with conn:
             conn.row_factory = sqlite3.Row
             curs = conn.cursor()
-            curs.execute( "SELECT * FROM Users WHERE id=:ident", { "ident":ident } )
+            curs.execute( "SELECT * FROM Users_toDelete WHERE id=:ident", { "ident":ident } )
             user = curs.fetchone()
             conn.commit()
             return user
@@ -62,7 +68,7 @@ class User(object):
         with conn:
             conn.row_factory = sqlite3.Row
             curs = conn.cursor()
-            curs.execute( "SELECT * FROM Users WHERE username=:username",
+            curs.execute( "SELECT * FROM Users_toDelete WHERE username=:username",
                           { "username":username } )
             user = curs.fetchone()
             conn.commit()
@@ -73,7 +79,7 @@ class User(object):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        curs.execute( """INSERT INTO Users (username, pw_hash, email, utype)
+        curs.execute( """INSERT INTO Users_toDelete (username, pw_hash, email, utype)
                         VALUES (:username, :pw_hash, :email, :utype)""",
                         {"username":self.username, "pw_hash":self.pw_hash, "email":self.email, "utype":self.utype} )
         self.id = curs.lastrowid
