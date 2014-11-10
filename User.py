@@ -1,16 +1,17 @@
 import sqlite3
 
+from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
 DbName = "TennisHistory.db"
 
 '''
-DROP TABLE Users_toDelete;
-CREATE TABLE Users_toDelete( Id-->Ident INTEGER PRIMARY KEY, Username TEXT, utype INTEGER, Pw_hash TEXT, Email TEXT);
-DELETE FROM Users_toDelete;
+DROP TABLE Users;
+CREATE TABLE Users( ident INTEGER PRIMARY KEY, username TEXT, utype INTEGER, pw_hash TEXT, email TEXT);
+DELETE FROM Users;
 '''
-class User(object):
+class User( UserMixin ):
 
     '''
         utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 4-admin (+delete)
@@ -49,6 +50,8 @@ class User(object):
     def get_id(self):
         return unicode(self.ident)
 
+    def get_utype(self):
+        return True #self.utype)
 
     @classmethod
     def get_byId(cls, ident):
@@ -56,7 +59,7 @@ class User(object):
         with conn:
             conn.row_factory = sqlite3.Row
             curs = conn.cursor()
-            curs.execute( "SELECT * FROM Users_toDelete WHERE id=:ident", { "ident":ident } )
+            curs.execute( "SELECT * FROM Users WHERE ident=:ident", { "ident":ident } )
             user = curs.fetchone()
             conn.commit()
             return user
@@ -68,7 +71,7 @@ class User(object):
         with conn:
             conn.row_factory = sqlite3.Row
             curs = conn.cursor()
-            curs.execute( "SELECT * FROM Users_toDelete WHERE username=:username",
+            curs.execute( "SELECT * FROM Users WHERE username=:username",
                           { "username":username } )
             user = curs.fetchone()
             conn.commit()
@@ -79,8 +82,17 @@ class User(object):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        curs.execute( """INSERT INTO Users_toDelete (username, pw_hash, email, utype)
+        curs.execute( """INSERT INTO Users (username, pw_hash, email, utype)
                         VALUES (:username, :pw_hash, :email, :utype)""",
                         {"username":self.username, "pw_hash":self.pw_hash, "email":self.email, "utype":self.utype} )
         self.id = curs.lastrowid
         conn.commit()                
+
+
+
+class Anonymous( AnonymousUserMixin ):
+
+    def __init__(self):
+        self.username = 'Guest'
+        self.utype = 0
+        self.email = ''

@@ -3,7 +3,7 @@
 
 <html>
 <head>
-	<link type="text/css" rel="stylesheet" href="static/main.css" />
+	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='main.css') }}" />
         <link rel="shortcut icon" href="{{ url_for('static', filename='tenis1.ico') }}">
 
 	<title>rezultati TK Triglav od l. 1954 do l. 1984 </title>
@@ -11,16 +11,16 @@
 	
 <body>
     <div style="position:relative; float:left; width:90%; height:140px; margin:0px; overflow:hidden;">
-        <img src="static/TH.jpg" style="width:1224px; height:130px;">
+        <img src="{{ url_for('static',filename='TH.jpg') }}" style="width:1224px; height:130px;">
     </div>
     <div style="position:relative; float:left; width:10%; righttext-align:center;">
         <div style="display:block; margin-left:20px; margin-top:40px;">
             {% if current_user.is_authenticated() %}
 		{{current_user.username}} |
-		<a href="/logout"><img src="static/1414455023_editor_unlock_lock-24.png" title="Odjava uporabnika"></a>
+		<a href="{{ url_for('Logout') }}"><img src="{{ url_for('static',filename='1414455023_editor_unlock_lock-24.png') }}" title="Odjava uporabnika"></a>
             {% else %}
-		<a href="/login"><img src="static/1414454957_editor_lock-24.png" title="Prijava uporabnika"></a> | 
-		<a href="/signup" ><img src="static/1414455652_common_new_edit_compose-24.png" title="Registracija uporabnika"></a> 
+		<a href="{{ url_for('Login') }}"><img src="{{ url_for('static',filename='1414454957_editor_lock-24.png') }}" title="Prijava uporabnika"></a> | 
+		<a href="{{ url_for('Signup') }}" ><img src="{{ url_for('static',filename='1414455652_common_new_edit_compose-24.png') }}" title="Registracija uporabnika"></a> 
             {% endif %}
 	</div>
     </div><br>

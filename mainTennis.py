@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
@@ -14,7 +15,7 @@ import logging
 import difflib
 
 from flask import render_template, request, redirect, url_for
-from flask.ext.login import LoginManager, login_user, logout_user, login_required
+from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
 
 
 from TennisData import TennisEvent
@@ -22,7 +23,7 @@ from TennisData import TennisEvent
 from Utils import valid_username, valid_password, valid_email
 from Utils import app
 
-from User import User
+from User import User, Anonymous
 
 
 
@@ -193,6 +194,7 @@ def TennisMain():
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.anonymous_user = Anonymous
 app.secret_key = os.urandom(24)
 app.config['SECURITY_PASSWORD_HASH'] = 'sha512_crypt'
 app.config['SECURITY_PASSWORD_SALT'] = '$2a$16$PnnIgfMwk0jGX4SkHqS0P0'
@@ -203,21 +205,22 @@ def load_user( userid ):
     u = User.get_byId( userid )
     if not u:
         return None
-    return User( username=u['username'], pw_hash=u['pw_hash'], email=u['email'], ident=u['id'] )
+    return User( username=u['username'], pw_hash=u['pw_hash'], email=u['email'], ident=u['ident'] )
 
 
 @app.route("/login", methods=['GET', 'POST'])
-def login():
+def Login():
     if request.method == 'GET':
         return render_template("login.html", user_info="username")
     
     elif request.method == 'POST':
+        app.logger.info( "LOGIN1" )
         username = request.form['username']
         password = request.form['password']
         rememberme = ("1" in request.form.getlist('remember'))
         u = User.get_byUser(username)
         if u:
-            user = User( username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Id'] )
+            user = User( username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'] )
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user,remember=rememberme)
                 return redirect(request.args.get("next") or url_for("TennisMain"))
@@ -265,6 +268,7 @@ def Logout():
 
 if __name__ == "__main__":
     if Production:
+        appLog( "START" )
         app.run(host='0.0.0.0', port=80, debug=False)
     else:        
         app.run(host='127.0.0.1', port=80, debug=True)
