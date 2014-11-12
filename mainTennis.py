@@ -15,7 +15,7 @@ import logging
 import difflib
 
 from flask import render_template, request, redirect, url_for
-from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
+from flask.ext.login import LoginManager, login_user, logout_user, login_required
 
 
 from TennisData import TennisEvent
@@ -268,7 +268,6 @@ def Logout():
 
 if __name__ == "__main__":
     if Production:
-        appLog( "START" )
         app.run(host='0.0.0.0', port=80, debug=False)
     else:        
         app.run(host='127.0.0.1', port=80, debug=True)

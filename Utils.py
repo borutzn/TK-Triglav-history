@@ -24,14 +24,14 @@ if not app.debug:
 
 
 def valid_username(username):
-	UsernameRE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-	#logging.info( "valid_username:" + str(username) )
-	return UsernameRE.match(username)
-	
+    UsernameRE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+    #logging.info( "valid_username:" + str(username) )
+    return UsernameRE.match(username)
+
 def valid_password(password):
-	PasswordRE = re.compile(r"^.{3,20}$")
-	return PasswordRE.match(password)
-	
+    PasswordRE = re.compile(r"^.{3,20}$")
+    return PasswordRE.match(password)
+
 def valid_email(email):
-	EmailRE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
-	return EmailRE.match(email)
+    EmailRE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
+    return EmailRE.match(email)

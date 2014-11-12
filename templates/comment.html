@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<form action="/comment" method="post">
+<form action="{{ url_for('EditComment') }}" method="post">
         <table class="player-table">
 		<tr><th>Datum:</th> <td>{{ date }}</td></tr>
 		<tr><th>Dogodek:</th> <td>{{ event.event }}</td></tr>

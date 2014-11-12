@@ -11,9 +11,9 @@
                 {{ events[0].player }}
             </div>
             <div style="float:right; width:40%">
-                &nbsp;&nbsp;<a href="/"><img src="static/1414454853_house_home-32.png" title="Domov"></a>
+                &nbsp;&nbsp;<a href="/"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
                 {% if current_user.is_authenticated() %}
-                    &nbsp;&nbsp;<a href="/add"><img src="static/1414093791_circle_add_plus-32.png" title="Dodaj nov dogodek"></a>
+                    &nbsp;&nbsp;<a href="/add"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Dodaj nov dogodek"></a>
                 {% endif %}
             </div>
         </div>
@@ -44,16 +44,16 @@
             <td> {{ event.result }} </td>
             <td>
                 {% if event.att1 != "" %}
-                    <a href="static/files/{{year}}/{{event.att1}}" target="_blank"><img src="static/1.png"></a>
+                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.att1}}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
                 {% endif %}
                 {% if event.att2 != "" %}
-                    <a href="static/files/{{year}}/{{event.att2}}" target="_blank"><img src="static/2.png"></a>
+                    <a href="static/files/{{year}}/{{event.att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
                 {% endif %}
                 {% if event.att3 != "" %}
-                    <a href="static/files/{{year}}/{{event.att3}}" target="_blank"><img src="static/3.png"></a>
+                    <a href="static/files/{{year}}/{{event.att3}}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
                 {% endif %}
                 {% if event.att4 != "" %}
-                    <a href="static/files/{{year}}/{{event.att4}}" target="_blank"><img src="static/4.png"></a>
+                    <a href="static/files/{{year}}/{{event.att4}}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
                 {% endif %}
             </td>
             <td style="text-align:right;"
@@ -61,12 +61,12 @@
                         rowspan="2"
                     {% endif %}>
                     {% if current_user.is_authenticated() %}
-                        <a href="/edit?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
+                        <a href="{{ url_for('Edit') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1413927437_editor_pencil_pen_edit_write-24.png') }}" title="Popravi dogodek"></a>
                     {% endif %}
-                    <a href="/comment?id={{ event.Id }}"><img src="static/1413927480_other_conversation_review_comment_bubble_talk-24.png" title="Komentiraj dogodek"></a>
+                    <a href="{{ url_for('Comment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1413927480_other_conversation_review_comment_bubble_talk-24.png') }}" title="Komentiraj dogodek"></a>
                 	{% if current_user.is_authenticated() %}
-                            <a href="/duplicate?id={{ event.Id }}"><img src="static/1414093784_circle_add_plus-24.png" title="Podvoji dogodek"></a>
-                            <a href="/delete?id={{ event.Id }}"><img src="static/1413927465_editor_trash_delete_recycle_bin-24.png" title="Briši dogodek"></a>
+                            <a href="{{ url_for('Duplicate') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1414093784_circle_add_plus-24.png') }}" title="Podvoji dogodek"></a>
+                            <a href="{{ url_for('Delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1413927465_editor_trash_delete_recycle_bin-24.png') }}" title="Briši dogodek"></a>
                     {% endif %}
             </td></tr>
                 {% if event.comment != "" %}
