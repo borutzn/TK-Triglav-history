@@ -47,13 +47,13 @@
                     <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.att1}}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
                 {% endif %}
                 {% if event.att2 != "" %}
-                    <a href="static/files/{{year}}/{{event.att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
+                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
                 {% endif %}
                 {% if event.att3 != "" %}
-                    <a href="static/files/{{year}}/{{event.att3}}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
+                    <a href="s{{ url_for('static',filename='files/') }}{{year}}/{{event.att3}}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
                 {% endif %}
                 {% if event.att4 != "" %}
-                    <a href="static/files/{{year}}/{{event.att4}}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
+                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.att4}}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
                 {% endif %}
             </td>
             <td style="text-align:right;"

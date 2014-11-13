@@ -145,7 +145,7 @@ def Correct():
 
         fnames = []
         try:
-            for f in os.listdir("static/files/"+fdir):
+            for f in os.listdir(url_for('static','files/')+fdir):
                 s = list(f)
                 for i, c in enumerate(s):
                     if ord(c) >= 128:
