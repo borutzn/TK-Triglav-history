@@ -38,10 +38,10 @@ def Player():
         if player == None:
                 players = list(TennisEvent.players)
                 players.sort(key=lambda player: player[0])
-                return render_template("players.html", user="Borut", players=players )
+                return render_template("players.html", players=players )
         else:
             events = TennisEvent.getPlayersEvents( player )
-            return render_template("player.html", user="Borut", events=events )
+            return render_template("player.html", events=events )
 
 
 

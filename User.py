@@ -82,6 +82,11 @@ class User( UserMixin ):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
+        curs.execute( "SELECT * FROM Users" )
+        if curs.rowcount == 0:
+            self.utype = self.admin
+        conn.commit()                
+
         curs.execute( """INSERT INTO Users (username, pw_hash, email, utype)
                         VALUES (:username, :pw_hash, :email, :utype)""",
                         {"username":self.username, "pw_hash":self.pw_hash, "email":self.email, "utype":self.utype} )

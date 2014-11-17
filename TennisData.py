@@ -6,6 +6,7 @@ import os
 import sqlite3
 
 from flask import url_for
+from __main__ import name
 
 
 DbName = "TennisHistory.db"
@@ -173,6 +174,7 @@ class TennisEvent:
             with conn:
                 conn.row_factory = sqlite3.Row
                 curs = conn.cursor()
+                curs.execute( "CFEATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)" )
                 curs.execute( "SELECT * FROM TennisEvents ORDER by date" )
                 cls.EventsCache = [ dict(row) for row in curs ]
                 conn.commit()
@@ -199,7 +201,7 @@ class TennisEvent:
                 cls.players.append( (k, v[0], v[1]) )
             cls.players.sort(key=lambda player: player[2], reverse=True)
 
-            logging.warning( "Cache reloaded (%d entries)" % len(cls.EventsCache) )
+            logging.warning( "Event cache reloaded (%d entries)" % len(cls.EventsCache) )
 
         @classmethod
         def clearData(cls):
@@ -233,5 +235,46 @@ class TennisEvent:
         def count(cls ):
                 cls.fetchData()           
                 return len(cls.EventsCache)
+
+
+
+'''
+DROP TABLE TennisPlayer;
+CREATE TABLE TennisPlayer( Id INTEGER PRIMARY KEY, Name TEXT, Born TEXT, 
+        Comment TEXT, Picture TEXT, Created DATE, LastModified DATE);
+DELETE FROM TennisPlayer;
+'''
+class TennisPlayer:
+
+        PlayersCache = None
+
+        def __init__(self, born="", comment="", picture=""):
+                self.name = name
+                self.born = born
+                self.comment = comment
+                self.picture = picture
+
+        @classmethod
+        def fetchData(cls):
+            if cls.PlayersCache != None:
+                return
+            
+            conn = sqlite3.connect(DbName)
+            with conn:
+                conn.row_factory = sqlite3.Row
+                curs = conn.cursor()
+                curs.execute( "CFEATE TABLE IF NOT EXISTS TennisPlayer( Id INTEGER PRIMARY KEY, Name TEXT, Born TEXT, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
+                curs.execute( "SELECT * FROM TennisPlayers" )
+                for row in curs:
+                    cls.PlayersCache[row.name] = dict(row)
+                conn.commit()
+
+            logging.warning( "Players cache reloaded (%d entries)" % len(cls.EventsCache) )
+
+
+        @classmethod
+        def get(cls, Player):
+                cls.fetchData()                        
+                return cls.EventsCache[Player]
 
 
