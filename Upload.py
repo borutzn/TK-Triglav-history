@@ -63,7 +63,7 @@ def UploadCSV():
     elif request.method == 'POST':
         line = 0
         f_upload = request.files['file']
-        local_fname = url_for('static','files/') + secure_filename(f_upload.filename)
+        local_fname = url_for('static',filename="files/" + secure_filename(f_upload.filename) )
         #f_upload.save( local_fname )
         with open(local_fname, 'rb') as csvfile:
             stringReader = csv.reader(csvfile,delimiter="\t",quotechar='"')
