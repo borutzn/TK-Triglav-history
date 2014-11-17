@@ -86,7 +86,7 @@ def Add():
 
 
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update':False} )
-@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update':True})
+@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update':True}, endpoint='Duplicate' )
 @login_required
 def Edit( update ):
     if request.method == 'GET':
