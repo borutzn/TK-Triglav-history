@@ -67,7 +67,7 @@ def EditComment():
 
 
 @app.route("/add", methods=['GET', 'POST'])
-def add():
+def Add():
     if request.method == 'GET':
         return render_template("add.html", event=[] )
 
@@ -145,7 +145,7 @@ def Correct():
 
         fnames = []
         try:
-            for f in os.listdir(url_for('static','files/')+fdir):
+            for f in os.listdir(url_for('static',filename="files/"+fdir)):
                 s = list(f)
                 for i, c in enumerate(s):
                     if ord(c) >= 128:

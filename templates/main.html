@@ -76,15 +76,15 @@
                         rowspan="2"
                     {% endif %}>
                     {% if current_user.utype >= 3 %}
-                        <a href="/edit?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
+                        <a href="{{ url_for('edit') }}?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
                     {% endif %}
                     {% if current_user.utype >= 1 %}
-                        <a href="/comment?id={{ event.Id }}"><img src="static/1413927480_other_conversation_review_comment_bubble_talk-24.png" title="Komentiraj dogodek"></a>
+                        <a href="{{ url_for('comment') }}?id={{ event.Id }}"><img src="static/1413927480_other_conversation_review_comment_bubble_talk-24.png" title="Komentiraj dogodek"></a>
                     {% endif %}
                 	{% if current_user.is_authenticated() %}
                             :{{ current_user.utype }}:
-                            <a href="/duplicate?id={{ event.Id }}"><img src="static/1414093784_circle_add_plus-24.png" title="Podvoji dogodek"></a>
-                            <a href="/delete?id={{ event.Id }}"><img src="static/1413927465_editor_trash_delete_recycle_bin-24.png" title="Briši dogodek"></a>
+                            <a href="{{ url_for('duplicate') }}?id={{ event.Id }}"><img src="static/1414093784_circle_add_plus-24.png" title="Podvoji dogodek"></a>
+                            <a href="{{ url_for('delete') }}?id={{ event.Id }}"><img src="static/1413927465_editor_trash_delete_recycle_bin-24.png" title="Briši dogodek"></a>
                     {% endif %}
                 </td></tr>
                 {% if event.Comment != "" %}
@@ -102,11 +102,11 @@
         <table>
         {% for player in players %}
             <tr>
-            <td><a href="/player?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x,{{player[2]}})</td>
+            <td><a href="{{ url_for('Player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x,{{player[2]}})</td>
             </tr>
         {% endfor %}
         </table>
-        <a href="/player">...</a><br>
+        <a href="{{ url_for('Player') }}">...</a><br>
         <br>
     {% endif %}
     </div>

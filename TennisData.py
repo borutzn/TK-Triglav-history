@@ -49,7 +49,7 @@ class TennisEvent:
         
         @classmethod
         def getFname( cls, year, att ):
-            return url_for('static','files/') + year + "/" + year + "_" + att
+            return url_for('static', filename="files/" + year + "/" + year + "_" + att )
         
         @classmethod
         def correctAtt( cls, year, att ):
@@ -61,7 +61,7 @@ class TennisEvent:
                 if ord(c) >= 128:
                     s[i] = "_"
             att = "".join(s)
-            fname = url_for('static','files/') + year + "/" + year + "_" + att
+            fname = url_for('static', filename="files/" + year + "/" + year + "_" + att )
             #logging.error( "correct: " + str(fname) +" - "+ str(os.path.exists(fname)) )
             if os.path.exists(fname):
                 return att
@@ -226,7 +226,7 @@ class TennisEvent:
                 cls.fetchData()
                 r = list()
                 for e in cls.EventsCache:
-                        if e['player'] == player:
+                        if e['Player'] == player:
                                 r.append( e )      
                 return r
 
