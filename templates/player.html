@@ -11,9 +11,9 @@
                 {{ events[0].Player }}
             </div>
             <div style="float:right; width:40%">
-                &nbsp;&nbsp;<a href="/"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
+                &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
                 {% if current_user.is_authenticated() %}
-                    &nbsp;&nbsp;<a href="/add"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Dodaj nov dogodek"></a>
+                    &nbsp;&nbsp;<a href="{{ url_for('Add') }}"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Dodaj nov dogodek"></a>
                 {% endif %}
             </div>
         </div>
@@ -24,7 +24,7 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><a href="/?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
+                <br><a href="{{ url_for('TennisMain') }}/?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
                   <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th></th><th></th></tr>

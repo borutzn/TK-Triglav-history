@@ -6,7 +6,7 @@ import os
 import sqlite3
 
 from flask import url_for
-from __main__ import name
+#where from?? from __main__ import name
 
 
 DbName = "TennisHistory.db"
@@ -174,7 +174,7 @@ class TennisEvent:
             with conn:
                 conn.row_factory = sqlite3.Row
                 curs = conn.cursor()
-                curs.execute( "CFEATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)" )
+                curs.execute( "CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)" )
                 curs.execute( "SELECT * FROM TennisEvents ORDER by date" )
                 cls.EventsCache = [ dict(row) for row in curs ]
                 conn.commit()
