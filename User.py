@@ -79,6 +79,18 @@ class User( UserMixin ):
             return user
 
 
+    @classmethod
+    def get_Users(cls):
+        conn = sqlite3.connect(DbName)
+        with conn:
+            conn.row_factory = sqlite3.Row
+            curs = conn.cursor()
+            curs.execute( "SELECT * FROM Users WHERE username=:username ORDER BY ident" )
+            users = curs.fetchall()
+            conn.commit()
+            return users
+
+
     def put(self):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()

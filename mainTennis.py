@@ -268,14 +268,18 @@ def Logout():
 @login_required
 def EditUser():
     if request.method == 'GET':
-        try:
-            ident = int(request.args.get('id'))
-        except ValueError:
-            return redirect(url_for("TennisMain"))
+        if 'id' in request.args:
+            try:
+                ident = int(request.args.get('id'))
+            except ValueError:
+                return redirect(url_for("TennisMain"))
 
-        user = User.get_nyId( ident )
-        return render_template("editUser.html", user=user )
-
+            user = User.get_nyId( ident )
+            return render_template("editUser.html", user=user )
+        else:
+            users = User.get_Users( ident )
+            return render_template("listUsers.html", users=users )
+            
     elif request.method == 'POST':
         return redirect(url_for("TennisMain"))
 
