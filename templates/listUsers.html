@@ -7,10 +7,13 @@
     <p><div class="page-title">Popravljanje podatkov o uporabniku</div><br>
     {% if users %}
 	    <table>
-		<tr><th>Username:</th> </tr>
+		<tr><th>Username</th> <th>Role</th> <th>Active</th> <th>Email</th> </tr>
         {% for user in users %}
 			<tr>
-			<td>{{ user.Username }}"></td>
+			<td>{{ user.username }}</td>
+			<td>{{ user.utype }}</td>
+			<td>{{ user.active }}</td>
+			<td>{{ user.email}}</td>
 			</tr>
 		{% endfor %}
 		</table> <br>
