@@ -8,7 +8,7 @@ DbName = "TennisHistory.db"
 
 '''
 DROP TABLE Users;
-CREATE TABLE Users( ident INTEGER PRIMARY KEY, username TEXT, utype INTEGER, pw_hash TEXT, email TEXT);
+CREATE TABLE Users( ident INTEGER PRIMARY KEY, username TEXT, utype INTEGER, active BOOLEAN, pw_hash TEXT, email TEXT);
 DELETE FROM Users;
 '''
 class User( UserMixin ):
@@ -17,15 +17,16 @@ class User( UserMixin ):
         utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 4-admin (+delete)
     '''
     reader = 0
-    comenter = 1
+    commenter = 1
     author = 2
     editor = 3
     admin = 4
     
-    def __init__( self, username, utype=0, password=None, pw_hash=None, email=None, ident=None):
+    def __init__( self, username, utype=reader, active=True, password=None, pw_hash=None, email=None, ident=None):
         self.ident = ident
         self.username = username
         self.utype=utype
+	self.active = active
         if pw_hash:
             self.pw_hash = pw_hash
         elif password:
@@ -42,7 +43,7 @@ class User( UserMixin ):
         return True
 
     def is_active(self):
-        return True
+        return self.active
 
     def is_anonymous(self):
         return True
@@ -87,9 +88,9 @@ class User( UserMixin ):
             self.utype = self.admin
         conn.commit()                
 
-        curs.execute( """INSERT INTO Users (username, pw_hash, email, utype)
-                        VALUES (:username, :pw_hash, :email, :utype)""",
-                        {"username":self.username, "pw_hash":self.pw_hash, "email":self.email, "utype":self.utype} )
+        curs.execute( """INSERT INTO Users (username, pw_hash, utype, active, email)
+                        VALUES (:username, :pw_hash, :utype, :active, :email)""",
+                        {"username":self.username, "pw_hash":self.pw_hash, "utype":self.utype, "active":self.active, "email":self.email} )
         self.id = curs.lastrowid
         conn.commit()                
 
@@ -99,5 +100,6 @@ class Anonymous( AnonymousUserMixin ):
 
     def __init__(self):
         self.username = 'Guest'
-        self.utype = 0
+        self.utype = User.reader
+	self.active = True
         self.email = ''

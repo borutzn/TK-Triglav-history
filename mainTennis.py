@@ -205,7 +205,7 @@ def load_user( userid ):
     u = User.get_byId( userid )
     if not u:
         return None
-    return User( username=u['username'], pw_hash=u['pw_hash'], email=u['email'], ident=u['ident'] )
+    return User( username=u['username'], pw_hash=u['pw_hash'], utype=u['utype'], active=u['active'], email=u['email'], ident=u['ident'] )
 
 
 @app.route("/login", methods=['GET', 'POST'])

@@ -15,7 +15,6 @@
             {% endif %}
         </div>
         <div style="float:left; width:30%; text-align:right; color:red;">
-            {{ current_user.utype }}
             {% if not production %} <b>Razvojno okolje</b> {% endif %}
         </div>
     </div>
@@ -76,7 +75,7 @@
                         rowspan="2"
                     {% endif %}>
                     {% if current_user.utype >= 3 %}
-                        <a href="{{ url_for('edit') }}?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
+                        <a href="{{ url_for('Edit') }}?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
                     {% endif %}
                     {% if current_user.utype >= 1 %}
                         <a href="{{ url_for('EditComment') }}?id={{ event.Id }}"><img src="static/1413927480_other_conversation_review_comment_bubble_talk-24.png" title="Komentiraj dogodek"></a>
