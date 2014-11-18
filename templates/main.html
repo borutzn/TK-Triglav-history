@@ -13,6 +13,9 @@
             {% if current_user.is_authenticated() %}
                 &nbsp;&nbsp;<a href="{{ url_for('Add') }}"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Dodaj nov dogodek"></a>
             {% endif %}
+            {% if current_user.utype >= 2 %}
+                &nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ url_for('EditUser') }}"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Urejanje uporabnikov"></a>
+            {% endif %}
         </div>
         <div style="float:left; width:30%; text-align:right; color:red;">
             {% if not production %} <b>Razvojno okolje</b> {% endif %}

@@ -96,7 +96,7 @@ def Edit( update ):
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get( ident )
-        return render_template("edit.html", event=event )
+        return render_template("editEvent.html", event=event )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -181,7 +181,7 @@ def TennisMain():
 
     events = TennisEvent.getEventsPage(pos, PAGELEN)
     eventsLen = TennisEvent.count()
-    for e in events:
+    for e in events: # Why this check?
         if e['Att1'] == None:
             logging.error( "err: "+e['Event']+", "+str(e['Att1']) )
     return render_template("main.html", events=events, production=Production,
@@ -263,6 +263,21 @@ def Logout():
     logout_user()
     return redirect(url_for("TennisMain"))
 
+
+@app.route("/editUser", methods=['GET', 'POST'])
+@login_required
+def EditUser( update ):
+    if request.method == 'GET':
+        try:
+            ident = int(request.args.get('id'))
+        except ValueError:
+            return redirect(url_for("TennisMain"))
+
+        user = User.get_nyId( ident )
+        return render_template("editUser.html", user=user )
+
+    elif request.method == 'POST':
+        return redirect(url_for("TennisMain"))
 
 
 
