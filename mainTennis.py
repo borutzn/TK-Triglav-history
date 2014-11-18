@@ -266,7 +266,7 @@ def Logout():
 
 @app.route("/editUser", methods=['GET', 'POST'])
 @login_required
-def EditUser( update ):
+def EditUser():
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
