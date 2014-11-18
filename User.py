@@ -85,7 +85,7 @@ class User( UserMixin ):
         with conn:
             conn.row_factory = sqlite3.Row
             curs = conn.cursor()
-            curs.execute( "SELECT * FROM Users WHERE username=:username ORDER BY ident" )
+            curs.execute( "SELECT * FROM Users ORDER BY ident" )
             users = curs.fetchall()
             conn.commit()
             return users
