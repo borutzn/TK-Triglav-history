@@ -277,7 +277,7 @@ def EditUser():
             user = User.get_nyId( ident )
             return render_template("editUser.html", user=user )
         else:
-            users = User.get_Users( ident )
+            users = User.get_Users()
             return render_template("listUsers.html", users=users )
             
     elif request.method == 'POST':
