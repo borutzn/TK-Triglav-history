@@ -5,14 +5,14 @@
 {% block content %}
 
     <p><div class="page-title">Popravljanje podatkov o uporabniku</div><br>
-    <form action="{{ url_for('EditUser') }}" method="post">
-    <table>
-		<tr><th>Username:</th> <td><input style="width:3cm" type="date" name="username" value="{{ user.Username }}"></td></tr>
-	</table> <br>
-	<input type="hidden" name="Id" value="{{ user.ident }}">
-	<input type="Submit" name="Status" id="button" value="Shrani">
-	<input type="Submit" name="Status" id="button" value="Prekliči">
-	<button type="Reset"               id="button" value="Reset">Obnovi</button>
-    </form>
+    {% if users %}
+	    <table>
+		<tr><th>Username:</th> </tr>
+        {% for user in users %}
+			<tr>
+			<td>{{ user.Username }}"></td>
+			</tr>
+		</table> <br>
+	{% endif %}
 
 {% endblock %}	
