@@ -4,16 +4,31 @@
 
 {% block content %}
 
-    <p><div class="page-title">Popravljanje podatkov o uporabniku</div><br>
+    <a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
+ 
+    <p><div class="page-title">Pregled uporabnikov</div><br>
     {% if users %}
 	    <table>
-		<tr><th>Username</th> <th>Role</th> <th>Active</th> <th>Email</th> </tr>
+		<tr><th>uporabniško ime</th> <th>pravice</th> <th>aktiven</th> <th>el. pošta</th> <th></th></tr>
         {% for user in users %}
 			<tr>
 			<td>{{ user.username }}</td>
-			<td>{{ user.utype }}</td>
-			<td>{{ user.active }}</td>
+			<td>
+				{% if user.utype == 0 %}
+					bralec
+				{% elif user.utype == 1 %}
+					komentator
+				{% elif user.utype == 2 %}
+					avtor
+				{% elif user.utype == 3 %}
+					urejevalec
+				{% else %}
+					administrator
+				{% endif %}
+			</td>
+			<td>{% if user.active %} da {% else %} ne {% endif %}</td>
 			<td>{{ user.email}}</td>
+            <td><a href="{{ url_for('EditUser') }}?id={{ user.ident }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi uporabnika"></a>
 			</tr>
 		{% endfor %}
 		</table> <br>

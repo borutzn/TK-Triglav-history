@@ -4,23 +4,24 @@
 
 {% block content %}
 
-    <p><div class="page-title">Popravljanje dogodka</div><br>
-    <form action="{{ url_for('Edit') }}" method="post">
-        <table id="player-table">
-		<tr><th>Datum:</th> <td><input style="width:3cm" type="date" name="date" value="{{ event.LocalDate }}"></td></tr>
-		<tr><th>Dogodek:</th> <td><input style="width:10cm" type="text" name="event" value="{{ event.Event }}"></td></tr>
-		<tr><th>Kraj:</th> <td><input type="text" name="place" value="{{ event.Place }}"></td></tr>
-		<tr><th>Kategorija:</th> <td><input style="width:3cm" type="text" name="category" value="{{ event.Category }}"></td></tr>
-		<tr><th>Rezultat:</th> <td><input style="width:3cm" type="text" name="result" value="{{ event.Result }}"></td></tr>
-		<tr><th>Igralec:</th> <td><input type="text" name="player" value="{{ event.Player }}"></td></tr>
-		<tr><th>Komentar:</th> <td><textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea></td></tr>
-		<tr><th>Dokument 1:</th> <td><input style="width:10cm" type="text" name="att1" value="{{ event.Att1 }}"></td></tr>
-		<tr><th>Dokument 2:</th> <td><input style="width:10cm" type="text" name="att2" value="{{ event.Att2 }}"></td></tr>
-		<tr><th>Dokument 3:</th> <td><input style="width:10cm" type="text" name="att3" value="{{ event.Att3 }}"></td></tr>
-		<tr><th>Dokument 4:</th> <td><input style="width:10cm" type="text" name="att4" value="{{ event.Att4 }}"></td></tr>
-		<tr><th>Vir:</th> <td><input type="text" name="source" value="{{ event.Source }}"></td></tr>
+    <p><div class="page-title">Popravljanje podatkov uporabnika</div><br>
+    <form action="{{ url_for('EditUser') }}" method="post">
+        <table><tr>
+        <th>uporabnik</th> <td>{{ user.username }}</td>
+		<th>pravice</th> <td><select name="utype">
+			<option value="0">bralec</option>
+			<option value="1">komentator</option>
+			<option value="2">avtor</option>
+			<option value="3">urednik</option>
+			<option value="4">administrator</option>
+		</option>
+		<th>vključen</th> <td>
+			<input type="radio" name="active" value="1" {% if user.active %} checked {% endif %}>da
+			<input type="radio" name="active" value="0" {% if not user.active %} checked {% endif %}>ne
+		</td>
+		<tr><th>el. pošta</th> <td><input style="width:3cm" type="text" name="email" value="{{ user.email }}"></td></tr>
 	</table> <br>
-	<input type="hidden" name="Id" value="{{ event.id }}">
+	<input type="hidden" name="Id" value="{{ user.ident }}">
 	<input type="Submit" name="Status" id="button" value="Shrani">
 	<input type="Submit" name="Status" id="button" value="Prekliči">
 	<button type="Reset"               id="button" value="Reset">Obnovi</button>
