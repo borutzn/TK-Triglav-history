@@ -6,20 +6,20 @@
 
     <p><div class="page-title">Popravljanje podatkov uporabnika</div><br>
     <form action="{{ url_for('EditUser') }}" method="post">
-        <table><tr>
-        <th>uporabnik</th> <td>{{ user.username }}</td>
-		<th>pravice</th> <td><select name="utype">
+        <table>
+		<tr><th>uporabnik</th> <th>{{ user.username }}<input type="hidden" name="username" value="{{ user.username }}"></th></tr>
+		<tr><th>pravice</th> <td><select name="utype">
 			<option value="0">bralec</option>
 			<option value="1">komentator</option>
 			<option value="2">avtor</option>
 			<option value="3">urednik</option>
 			<option value="4">administrator</option>
-		</option>
-		<th>vključen</th> <td>
+		</option></td></tr>
+		<tr><th>vključen</th> <td>
 			<input type="radio" name="active" value="1" {% if user.active %} checked {% endif %}>da
 			<input type="radio" name="active" value="0" {% if not user.active %} checked {% endif %}>ne
-		</td>
-		<tr><th>el. pošta</th> <td><input style="width:3cm" type="text" name="email" value="{{ user.email }}"></td></tr>
+		</td></tr>
+		<tr><th>el. pošta</th> <td><input style="width:36m" type="text" name="email" value="{{ user.email }}"></td></tr>
 	</table> <br>
 	<input type="hidden" name="Id" value="{{ user.ident }}">
 	<input type="Submit" name="Status" id="button" value="Shrani">

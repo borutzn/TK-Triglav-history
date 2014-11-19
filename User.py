@@ -106,6 +106,18 @@ class User( UserMixin ):
         self.id = curs.lastrowid
         conn.commit()                
 
+    def update( self, ident ):
+        conn = sqlite3.connect(DbName)
+        curs = conn.cursor()
+
+        app.logger( "before update" )
+        curs.execute( """UPDATE Users SET utype=:utype, active=:active, email=:email, LastModified=CURRENT_TIMESTAMP WHERE ident=:ident""",
+                              { 'utype':self.utype, 'active':self.active, 'email':self.email, 'ident':ident } )
+        app.logger( "before commit" )
+        conn.commit()                
+        app.logger( "after comit" )
+
+
 
 
 class Anonymous( AnonymousUserMixin ):

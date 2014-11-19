@@ -214,7 +214,6 @@ def Login():
         return render_template("login.html", user_info="username")
     
     elif request.method == 'POST':
-        app.logger.info( "LOGIN1" )
         username = request.form['username']
         password = request.form['password']
         rememberme = ("1" in request.form.getlist('remember'))
@@ -274,18 +273,21 @@ def EditUser():
             except ValueError:
                 return redirect(url_for("TennisMain"))
 
-            user = User.get_nyId( ident )
+            user = User.get_byId( ident )
             return render_template("editUser.html", user=user )
         else:
             users = User.get_Users()
             return render_template("listUsers.html", users=users )
             
     elif request.method == 'POST':
+        app.logger.error( "EDIT" + str(request.form) )
         if request.form["Status"] == "Shrani":
             u = User( username=request.form["username"], utype=request.form["utype"], 
                       active=request.form["active"], email=request.form["email"])
+            app.logger.error( "before update" )
             u.update( request.form["ident"] )
-        return redirect(url_for("TennisMain"))
+            app.logger.error( "after update" )
+        return redirect(url_for("EditUser"))
 
 
 
