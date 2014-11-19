@@ -280,10 +280,11 @@ def EditUser():
             return render_template("listUsers.html", users=users )
             
     elif request.method == 'POST':
-        app.logger.error( "EDIT" + str(request.form) )
         if request.form["Status"] == "Shrani":
             u = User( username=request.form["username"], utype=request.form["utype"], 
                       active=request.form["active"], email=request.form["email"])
+            app.logger.error( "before update" + str(request.form) )
+            ident = request.form["ident"]
             app.logger.error( "before update" )
             u.update( request.form["ident"] )
             app.logger.error( "after update" )

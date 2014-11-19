@@ -112,12 +112,12 @@ class User( UserMixin ):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        app.logger( "before update" )
-        curs.execute( """UPDATE Users SET utype=:utype, active=:active, email=:email, LastModified=CURRENT_TIMESTAMP WHERE ident=:ident""",
+        app.logger.error( "before update" )
+        curs.execute( """UPDATE Users SET utype=:utype, active=:active, email=:email WHERE ident=:ident""",
                               { 'utype':self.utype, 'active':self.active, 'email':self.email, 'ident':ident } )
-        app.logger( "before commit" )
+        app.logger.error( "before commit" )
         conn.commit()                
-        app.logger( "after comit" )
+        app.logger.error( "after comit" )
 
 
 
