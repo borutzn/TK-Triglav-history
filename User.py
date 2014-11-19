@@ -3,6 +3,8 @@ import sqlite3
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from Utils import app
+
 
 DbName = "TennisHistory.db"
 
@@ -26,7 +28,7 @@ class User( UserMixin ):
         self.ident = ident
         self.username = username
         self.utype=utype
-	self.active = active
+        self.active = active
         if pw_hash:
             self.pw_hash = pw_hash
         elif password:
@@ -125,5 +127,5 @@ class Anonymous( AnonymousUserMixin ):
     def __init__(self):
         self.username = 'Guest'
         self.utype = User.reader
-	self.active = True
+        self.active = True
         self.email = ''
