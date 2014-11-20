@@ -39,7 +39,7 @@
                     <br><a href="{{ url_for('TennisMain') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                     {% set year = event.Date[:4] %}
                     <table class="main-table" style="width:95%">
-                      <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th>igralec</th><th></th><th></th></tr>
+                      <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th>igralec</th><th></th>{% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
                 {% endif %}
                 <tr>
                 <td style="">
@@ -78,10 +78,9 @@
                     <a href="correct?id={{ event.Id }}&att=4&d={{year}}&f={{event.Att4[4:]}}"><img src="static/1414881448_editor_image_picture_photo-24.png"></a>
                 {% endif %}
                 </td>
-                <td style="text-align:right;"
-                    {% if event.Comment != "" %}
-                        rowspan="2"
-                    {% endif %}>
+                {% if current_user.is_authenticated() %}
+                <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
+                {% endif %}
                     {% if current_user.utype >= 3 %}
                         <a href="{{ url_for('Edit') }}?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
                     {% endif %}
@@ -92,7 +91,8 @@
                             <a href="{{ url_for('Edit') }}?id={{ event.Id }}"><img src="static/1414093784_circle_add_plus-24.png" title="Podvoji dogodek"></a>
                             <a href="{{ url_for('Delete') }}?id={{ event.Id }}"><img src="static/1413927465_editor_trash_delete_recycle_bin-24.png" title="Briši dogodek"></a>
                     {% endif %}
-                </td></tr>
+                {% if current_user.is_authenticated() %}</td>{% endif %}
+                </tr>
                 {% if event.Comment != "" %}
                     <tr><td class="main-table-comment" colspan="6">{{ event.Comment }}<td></tr>
                 {% endif %}

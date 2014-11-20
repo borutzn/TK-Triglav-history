@@ -20,25 +20,42 @@ from flask.ext.login import LoginManager, login_user, logout_user, login_require
 
 from TennisData import TennisEvent
 
-from Utils import valid_username, valid_password, valid_email
-from Utils import app
+from Utils import app, log_info, valid_username, valid_password, valid_email
 
 from User import User, Anonymous
 
 
 
-@app.route("/player", methods=['GET'])
+@app.route("/player", methods=['GET', 'POST'])
 def Player():
-    if request.method == 'GET':
+    if request.method == 'GET' or request.method == 'POST':
+        app.logger.info( "search: " + str(list(request.args)) )
         try:
                 player = request.args.get('n')
         except ValueError:
                 player = None
 
+        try:
+                srch = request.args.get('search')
+        except ValueError:
+                srch = None
+
         if player == None:
-                players = list(TennisEvent.players)
+                app.logger.info( "search: " + str(srch) )
+                #app.logger.info( "players: " + str(TennisEvent.players) )
+                if srch == None:
+                    srch = ""
+                    players = list(TennisEvent.players)
+                else:
+                    players = list()
+                    for p in TennisEvent.players:
+                        if srch in p[0]:
+                            app.logger.info( "found: (%s) in %s" %  (srch, p[0]) )
+                            players.append( p )
+                    #app.logger.info( "players: " + str(players) )
+
                 players.sort(key=lambda player: player[0])
-                return render_template("players.html", players=players )
+                return render_template("players.html", players=players, search=srch )
         else:
             events = TennisEvent.getPlayersEvents( player )
             return render_template("player.html", events=events )
@@ -283,17 +300,16 @@ def EditUser():
         if request.form["Status"] == "Shrani":
             u = User( username=request.form["username"], utype=request.form["utype"], 
                       active=request.form["active"], email=request.form["email"])
-            app.logger.error( "before update" + str(request.form) )
             ident = request.form["ident"]
-            app.logger.error( "before update" )
             u.update( request.form["ident"] )
-            app.logger.error( "after update" )
         return redirect(url_for("EditUser"))
 
 
 
 if __name__ == "__main__":
     if Production:
+        log_info( "start production version" )
         app.run(host='0.0.0.0', port=80, debug=False)
     else:        
+        log_info( "start development version" )
         app.run(host='127.0.0.1', port=80, debug=True)
