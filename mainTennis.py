@@ -28,37 +28,33 @@ from User import User, Anonymous
 
 @app.route("/player", methods=['GET', 'POST'])
 def Player():
-    if request.method == 'GET' or request.method == 'POST':
-        app.logger.info( "srch: " + str(list(request.args)) )
+    if request.method == 'GET' :
         try:
             player = request.args.get('n')
         except ValueError:
             player = None
-
-        try:
-            srch = request.args.get('search')
-        except ValueError:
-            srch = None
-
-        if player == None:
-            app.logger.info( "srch: " + str(srch) )
-            #app.logger.info( "players: " + str(TennisEvent.players) )
-            if srch == None:
-                srch = ""
-                players = list(TennisEvent.players)
-            else:
-                players = list()
-                for p in TennisEvent.players:
-                    if srch in p[0]:
-                        app.logger.info( "found: (%s) in %s" %  (srch, p[0]) )
-                        players.append( p )
-                #app.logger.info( "players: " + str(players) )
-
-            players.sort(key=lambda player: player[0])
-            return render_template("players.html", players=players, search=srch )
-        else:
+        if player <> None:
             events = TennisEvent.getPlayersEvents( player )
             return render_template("player.html", events=events )
+
+    search = ""
+    if request.method == 'POST':
+        search = request.form['search']
+
+    #app.logger.info( "search: " + str(search) )
+    #app.logger.info( "players: " + str(TennisEvent.players) )
+    if search == "":
+        players = list(TennisEvent.players)
+    else:
+        players = list()
+        for p in TennisEvent.players:
+            if search in p[0]:
+                #app.logger.info( "found: (%s) in %s" %  (search, p[0]) )
+                players.append( p )
+        #app.logger.info( "players: " + str(players) )
+
+    players.sort(key=lambda player: player[0])
+    return render_template("players.html", players=players, search=search )
 
 
 
