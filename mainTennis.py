@@ -59,25 +59,33 @@ def Player():
 
 
 @app.route("/editPlayer", methods=['GET', 'POST'])
+@login_required
 def EditPlayer():
     if request.method == 'GET' :
         try:
-            player = request.args.get('n')
+            ident = request.args.get('id')
         except ValueError:
-            player = None
-        if player <> None:
-            player = TennisPlayer.get( player )
-            return render_template("player.html", player=player )
+            ident = None
+        app.logger.info( 'editPlayer: ' + str(ident) )
+        if ident <> None:
+            player = TennisPlayer.get( ident )
+            app.logger.info( "GOT " + str(player) )
+            if player == None:
+                player = TennisPlayer( name=ident )
+            app.logger.info( "GOT " + str(player) )
+            return render_template("editPlayer.html", player=player, ident=ident )
 
-    if request.method == 'POST':
-        name = request.form['name']
-        born = request.form['born']
-        died = request.form['died']
-        comment = request.form['comment']
-        picture = request.form['picture']
-        p = TennisPlayer( name=name, born=born, died=died, comment=comment, picture=picture )
-        p.put()
-        return redirect(url_for("Player"))
+    elif request.method == 'POST':
+        if request.form["Status"] == "Shrani":
+            name = request.form['name']
+            born = request.form['born']
+            died = request.form['died']
+            comment = request.form['comment']
+            picture = request.form['picture']
+            p = TennisPlayer( name=name, born=born, died=died, comment=comment, picture=picture )
+            p.update()
+
+    return redirect(url_for("Player"))
 
 
 @app.route("/comment", methods=['GET', 'POST'])

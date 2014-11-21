@@ -8,6 +8,8 @@ import sqlite3
 from flask import url_for
 #where from?? from __main__ import name
 
+from Utils import app
+
 
 DbName = "TennisHistory.db"
 
@@ -247,6 +249,7 @@ DELETE FROM TennisPlayer;
 class TennisPlayer:
 
         PlayersCache = None
+        PlayersIndex = {}
 
         def __init__(self, name, born="", died="", comment="", picture=""):
                 self.name = name
@@ -264,13 +267,17 @@ class TennisPlayer:
             with conn:
                 conn.row_factory = sqlite3.Row
                 curs = conn.cursor()
-                curs.execute( "CFEATE TABLE IF NOT EXISTS TennisPlayer( Id INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
-                curs.execute( "SELECT * FROM TennisPlayers" )
-                for row in curs:
-                    cls.PlayersCache[row.name] = dict(row)
+                curs.execute( "CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
+                curs.execute( "SELECT * FROM TennisPlayer" )
+                cls.PlayersCache = [ dict(row) for row in curs ]
                 conn.commit()
 
-            logging.warning( "Players cache reloaded (%d entries)" % len(cls.EventsCache) )
+            for idx, val in enumerate(cls.PlayersCache):
+                cls.PlayersIndex[val['Name']] = idx
+
+            app.logger.error( "CACHE " + str(cls.PlayersCache) )
+            app.logger.error( "CACHE " + str(cls.PlayersIndex) )
+            app.logger.warning( "Players cache reloaded (%d entries)" % len(cls.PlayersCache) )
 
 
         @classmethod
@@ -279,8 +286,27 @@ class TennisPlayer:
 
 
         @classmethod
-        def get(cls, Player):
+        def get(cls, Name):
                 cls.fetchData()                        
-                return cls.PlayersCache[Player]
+		if Name in cls.PlayersIndex:
+                        app.logger.error( "GET " + Name )
+	                idx = cls.PlayersIndex[Name]
+                        app.logger.error( "GET " + str(idx) )
+                        app.logger.error( "return " + str(cls.PlayersCache[idx]) )
+        	        return cls.PlayersCache[idx]
+		else:
+			return None
 
+        def update(self):
+                conn = sqlite3.connect(DbName)
+                curs = conn.cursor()
 
+                logging.error( "PUT " )
+                curs.execute( "CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
+                curs.execute( """INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died,Comment, Picture, Created,LastModified)
+                                VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
+                                      {"Name":self.name, "Born":self.born, "Died":self.died,
+                                       "Comment":self.comment, "Picture":self.picture} )
+                conn.commit()                
+                self.clearData()
+                return curs.lastrowid
