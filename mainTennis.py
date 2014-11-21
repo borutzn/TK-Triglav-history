@@ -18,7 +18,7 @@ from flask import render_template, request, redirect, url_for
 from flask.ext.login import LoginManager, login_user, logout_user, login_required
 
 
-from TennisData import TennisEvent
+from TennisData import TennisEvent, TennisPlayer
 
 from Utils import app, log_info, valid_username, valid_password, valid_email
 
@@ -35,7 +35,7 @@ def Player():
             player = None
         if player <> None:
             events = TennisEvent.getPlayersEvents( player )
-            return render_template("player.html", events=events )
+            return render_template("player.html", events=events, id=player )
 
     search = ""
     if request.method == 'POST':
@@ -58,6 +58,28 @@ def Player():
 
 
 
+@app.route("/editPlayer", methods=['GET', 'POST'])
+def EditPlayer():
+    if request.method == 'GET' :
+        try:
+            player = request.args.get('n')
+        except ValueError:
+            player = None
+        if player <> None:
+            player = TennisPlayer.get( player )
+            return render_template("player.html", player=player )
+
+    if request.method == 'POST':
+        name = request.form['name']
+        born = request.form['born']
+        died = request.form['died']
+        comment = request.form['comment']
+        picture = request.form['picture']
+        p = TennisPlayer( name=name, born=born, died=died, comment=comment, picture=picture )
+        p.put()
+        return redirect(url_for("Player"))
+
+
 @app.route("/comment", methods=['GET', 'POST'])
 def EditComment():
     if request.method == 'GET':
@@ -67,7 +89,7 @@ def EditComment():
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get( ident )
-        return render_template("comment.html", event=event, date=TennisEvent.date2user(event['date']) )
+        return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['date']) )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -80,9 +102,9 @@ def EditComment():
 
 
 @app.route("/add", methods=['GET', 'POST'])
-def Add():
+def AddEvent():
     if request.method == 'GET':
-        return render_template("add.html", event=[] )
+        return render_template("addEvent.html", event=[] )
 
     elif request.method == 'POST':
         logging.error( "ADD: "+str(request.form) )
@@ -101,7 +123,7 @@ def Add():
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update':False} )
 @app.route("/duplicate", methods=['GET', 'POST'], defaults={'update':True}, endpoint='Duplicate' )
 @login_required
-def Edit( update ):
+def EditEvent( update ):
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))

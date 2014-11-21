@@ -240,7 +240,7 @@ class TennisEvent:
 
 '''
 DROP TABLE TennisPlayer;
-CREATE TABLE TennisPlayer( Id INTEGER PRIMARY KEY, Name TEXT, Born TEXT, 
+CREATE TABLE TennisPlayer( Ident INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER, 
         Comment TEXT, Picture TEXT, Created DATE, LastModified DATE);
 DELETE FROM TennisPlayer;
 '''
@@ -248,9 +248,10 @@ class TennisPlayer:
 
         PlayersCache = None
 
-        def __init__(self, born="", comment="", picture=""):
+        def __init__(self, name, born="", died="", comment="", picture=""):
                 self.name = name
                 self.born = born
+                self.died = died
                 self.comment = comment
                 self.picture = picture
 
@@ -263,7 +264,7 @@ class TennisPlayer:
             with conn:
                 conn.row_factory = sqlite3.Row
                 curs = conn.cursor()
-                curs.execute( "CFEATE TABLE IF NOT EXISTS TennisPlayer( Id INTEGER PRIMARY KEY, Name TEXT, Born TEXT, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
+                curs.execute( "CFEATE TABLE IF NOT EXISTS TennisPlayer( Id INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
                 curs.execute( "SELECT * FROM TennisPlayers" )
                 for row in curs:
                     cls.PlayersCache[row.name] = dict(row)
@@ -273,8 +274,13 @@ class TennisPlayer:
 
 
         @classmethod
+        def clearData(cls):
+                TennisPlayer.PlayersCache = None # lazy approach - clear cache & reload again
+
+
+        @classmethod
         def get(cls, Player):
                 cls.fetchData()                        
-                return cls.EventsCache[Player]
+                return cls.PlayersCache[Player]
 
 

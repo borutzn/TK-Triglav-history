@@ -1,0 +1,21 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p><div class="page-title">Popravljanje podatkov igralca</div><br>
+    <form action="{{ url_for('EditPlayer') }}" method="post">
+        <table>
+		<tr><th>igralec</th> <th>{{ player.name }}<input type="hidden" name="name" value="{{ player.name }}"></th></tr>
+		<tr><th>leto rojstva</th> <td><input type="number" name="born" value="{{ player.born }}"></td></tr>
+		<tr><th>leto smrti</th> <td><input type="number" name="died" value="{{ player.died }}"></td></tr>
+		<tr><th>opombe</th> <td><textarea rows="6" cols="60" name="comment">{{ player.comment }}</textarea></td></tr>
+	</table> <br>
+	<input type="hidden" name="ident" value="{{ user.ident }}">
+	<input type="Submit" name="Status" id="button" value="Shrani">
+	<input type="Submit" name="Status" id="button" value="Prekliči">
+	<button type="Reset"               id="button" value="Reset">Obnovi</button>
+    </form>
+
+{% endblock %}	
