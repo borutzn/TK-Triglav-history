@@ -8,7 +8,15 @@
     {% if events %}
         <div style="position=:relative; height:35px;">
             <div class="year" style="float:left; width:60%">
-                {{ events[0].Player }}
+                {{ events[0].Player }},
+                {{ playername }},
+                {% if player %}
+	                {{ player.name }},
+	                {{ player.born }},
+	                {{ player.died }},
+	                {{ player.comment }},
+	                {{ player.picture }}.
+	            {% endif %}
             </div>
             <div style="float:right; width:40%">
                 &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>

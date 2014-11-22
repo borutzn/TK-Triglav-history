@@ -30,12 +30,13 @@ from User import User, Anonymous
 def Player():
     if request.method == 'GET' :
         try:
-            player = request.args.get('n')
+            playerName = request.args.get('n')
         except ValueError:
-            player = None
-        if player <> None:
-            events = TennisEvent.getPlayersEvents( player )
-            return render_template("player.html", events=events, id=player )
+            playerName = None
+        if playerName is not None:
+            player = TennisPlayer.get( playerName )
+            events = TennisEvent.getPlayersEvents( playerName )
+            return render_template("player.html", events=events, playername=playerName, player=player )
 
     search = ""
     if request.method == 'POST':
