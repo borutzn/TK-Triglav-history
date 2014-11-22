@@ -7,16 +7,14 @@
 
     {% if events %}
         <div style="position=:relative; height:35px;">
-            <div class="year" style="float:left; width:60%">
-                {{ events[0].Player }},
-                {{ playername }},
+            <div style="float:left; width:60%">
+                <p class="year">{{ playername }}</p>
                 {% if player %}
-	                {{ player.name }},
-	                {{ player.born }},
-	                {{ player.died }},
-	                {{ player.comment }},
-	                {{ player.picture }}.
-	            {% endif %}
+                    {% if player.Born %}<br>rojen {{ player.Born }}{% endif %}
+                    {% if player.Died %}<br>umrl {{ player.Died }}{% endif %}
+                    {% if player.Comment %}<br>komentar {{ player.Comment }}{% endif %}
+                    {% if player.Picture %}<br>slika {{ player.Picture }}{% endif %}
+                {% endif %}
             </div>
             <div style="float:right; width:40%">
                 &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>

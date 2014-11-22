@@ -35,6 +35,7 @@ def Player():
             playerName = None
         if playerName is not None:
             player = TennisPlayer.get( playerName )
+            app.logger.info( "get: " + playerName + ", " + str(player) )
             events = TennisEvent.getPlayersEvents( playerName )
             return render_template("player.html", events=events, playername=playerName, player=player )
 
