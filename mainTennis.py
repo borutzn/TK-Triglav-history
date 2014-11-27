@@ -218,6 +218,7 @@ PAGELEN = 15
 
 @app.route("/")
 def TennisMain():
+    app.logger.info( "request for /" )
     try:
         p = request.args.get('p')
         pos = int(p) if p else 0
@@ -337,7 +338,7 @@ def EditUser():
 if __name__ == "__main__":
     if Production:
         log_info( "start production version" )
-        app.run(host='0.0.0.0', port=80, debug=False)
+        app.run(host='0.0.0.0', port=8080, debug=False)
     else:        
         log_info( "start development version" )
         app.run(host='127.0.0.1', port=80, debug=True)

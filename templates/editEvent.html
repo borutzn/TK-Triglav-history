@@ -5,7 +5,7 @@
 {% block content %}
 
     <p><div class="page-title">Popravljanje dogodka</div><br>
-    <form action="{{ url_for('Edit') }}" method="post">
+    <form action="{{ url_for('EditEvent') }}" method="post">
         <table id="player-table">
 		<tr><th>Datum:</th> <td><input style="width:3cm" type="date" name="date" value="{{ event.LocalDate }}"></td></tr>
 		<tr><th>Dogodek:</th> <td><input style="width:10cm" type="text" name="event" value="{{ event.Event }}"></td></tr>
