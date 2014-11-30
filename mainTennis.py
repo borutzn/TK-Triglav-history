@@ -15,7 +15,7 @@ import logging
 import difflib
 
 from flask import render_template, request, redirect, url_for
-from flask.ext.login import LoginManager, login_user, logout_user, login_required
+from flask.ext.login import LoginManager, login_user, logout_user, login_required#, current_user
 
 
 from TennisData import TennisEvent, TennisPlayer
@@ -99,7 +99,8 @@ def EditComment():
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get( ident )
-        return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['date']) )
+        app.logger.error( "Com: "+ str(event) )
+        return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['Date']) )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -208,7 +209,8 @@ def Correct():
 
     elif request.method == 'POST':
         logging.error( "UPDATE ATT" )
-        TennisEvent.updateAtt( request.form["id"],request.form["att"], request.form["fname"] )
+ 
+       TennisEvent.updateAtt( request.form["id"],request.form["att"], request.form["fname"] )
         logging.error( "UPDATE ATT DONE" )
         return redirect(url_for("TennisMain"))
 
@@ -268,6 +270,7 @@ def Login():
             user = User( username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'] )
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user,remember=rememberme)
+                app.logger.info( "AUDIT - User login: " + user.username )
                 return redirect(request.args.get("next") or url_for("TennisMain"))
         
         return render_template("login.html", username=username,
@@ -296,6 +299,7 @@ def Signup():
             user = User( username=username, password=pass1, email=email)
             user.put()
             login_user(user)
+            app.logger.info( "AUDIT - New user: " + user )
             return redirect(url_for("TennisMain"))
 
         return render_template("signup.html", username=username, userMsg=userMsg, password=pass1, 
@@ -305,6 +309,7 @@ def Signup():
 @app.route("/logout")
 @login_required
 def Logout():
+    app.logger.info( "AUDIT - User logout: " + str(current_user) )
     logout_user()
     return redirect(url_for("TennisMain"))
 

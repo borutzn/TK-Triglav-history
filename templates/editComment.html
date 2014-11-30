@@ -7,26 +7,26 @@
 <form action="{{ url_for('EditComment') }}" method="post">
         <table class="player-table">
 		<tr><th>Datum:</th> <td>{{ date }}</td></tr>
-		<tr><th>Dogodek:</th> <td>{{ event.event }}</td></tr>
-		<tr><th>Kraj:</th> <td>{{ event.place }}</td></tr>
-		<tr><th>Kategorija:</th> <td>{{ event.category }}</td></tr>
-		<tr><th>Rezultat:</th> <td>{{ event.result }}</td></tr>
-		<tr><th>Igralec:</th> <td>{{ event.player }}</td></tr>
+		<tr><th>Dogodek:</th> <td>{{ event.Event }}</td></tr>
+		<tr><th>Kraj:</th> <td>{{ event.Place }}</td></tr>
+		<tr><th>Kategorija:</th> <td>{{ event.Category }}</td></tr>
+		<tr><th>Rezultat:</th> <td>{{ event.Result }}</td></tr>
+		<tr><th>Igralec:</th> <td>{{ event.Player }}</td></tr>
 		{% if current_user.is_authenticated() %}
-                    <tr><th>Komentar:</th> <td><textarea rows="4" cols="60" name="comment">{{ event.comment }}</textarea></td></tr>
+                    <tr><th>Komentar:</th> <td><textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea></td></tr>
                     <input type="hidden" name="addcomment" value="">
                 {% else %}
-                    <tr><th rowspan="2">Komentar:</th> <td>{{ event.comment }}</td></tr>
-                    <input type="hidden" name="comment" value="{{ event.comment }}">
+                    <tr><th rowspan="2">Komentar:</th> <td>{{ event.Comment }}</td></tr>
+                    <input type="hidden" name="comment" value="{{ event.Comment }}">
                     <tr><td><textarea rows="4" cols="60" name="addcomment"></textarea></td></tr>
                 {% endif %}
-		<tr><th>Dokument 1:</th> <td>{{ event.att1 }}</td></tr>
-		<tr><th>Dokument 2:</th> <td>{{ event.att2 }}</td></tr>
-		<tr><th>Dokument 3:</th> <td>{{ event.att3 }}</td></tr>
-		<tr><th>Dokument 4:</th> <td>{{ event.att4 }}</td></tr>
-		<tr><th>Vir:</th> <td>{{ event.source }}</td></tr>
+		<tr><th>Dokument 1:</th> <td>{{ event.Att1 }}</td></tr>
+		<tr><th>Dokument 2:</th> <td>{{ event.Att2 }}</td></tr>
+		<tr><th>Dokument 3:</th> <td>{{ event.Att3 }}</td></tr>
+		<tr><th>Dokument 4:</th> <td>{{ event.Att4 }}</td></tr>
+		<tr><th>Vir:</th> <td>{{ event.Source }}</td></tr>
 	</table> <br>
-	<input type="hidden" name="Id" value="{{ event.id }}">
+	<input type="hidden" name="Id" value="{{ event.Id }}">
 	<input type="Submit" name="Status" id="button" value="Shrani">
 	<input type="Submit" name="Status" id="button" value="Prekliči">
 	<button type="Reset"               id="button" value="Reset">Obnovi</button>

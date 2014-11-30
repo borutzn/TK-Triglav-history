@@ -73,7 +73,7 @@ class TennisEvent:
                 
         @classmethod
         def date2user( cls, date ):
-                #logging.error( "date2user from : "+str(type(date))+", "+str(date) )
+                logging.error( "date2user from : "+str(type(date))+", "+str(date) )
                 match=re.search(r"(\d{4})/(\d{0,2})/?(\d{0,2})",date)
                 if match:
                         (d,m,y) = (int(match.group(3)), int(match.group(2)), int(match.group(1)))
@@ -275,8 +275,8 @@ class TennisPlayer:
             for idx, val in enumerate(cls.PlayersCache):
                 cls.PlayersIndex[val['Name']] = idx
 
-            app.logger.error( "CACHE " + str(cls.PlayersCache) )
-            app.logger.error( "CACHE " + str(cls.PlayersIndex) )
+            #app.logger.error( "CACHE " + str(cls.PlayersCache) )
+            #app.logger.error( "CACHE " + str(cls.PlayersIndex) )
             app.logger.warning( "Players cache reloaded (%d entries)" % len(cls.PlayersCache) )
 
 
