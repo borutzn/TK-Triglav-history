@@ -287,15 +287,15 @@ class TennisPlayer:
 
         @classmethod
         def get(cls, Name):
-                cls.fetchData()                        
-		if Name in cls.PlayersIndex:
-                        app.logger.error( "GET " + Name )
-	                idx = cls.PlayersIndex[Name]
-                        app.logger.error( "GET " + str(idx) )
-                        app.logger.error( "return " + str(cls.PlayersCache[idx]) )
-        	        return cls.PlayersCache[idx]
-		else:
-			return None
+            cls.fetchData()                        
+            if Name in cls.PlayersIndex:
+                app.logger.error( "GET " + Name )
+                idx = cls.PlayersIndex[Name]
+                app.logger.error( "GET " + str(idx) )
+                app.logger.error( "return " + str(cls.PlayersCache[idx]) )
+                return cls.PlayersCache[idx]
+            else:
+                return None
 
         def update(self):
                 conn = sqlite3.connect(DbName)

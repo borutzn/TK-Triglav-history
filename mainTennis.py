@@ -15,7 +15,7 @@ import logging
 import difflib
 
 from flask import render_template, request, redirect, url_for
-from flask.ext.login import LoginManager, login_user, logout_user, login_required#, current_user
+from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
 
 
 from TennisData import TennisEvent, TennisPlayer
@@ -210,7 +210,7 @@ def Correct():
     elif request.method == 'POST':
         logging.error( "UPDATE ATT" )
  
-       TennisEvent.updateAtt( request.form["id"],request.form["att"], request.form["fname"] )
+        TennisEvent.updateAtt( request.form["id"],request.form["att"], request.form["fname"] )
         logging.error( "UPDATE ATT DONE" )
         return redirect(url_for("TennisMain"))
 
