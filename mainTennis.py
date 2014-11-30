@@ -220,6 +220,7 @@ PAGELEN = 15
 
 @app.route("/")
 def TennisMain():
+    #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     app.logger.info( "request for /" )
     try:
         p = request.args.get('p')
@@ -309,7 +310,7 @@ def Signup():
 @app.route("/logout")
 @login_required
 def Logout():
-    app.logger.info( "AUDIT - User logout: " + str(current_user) )
+    app.logger.info( "AUDIT - User logout: " + str(current_user.username) )
     logout_user()
     return redirect(url_for("TennisMain"))
 
