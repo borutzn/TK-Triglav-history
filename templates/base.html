@@ -19,7 +19,7 @@
 		{{current_user.username}} |
 		<a href="{{ url_for('Logout') }}"><img src="{{ url_for('static',filename='1414455023_editor_unlock_lock-24.png') }}" title="Odjava uporabnika"></a>
             {% else %}
-		<a href="{{ url_for('Login') }}"><img src="{{ url_for('static',filename='1414454957_editor_lock-24.png') }}" title="Prijava uporabnika"></a> | 
+		<a href="{{ url_for('Login', next=request.url) }}"><img src="{{ url_for('static',filename='1414454957_editor_lock-24.png') }}" title="Prijava uporabnika"></a> | 
 		<a href="{{ url_for('Signup') }}" ><img src="{{ url_for('static',filename='1414455652_common_new_edit_compose-24.png') }}" title="Registracija uporabnika"></a> 
             {% endif %}
 	</div>

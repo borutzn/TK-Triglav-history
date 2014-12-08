@@ -251,12 +251,12 @@ class TennisPlayer:
         PlayersCache = None
         PlayersIndex = {}
 
-        def __init__(self, name, born="", died="", comment="", picture=""):
-                self.name = name
-                self.born = born
-                self.died = died
-                self.comment = comment
-                self.picture = picture
+        def __init__(self, Name, Born="", Died="", Comment="", Picture=""):
+                self.Name = Name
+                self.Born = Born
+                self.Died = Died
+                self.Comment = Comment
+                self.Picture = Picture
 
         @classmethod
         def fetchData(cls):
@@ -305,8 +305,8 @@ class TennisPlayer:
                 curs.execute( "CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
                 curs.execute( """INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died,Comment, Picture, Created,LastModified)
                                 VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                                      {"Name":self.name, "Born":self.born, "Died":self.died,
-                                       "Comment":self.comment, "Picture":self.picture} )
+                                      {"Name":self.Name, "Born":self.Born, "Died":self.Died,
+                                       "Comment":self.Comment, "Picture":self.Picture} )
                 conn.commit()                
                 self.clearData()
                 return curs.lastrowid

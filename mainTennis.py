@@ -35,8 +35,8 @@ def Player():
             playerName = None
         if playerName is not None:
             player = TennisPlayer.get( playerName )
-            app.logger.info( "get: " + playerName + ", " + str(player) )
             events = TennisEvent.getPlayersEvents( playerName )
+            app.logger.info( "Player: " + str(player) )
             return render_template("player.html", events=events, playername=playerName, player=player )
 
     search = ""
@@ -68,23 +68,23 @@ def EditPlayer():
             ident = request.args.get('id')
         except ValueError:
             ident = None
-        app.logger.info( 'editPlayer: ' + str(ident) )
+        #app.logger.info( 'editPlayer: ' + unicode(ident) )
         if ident <> None:
             player = TennisPlayer.get( ident )
-            app.logger.info( "GOT " + str(player) )
+            #app.logger.info( "GOT " + unicode(player) )
             if player == None:
-                player = TennisPlayer( name=ident )
-            app.logger.info( "GOT " + str(player) )
+                player = TennisPlayer( Name=ident )
+            #app.logger.info( "GOT " + unicode(player.Name) )
             return render_template("editPlayer.html", player=player, ident=ident )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            name = request.form['name']
-            born = request.form['born']
-            died = request.form['died']
-            comment = request.form['comment']
-            picture = request.form['picture']
-            p = TennisPlayer( name=name, born=born, died=died, comment=comment, picture=picture )
+            name = request.form['Name']
+            born = request.form['Born']
+            died = request.form['Died']
+            comment = request.form['Comment']
+            picture = request.form['Picture']
+            p = TennisPlayer( Name=name, Born=born, Died=died, Comment=comment, Picture=picture )
             p.update()
 
     return redirect(url_for("Player"))
