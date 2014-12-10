@@ -6,23 +6,24 @@
 
 
     {% if events %}
-        <div style="position=:relative; height:35px;">
-            <div style="float:left; width:60%">
-                <p class="year">{{ playername }}</p>
-                {% if player %}
-                    {% if player.Born %}<br>rojen {{ player.Born }}{% endif %}
-                    {% if player.Died %}<br>umrl {{ player.Died }}{% endif %}
-                    {% if player.Comment %}<br>komentar {{ player.Comment }}{% endif %}
-                    {% if player.Picture %}<br>slika {{ player.Picture }}{% endif %}
-                {% endif %}
-            </div>
-            <div style="float:right; width:40%">
-                &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
-                {% if current_user.is_authenticated() %}
-                    &nbsp;&nbsp;<a href="{{ url_for('EditPlayer') }}?id={{ playername }}"><img src="{{ url_for('static',filename='1413926808_editor_pencil_pen_edit_write_-32.png') }}" title="Urejanje igralca"></a>
-                {% endif %}
-            </div>
+        <div style="float:left; width:60%;">
+            <div class="player_name">{{ playername }}</div>
+            {% if player %}
+                <div class="player_data">
+                {% if player.Born %}rojen {{ player.Born }}<br>{% endif %}
+                {% if player.Died %}umrl {{ player.Died }}<br>{% endif %}
+                {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
+                {% if player.Picture %}slika {{ player.Picture }}<br>{% endif %}
+                </div>
+            {% endif %}
         </div>
+        <div style="float:left; width:40%;">
+            &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
+            {% if current_user.is_authenticated() %}
+                &nbsp;&nbsp;<a href="{{ url_for('EditPlayer') }}?id={{ playername }}"><img src="{{ url_for('static',filename='1413926808_editor_pencil_pen_edit_write_-32.png') }}" title="Urejanje igralca"></a>
+            {% endif %}
+        </div>
+        <div style="clear:both;"></div>
 
         {% set year = 0 %}
         {% for event in events %}
