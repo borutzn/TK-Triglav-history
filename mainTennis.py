@@ -16,11 +16,12 @@ import difflib
 
 from flask import render_template, request, redirect, url_for
 from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug import secure_filename
 
 
 from TennisData import TennisEvent, TennisPlayer
 
-from Utils import app, log_info, valid_username, valid_password, valid_email
+from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file
 
 from User import User, Anonymous
 
@@ -59,6 +60,7 @@ def Player():
     return render_template("players.html", players=players, search=search )
 
 
+PLAYER_PIC_DIR = "/home/apps/TK-Triglav-history/"
 
 @app.route("/editPlayer", methods=['GET', 'POST'])
 @login_required
@@ -84,6 +86,10 @@ def EditPlayer():
             died = request.form['Died']
             comment = request.form['Comment']
             picture = request.form['Picture']
+            file = request.files['upload']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save( os.path.join(PLAYER_PIC_DIR,filename) )
             p = TennisPlayer( Name=name, Born=born, Died=died, Comment=comment, Picture=picture )
             p.update()
 

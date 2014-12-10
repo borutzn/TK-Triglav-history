@@ -5,13 +5,14 @@
 {% block content %}
 
     <p><div class="page-title">Popravljanje podatkov igralca</div><br>
-    <form action="{{ url_for('EditPlayer') }}" method="post">
+    <form action="{{ url_for('EditPlayer') }}" method="post" enctype="multipart/form-data">
         <table>
 		<tr><th>igralec</th> <th>{{ player.Name }}<input type="hidden" name="Name" value="{{ player.Name }}"></th></tr>
 		<tr><th>leto rojstva</th> <td><input type="text" name="Born" value="{{ player.Born }}"></td></tr>
 		<tr><th>leto smrti</th> <td><input type="text" name="Died" value="{{ player.Died }}"></td></tr>
 		<tr><th>opombe</th> <td><textarea rows="6" cols="60" name="Comment">{{ player.Comment }}</textarea></td></tr>
-		<tr><th>slika</th> <td><input type="text" name="Picture" value="{{ player.Picture }}"></td></tr>
+		<tr><th>slika</th> <td><input type="text" size="60" name="Picture" value="{{ player.Picture }}"><br>
+                                       <input name="upload" type="file"> </td></tr>
 	</table> <br>
 	<input type="Submit" name="Status" id="button" value="Shrani">
 	<input type="Submit" name="Status" id="button" value="Prekliči">

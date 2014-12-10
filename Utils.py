@@ -38,3 +38,11 @@ def valid_password(password):
 def valid_email(email):
     EmailRE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
     return EmailRE.match(email)
+
+
+
+PICTURE_EXT = set(['png', 'jpg', 'jpeg', 'gif'])
+
+def allowed_file( filename ):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in PICTURE_EXT

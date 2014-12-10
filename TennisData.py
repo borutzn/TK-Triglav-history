@@ -289,10 +289,10 @@ class TennisPlayer:
         def get(cls, Name):
             cls.fetchData()                        
             if Name in cls.PlayersIndex:
-                app.logger.error( "GET " + Name )
+                #app.logger.error( "GET " + Name )
                 idx = cls.PlayersIndex[Name]
-                app.logger.error( "GET " + str(idx) )
-                app.logger.error( "return " + str(cls.PlayersCache[idx]) )
+                #app.logger.error( "GET " + str(idx) )
+                #app.logger.error( "return " + str(cls.PlayersCache[idx]) )
                 return cls.PlayersCache[idx]
             else:
                 return None
