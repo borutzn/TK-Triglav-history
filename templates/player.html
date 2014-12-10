@@ -63,22 +63,24 @@
                     <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.Att4}}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
                 {% endif %}
             </td>
-            <td style="text-align:right;"
-                    {% if event.Comment != "" %}
-                        rowspan="2"
-                    {% endif %}>
-                    {% if current_user.is_authenticated() %}
-                        <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1413927437_editor_pencil_pen_edit_write-24.png') }}" title="Popravi dogodek"></a>
-                    {% endif %}
-                    <a href="{{ url_for('EditComment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1413927480_other_conversation_review_comment_bubble_talk-24.png') }}" title="Komentiraj dogodek"></a>
-                	{% if current_user.is_authenticated() %}
-                            <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1414093784_circle_add_plus-24.png') }}" title="Podvoji dogodek"></a>
-                            <a href="{{ url_for('Delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='1413927465_editor_trash_delete_recycle_bin-24.png') }}" title="Briši dogodek"></a>
-                    {% endif %}
-            </td></tr>
-                {% if event.comment != "" %}
-                    <tr><td class="main-table-comment" colspan="6">{{ event.Comment }}<td></tr>
+            {% if current_user.is_authenticated() %}
+            <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
+            {% endif %}
+                {% if current_user.utype >= 3 %}
+                    <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="static/1413927437_editor_pencil_pen_edit_write-24.png" title="Popravi dogodek"></a>
                 {% endif %}
+                {% if current_user.utype >= 1 %}
+                    <a href="{{ url_for('EditComment') }}?id={{ event.Id }}"><img src="static/1413927480_other_conversation_review_comment_bubble_talk-24.png" title="Komentiraj dogodek"></a>
+                {% endif %}
+            	{% if current_user.is_authenticated() %}
+                        <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="static/1414093784_circle_add_plus-24.png" title="Podvoji dogodek"></a>
+                        <a href="{{ url_for('Delete') }}?id={{ event.Id }}"><img src="static/1413927465_editor_trash_delete_recycle_bin-24.png" title="Briši dogodek"></a>
+                {% endif %}
+            {% if current_user.is_authenticated() %}</td>{% endif %}
+            </tr>
+            {% if event.Comment != "" %}
+                <tr><td class="main-table-comment" colspan="6">{{ event.Comment }}<td></tr>
+            {% endif %}
         {% endfor %}
         </table>
     {% endif %}
