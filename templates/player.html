@@ -34,7 +34,7 @@
                 <br><a href="{{ url_for('TennisMain') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
-                  <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th></th><th></th></tr>
+                  <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th></th>{% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
             {% endif %}
             <tr><td>
             {% if event.Date[4:] == "/00/00" %}
