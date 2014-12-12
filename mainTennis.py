@@ -5,9 +5,10 @@
 Show Tenis history data of TK Triglav Kranj
 
 data collected by Davor Žnidar
-program by Borut Žnidar on 7.11.2014
+program by Borut Žnidar on 12.12.2014
 """
 
+appname = "TK-Triglav-history"
 Production = True
 
 import string
@@ -354,8 +355,10 @@ def EditUser():
 
 if __name__ == "__main__":
     if Production:
-        log_info( "start production version" )
+        log_info( appname + "start standalone production" )
         app.run(host='0.0.0.0', port=8080, debug=False)
     else:        
-        log_info( "start development version" )
+        log_info( appname + "start standalone development" )
         app.run(host='127.0.0.1', port=80, debug=True)
+else:
+    log_info( appname + "start" )
