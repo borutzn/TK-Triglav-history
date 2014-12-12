@@ -10,6 +10,7 @@ program by Borut Žnidar on 7.11.2014
 
 Production = True
 
+import string
 import os
 import logging
 import difflib
@@ -37,7 +38,7 @@ def Player():
         if playerName is not None:
             player = TennisPlayer.get( playerName )
             events = TennisEvent.getPlayersEvents( playerName )
-            app.logger.info( "Player: " + str(player) )
+            #app.logger.info( "Player: " + str(player) )
             return render_template("player.html", events=events, playername=playerName, player=player )
 
     search = ""
@@ -60,7 +61,7 @@ def Player():
     return render_template("players.html", players=players, search=search )
 
 
-PLAYER_PIC_DIR = "/home/apps/TK-Triglav-history/"
+PLAYER_PIC_BASEDIR = "/home/apps/TK-Triglav-history/static/files"
 
 @app.route("/editPlayer", methods=['GET', 'POST'])
 @login_required
@@ -88,8 +89,12 @@ def EditPlayer():
             picture = request.form['Picture']
             file = request.files['upload']
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save( os.path.join(PLAYER_PIC_DIR,filename) )
+                picture = os.path.join( "players", secure_filename(file.filename) )
+                app.logger.info( "PICTURE=" + picture )
+                filename = os.path.join( PLAYER_PIC_BASEDIR, picture )
+                app.logger.info( "FILENAME " + filename )
+                file.save( os.path.join( filename ) )
+                app.logger.info( "after join" )
             p = TennisPlayer( Name=name, Born=born, Died=died, Comment=comment, Picture=picture )
             p.update()
 

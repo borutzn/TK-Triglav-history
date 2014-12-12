@@ -303,7 +303,7 @@ class TennisPlayer:
 
                 logging.error( "PUT " )
                 curs.execute( "CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
-                curs.execute( """INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died,Comment, Picture, Created,LastModified)
+                curs.execute( """INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
                                 VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
                                       {"Name":self.Name, "Born":self.Born, "Died":self.Died,
                                        "Comment":self.Comment, "Picture":self.Picture} )

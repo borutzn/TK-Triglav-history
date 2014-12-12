@@ -6,18 +6,22 @@
 
 
     {% if events %}
-        <div style="float:left; width:60%;">
+        <div style="float:left; width:25%">
+            {% if player %}
+                {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}{{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
+            {% endif %}
+        </div>
+        <div style="float:left; width:45%;">
             <div class="player_name">{{ playername }}</div>
             {% if player %}
-                <div class="player_data">
+            <div class="player_data">
                 {% if player.Born %}rojen {{ player.Born }}<br>{% endif %}
                 {% if player.Died %}umrl {{ player.Died }}<br>{% endif %}
                 {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
-                {% if player.Picture %}slika {{ player.Picture }}<br>{% endif %}
-                </div>
+            </div>
             {% endif %}
         </div>
-        <div style="float:left; width:40%;">
+        <div style="float:left; width:30%;">
             &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
             {% if current_user.is_authenticated() %}
                 &nbsp;&nbsp;<a href="{{ url_for('EditPlayer') }}?id={{ playername }}"><img src="{{ url_for('static',filename='1413926808_editor_pencil_pen_edit_write_-32.png') }}" title="Urejanje igralca"></a>
