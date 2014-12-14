@@ -64,22 +64,22 @@
             </td>
             <td style="">
             {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{year}}_{{event.Att1}}" target="_blank"><img src="static/1.png"></a>
+                <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att1}}" target="_blank"><img src="static/1.png"></a>
             {% elif event.Att1 != "" and event.Att1[:4] == "err_" and current_user.is_authenticated() %}
-                <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}&att=1&d={{year}}&f={{event.Att1[4:]}}"><img src="static/1414881448_editor_image_picture_photo-24.png"></a>
+                <a href="correct?id={{ event.Id }}&att=1&d={{year}}&f={{event.Att1[4:]}}"><img src="static/1414881448_editor_image_picture_photo-24.png"></a>
             {% endif %}
             {% if event.Att2 != "" and event.Att2[:4] != "err_"%}
-                <a href="url_for('static',filename='/files/{{year}}/{{year}}_{{event.Att2}}" target="_blank"><img src="static/2.png"></a>
+                <a href="url_for('static',filename='/files/{{year}}/{{event.Att2}}" target="_blank"><img src="static/2.png"></a>
             {% elif event.Att2 != "" and event.Att2[:4] == "err_" and current_user.is_authenticated() %}
                 <a href="correct?id={{ event.Id }}&att=2&d={{year}}&f={{event.Att2[4:]}}"><img src="static/1414881448_editor_image_picture_photo-24.png"></a>
             {% endif %}
             {% if event.Att3 != "" and event.Att3[:4] != "err_"%}
-                <a href="url_for('static',filename='/files/{{year}}/{{year}}_{{event.Att3}}" target="_blank"><img src="static/3.png"></a>
+                <a href="url_for('static',filename='/files/{{year}}/{{event.Att3}}" target="_blank"><img src="static/3.png"></a>
             {% elif event.Att3 != "" and event.Att3[:4] == "err_" and current_user.is_authenticated() %}
                 <a href="correct?id={{ event.Id }}&att=3&d={{year}}&f={{event.Att3[4:]}}"><img src="static/1414881448_editor_image_picture_photo-24.png"></a>
             {% endif %}
             {% if event.Att4 != "" and event.Att4[:4] != "err_"%}
-                <a href="url_for('static',filename='/files/') }}{{year}}/{{year}}_{{event.Att4}}" target="_blank"><img src="static/4.png"></a>
+                <a href="url_for('static',filename='/files/') }}{{year}}/{{event.Att4}}" target="_blank"><img src="static/4.png"></a>
             {% elif event.Att4 != "" and event.Att4[:4] == "err_" and current_user.is_authenticated() %}
                 <a href="correct?id={{ event.Id }}&att=4&d={{year}}&f={{event.Att4[4:]}}"><img src="static/1414881448_editor_image_picture_photo-24.png"></a>
             {% endif %}

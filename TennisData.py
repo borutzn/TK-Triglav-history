@@ -59,17 +59,18 @@ class TennisEvent:
                 return ""
             
             s = list(att)
+            CORRECTED = False
             for i, c in enumerate(s):
                 if ord(c) >= 128:
                     s[i] = "_"
+                    CORRECTED = True
             att = "".join(s)
+            if CORRECTED:
+                log_info( "Unknown characters --> " + att )
             if os.path.exists(os.path.join(FILES_BASEDIR,year+"/"+att)):
-                if year == "1956":
-                    log_info( "OK: " + str(att) )
                 return att
             else:
-                if year == "1956":
-                    log_info( "BAD: " + str( os.path.join(FILES_BASEDIR,year+"/"+att)) )
+                log_info( "Bad filename: " + str(os.path.join(FILES_BASEDIR,year+"/"+att)) )
                 return "err_"+att
 
                 
@@ -151,9 +152,18 @@ class TennisEvent:
                 conn = sqlite3.connect(DbName)
                 curs = conn.cursor()
 
-                logging.error("update"+str(Att))
-                curs.execute( """UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                              { 'fname':fname, 'Id':Id, 'Att':Att } )
+                if Att == "1":
+                    curs.execute( """UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                                  { 'fname':fname, 'Id':Id } )
+                elif Att == "2":
+                    curs.execute( """UPDATE TennisEvents SET Att2=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                                  { 'fname':fname, 'Id':Id } )
+                elif Att == "3":
+                    curs.execute( """UPDATE TennisEvents SET Att3=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                                  { 'fname':fname, 'Id':Id } )
+                elif Att == "4":
+                    curs.execute( """UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                                  { 'fname':fname, 'Id':Id } )
                 conn.commit()                
                 self.clearData()
                 
