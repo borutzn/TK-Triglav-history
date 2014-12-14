@@ -1,0 +1,25 @@
+<!--# -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p><div class="page-title">Spreminjanje imena datoteke</div><br>
+
+    <div class="player_data">mapa: {{ fdir }}, datoteka: <b>{{ fname }}</b><div><br>
+
+    <form  action="{{ url_for('Correct') }}" method="post">
+        <table><tr><th></th><th>ujemanje</th><th>ime datoteke</th></tr>
+        {% for fn in fnames %}
+            <tr><td><input type="radio" name="fname" value="{{ fn.fname }}"></td>
+                <td>{{ fn.fit }}</td><td>{{ fn.fname }}</td></tr>
+        {% endfor %}
+        </table>
+        <input type="hidden" name="ident" value="{{ ident }}">
+        <input type="hidden" name="att" value="{{ att }}">
+        <input type="Submit" name="Status" id="button" value="Shrani">
+        <input type="Submit" name="Status" id="button" value="Preklici">
+        <button type="Reset"               id="button" value="Reset">Obnovi</button>
+    </form>
+
+{% endblock %}		

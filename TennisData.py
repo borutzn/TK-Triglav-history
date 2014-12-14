@@ -8,7 +8,7 @@ import sqlite3
 from flask import url_for
 #where from?? from __main__ import name
 
-from Utils import app
+from Utils import app, log_info, FILES_BASEDIR
 
 
 DbName = "TennisHistory.db"
@@ -63,17 +63,19 @@ class TennisEvent:
                 if ord(c) >= 128:
                     s[i] = "_"
             att = "".join(s)
-            fname = url_for('static', filename="files/" + year + "/" + year + "_" + att )
-            #logging.error( "correct: " + str(fname) +" - "+ str(os.path.exists(fname)) )
-            if os.path.exists(fname):
+            if os.path.exists(os.path.join(FILES_BASEDIR,year+"/"+att)):
+                if year == "1956":
+                    log_info( "OK: " + str(att) )
                 return att
             else:
+                if year == "1956":
+                    log_info( "BAD: " + str( os.path.join(FILES_BASEDIR,year+"/"+att)) )
                 return "err_"+att
 
                 
         @classmethod
         def date2user( cls, date ):
-                logging.error( "date2user from : "+str(type(date))+", "+str(date) )
+                #log_info( "date2user from : "+str(type(date))+", "+str(date) )
                 match=re.search(r"(\d{4})/(\d{0,2})/?(\d{0,2})",date)
                 if match:
                         (d,m,y) = (int(match.group(3)), int(match.group(2)), int(match.group(1)))
@@ -203,18 +205,19 @@ class TennisEvent:
                 cls.players.append( (k, v[0], v[1]) )
             cls.players.sort(key=lambda player: player[2], reverse=True)
 
-            logging.warning( "Event cache reloaded (%d entries)" % len(cls.EventsCache) )
+            log_info( "Event cache reloaded (%d entries)" % len(cls.EventsCache) )
 
         @classmethod
         def clearData(cls):
-                TennisEvent.EventsCache = None # lazy approach - clear cache & reload again
+            TennisEvent.EventsCache = None # lazy approach - clear cache & reload again
 
 
         @classmethod
         def get(cls, Id):
-                cls.fetchData()                        
-                idx = cls.EventsIndex[Id]
-                return cls.EventsCache[idx]
+            cls.fetchData()                        
+            idx = cls.EventsIndex[Id]
+            #log_info( "GET: " + str(cls.EventsCache[idx]) )
+            return cls.EventsCache[idx]
 
 
         @classmethod
@@ -225,18 +228,18 @@ class TennisEvent:
 
         @classmethod
         def getPlayersEvents(cls, player ):
-                cls.fetchData()
-                r = list()
-                for e in cls.EventsCache:
-                        if e['Player'] == player:
-                                r.append( e )      
-                return r
+            cls.fetchData()
+            r = list()
+            for e in cls.EventsCache:
+                if e['Player'] == player:
+                    r.append( e )      
+            return r
 
 
         @classmethod
         def count(cls ):
-                cls.fetchData()           
-                return len(cls.EventsCache)
+            cls.fetchData()           
+            return len(cls.EventsCache)
 
 
 

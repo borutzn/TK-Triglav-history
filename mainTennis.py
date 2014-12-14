@@ -23,7 +23,7 @@ from werkzeug import secure_filename
 
 from TennisData import TennisEvent, TennisPlayer
 
-from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file
+from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, FILES_BASEDIR
 
 from User import User, Anonymous
 
@@ -62,8 +62,6 @@ def Player():
     return render_template("players.html", players=players, search=search )
 
 
-PLAYER_PIC_BASEDIR = "/home/apps/TK-Triglav-history/static/files"
-
 @app.route("/editPlayer", methods=['GET', 'POST'])
 @login_required
 def EditPlayer():
@@ -91,11 +89,8 @@ def EditPlayer():
             file = request.files['upload']
             if file and allowed_file(file.filename):
                 picture = os.path.join( "players", secure_filename(file.filename) )
-                app.logger.info( "PICTURE=" + picture )
-                filename = os.path.join( PLAYER_PIC_BASEDIR, picture )
-                app.logger.info( "FILENAME " + filename )
+                filename = os.path.join( Utils.FILES_BASEDIR, picture )
                 file.save( os.path.join( filename ) )
-                app.logger.info( "after join" )
             p = TennisPlayer( Name=name, Born=born, Died=died, Comment=comment, Picture=picture )
             p.update()
 
@@ -154,6 +149,7 @@ def EditEvent( update ):
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get( ident )
+        log_info( "RENDER " + str(event['LocalDate']) )
         return render_template("editEvent.html", event=event )
 
     elif request.method == 'POST':
@@ -203,7 +199,8 @@ def Correct():
 
         fnames = []
         try:
-            for f in os.listdir(url_for('static',filename="files/"+fdir)):
+            log_info( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) )
+            for f in os.listdir( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) ):
                 s = list(f)
                 for i, c in enumerate(s):
                     if ord(c) >= 128:
@@ -215,15 +212,16 @@ def Correct():
             return redirect(url_for("TennisMain"))
             
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
-        if len(fnames) > 15:
-            fnames= fnames[:15]
-            return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, id=ident, att=att )
+        if len(fnames) > 10:
+            fnames= fnames[:10]
+        return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, ident=ident, att=att )
 
     elif request.method == 'POST':
-        logging.error( "UPDATE ATT" )
+        log_info( "UPDATE ATT" )
  
-        TennisEvent.updateAtt( request.form["id"],request.form["att"], request.form["fname"] )
-        logging.error( "UPDATE ATT DONE" )
+        log_info( request.form["ident"] + request.form["att"] + request.form["fname"] )
+        TennisEvent.updateAtt( request.form["ident"],request.form["att"], request.form["fname"] )
+        log_info( "UPDATE ATT DONE" )
         return redirect(url_for("TennisMain"))
 
 

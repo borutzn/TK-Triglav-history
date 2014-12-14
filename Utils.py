@@ -3,6 +3,9 @@ import os
 
 import jinja2
 
+FILES_BASEDIR = "/home/apps/TK-Triglav-history/static/files"
+
+
 template_dir = os.path.join(os.path.dirname(__file__), 'template')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
 
