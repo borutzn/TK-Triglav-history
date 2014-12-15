@@ -8,7 +8,7 @@ import sqlite3
 from flask import url_for
 #where from?? from __main__ import name
 
-from Utils import app, log_info, FILES_BASEDIR
+from Utils import app, log_info, files_dir
 
 
 DbName = "TennisHistory.db"
@@ -67,10 +67,10 @@ class TennisEvent:
             att = "".join(s)
             if CORRECTED:
                 log_info( "Unknown characters --> " + att )
-            if os.path.exists(os.path.join(FILES_BASEDIR,year+"/"+att)):
+            if os.path.exists(os.path.join(files_dir,year+"/"+att)):
                 return att
             else:
-                log_info( "Bad filename: " + str(os.path.join(FILES_BASEDIR,year+"/"+att)) )
+                log_info( "Bad filename: " + str(os.path.join(files_dir,year+"/"+att)) )
                 return "err_"+att
 
                 

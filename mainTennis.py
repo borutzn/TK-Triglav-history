@@ -12,6 +12,8 @@ appname = "TK-Triglav-history"
 Production = True
 
 import string
+import csv
+import re
 import os
 import logging
 import difflib
@@ -23,7 +25,7 @@ from werkzeug import secure_filename
 
 from TennisData import TennisEvent, TennisPlayer
 
-from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, FILES_BASEDIR
+from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, files_dir
 
 from User import User, Anonymous
 
@@ -89,7 +91,7 @@ def EditPlayer():
             file = request.files['upload']
             if file and allowed_file(file.filename):
                 picture = os.path.join( "players", secure_filename(file.filename) )
-                filename = os.path.join( Utils.FILES_BASEDIR, picture )
+                filename = os.path.join( files_dir, picture )
                 file.save( os.path.join( filename ) )
             p = TennisPlayer( Name=name, Born=born, Died=died, Comment=comment, Picture=picture )
             p.update()
@@ -250,6 +252,105 @@ def TennisMain():
                 start=pos, count=eventsLen )
 
         
+
+'''
+   0. Leto - datum
+   1. * - datum je datum vira
+   2. Dogodek
+   3. Kraj
+   4. Spol - M, Z
+   5. Dvojice - D
+   6. Kategorija
+   7. Uvrstitev
+   8. Igralci
+   9. Priloga 1
+  10. Priloga 2
+  11. Priloga 3
+'''
+att_ext = [".pdf",".PDF",".jpg",".JPG",".jpeg",".JPEG",".png",".PNG"]
+def convertEntry( row ):
+    entry = {}
+    lastCol = 13
+    while (row[lastCol] == "") and lastCol > 1:
+        lastCol -= 1
+    if lastCol >= 2:
+        m = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
+        if m:
+            entry["date"] = unicode("%02d.%02d.%04d" % (int(m.group(1)),int(m.group(2)),int(m.group(3))))
+        else:
+            entry["date"] = unicode("%02d.%02d.%04s" % (0, 0, row[0]))
+        entry["event"] = unicode(row[2], "utf-8")
+        entry["place"] = unicode(row[3], "utf-8")
+        entry["sex"] = unicode(row[4], "utf-8")
+        entry["doubles"] = unicode(row[5], "utf-8")
+        entry["category"] = unicode(row[6], "utf-8")
+        entry["result"] = unicode(row[7], "utf-8")
+        entry["player"] = unicode(string.strip(row[8]), "utf-8")
+        m = re.search("^.*(\d{2,4})$", entry["player"])
+        if m:
+            log_info( "STAROST: " + m.group(1) )
+        entry["eventAge"] = unicode(row[6], "utf-8")
+        entry["comment"] = unicode("")
+        if row[1] == '*':
+            entry["comment"] = "vnesen datum vira; "
+        entry["att1"] = unicode(string.strip(row[9]), "utf-8")
+        if entry["att1"] != "" and not any(x in entry["att1"] for x in att_ext):
+            entry["comment"] += entry["att1"] + "; "
+            entry["att1"] = ""
+        entry["att2"] = unicode(string.strip(row[10]), "utf-8")
+        if entry["att2"] != "" and not any(x in entry["att2"] for x in att_ext):
+            entry["comment"] += entry["att2"] + "; "
+            entry["att2"] = ""
+        entry["att3"] = unicode(string.strip(row[11]), "utf-8")
+        if entry["att3"] != "" and not any(x in entry["att3"] for x in att_ext):
+            entry["comment"] += entry["att3"] + "; "
+            entry["att3"] = ""
+        entry["att4"] = unicode(string.strip(row[12]), "utf-8")
+        if entry["att4"] != "" and not any(x in entry["att4"] for x in att_ext):
+            entry["comment"] += entry["att4"] + "; "
+            entry["att4"] = ""
+        
+
+        return True, entry
+    else:
+        return False, None
+
+
+'''
+  - generate data from Execel: Export to text (Unicode)
+  - convert to UTF-8
+'''
+@app.route('/Upload', methods=['GET', 'POST'])
+def UploadCSV():
+    if request.method == 'GET':
+        return render_template("uploadFile.html")
+    elif request.method == 'POST':
+        line = 0
+        f_upload = request.files['file']
+        local_fname = os.path.join( files_dir, secure_filename(f_upload.filename) )
+        f_upload.save( local_fname )
+        with open(local_fname, 'rb') as csvfile:
+            stringReader = csv.reader(csvfile,delimiter="\t",quotechar='"')
+            for row in stringReader:
+                line += 1
+                if line == 1:
+                    continue
+                #log_info("Row: %s" % (row) )
+                (ok, entry) = convertEntry( row )
+                #log_info("Entry: %s - %s" % (str(ok), entry))
+                if ok:
+                    if line % 20 == 0:
+                        app.logger.info( "IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
+                    e = TennisEvent( date=entry["date"], event=entry["event"],
+                                     place=entry["place"], category=entry["category"],
+                                     result=entry["result"], player=entry["player"],
+                                     comment=entry["comment"], att1=entry["att1"],
+                                     att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
+                    e.put()
+        return redirect(url_for("TennisMain"))
+
+
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
