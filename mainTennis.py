@@ -204,9 +204,9 @@ def Correct():
             log_info( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) )
             for f in os.listdir( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) ):
                 s = list(f)
-                for i, c in enumerate(s):
-                    if ord(c) >= 128:
-                        s[i] = "_"
+                #for i, c in enumerate(s):
+                #    if ord(c) >= 128:
+                #        s[i] = "_"
                 f = "".join(s)
                 fnames.append( { 'fname':f, 'fit':("%d%%" % (100.0*difflib.SequenceMatcher(None,fname,f).ratio())) } )
         except ValueError:
@@ -219,11 +219,8 @@ def Correct():
         return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, ident=ident, att=att )
 
     elif request.method == 'POST':
-        log_info( "UPDATE ATT" )
- 
-        log_info( request.form["ident"] + request.form["att"] + request.form["fname"] )
-        TennisEvent.updateAtt( request.form["ident"],request.form["att"], request.form["fname"] )
-        log_info( "UPDATE ATT DONE" )
+        if request.form["Status"][:5] == unicode("Shrani"[:5]):
+            TennisEvent.updateAtt( request.form["ident"],request.form["att"], request.form["fname"] )
         return redirect(url_for("TennisMain"))
 
 
@@ -274,11 +271,13 @@ def convertEntry( row ):
     while (row[lastCol] == "") and lastCol > 1:
         lastCol -= 1
     if lastCol >= 2:
-        m = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
-        if m:
-            entry["date"] = unicode("%02d.%02d.%04d" % (int(m.group(1)),int(m.group(2)),int(m.group(3))))
+        r = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
+        if r:
+            (d,m,y) = (int(r.group(1)), int(r.group(2)), int(r.group(3)))
+            entry["date"] = unicode("%02d.%02d.%04d" % (d,m,y))
         else:
-            entry["date"] = unicode("%02d.%02d.%04s" % (0, 0, row[0]))
+            (d,m,y) = (0, 0, int(row[0]))
+            entry["date"] = unicode("%02d.%02d.%04s" % (d,m,y))
         entry["event"] = unicode(row[2], "utf-8")
         entry["place"] = unicode(row[3], "utf-8")
         entry["sex"] = unicode(row[4], "utf-8")
@@ -286,9 +285,13 @@ def convertEntry( row ):
         entry["category"] = unicode(row[6], "utf-8")
         entry["result"] = unicode(row[7], "utf-8")
         entry["player"] = unicode(string.strip(row[8]), "utf-8")
-        m = re.search("^.*(\d{2,4})$", entry["player"])
-        if m:
-            log_info( "STAROST: " + m.group(1) )
+        r = re.search("\((\d{1,2})\)$", entry["player"])
+        #log_info( "ENTRY: " + entry["player"] )
+        if r:
+            age = r.group(1) # save in the database
+            log_info( "  DO: " + entry["player"] + ":" + age )
+            entry["player"] = entry["player"][:-5]
+            log_info( "EXIT: " + entry["player"] )
         entry["eventAge"] = unicode(row[6], "utf-8")
         entry["comment"] = unicode("")
         if row[1] == '*':
@@ -297,19 +300,41 @@ def convertEntry( row ):
         if entry["att1"] != "" and not any(x in entry["att1"] for x in att_ext):
             entry["comment"] += entry["att1"] + "; "
             entry["att1"] = ""
+        if entry["att1"] != "":
+            if d==0 and m==0:
+                entry["att1"] = ("%d" % (y)) + '_' + entry["att1"]
+            else:
+                entry["att1"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att1"]
+
         entry["att2"] = unicode(string.strip(row[10]), "utf-8")
         if entry["att2"] != "" and not any(x in entry["att2"] for x in att_ext):
             entry["comment"] += entry["att2"] + "; "
             entry["att2"] = ""
+        if entry["att2"] != "":
+            if d==0 and m==0:
+                entry["att2"] = ("%d" % (y)) + '_' + entry["att2"]
+            else:
+                entry["att2"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att2"]
+
         entry["att3"] = unicode(string.strip(row[11]), "utf-8")
         if entry["att3"] != "" and not any(x in entry["att3"] for x in att_ext):
             entry["comment"] += entry["att3"] + "; "
             entry["att3"] = ""
+        if entry["att3"] != "":
+            if d==0 and m==0:
+                entry["att3"] = ("%d" % (y)) + '_' + entry["att3"]
+            else:
+                entry["att3"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att3"]
+
         entry["att4"] = unicode(string.strip(row[12]), "utf-8")
         if entry["att4"] != "" and not any(x in entry["att4"] for x in att_ext):
             entry["comment"] += entry["att4"] + "; "
             entry["att4"] = ""
-        
+        if entry["att4"] != "":
+            if d==0 and m==0:
+                entry["att4"] = ("%d" % (y)) + '_' + entry["att4"]
+            else:
+                entry["att4"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att4"]
 
         return True, entry
     else:
@@ -340,7 +365,7 @@ def UploadCSV():
                 #log_info("Entry: %s - %s" % (str(ok), entry))
                 if ok:
                     if line % 20 == 0:
-                        app.logger.info( "IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
+                        log_info( "IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
                     e = TennisEvent( date=entry["date"], event=entry["event"],
                                      place=entry["place"], category=entry["category"],
                                      result=entry["result"], player=entry["player"],

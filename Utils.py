@@ -30,7 +30,6 @@ def log_info( s ):
 
 def valid_username(username):
     UsernameRE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-    #logging.info( "valid_username:" + str(username) )
     return UsernameRE.match(username)
 
 def valid_password(password):

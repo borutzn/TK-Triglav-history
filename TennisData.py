@@ -58,19 +58,13 @@ class TennisEvent:
             if att == "":
                 return ""
             
+            #.decode("windows-1250").encode("utf-8")
             s = list(att)
-            CORRECTED = False
-            for i, c in enumerate(s):
-                if ord(c) >= 128:
-                    s[i] = "_"
-                    CORRECTED = True
             att = "".join(s)
-            if CORRECTED:
-                log_info( "Unknown characters --> " + att )
             if os.path.exists(os.path.join(files_dir,year+"/"+att)):
                 return att
             else:
-                log_info( "Bad filename: " + str(os.path.join(files_dir,year+"/"+att)) )
+                log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
                 return "err_"+att
 
                 
@@ -193,6 +187,7 @@ class TennisEvent:
                 cls.EventsCache = [ dict(row) for row in curs ]
                 conn.commit()
 
+            #cnt = 0
             for idx, val in enumerate(cls.EventsCache):
                 cls.EventsCache[idx]['LocalDate'] = cls.date2user( cls.EventsCache[idx]['Date'] )
                 cls.EventsCache[idx]['Att1'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'] )
@@ -200,6 +195,9 @@ class TennisEvent:
                 cls.EventsCache[idx]['Att3'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'] )
                 cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
                 cls.EventsIndex[val['Id']] = idx
+                #cnt += 1
+                #if cnt > 10:
+                #    break
 
             p = dict()
             for i in cls.EventsCache:
