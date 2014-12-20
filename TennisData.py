@@ -107,13 +107,13 @@ class TennisEvent:
                 conn = sqlite3.connect(DbName)
                 curs = conn.cursor()
 
-                logging.error( "PUT: "+str(self.date)+":"+str(TennisEvent.date2Db(self.date)) )
+                #log_info( "PUT: "+str(TennisEvent.date2Db(self.date)) + ": " + self.comment )
                 curs.execute( """INSERT INTO TennisEvents (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
                                 VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3, :Att4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
                                       {"Date":TennisEvent.date2Db(self.date), "Event":self.event, "Place":self.place, "Category":self.category,
                                        "Result":self.result, "Player":self.player, "Comment":self.comment,
                                        "Att1":self.att1, "Att2":self.att2, "Att3":self.att3, "Att4":self.att4} )
-                conn.commit()                
+                conn.commit()
                 self.clearData()
                 return curs.lastrowid
                 
@@ -159,7 +159,7 @@ class TennisEvent:
                     curs.execute( """UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                                   { 'fname':fname, 'Id':Id } )
                 conn.commit()                
-                self.clearData()
+                # popravi tako, da se raje spremeni v cache-u, namesto: self.clearData()
                 
 
         @classmethod

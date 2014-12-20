@@ -196,6 +196,7 @@ def Correct():
             att = int(request.args.get('att'))
             fdir = request.args.get('d')
             fname = request.args.get('f')
+            next = request.args.get('next')
         except ValueError:
             return redirect(url_for("TennisMain"))
 
@@ -216,12 +217,12 @@ def Correct():
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
         if len(fnames) > 10:
             fnames= fnames[:10]
-        return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, ident=ident, att=att )
+        return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, ident=ident, att=att, next=next )
 
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Shrani"[:5]):
             TennisEvent.updateAtt( request.form["ident"],request.form["att"], request.form["fname"] )
-        return redirect(url_for("TennisMain"))
+        return redirect( request.form["next"] )
 
 
 
@@ -286,16 +287,13 @@ def convertEntry( row ):
         entry["result"] = unicode(row[7], "utf-8")
         entry["player"] = unicode(string.strip(row[8]), "utf-8")
         r = re.search("\((\d{1,2})\)$", entry["player"])
-        #log_info( "ENTRY: " + entry["player"] )
         if r:
             age = r.group(1) # save in the database
-            log_info( "  DO: " + entry["player"] + ":" + age )
             entry["player"] = entry["player"][:-5]
-            log_info( "EXIT: " + entry["player"] )
         entry["eventAge"] = unicode(row[6], "utf-8")
         entry["comment"] = unicode("")
         if row[1] == '*':
-            entry["comment"] = "vnesen datum vira; "
+            entry["comment"] = u"vnešen datum vira; "
         entry["att1"] = unicode(string.strip(row[9]), "utf-8")
         if entry["att1"] != "" and not any(x in entry["att1"] for x in att_ext):
             entry["comment"] += entry["att1"] + "; "
