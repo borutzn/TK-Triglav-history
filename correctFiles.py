@@ -118,7 +118,7 @@ try:
             if checkFile( root, fname ):
                 changed_files += 1
 except ValueError: # No files in directory - nothing to select from
-    skip        
+    pass        
 
 
 print

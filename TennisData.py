@@ -168,7 +168,6 @@ class TennisEvent:
                 curs = conn.cursor()
 
                 curs.execute( """DELETE FROM TennisEvents WHERE Id=:Id""", { 'Id':Id } )
-                #logging.error("DELETE Id="+str(Id))
                 conn.commit()                
                 self.clearData()
                 

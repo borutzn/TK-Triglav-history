@@ -23,7 +23,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, login_require
 from werkzeug import secure_filename
 
 
-from TennisData import TennisEvent, TennisPlayer, fetchData
+from TennisData import TennisEvent, TennisPlayer
 
 from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, files_dir
 
@@ -187,12 +187,12 @@ def Delete():
         return redirect(url_for("TennisMain"))
 
 
-#@app.route("/reload", methods=['GET'])
-#@login_required
-#def Reload():
-#    if request.method == 'GET':
-#        TennisData.fetchData()        
-#    return redirect( request.form["next"] )
+@app.route("/reload", methods=['GET'])
+@login_required
+def Reload():
+    if request.method == 'GET':
+        TennisEvent.clearData()
+    return redirect( request.args.get("next") )
 
 
 
@@ -240,7 +240,7 @@ PAGELEN = 15
 @app.route("/")
 def TennisMain():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
-    app.logger.info( "request for /" )
+    log_info( "request for /" )
     try:
         p = request.args.get('p')
         pos = int(p) if p else 0
