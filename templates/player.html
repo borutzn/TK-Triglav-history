@@ -83,7 +83,7 @@
             {% if current_user.is_authenticated() %}</td>{% endif %}
             </tr>
             {% if event.Comment != "" %}
-                <tr><td class="main-table-comment" colspan="6">{{ event.Comment }}<td></tr>
+                <tr><td class="main-table-comment" colspan="5">{{ event.Comment }}<td></tr>
             {% endif %}
         {% endfor %}
         </table>

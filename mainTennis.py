@@ -23,7 +23,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, login_require
 from werkzeug import secure_filename
 
 
-from TennisData import TennisEvent, TennisPlayer
+from TennisData import TennisEvent, TennisPlayer, fetchData
 
 from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, files_dir
 
@@ -187,6 +187,15 @@ def Delete():
         return redirect(url_for("TennisMain"))
 
 
+#@app.route("/reload", methods=['GET'])
+#@login_required
+#def Reload():
+#    if request.method == 'GET':
+#        TennisData.fetchData()        
+#    return redirect( request.form["next"] )
+
+
+
 @app.route("/correct", methods=['GET', 'POST'])
 @login_required
 def Correct():
@@ -342,6 +351,7 @@ def convertEntry( row ):
 '''
   - generate data from Execel: Export to text (Unicode)
   - convert to UTF-8
+  - change/reduce all pictures with: mogrify -resize 500 */*JPG; jpg
 '''
 @app.route('/Upload', methods=['GET', 'POST'])
 def UploadCSV():

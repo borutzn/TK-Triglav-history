@@ -95,7 +95,21 @@ def updateAtt( ident, num, year, att ):
     return 0
 
 print
-print( "Translating Windows-1250 to UTF-8" )
+print( "STEP 1: Clearing database" )
+delete = raw_input( "Delete all data from TennisEvents (y/n)?" )
+if delete == "y":
+    print( "-> Data deleted" )
+    conn = sqlite3.connect(DbName)
+    curs = conn.cursor()
+    curs.execute( "DELETE FROM TennisEvents" )
+    conn.commit()
+
+print
+print( "STEP 2: Importing data" )
+
+
+print
+print( "STEP 2: Translating filenames from Windows-1250 to UTF-8" )
 changed_files = 0
 try:
     for root, dir, files in os.walk( FILES_BASEDIR ):
@@ -108,7 +122,7 @@ except ValueError: # No files in directory - nothing to select from
 
 
 print
-print( "correcting attachements in the DB" )
+print( "STEP 3: correcting attachements in the DB" )
 changed_atts = 0
 conn = sqlite3.connect(DbName)
 with conn:
@@ -130,4 +144,12 @@ for row in EventsCache:
     if checkAtt( year, row["Att4"] ):
         changed_atts += updateAtt( ident, 4, year, row["Att4"] )
 
-print( "Summary: %d files changed; %d attachements changed" % (changed_files, changed_atts) )
+    print
+    print( "STEP 4: resizing oversized pictures" )
+    for ext in ('JPG','jpg'):
+        cmd = "mogrify -resize 500 %s/*/*.%s" % (DIR, ext)
+        print( "  run: %s" % cmd )
+        os.system( cmd )
+
+    print( "-------------------------" )
+    print( "SUMMARY: %d files changed; %d attachements changed" % (changed_files, changed_atts) )

@@ -19,6 +19,8 @@
                 <a href="{{ url_for('AddEvent') }}"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Dodaj nov dogodek"></a>
             {% endif %}
             {% if current_user.utype >= 2 %}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{{ url_for('Reload',next=request.url) }}"><img src="{{ url_for('static',filename='1419213536_circle_sync_backup_1_-32.png') }}" title="Ponovno naloži podatke"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="{{ url_for('EditUser') }}"><img src="{{ url_for('static',filename='1416438527_group2-32.png') }}" title="Urejanje uporabnikov"></a>
             {% endif %}
