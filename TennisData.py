@@ -64,7 +64,7 @@ class TennisEvent:
             if os.path.exists(os.path.join(files_dir,year+"/"+att)):
                 return att
             else:
-                log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
+                #log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
                 return "err_"+att
 
                 
@@ -122,6 +122,7 @@ class TennisEvent:
                 conn = sqlite3.connect(DbName)
                 curs = conn.cursor()
 
+                log_info( "UPDATE %s" % str(Id) )
                 curs.execute( """UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result,
                         Player=:Player, Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                               { 'Id':Id, 'Date':TennisEvent.date2Db(self.date), 'Event':self.event, 'Place':self.place,
@@ -186,17 +187,18 @@ class TennisEvent:
                 cls.EventsCache = [ dict(row) for row in curs ]
                 conn.commit()
 
-            #cnt = 0
             for idx, val in enumerate(cls.EventsCache):
                 cls.EventsCache[idx]['LocalDate'] = cls.date2user( cls.EventsCache[idx]['Date'] )
                 cls.EventsCache[idx]['Att1'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'] )
                 cls.EventsCache[idx]['Att2'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'] )
                 cls.EventsCache[idx]['Att3'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'] )
                 cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
+                if val['Id'] == 2971:
+                    print( "FOUND" )
                 cls.EventsIndex[val['Id']] = idx
-                #cnt += 1
-                #if cnt > 10:
-                #    break
+                #if val['Id'] == 2971:
+                #    log_info( "FOUND: " + str(val['Id']) + " --> " + str(idx) )
+                #    log_info( "FOUND: " + str(cls.EventsIndex[val['Id']]) )
 
             p = dict()
             for i in cls.EventsCache:
@@ -220,9 +222,11 @@ class TennisEvent:
 
 
         @classmethod
-        def get(cls, Id):
-            cls.fetchData()                        
-            idx = cls.EventsIndex[Id]
+        def get(cls, Ident):
+            cls.fetchData()
+            log_info( "GET: " + str(Ident) )
+            log_info( "GET: " + str(cls.EventsIndex[Ident]) )
+            idx = cls.EventsIndex[Ident]
             #log_info( "GET: " + str(cls.EventsCache[idx]) )
             return cls.EventsCache[idx]
 

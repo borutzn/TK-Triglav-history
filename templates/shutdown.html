@@ -1,0 +1,15 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{{ url_for('Shutdown') }}" method="post">
+    <p><div class="page-title">Ugašanje računalnika</div>
+    <br><br>
+
+    <input type="Submit" name="Status" id="button" value="Ugasni">
+    <input type="Submit" name="Status" id="button" value="Prekliči">
+</form>
+
+{% endblock %}	

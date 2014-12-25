@@ -72,13 +72,13 @@ def EditPlayer():
             ident = request.args.get('id')
         except ValueError:
             ident = None
-        #app.logger.info( 'editPlayer: ' + unicode(ident) )
+        #log_info( 'editPlayer: ' + unicode(ident) )
         if ident <> None:
             player = TennisPlayer.get( ident )
-            #app.logger.info( "GOT " + unicode(player) )
+            #log_info( "GOT " + unicode(player) )
             if player == None:
                 player = TennisPlayer( Name=ident )
-            #app.logger.info( "GOT " + unicode(player.Name) )
+                #log_info( "GOT " + unicode(player.Name) )
             return render_template("editPlayer.html", player=player, ident=ident )
 
     elif request.method == 'POST':
@@ -140,8 +140,8 @@ def AddEvent():
         return redirect(url_for("TennisMain"))
 
 
-@app.route("/edit", methods=['GET', 'POST'], defaults={'update':False} )
-@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update':True}, endpoint='Duplicate' )
+@app.route("/edit", methods=['GET', 'POST'], defaults={'update':True} )
+@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update':False}, endpoint='Duplicate' )
 @login_required
 def EditEvent( update ):
     if request.method == 'GET':
@@ -151,17 +151,18 @@ def EditEvent( update ):
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get( ident )
-        log_info( "RENDER " + str(event['LocalDate']) )
+        #log_info( "RENDER " + str(event['LocalDate']) )
         return render_template("editEvent.html", event=event )
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
+            log_info( "CreateEvent" + str(request.form) )
             e = TennisEvent( date=request.form["date"], event=request.form["event"],
                          place=request.form["place"], category=request.form["category"],
                          result=request.form["result"], player=request.form["player"],
                          att1=request.form["att1"], att2=request.form["att2"],
                          att3=request.form["att3"], att4=request.form["att4"], 
-                         comment=request.form["comment"], source=request.form["vir"])
+                         comment=request.form["comment"], source=request.form["source"])
             if update:
                 e.update( request.form["Id"] )
             else:
@@ -178,7 +179,8 @@ def Delete():
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get( ident )
-        return render_template("delete.html", event=event, date=TennisEvent.date2user(event['date']) )
+        log_info( "DELETE: " + str(event) )
+        return render_template("delete.html", event=event, date=TennisEvent.date2user(event['Date']) )
         # CORRECT date=...
         
     elif request.method == 'POST':
@@ -482,6 +484,20 @@ def EditUser():
             ident = request.form["ident"]
             u.update( request.form["ident"] )
         return redirect(url_for("EditUser"))
+
+
+
+@app.route("/shutdown", methods=['GET', 'POST'])
+@login_required
+def Shutdown():
+    if request.method == 'GET':
+        return render_template("shutdown.html" )
+            
+    elif request.method == 'POST':
+        if request.form["Status"] == "Shrani":
+            os.system( "shutdown -h 0" )
+        return redirect(request.args.get("next") or url_for("TennisMain"))
+
 
 
 
