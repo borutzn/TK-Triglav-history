@@ -491,10 +491,12 @@ def EditUser():
 @login_required
 def Shutdown():
     if request.method == 'GET':
+        log_info( appname + ": system shutdown requested" )
         return render_template("shutdown.html" )
             
     elif request.method == 'POST':
-        if request.form["Status"] == "Shrani":
+        if request.form["Status"] == "Ugasni":
+            log_info( appname + ": system shutdown confirmed and executed" )
             os.system( "shutdown -h 0" )
         return redirect(request.args.get("next") or url_for("TennisMain"))
 
@@ -503,10 +505,10 @@ def Shutdown():
 
 if __name__ == "__main__":
     if Production:
-        log_info( appname + " start standalone production" )
+        log_info( appname + ": start standalone production" )
         app.run(host='0.0.0.0', port=8080, debug=False)
     else:        
-        log_info( appname + " start standalone development" )
+        log_info( appname + ": start standalone development" )
         app.run(host='127.0.0.1', port=80, debug=True)
 else:
-    log_info( appname + " start" )
+    log_info( appname + ": start" )
