@@ -186,6 +186,7 @@ class TennisEvent:
                 cls.EventsCache = [ dict(row) for row in curs ]
                 conn.commit()
 
+            cls.years = []
             for idx, val in enumerate(cls.EventsCache):
                 cls.EventsCache[idx]['LocalDate'] = cls.date2user( cls.EventsCache[idx]['Date'] )
                 cls.EventsCache[idx]['Att1'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'] )
@@ -193,8 +194,12 @@ class TennisEvent:
                 cls.EventsCache[idx]['Att3'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'] )
                 cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
                 cls.EventsIndex[val['Id']] = idx
+                year = cls.EventsCache[idx]['LocalDate'][:4]
+                if not year in years:
+                    years.append( year )
+                #    print year + ":" + years
 
-            p = dict()
+            p = dict() # move collection to the upper for loop?
             for i in cls.EventsCache:
                 pName = i['Player']
                 pResult = cls.resultValue(i['Result'])
