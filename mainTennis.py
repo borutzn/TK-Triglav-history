@@ -21,8 +21,8 @@ import logging
 import difflib
 
 from flask import render_template, request, redirect, url_for
-from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
-from werkzeug import secure_filename
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+#from werkzeug import secure_filename
 
 
 from TennisData import TennisEvent, TennisPlayer
@@ -506,7 +506,7 @@ def Shutdown():
 if __name__ == "__main__":
     if Production:
         log_info( appname + ": start standalone production" )
-        app.run(host='0.0.0.0', port=8080, debug=False)
+        app.run(host='127.0.0.1', port=8080, debug=False)
     else:        
         log_info( appname + ": start standalone development" )
         app.run(host='127.0.0.1', port=80, debug=True)

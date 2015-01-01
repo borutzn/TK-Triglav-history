@@ -17,10 +17,10 @@
         <div style="display:block; margin-left:20px; margin-top:40px;">
             {% if current_user.is_authenticated() %}
 		{{current_user.username}} |
-		<a href="{{ url_for('Logout') }}"><img src="{{ url_for('static',filename='1414455023_editor_unlock_lock-24.png') }}" title="Odjava uporabnika"></a>
+		<a href="{{ url_for('Logout') }}"><img src="{{ url_for('static',filename='unlock-24.png') }}" title="Odjava uporabnika"></a>
             {% else %}
-		<a href="{{ url_for('Login', next=request.url) }}"><img src="{{ url_for('static',filename='1414454957_editor_lock-24.png') }}" title="Prijava uporabnika"></a> | 
-		<a href="{{ url_for('Signup') }}" ><img src="{{ url_for('static',filename='1414455652_common_new_edit_compose-24.png') }}" title="Registracija uporabnika"></a> 
+		<a href="{{ url_for('Login', next=request.url) }}"><img src="{{ url_for('static',filename='lock-24.png') }}" title="Prijava uporabnika"></a> |
+		<a href="{{ url_for('Signup') }}" ><img src="{{ url_for('static',filename='edit-24.png') }}" title="Registracija uporabnika"></a>
             {% endif %}
 	</div>
     </div><br>
