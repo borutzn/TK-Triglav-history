@@ -16,12 +16,12 @@
                 &nbsp;&nbsp;
                 <a href="{{ url_for('TennisMain') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                leto: <input type="text" name="search" size="10" value="{{ search }}">
                 <select name="search">
                     {% for year in years %}
                        <option value="{{ year }}">{{ year }}</option>
                     {% endfor %}
                 </select>
+                <input type="submit" value="Izberi">
                 {% if current_user.is_authenticated() %}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
