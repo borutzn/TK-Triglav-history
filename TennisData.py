@@ -197,7 +197,7 @@ class TennisEvent:
                 year = cls.EventsCache[idx]['LocalDate'][:4]
                 if not year in years:
                     cls.years.append( year )
-                    log_info( year + ":" + years )
+                    log_info( year + ":" + cls.years )
 
             p = dict() # move collection to the upper for loop?
             for i in cls.EventsCache:
