@@ -62,7 +62,6 @@ class TennisEvent:
             s = list(att)
             att = "".join(s)
             if os.path.exists(os.path.join(files_dir,year+"/"+att)):
-                log_info( "FOUND: " + att )
                 return att
             else:
                 # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
@@ -196,7 +195,7 @@ class TennisEvent:
                 cls.EventsCache[idx]['Att3'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'] )
                 cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
                 cls.EventsIndex[val['Id']] = idx
-                year = cls.EventsCache[idx]['LocalDate'][:4]
+                year = cls.EventsCache[idx]['Date'][:4]
                 if not year in cls.Years:
                     cls.Years.append( year )
                     log_info( year + ":" + str(cls.Years) )
