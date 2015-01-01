@@ -20,7 +20,7 @@ import os
 import logging
 import difflib
 
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 #from werkzeug import secure_filename
 
@@ -486,6 +486,16 @@ def EditUser():
         return redirect(url_for("EditUser"))
 
 
+
+@app.route("/events.json", methods=['GET'], defaults={'action':'events'} )
+@app.route("/people.json", methods=['GET'], defaults={'action':'people'} )
+@login_required
+def Json():
+    if request.method == 'GET':
+        if action == 'events':
+            return jsonify( **TennisEvents )
+        elif action == 'people':
+            return jsonify( **TennisPlayer )
 
 @app.route("/shutdown", methods=['GET', 'POST'])
 @login_required

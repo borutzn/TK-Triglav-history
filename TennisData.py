@@ -24,6 +24,7 @@ class TennisEvent:
 
         EventsCache = None
         EventsIndex = {}
+        Years = []
         players = list()
         
         def __init__(self, date="", event="", place="", category="", result="",
@@ -195,9 +196,9 @@ class TennisEvent:
                 cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
                 cls.EventsIndex[val['Id']] = idx
                 year = cls.EventsCache[idx]['LocalDate'][:4]
-                if not year in years:
-                    cls.years.append( year )
-                    log_info( year + ":" + cls.years )
+                if not year in cls.Years:
+                    cls.Years.append( year )
+                    log_info( year + ":" + cls.Years )
 
             p = dict() # move collection to the upper for loop?
             for i in cls.EventsCache:
