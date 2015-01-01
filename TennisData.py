@@ -233,7 +233,11 @@ class TennisEvent:
         def getYearPos(cls, year):
             cls.fetchData()
             log_info( "get Y pos: " + year )
-            
+            for idx, val in enumerate(cls.EventsCache):
+                print( "ENTRY: " + val['Date'] + " - " + cls.EventsCache[idx]['Date'][:4] )
+                if val['Date'][:4] == year:
+                    log_info( "Found pos: " + str(idx) )
+                    return idx
             return 0
 
 
