@@ -6,6 +6,8 @@ Show Tenis history data of TK Triglav Kranj
 
 data collected by Davor Žnidar
 program by Borut Žnidar on 12.12.2014
+
+check syntactic errors with: "python mainTennis.py runserver -d"
 """
 
 appname = "TK-Triglav-history"
@@ -216,9 +218,6 @@ def Correct():
             log_info( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) )
             for f in os.listdir( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) ):
                 s = list(f)
-                #for i, c in enumerate(s):
-                #    if ord(c) >= 128:
-                #        s[i] = "_"
                 f = "".join(s)
                 fnames.append( { 'fname':f, 'fit':("%d%%" % (100.0*difflib.SequenceMatcher(None,fname,f).ratio())) } )
         except ValueError:
@@ -239,28 +238,29 @@ def Correct():
 
 PAGELEN = 15
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def TennisMain():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
-    log_info( "request for /" )
-    try:
-        p = request.args.get('p')
-        pos = int(p) if p else 0
-    except ValueError:
+    if request.method == 'GET':
+        log_info( "request for /" )
+        try:
+            p = request.args.get('p')
+            pos = int(p) if p else 0
+        except ValueError:
+            pos = 0
+    elif request.method == 'POST':
+        year = request.form['search']
+        pos = TennisEvent.getYearPos( year )
+    else:
         pos = 0
 
     events = TennisEvent.getEventsPage(pos, PAGELEN)
     eventsLen = TennisEvent.count()
-    for e in events: # Why this check?
-        if e['Att1'] == None:
-            logging.error( "err: "+e['Event']+", "+str(e['Att1']) )
     return render_template("main.html", events=events, production=Production,
-                players=TennisEvent.players[:20],
-                prevPage=pos-PAGELEN if pos>PAGELEN else 0,
-                nextPage=pos+PAGELEN if pos<eventsLen-PAGELEN else eventsLen-PAGELEN,
-                start=pos, count=eventsLen )
-
-        
+           players=TennisEvent.players[:20],
+           prevPage=pos-PAGELEN if pos>PAGELEN else 0,
+           nextPage=pos+PAGELEN if pos<eventsLen-PAGELEN else eventsLen-PAGELEN,
+           start=pos, count=eventsLen )
 
 '''
    0. Leto - datum
@@ -497,7 +497,7 @@ def Shutdown():
     elif request.method == 'POST':
         if request.form["Status"] == "Ugasni":
             log_info( appname + ": system shutdown confirmed and executed" )
-            os.system( "shutdown -h 0" )
+            os.system( "sudo shutdown -h 0" )
         return redirect(request.args.get("next") or url_for("TennisMain"))
 
 

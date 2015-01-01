@@ -1,0 +1,156 @@
+/*
+
+
+Icons: https://www.iconfinder.com/iconsets/miu
+
+Pallete:
+    US Open Tennis (http://www.colourlovers.com/palette/942239/[p]_US_Open_Tennis): 
+        Tennis Time: #94BEFA,
+        US Open Tennis: #6790D0,
+        US Open Blue: #16377A,
+        Enumerous Epiphany: #18151C,
+        Arthur Ashe Stadium: #759252
+    http://www.colourlovers.com/palette/2117949/Young_Old#
+    http://www.colourlovers.com/palette/2821762/Sp-outfit_04-25-2013
+    http://www.colourlovers.com/palette/3386528/tennis
+    http://www.colourlovers.com/pattern/4866/tennis_player
+    http://www.colourlovers.com/pattern/1109179/Tennis_time
+
+*/
+
+body {
+    font-family: Calibri, Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+
+    margin: 0 auto;
+    padding: 10px;
+    color: #18151C;
+}
+
+.page-title {
+    font: bold 20pt Calibri, Helvetica, Arial, sans-serif;
+    color:#16377A;
+}
+
+#button {
+    border-radius: 3px;
+    font-size: 11pt;
+    cursor: pointer;
+}
+#button:hover {
+    background: #759252;
+    box-shadow:0px 0px 1px #759252;
+}
+
+a:link { text-decoration: none; }
+
+p {
+    margin:0;
+}
+
+input {
+    font-family: Calibri, Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+}
+
+#base-title {
+    position:relative;
+    display: block;
+    color: #222;
+    font-size: 12px;
+    text-align: right;
+    margin-bottom: 30px;
+    text-decoration: none;
+}
+
+th {
+    background:#94BEFA;
+    border-top: thin solid #16377A;
+    border-bottom: thin solid #16377A;
+    text-align:left;
+    padding: 2px;
+}
+
+.main-table {
+    padding: 2px;
+}
+
+.main-table td {
+    border-bottom: thin solid #16377A;
+}
+
+.main-table td:last-child {
+    border-right: thin solid #16377A;
+}
+
+.main-table-comment {
+    font-size: 10pt;
+    border-right: none;
+}
+                     
+.player-table {
+    padding: 2px;
+}
+
+.player-table td {
+    border-right: thin solid #16377A;
+    border-bottom: thin solid #16377A;
+}
+
+.player-table tr:nth-child(1) td {
+    border-top: thin solid #16377A;
+}
+
+.player_name {
+    font: bold 16pt Calibri, Helvetica, Arial, sans-serif;
+    color:#16377A;
+}
+
+.player_data {
+    font: 14pt Calibri, Helvetica, Arial, sans-serif;
+    color:#16377A;
+}
+
+.year {
+    font: bold 16pt Calibri, Helvetica, Arial, sans-serif;
+    color:#6790D0;
+}
+
+.copyright {
+    position: relative;
+    bottom: 0;
+    padding:4px;
+    background:#759252;
+}
+                        
+..post + .post {
+    margin-top: 15px;
+}
+
+.post-heading {
+    position: relative;
+    border-bottom: 3px solid #666;
+}
+
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.post-date {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    color: #999;
+
+}
+
+.post-content {
+    margin-top: 5px;
+}
+
+.query-delay {
+    position: absolute;
+}
+

@@ -58,7 +58,6 @@ class TennisEvent:
             if att == "":
                 return ""
             
-            #.decode("windows-1250").encode("utf-8")
             s = list(att)
             att = "".join(s)
             if os.path.exists(os.path.join(files_dir,year+"/"+att)):
@@ -193,12 +192,7 @@ class TennisEvent:
                 cls.EventsCache[idx]['Att2'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'] )
                 cls.EventsCache[idx]['Att3'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'] )
                 cls.EventsCache[idx]['Att4'] = cls.correctAtt( cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'] )
-                if val['Id'] == 2971:
-                    print( "FOUND" )
                 cls.EventsIndex[val['Id']] = idx
-                #if val['Id'] == 2971:
-                #    log_info( "FOUND: " + str(val['Id']) + " --> " + str(idx) )
-                #    log_info( "FOUND: " + str(cls.EventsIndex[val['Id']]) )
 
             p = dict()
             for i in cls.EventsCache:
@@ -224,11 +218,16 @@ class TennisEvent:
         @classmethod
         def get(cls, Ident):
             cls.fetchData()
-            log_info( "GET: " + str(Ident) )
-            log_info( "GET: " + str(cls.EventsIndex[Ident]) )
             idx = cls.EventsIndex[Ident]
-            #log_info( "GET: " + str(cls.EventsCache[idx]) )
             return cls.EventsCache[idx]
+
+
+        @classmethod
+        def getYearPos(cls, year):
+            cls.fetchData()
+            log_info( "get Y pos: " + year )
+            
+            return 0
 
 
         @classmethod

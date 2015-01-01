@@ -8,34 +8,38 @@
     
     <div style="position=:relative; height:35px;">
         <div style="float:left; width:70%;">
-            &nbsp;&nbsp;
-            <a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='1414454853_house_home-32.png') }}" title="Domov"></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="{{ url_for('TennisMain') }}?p={{prevPage}}"><img src="{{ url_for('static',filename='1413926788_circle_back_arrow-32.png') }}" title="Prejšnja stran"></a>
-            &nbsp;&nbsp;
-            <a href="{{ url_for('TennisMain') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='1413926781_circle_next_arrow_disclosure-32.png') }}" title="Naslednja stran"></a>
-            {% if current_user.is_authenticated() %}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('AddEvent') }}"><img src="{{ url_for('static',filename='1414093791_circle_add_plus-32.png') }}" title="Dodaj nov dogodek"></a>
-            {% endif %}
-            {% if current_user.utype >= 2 %}
+            <form action="{{ url_for('TennisMain') }}" method="post">
+                &nbsp;&nbsp;
+                <a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('Reload',next=request.url) }}"><img src="{{ url_for('static',filename='1419213536_circle_sync_backup_1_-32.png') }}" title="Ponovno naloži podatke"></a>
+                <a href="{{ url_for('TennisMain') }}?p={{prevPage}}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
+                &nbsp;&nbsp;
+                <a href="{{ url_for('TennisMain') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('EditUser') }}"><img src="{{ url_for('static',filename='1416438527_group2-32.png') }}" title="Uredi uporabnike"></a>
-            {% endif %}
-            {% if current_user.utype >= 4 %}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('Shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='1419546718_device_power-32.png') }}" title="Ugasni strežnik"></a>
-            {% endif %}
+                leto: <input type="text" name="search" size="10" value="{{ search }}">
+                {% if current_user.is_authenticated() %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('AddEvent') }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
+                {% endif %}
+                {% if current_user.utype >= 2 %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('Reload',next=request.url) }}"><img src="{{ url_for('static',filename='sync-32.png') }}" title="Ponovno naloži podatke"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('EditUser') }}"><img src="{{ url_for('static',filename='group-32.png') }}" title="Uredi uporabnike"></a>
+                {% endif %}
+                {% if current_user.utype >= 4 %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('Shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
+                {% endif %}
+            </form>
         </div>
         <div style="float:left; width:30%; text-align:right; color:red;">
             {% if not production %} <b>Razvojno okolje</b> {% endif %}
         </div>
     </div>
-    <div style="clear:both; background:green;"></div>
+    <div style="clear:both;"></div>
 
     <div style="clear:both; float:left; width:80%;">
     {% if events %}
