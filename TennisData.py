@@ -198,7 +198,8 @@ class TennisEvent:
                 year = cls.EventsCache[idx]['Date'][:4]
                 if not year in cls.Years:
                     cls.Years.append( year )
-                    log_info( year + ":" + str(cls.Years) )
+            cls.Years.sort()
+            log_info( cls.Years )
 
             p = dict() # move collection to the upper for loop?
             for i in cls.EventsCache:

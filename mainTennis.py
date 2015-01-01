@@ -257,7 +257,7 @@ def TennisMain():
     events = TennisEvent.getEventsPage(pos, PAGELEN)
     eventsLen = TennisEvent.count()
     return render_template("main.html", events=events, production=Production,
-           players=TennisEvent.players[:20],
+           players=TennisEvent.players[:20], years=Years,
            prevPage=pos-PAGELEN if pos>PAGELEN else 0,
            nextPage=pos+PAGELEN if pos<eventsLen-PAGELEN else eventsLen-PAGELEN,
            start=pos, count=eventsLen )
