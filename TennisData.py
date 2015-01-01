@@ -62,9 +62,10 @@ class TennisEvent:
             s = list(att)
             att = "".join(s)
             if os.path.exists(os.path.join(files_dir,year+"/"+att)):
+                log_info( "FOUND: " + att )
                 return att
             else:
-                #log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
+                # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
                 return "err_"+att
 
                 
@@ -198,7 +199,7 @@ class TennisEvent:
                 year = cls.EventsCache[idx]['LocalDate'][:4]
                 if not year in cls.Years:
                     cls.Years.append( year )
-                    log_info( year + ":" + cls.Years )
+                    log_info( year + ":" + str(cls.Years) )
 
             p = dict() # move collection to the upper for loop?
             for i in cls.EventsCache:
