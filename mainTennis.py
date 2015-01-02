@@ -5,13 +5,14 @@
 Show Tenis history data of TK Triglav Kranj
 
 data collected by Davor Žnidar
-program by Borut Žnidar on 12.12.2014
+program by Borut Žnidar on 2.1.2015
 
 check syntactic errors with: "python mainTennis.py runserver -d"
 """
 
-appname = "TK-Triglav-history"
-Production = True
+appname = "TK-Triglav-History"
+
+from config import Production, PAGELEN, ATT_EXT
 
 import string
 import csv
@@ -22,7 +23,7 @@ import difflib
 
 from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-#from werkzeug import secure_filename
+# from werkzeug import secure_filename
 
 
 from TennisData import TennisEvent, TennisPlayer
@@ -37,21 +38,21 @@ from User import User, Anonymous
 def Player():
     if request.method == 'GET' :
         try:
-            playerName = request.args.get('n')
+            player_name = request.args.get('n')
         except ValueError:
-            playerName = None
-        if playerName is not None:
-            player = TennisPlayer.get( playerName )
-            events = TennisEvent.getPlayersEvents( playerName )
+            player_name = None
+        if player_name is not None:
+            player = TennisPlayer.get(player_name)
+            events = TennisEvent.getPlayersEvents(player_name)
             #app.logger.info( "Player: " + str(player) )
-            return render_template("player.html", events=events, playername=playerName, player=player )
+            return render_template("player.html", events=events, playername=player_name, player=player)
 
     search = ""
     if request.method == 'POST':
         search = request.form['search']
 
-    #app.logger.info( "search: " + str(search) )
-    #app.logger.info( "players: " + str(TennisEvent.players) )
+    # app.logger.info( "search: " + str(search) )
+    # app.logger.info( "players: " + str(TennisEvent.players) )
     if search == "":
         players = list(TennisEvent.players)
     else:
@@ -63,7 +64,7 @@ def Player():
         #app.logger.info( "players: " + str(players) )
 
     players.sort(key=lambda player: player[0])
-    return render_template("players.html", players=players, search=search )
+    return render_template("players.html", players=players, search=search)
 
 
 @app.route("/editPlayer", methods=['GET', 'POST'])
@@ -74,13 +75,13 @@ def EditPlayer():
             ident = request.args.get('id')
         except ValueError:
             ident = None
-        #log_info( 'editPlayer: ' + unicode(ident) )
-        if ident <> None:
+        # log_info( 'editPlayer: ' + unicode(ident) )
+        if ident is not None:
             player = TennisPlayer.get( ident )
-            #log_info( "GOT " + unicode(player) )
-            if player == None:
-                player = TennisPlayer( Name=ident )
-                #log_info( "GOT " + unicode(player.Name) )
+            # log_info( "GOT " + unicode(player) )
+            if player is None:
+                player = TennisPlayer(Name=ident)
+                # log_info( "GOT " + unicode(player.Name) )
             return render_template("editPlayer.html", player=player, ident=ident )
 
     elif request.method == 'POST':
@@ -109,67 +110,68 @@ def EditComment():
         except ValueError:
             return redirect(url_for("TennisMain"))
 
-        event = TennisEvent.get( ident )
-        app.logger.error( "Com: "+ str(event) )
-        return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['Date']) )
+        event = TennisEvent.get(ident)
+        app.logger.error("Com: " + str(event))
+        return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['Date']))
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
             comment = request.form["comment"]
             if request.form["addcomment"] != "":
                 comment += "; " + request.form["addcomment"]
-            e = TennisEvent( comment=comment )
-            e.updateComment( request.form["Id"] )
+            ev = TennisEvent(comment=comment)
+            ev.updateComment(request.form["Id"])
         return redirect(url_for("TennisMain"))
 
 
 @app.route("/add", methods=['GET', 'POST'])
 def AddEvent():
     if request.method == 'GET':
-        return render_template("addEvent.html", event=[] )
+        return render_template("addEvent.html", event=[])
 
     elif request.method == 'POST':
-        logging.error( "ADD: "+str(request.form) )
+        logging.error("ADD: "+str(request.form))
         if request.form["Status"] == "Shrani":
-            e = TennisEvent( date=request.form["date"], event=request.form["event"],
-                         place=request.form["place"], category=request.form["category"],
-                         result=request.form["result"], player=request.form["player"],
-                         att1=request.form["att1"], att2=request.form["att2"],
-                         att3=request.form["att3"], att4=request.form["att4"], 
-                         comment=request.form["comment"])
-            logging.error( "PUT: " )
-            e.put()
+            ev = TennisEvent(date=request.form["date"], event=request.form["event"],
+                             place=request.form["place"], category=request.form["category"],
+                             result=request.form["result"], player=request.form["player"],
+                             att1=request.form["att1"], att2=request.form["att2"],
+                             att3=request.form["att3"], att4=request.form["att4"],
+                             comment=request.form["comment"])
+            log_info("PUT: ")
+            ev.put()
         return redirect(url_for("TennisMain"))
 
 
-@app.route("/edit", methods=['GET', 'POST'], defaults={'update':True} )
-@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update':False}, endpoint='Duplicate' )
+@app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
+@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='Duplicate')
 @login_required
-def EditEvent( update ):
+def EditEvent(update):
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
         except ValueError:
             return redirect(url_for("TennisMain"))
 
-        event = TennisEvent.get( ident )
-        #log_info( "RENDER " + str(event['LocalDate']) )
-        return render_template("editEvent.html", event=event )
+        event = TennisEvent.get(ident)
+        # log_info( "RENDER " + str(event['LocalDate']) )
+        return render_template("editEvent.html", event=event)
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            log_info( "CreateEvent" + str(request.form) )
-            e = TennisEvent( date=request.form["date"], event=request.form["event"],
-                         place=request.form["place"], category=request.form["category"],
-                         result=request.form["result"], player=request.form["player"],
-                         att1=request.form["att1"], att2=request.form["att2"],
-                         att3=request.form["att3"], att4=request.form["att4"], 
-                         comment=request.form["comment"], source=request.form["source"])
+            log_info("CreateEvent" + str(request.form))
+            ev = TennisEvent(date=request.form["date"], event=request.form["event"],
+                             place=request.form["place"], category=request.form["category"],
+                             result=request.form["result"], player=request.form["player"],
+                             att1=request.form["att1"], att2=request.form["att2"],
+                             att3=request.form["att3"], att4=request.form["att4"],
+                             comment=request.form["comment"], source=request.form["source"])
             if update:
-                e.update( request.form["Id"] )
+                ev.update(request.form["Id"])
             else:
-                e.put()
+                ev.put()
         return redirect(url_for("TennisMain"))
+
 
 @app.route("/delete", methods=['GET', 'POST'])
 @login_required
@@ -180,14 +182,14 @@ def Delete():
         except ValueError:
             return redirect(url_for("TennisMain"))
 
-        event = TennisEvent.get( ident )
-        log_info( "DELETE: " + str(event) )
-        return render_template("delete.html", event=event, date=TennisEvent.date2user(event['Date']) )
+        event = TennisEvent.get(ident)
+        log_info("DELETE: " + str(event))
+        return render_template("delete.html", event=event, date=TennisEvent.date2user(event['Date']))
         # CORRECT date=...
         
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
-            TennisEvent.delete( request.form["Id"] )
+            TennisEvent.delete(request.form["Id"])
         return redirect(url_for("TennisMain"))
 
 
@@ -196,8 +198,7 @@ def Delete():
 def Reload():
     if request.method == 'GET':
         TennisEvent.clearData()
-    return redirect( request.args.get("next") )
-
+    return redirect(request.args.get("next"))
 
 
 @app.route("/correct", methods=['GET', 'POST'])
@@ -209,40 +210,38 @@ def Correct():
             att = int(request.args.get('att'))
             fdir = request.args.get('d')
             fname = request.args.get('f')
-            next = request.args.get('next')
+            next_pg = request.args.get('next')
         except ValueError:
             return redirect(url_for("TennisMain"))
 
         fnames = []
         try:
-            log_info( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) )
-            for f in os.listdir( os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir) ):
+            log_info(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir))
+            for f in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir)):
                 s = list(f)
                 f = "".join(s)
-                fnames.append( { 'fname':f, 'fit':("%d%%" % (100.0*difflib.SequenceMatcher(None,fname,f).ratio())) } )
+                fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
         except ValueError:
             # No files in directory - nothing to select from
             return redirect(url_for("TennisMain"))
             
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
         if len(fnames) > 10:
-            fnames= fnames[:10]
-        return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames, ident=ident, att=att, next=next )
+            fnames = fnames[:10]
+        return render_template("correct.html", fdir=fdir, fname=fname, fnames=fnames,
+                               ident=ident, att=att, next=next_pg)
 
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Shrani"[:5]):
-            TennisEvent.updateAtt( request.form["ident"],request.form["att"], request.form["fname"] )
-        return redirect( request.form["next"] )
+            TennisEvent.updateAtt(request.form["ident"], request.form["att"], request.form["fname"])
+        return redirect(request.form["next"])
 
-
-
-PAGELEN = 15
 
 @app.route("/", methods=['GET', 'POST'])
 def TennisMain():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     if request.method == 'GET':
-        log_info( "request for /" )
+        log_info("request for /")
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
@@ -255,40 +254,39 @@ def TennisMain():
         pos = 0
 
     events = TennisEvent.getEventsPage(pos, PAGELEN)
-    eventsLen = TennisEvent.count()
+    events_len = TennisEvent.count()
     return render_template("main.html", events=events, production=Production,
-           players=TennisEvent.players[:20], years=TennisEvent.Years,
-           prevPage=pos-PAGELEN if pos>PAGELEN else 0,
-           nextPage=pos+PAGELEN if pos<eventsLen-PAGELEN else eventsLen-PAGELEN,
-           start=pos, count=eventsLen )
+                           players=TennisEvent.players[:20], years=TennisEvent.Years,
+                           prevPage=pos-PAGELEN if pos > PAGELEN else 0,
+                           nextPage=pos+PAGELEN if pos < events_len-PAGELEN else events_len-PAGELEN,
+                           start=pos, count=events_len)
 
-'''
-   0. Leto - datum
-   1. * - datum je datum vira
-   2. Dogodek
-   3. Kraj
-   4. Spol - M, Z
-   5. Dvojice - D
-   6. Kategorija
-   7. Uvrstitev
-   8. Igralci
-   9. Priloga 1
-  10. Priloga 2
-  11. Priloga 3
-'''
-att_ext = [".pdf",".PDF",".jpg",".JPG",".jpeg",".JPEG",".png",".PNG"]
-def convertEntry( row ):
-    entry = {}
+
+def convertEntry(row):
+    '''
+       0. Leto - datum
+       1. * - datum je datum vira
+       2. Dogodek
+       3. Kraj
+       4. Spol - M, Z
+       5. Dvojice - D
+       6. Kategorija
+       7. Uvrstitev
+       8. Igralci
+       9. Priloga 1
+      10. Priloga 2
+      11. Priloga 3
+    '''    entry = {}
     lastCol = 13
     while (row[lastCol] == "") and lastCol > 1:
         lastCol -= 1
     if lastCol >= 2:
         r = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
         if r:
-            (d,m,y) = (int(r.group(1)), int(r.group(2)), int(r.group(3)))
+            (d, m, y) = (int(r.group(1)), int(r.group(2)), int(r.group(3)))
             entry["date"] = unicode("%02d.%02d.%04d" % (d,m,y))
         else:
-            (d,m,y) = (0, 0, int(row[0]))
+            (d, m, y) = (0, 0, int(row[0]))
             entry["date"] = unicode("%02d.%02d.%04s" % (d,m,y))
         entry["event"] = unicode(row[2], "utf-8")
         entry["place"] = unicode(row[3], "utf-8")
@@ -299,92 +297,90 @@ def convertEntry( row ):
         entry["player"] = unicode(string.strip(row[8]), "utf-8")
         r = re.search("\((\d{1,2})\)$", entry["player"])
         if r:
-            age = r.group(1) # save in the database
+            age = r.group(1)  # save in the database
             entry["player"] = entry["player"][:-5]
         entry["eventAge"] = unicode(row[6], "utf-8")
         entry["comment"] = unicode("")
         if row[1] == '*':
             entry["comment"] = u"vnešen datum vira; "
         entry["att1"] = unicode(string.strip(row[9]), "utf-8")
-        if entry["att1"] != "" and not any(x in entry["att1"] for x in att_ext):
+        if entry["att1"] != "" and not any(x in entry["att1"] for x in ATT_EXT):
             entry["comment"] += entry["att1"] + "; "
             entry["att1"] = ""
         if entry["att1"] != "":
-            if d==0 and m==0:
+            if d == 0 and m == 0:
                 entry["att1"] = ("%d" % (y)) + '_' + entry["att1"]
             else:
                 entry["att1"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att1"]
 
         entry["att2"] = unicode(string.strip(row[10]), "utf-8")
-        if entry["att2"] != "" and not any(x in entry["att2"] for x in att_ext):
+        if entry["att2"] != "" and not any(x in entry["att2"] for x in ATT_EXT):
             entry["comment"] += entry["att2"] + "; "
             entry["att2"] = ""
         if entry["att2"] != "":
-            if d==0 and m==0:
+            if d == 0 and m == 0:
                 entry["att2"] = ("%d" % (y)) + '_' + entry["att2"]
             else:
                 entry["att2"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att2"]
 
         entry["att3"] = unicode(string.strip(row[11]), "utf-8")
-        if entry["att3"] != "" and not any(x in entry["att3"] for x in att_ext):
+        if entry["att3"] != "" and not any(x in entry["att3"] for x in ATT_EXT):
             entry["comment"] += entry["att3"] + "; "
             entry["att3"] = ""
         if entry["att3"] != "":
-            if d==0 and m==0:
+            if d == 0 and m == 0:
                 entry["att3"] = ("%d" % (y)) + '_' + entry["att3"]
             else:
                 entry["att3"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att3"]
 
         entry["att4"] = unicode(string.strip(row[12]), "utf-8")
-        if entry["att4"] != "" and not any(x in entry["att4"] for x in att_ext):
+        if entry["att4"] != "" and not any(x in entry["att4"] for x in ATT_EXT):
             entry["comment"] += entry["att4"] + "; "
             entry["att4"] = ""
         if entry["att4"] != "":
-            if d==0 and m==0:
+            if d == 0 and m == 0:
                 entry["att4"] = ("%d" % (y)) + '_' + entry["att4"]
             else:
-                entry["att4"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att4"]
+                entry["att4"] = ("%d.%d.%d" % (y, m, d)) + '_' + entry["att4"]
 
         return True, entry
     else:
         return False, None
 
 
-'''
-  - generate data from Execel: Export to text (Unicode)
-  - convert to UTF-8
-  - change/reduce all pictures with: mogrify -resize 500 */*JPG; jpg
-'''
 @app.route('/Upload', methods=['GET', 'POST'])
 def UploadCSV():
+    '''
+    - generate data from Execel: Export to text (Unicode)
+    - convert to UTF-8
+    - change/reduce all pictures with: mogrify -resize 500 */*JPG; jpg
+    '''
     if request.method == 'GET':
         return render_template("uploadFile.html")
     elif request.method == 'POST':
         line = 0
         f_upload = request.files['file']
-        local_fname = os.path.join( files_dir, secure_filename(f_upload.filename) )
-        f_upload.save( local_fname )
+        local_fname = os.path.join(files_dir, secure_filename(f_upload.filename))
+        f_upload.save(local_fname)
         with open(local_fname, 'rb') as csvfile:
             stringReader = csv.reader(csvfile,delimiter="\t",quotechar='"')
             for row in stringReader:
                 line += 1
                 if line == 1:
                     continue
-                #log_info("Row: %s" % (row) )
-                (ok, entry) = convertEntry( row )
-                #log_info("Entry: %s - %s" % (str(ok), entry))
+                # log_info("Row: %s" % (row) )
+                (ok, entry) = convertEntry(row)
+                # log_info("Entry: %s - %s" % (str(ok), entry))
                 if ok:
                     if line % 20 == 0:
                         log_info( "IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
-                    e = TennisEvent( date=entry["date"], event=entry["event"],
-                                     place=entry["place"], category=entry["category"],
+                    e = TennisEvent( date=entry["date"], event=entry["event"], place=entry["place"],
+                                     category="%s %s %s" % (entry["category"], entry["doubles"], entry["sex"]),
                                      result=entry["result"], player=entry["player"],
                                      comment=entry["comment"], att1=entry["att1"],
                                      att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
                     e.put()
         return redirect(url_for("TennisMain"))
-
-
 
 
 login_manager = LoginManager()
@@ -397,10 +393,10 @@ app.config['SECURITY_PASSWORD_SALT'] = '$2a$16$PnnIgfMwk0jGX4SkHqS0P0'
 
 @login_manager.user_loader
 def load_user( userid ):
-    u = User.get_byId( userid )
+    u = User.get_byId(userid)
     if not u:
         return None
-    return User( username=u['username'], pw_hash=u['pw_hash'], utype=u['utype'], active=u['active'], email=u['email'], ident=u['ident'] )
+    return User(username=u['username'], pw_hash=u['pw_hash'], utype=u['utype'], active=u['active'], email=u['email'], ident=u['ident'])
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -414,10 +410,10 @@ def Login():
         rememberme = ("1" in request.form.getlist('remember'))
         u = User.get_byUser(username)
         if u:
-            user = User( username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'] )
+            user = User(username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'])
             if user and user.is_authenticated() and user.check_password(password):
-                login_user(user,remember=rememberme)
-                app.logger.info( "AUDIT - User login: " + user.username )
+                login_user(user, remember=rememberme)
+                app.logger.info("AUDIT - User login: " + user.username)
                 return redirect(request.args.get("next") or url_for("TennisMain"))
         
         return render_template("login.html", username=username,
@@ -434,29 +430,29 @@ def Signup():
         pass1 = request.form['password']
         pass2 = request.form['verify']
         email = request.form['email']
-        userMsg = "That's not a valid username." if not valid_username(username) else ""
-        pass1Msg = "That wasn't a valid password." if not valid_password(pass1) else ""
-        pass2Msg = "Your password didn't match." if pass1 <> pass2 else ""
-        emailMsg = "That's not a valid email." if not valid_email(email) else ""
-        if (userMsg=="") and (pass1Msg=="") and (pass2Msg=="") and (emailMsg==""):
+        user_msg = "That's not a valid username." if not valid_username(username) else ""
+        pass1_msg = "That wasn't a valid password." if not valid_password(pass1) else ""
+        pass2_msg = "Your password didn't match." if pass1 != pass2 else ""
+        email_msg = "That's not a valid email." if not valid_email(email) else ""
+        if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
             user = User.get_byUser(username)
-            if user != None:
-                userMsg = "That user already exists."
-        if (userMsg=="") and (pass1Msg=="") and (pass2Msg=="") and (emailMsg==""):
-            user = User( username=username, password=pass1, email=email)
+            if user is not None:
+                user_msg = "That user already exists."
+        if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
+            user = User(username=username, password=pass1, email=email)
             user.put()
             login_user(user)
-            app.logger.info( "AUDIT - New user: " + user )
+            app.logger.info("AUDIT - New user: " + user.username)
             return redirect(url_for("TennisMain"))
 
-        return render_template("signup.html", username=username, userMsg=userMsg, password=pass1, 
-            pass1Msg=pass1Msg, verify=pass2, pass2Msg=pass2Msg, email=email, emailMsg=emailMsg)
+        return render_template("signup.html", username=username, userMsg=user_msg, password=pass1,
+                               pass1Msg=pass1_msg, verify=pass2, pass2Msg=pass2_msg, email=email, emailMsg=email_msg)
 
 
 @app.route("/logout")
 @login_required
 def Logout():
-    app.logger.info( "AUDIT - User logout: " + str(current_user.username) )
+    app.logger.info("AUDIT - User logout: " + str(current_user.username))
     logout_user()
     return redirect(url_for("TennisMain"))
 
@@ -471,56 +467,54 @@ def EditUser():
             except ValueError:
                 return redirect(url_for("TennisMain"))
 
-            user = User.get_byId( ident )
-            return render_template("editUser.html", user=user )
+            user = User.get_byId(ident)
+            return render_template("editUser.html", user=user)
         else:
             users = User.get_Users()
-            return render_template("listUsers.html", users=users )
+            return render_template("listUsers.html", users=users)
             
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            u = User( username=request.form["username"], utype=request.form["utype"], 
-                      active=request.form["active"], email=request.form["email"])
-            ident = request.form["ident"]
-            u.update( request.form["ident"] )
+            u = User(username=request.form["username"], utype=request.form["utype"],
+                     active=request.form["active"], email=request.form["email"])
+            u.update(request.form["ident"])
         return redirect(url_for("EditUser"))
 
 
-
-@app.route("/events.json", methods=['GET'], defaults={'action':'events'} )
-@app.route("/people.json", methods=['GET'], defaults={'action':'people'} )
+@app.route("/test.json", methods=['GET'], defaults={'action': 'test'})
+@app.route("/events.json", methods=['GET'], defaults={'action': 'events'})
+@app.route("/people.json", methods=['GET'], defaults={'action': 'people'})
 @login_required
-def Json():
+def Json(action):
     if request.method == 'GET':
         if action == 'events':
-            return jsonify( **TennisEvents )
+            return jsonify(**TennisEvent)
         elif action == 'people':
-            return jsonify( **TennisPlayer )
-
+            return jsonify(**TennisPlayer)
+        elif action == 'test':
+            return jsonify({"test": "test"})
 
 
 @app.route("/shutdown", methods=['GET', 'POST'])
 @login_required
 def Shutdown():
     if request.method == 'GET':
-        log_info( appname + ": system shutdown requested" )
-        return render_template("shutdown.html" )
+        log_info(appname + ": system shutdown requested")
+        return render_template("shutdown.html")
             
     elif request.method == 'POST':
         if request.form["Status"] == "Ugasni":
-            log_info( appname + ": system shutdown confirmed and executed" )
-            os.system( "sudo shutdown -h 0" )
+            log_info(appname + ": system shutdown confirmed and executed")
+            os.system("sudo shutdown -h 0")
         return redirect(request.args.get("next") or url_for("TennisMain"))
-
-
 
 
 if __name__ == "__main__":
     if Production:
-        log_info( appname + ": start standalone production" )
+        log_info(appname + ": start standalone production")
         app.run(host='127.0.0.1', port=8080, debug=False)
     else:        
-        log_info( appname + ": start standalone development" )
+        log_info(appname + ": start standalone development")
         app.run(host='127.0.0.1', port=80, debug=True)
 else:
-    log_info( appname + ": start" )
+    log_info(appname + ": start")
