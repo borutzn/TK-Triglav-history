@@ -111,7 +111,7 @@ def edit_comment():
             return redirect(url_for("TennisMain"))
 
         event = TennisEvent.get(ident)
-        app.logger.error("Com: " + str(event))
+        log_info("Com: " + str(event))
         return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['Date']))
 
     elif request.method == 'POST':
@@ -415,7 +415,7 @@ def login():
             user = User(username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'])
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=rememberme)
-                app.logger.info("AUDIT - User login: " + user.username)
+                log_info("AUDIT - User login: " + user.username)
                 return redirect(request.args.get("next") or url_for("TennisMain"))
         
         return render_template("login.html", username=username,
@@ -444,7 +444,7 @@ def signup():
             user = User(username=username, password=pass1, email=email)
             user.put()
             login_user(user)
-            app.logger.info("AUDIT - New user: " + user.username)
+            log_info("AUDIT - New user: " + user.username)
             return redirect(url_for("TennisMain"))
 
         return render_template("signup.html", username=username, userMsg=user_msg, password=pass1,
@@ -454,7 +454,7 @@ def signup():
 @app.route("/logout")
 @login_required
 def logout():
-    app.logger.info("AUDIT - User logout: " + str(current_user.username))
+    log_info("AUDIT - User logout: " + str(current_user.username))
     logout_user()
     return redirect(url_for("TennisMain"))
 

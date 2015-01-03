@@ -7,7 +7,6 @@ import os
 import sqlite3
 
 from flask import url_for
-# where from?? from __main__ import name
 
 from Utils import log_info, files_dir
 
@@ -101,42 +100,42 @@ class TennisEvent:
         return "1900/01/01"
 
     def put(cls):
-        conn = sqlite3.connect(DbName)
-        curs = conn.cursor()
+        connection = sqlite3.connect(DbName)
+        cursor = connection.cursor()
 
         # log_info( "PUT: "+str(TennisEvent.date2Db(self.date)) + ": " + self.comment )
-        curs.execute("""INSERT INTO TennisEvents
+        cursor.execute("""INSERT INTO TennisEvents
                      (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
                      VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3, :Att4,
                      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
                      {"Date": TennisEvent.date2Db(cls.date), "Event": cls.event, "Place": cls.place,
                       "Category": cls.category, "Result": cls.result, "Player": cls.player, "Comment": cls.comment,
-                      "Att1": cls.att1, "Att2": cls.att2, "Att3": cls.att3, "Att4": cls.att4} )
-        conn.commit()
+                      "Att1": cls.att1, "Att2": cls.att2, "Att3": cls.att3, "Att4": cls.att4})
+        connection.commit()
         cls.clear_data()
-        return curs.lastrowid
+        return cursor.lastrowid
 
     def update(cls, iden):
-        conn = sqlite3.connect(DbName)
-        curs = conn.cursor()
+        connection = sqlite3.connect(DbName)
+        cursor = connection.cursor()
 
         log_info("UPDATE %s" % str(iden))
-        curs.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
-                     Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
-                     WHERE Id=:Id""",
-                     {'Id': iden, 'Date': TennisEvent.date2db(cls.date), 'Event': cls.event, 'Place': cls.place,
-                      'Result': cls.result, 'Player': cls.player, 'Comment': cls.comment,
-                      'Att1': cls.att1, 'Att2': cls.att2, 'Att3': cls.att3, 'Att4': cls.att4})
-        conn.commit()
+        cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
+                       Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
+                       WHERE Id=:Id""",
+                       {'Id': iden, 'Date': TennisEvent.date2db(cls.date), 'Event': cls.event, 'Place': cls.place,
+                        'Result': cls.result, 'Player': cls.player, 'Comment': cls.comment,
+                        'Att1': cls.att1, 'Att2': cls.att2, 'Att3': cls.att3, 'Att4': cls.att4})
+        connection.commit()
         cls.clear_data()
                 
     def update_comment(cls, iden):
-        conn = sqlite3.connect(DbName)
-        curs = conn.cursor()
+        connection = sqlite3.connect(DbName)
+        cursor = connection.cursor()
 
-        curs.execute("""UPDATE TennisEvents SET Comment=:Comment, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                     {'Comment': cls.comment, 'Id': iden})
-        conn.commit()
+        cursor.execute("""UPDATE TennisEvents SET Comment=:Comment, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                       {'Comment': cls.comment, 'Id': iden})
+        connection.commit()
         cls.clear_data()
                 
     @classmethod
@@ -161,11 +160,11 @@ class TennisEvent:
                 
     @classmethod
     def delete(cls, iden):
-        conn = sqlite3.connect(DbName)
-        curs = conn.cursor()
+        connection = sqlite3.connect(DbName)
+        cursor = connection.cursor()
 
-        curs.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
-        conn.commit()
+        cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
+        connection.commit()
         cls.clear_data()
                 
     @classmethod
@@ -173,14 +172,14 @@ class TennisEvent:
         if cls.EventsCache is not None:
             return
             
-        conn = sqlite3.connect(DbName)
-        with conn:
-            conn.row_factory = sqlite3.Row
-            curs = conn.cursor()
-            curs.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
-            curs.execute("SELECT * FROM TennisEvents ORDER by date")
-            cls.EventsCache = [dict(row) for row in curs]
-            conn.commit()
+        connection = sqlite3.connect(DbName)
+        with connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
+            cursor.execute("SELECT * FROM TennisEvents ORDER by date")
+            cls.EventsCache = [dict(row) for row in cursor]
+            connection.commit()
 
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
@@ -276,14 +275,14 @@ class TennisPlayer:
         if cls.PlayersCache is not None:
             return
             
-        conn = sqlite3.connect(DbName)
-        with conn:
-            conn.row_factory = sqlite3.Row
-            curs = conn.cursor()
-            curs.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )")
-            curs.execute("SELECT * FROM TennisPlayer")
-            cls.PlayersCache = [dict(row) for row in curs]
-            conn.commit()
+        connection = sqlite3.connect(DbName)
+        with connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            cursor.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )")
+            cursor.execute("SELECT * FROM TennisPlayer")
+            cls.PlayersCache = [dict(row) for row in cursor]
+            connection.commit()
 
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx

@@ -56,17 +56,17 @@ def check_att(y, att):
 
 
 def update_entry(iden, num, att):
-    conn = sqlite3.connect(DbName)
-    curs = conn.cursor()
+    connection = sqlite3.connect(DbName)
+    cursor = connection.cursor()
     if num == 1:
-        curs.execute("""UPDATE TennisEvents SET Att1=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
+        cursor.execute("""UPDATE TennisEvents SET Att1=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     elif num == 2:
-        curs.execute("""UPDATE TennisEvents SET Att2=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
+        cursor.execute("""UPDATE TennisEvents SET Att2=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     elif num == 3:
-        curs.execute("""UPDATE TennisEvents SET Att3=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
+        cursor.execute("""UPDATE TennisEvents SET Att3=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     elif num == 4:
-        curs.execute("""UPDATE TennisEvents SET Att4=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
-    conn.commit()                
+        cursor.execute("""UPDATE TennisEvents SET Att4=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
+    connection.commit()
 
 
 def update_att(iden, num, y, att):
