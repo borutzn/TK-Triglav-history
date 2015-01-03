@@ -8,13 +8,13 @@
     
     <div style="position:relative; height:35px;">
         <div style="float:left; width:70%;">
-            <form action="{{ url_for('TennisMain') }}" method="post">
+            <form action="{{ url_for('tennis_main') }}" method="post">
                 &nbsp;&nbsp;
-                <a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+                <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('TennisMain') }}?p={{prevPage}}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
+                <a href="{{ url_for('tennis_main') }}?p={{prevPage}}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
                 &nbsp;&nbsp;
-                <a href="{{ url_for('TennisMain') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
+                <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                Leto:  <select name="search">
                     {% for year in years %}
@@ -55,7 +55,7 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><a href="{{ url_for('TennisMain') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
+                <br><a href="{{ url_for('tennis_main') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
                   <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th>igralec</th><th></th>{% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
@@ -76,7 +76,7 @@
             <td style=""> {{ event.Result }} </td>
             <td style=""> 
                 {% if event.Player != "" %}
-                    <a href="{{ url_for('Player') }}?n={{ event.Player }}">{{ event.Player }}</a>
+                    <a href="{{ url_for('player') }}?n={{ event.Player }}">{{ event.Player }}</a>
                 {% endif %}
             </td>
             <td style="">
@@ -105,14 +105,14 @@
                 <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
             {% endif %}
             {% if current_user.utype >= 3 %}
-                <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
+                <a href="{{ url_for('edit_event') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
             {% endif %}
             {% if current_user.utype >= 1 %}
-                <a href="{{ url_for('EditComment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
+                <a href="{{ url_for('edit_comment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
             {% endif %}
             {% if current_user.is_authenticated() %}
-                <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
-                <a href="{{ url_for('Delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
+                <a href="{{ url_for('edit_event') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                <a href="{{ url_for('delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
             {% endif %}
             {% if current_user.is_authenticated() %}</td>{% endif %}
             </tr>
@@ -132,11 +132,11 @@
         <table>
         {% for player in players %}
             <tr>
-            <td><a href="{{ url_for('Player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
+            <td><a href="{{ url_for('player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
             </tr>
         {% endfor %}
         </table>
-        <a href="{{ url_for('Player') }}">...</a><br>
+        <a href="{{ url_for('player') }}">...</a><br>
         <br>
     {% endif %}
     </div>

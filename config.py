@@ -1,4 +1,4 @@
-__author__ = 'BŽ'
+__author__ = 'Borut'
 
 FILES_BASEDIR = "/home/apps/TK-Triglav-history/static/files"
 DbName = "TennisHistory.db"

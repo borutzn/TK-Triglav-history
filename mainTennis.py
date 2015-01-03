@@ -35,7 +35,7 @@ from User import User, Anonymous
 
 
 @app.route("/player", methods=['GET', 'POST'])
-def Player():
+def player():
     if request.method == 'GET' :
         try:
             player_name = request.args.get('n')
@@ -43,7 +43,7 @@ def Player():
             player_name = None
         if player_name is not None:
             player = TennisPlayer.get(player_name)
-            events = TennisEvent.getPlayersEvents(player_name)
+            events = TennisEvent.get_players_events(player_name)
             #app.logger.info( "Player: " + str(player) )
             return render_template("player.html", events=events, playername=player_name, player=player)
 
@@ -69,20 +69,20 @@ def Player():
 
 @app.route("/editPlayer", methods=['GET', 'POST'])
 @login_required
-def EditPlayer():
+def edit_player():
     if request.method == 'GET' :
         try:
-            ident = request.args.get('id')
+            iden = request.args.get('id')
         except ValueError:
-            ident = None
-        # log_info( 'editPlayer: ' + unicode(ident) )
-        if ident is not None:
-            player = TennisPlayer.get( ident )
+            iden = None
+        # log_info( 'editPlayer: ' + unicode(iden) )
+        if iden is not None:
+            player = TennisPlayer.get( iden )
             # log_info( "GOT " + unicode(player) )
             if player is None:
-                player = TennisPlayer(Name=ident)
+                player = TennisPlayer(Name=iden)
                 # log_info( "GOT " + unicode(player.Name) )
-            return render_template("editPlayer.html", player=player, ident=ident )
+            return render_template("editPlayer.html", player=player, ident=iden)
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -93,17 +93,17 @@ def EditPlayer():
             picture = request.form['Picture']
             file = request.files['upload']
             if file and allowed_file(file.filename):
-                picture = os.path.join( "players", secure_filename(file.filename) )
-                filename = os.path.join( files_dir, picture )
-                file.save( os.path.join( filename ) )
-            p = TennisPlayer( Name=name, Born=born, Died=died, Comment=comment, Picture=picture )
+                picture = os.path.join("players", secure_filename(file.filename))
+                filename = os.path.join(files_dir, picture)
+                file.save(os.path.join(filename))
+            p = TennisPlayer(Name=name, Born=born, Died=died, Comment=comment, Picture=picture)
             p.update()
 
     return redirect(url_for("Player"))
 
 
 @app.route("/comment", methods=['GET', 'POST'])
-def EditComment():
+def edit_comment():
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
@@ -120,12 +120,12 @@ def EditComment():
             if request.form["addcomment"] != "":
                 comment += "; " + request.form["addcomment"]
             ev = TennisEvent(comment=comment)
-            ev.updateComment(request.form["Id"])
+            ev.update_comment(request.form["Id"])
         return redirect(url_for("TennisMain"))
 
 
 @app.route("/add", methods=['GET', 'POST'])
-def AddEvent():
+def add_event():
     if request.method == 'GET':
         return render_template("addEvent.html", event=[])
 
@@ -146,7 +146,7 @@ def AddEvent():
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
 @app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='Duplicate')
 @login_required
-def EditEvent(update):
+def edit_event(update):
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
@@ -175,7 +175,7 @@ def EditEvent(update):
 
 @app.route("/delete", methods=['GET', 'POST'])
 @login_required
-def Delete():
+def delete():
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
@@ -195,15 +195,15 @@ def Delete():
 
 @app.route("/reload", methods=['GET'])
 @login_required
-def Reload():
+def reload():
     if request.method == 'GET':
-        TennisEvent.clearData()
+        TennisEvent.clear_data()
     return redirect(request.args.get("next"))
 
 
 @app.route("/correct", methods=['GET', 'POST'])
 @login_required
-def Correct():
+def correct():
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
@@ -233,12 +233,12 @@ def Correct():
 
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Shrani"[:5]):
-            TennisEvent.updateAtt(request.form["ident"], request.form["att"], request.form["fname"])
+            TennisEvent.update_att(request.form["ident"], request.form["att"], request.form["fname"])
         return redirect(request.form["next"])
 
 
 @app.route("/", methods=['GET', 'POST'])
-def TennisMain():
+def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     if request.method == 'GET':
         log_info("request for /")
@@ -249,11 +249,11 @@ def TennisMain():
             pos = 0
     elif request.method == 'POST':
         year = request.form['search']
-        pos = TennisEvent.getYearPos( year )
+        pos = TennisEvent.get_year_pos(year)
     else:
         pos = 0
 
-    events = TennisEvent.getEventsPage(pos, PAGELEN)
+    events = TennisEvent.get_events_page(pos, PAGELEN)
     events_len = TennisEvent.count()
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players[:20], years=TennisEvent.Years,
@@ -262,7 +262,7 @@ def TennisMain():
                            start=pos, count=events_len)
 
 
-def convertEntry(row):
+def convert_entry(row):
     '''
        0. Leto - datum
        1. * - datum je datum vira
@@ -276,18 +276,19 @@ def convertEntry(row):
        9. Priloga 1
       10. Priloga 2
       11. Priloga 3
-    '''    entry = {}
-    lastCol = 13
-    while (row[lastCol] == "") and lastCol > 1:
-        lastCol -= 1
-    if lastCol >= 2:
+    '''
+    entry = {}
+    last_col = 13
+    while (row[last_col] == "") and last_col > 1:
+        last_col -= 1
+    if last_col >= 2:
         r = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
         if r:
             (d, m, y) = (int(r.group(1)), int(r.group(2)), int(r.group(3)))
-            entry["date"] = unicode("%02d.%02d.%04d" % (d,m,y))
+            entry["date"] = unicode("%02d.%02d.%04d" % (d, m, y))
         else:
             (d, m, y) = (0, 0, int(row[0]))
-            entry["date"] = unicode("%02d.%02d.%04s" % (d,m,y))
+            entry["date"] = unicode("%02d.%02d.%04s" % (d, m, y))
         entry["event"] = unicode(row[2], "utf-8")
         entry["place"] = unicode(row[3], "utf-8")
         entry["sex"] = unicode(row[4], "utf-8")
@@ -309,9 +310,9 @@ def convertEntry(row):
             entry["att1"] = ""
         if entry["att1"] != "":
             if d == 0 and m == 0:
-                entry["att1"] = ("%d" % (y)) + '_' + entry["att1"]
+                entry["att1"] = ("%d" % y) + '_' + entry["att1"]
             else:
-                entry["att1"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att1"]
+                entry["att1"] = ("%d.%d.%d" % (y, m, d)) + '_' + entry["att1"]
 
         entry["att2"] = unicode(string.strip(row[10]), "utf-8")
         if entry["att2"] != "" and not any(x in entry["att2"] for x in ATT_EXT):
@@ -319,9 +320,9 @@ def convertEntry(row):
             entry["att2"] = ""
         if entry["att2"] != "":
             if d == 0 and m == 0:
-                entry["att2"] = ("%d" % (y)) + '_' + entry["att2"]
+                entry["att2"] = ("%d" % y) + '_' + entry["att2"]
             else:
-                entry["att2"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att2"]
+                entry["att2"] = ("%d.%d.%d" % (y, m, d)) + '_' + entry["att2"]
 
         entry["att3"] = unicode(string.strip(row[11]), "utf-8")
         if entry["att3"] != "" and not any(x in entry["att3"] for x in ATT_EXT):
@@ -329,9 +330,9 @@ def convertEntry(row):
             entry["att3"] = ""
         if entry["att3"] != "":
             if d == 0 and m == 0:
-                entry["att3"] = ("%d" % (y)) + '_' + entry["att3"]
+                entry["att3"] = ("%d" % y) + '_' + entry["att3"]
             else:
-                entry["att3"] = ("%d.%d.%d" % (y,m,d)) + '_' + entry["att3"]
+                entry["att3"] = ("%d.%d.%d" % (y, m, d)) + '_' + entry["att3"]
 
         entry["att4"] = unicode(string.strip(row[12]), "utf-8")
         if entry["att4"] != "" and not any(x in entry["att4"] for x in ATT_EXT):
@@ -339,7 +340,7 @@ def convertEntry(row):
             entry["att4"] = ""
         if entry["att4"] != "":
             if d == 0 and m == 0:
-                entry["att4"] = ("%d" % (y)) + '_' + entry["att4"]
+                entry["att4"] = ("%d" % y) + '_' + entry["att4"]
             else:
                 entry["att4"] = ("%d.%d.%d" % (y, m, d)) + '_' + entry["att4"]
 
@@ -349,7 +350,7 @@ def convertEntry(row):
 
 
 @app.route('/Upload', methods=['GET', 'POST'])
-def UploadCSV():
+def upload_csv():
     '''
     - generate data from Execel: Export to text (Unicode)
     - convert to UTF-8
@@ -369,16 +370,16 @@ def UploadCSV():
                 if line == 1:
                     continue
                 # log_info("Row: %s" % (row) )
-                (ok, entry) = convertEntry(row)
+                (ok, entry) = convert_entry(row)
                 # log_info("Entry: %s - %s" % (str(ok), entry))
                 if ok:
                     if line % 20 == 0:
                         log_info( "IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
-                    e = TennisEvent( date=entry["date"], event=entry["event"], place=entry["place"],
-                                     category="%s %s %s" % (entry["category"], entry["doubles"], entry["sex"]),
-                                     result=entry["result"], player=entry["player"],
-                                     comment=entry["comment"], att1=entry["att1"],
-                                     att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
+                    e = TennisEvent(date=entry["date"], event=entry["event"], place=entry["place"],
+                                    category="%s %s %s" % (entry["category"], entry["doubles"], entry["sex"]),
+                                    result=entry["result"], player=entry["player"],
+                                    comment=entry["comment"], att1=entry["att1"],
+                                    att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
                     e.put()
         return redirect(url_for("TennisMain"))
 
@@ -392,15 +393,16 @@ app.config['SECURITY_PASSWORD_SALT'] = '$2a$16$PnnIgfMwk0jGX4SkHqS0P0'
 
 
 @login_manager.user_loader
-def load_user( userid ):
+def load_user(userid):
     u = User.get_byId(userid)
     if not u:
         return None
-    return User(username=u['username'], pw_hash=u['pw_hash'], utype=u['utype'], active=u['active'], email=u['email'], ident=u['ident'])
+    return User(username=u['username'], pw_hash=u['pw_hash'], utype=u['utype'], active=u['active'], email=u['email'],
+                ident=u['ident'])
 
 
 @app.route("/login", methods=['GET', 'POST'])
-def Login():
+def login():
     if request.method == 'GET':
         return render_template("login.html", user_info="username")
     
@@ -421,7 +423,7 @@ def Login():
 
 
 @app.route("/signup", methods=['GET', 'POST'])
-def Signup():
+def signup():
     if request.method == 'GET':
         return render_template("signup.html", entries=[])
 
@@ -451,7 +453,7 @@ def Signup():
 
 @app.route("/logout")
 @login_required
-def Logout():
+def logout():
     app.logger.info("AUDIT - User logout: " + str(current_user.username))
     logout_user()
     return redirect(url_for("TennisMain"))
@@ -459,15 +461,15 @@ def Logout():
 
 @app.route("/editUser", methods=['GET', 'POST'])
 @login_required
-def EditUser():
+def edit_user():
     if request.method == 'GET':
         if 'id' in request.args:
             try:
-                ident = int(request.args.get('id'))
+                iden = int(request.args.get('id'))
             except ValueError:
                 return redirect(url_for("TennisMain"))
 
-            user = User.get_byId(ident)
+            user = User.get_byId(iden)
             return render_template("editUser.html", user=user)
         else:
             users = User.get_Users()
@@ -485,7 +487,7 @@ def EditUser():
 @app.route("/events.json", methods=['GET'], defaults={'action': 'events'})
 @app.route("/people.json", methods=['GET'], defaults={'action': 'people'})
 @login_required
-def Json(action):
+def json(action):
     if request.method == 'GET':
         if action == 'events':
             return jsonify(**TennisEvent)
@@ -497,7 +499,7 @@ def Json(action):
 
 @app.route("/shutdown", methods=['GET', 'POST'])
 @login_required
-def Shutdown():
+def shutdown():
     if request.method == 'GET':
         log_info(appname + ": system shutdown requested")
         return render_template("shutdown.html")

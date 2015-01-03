@@ -6,11 +6,14 @@ import jinja2
 
 files_dir = os.path.join(os.path.dirname(__file__), 'static/files')
 template_dir = os.path.join(os.path.dirname(__file__), 'template')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 
 from flask import Flask
 app = Flask(__name__)
+
+PICTURE_EXT = {'png', 'jpg', 'jpeg', 'gif'}
+
 
 if not app.debug:
     import logging
@@ -24,26 +27,25 @@ if not app.debug:
     app.logger.info('TK start')
 
 
-def log_info( s ):
-    app.logger.info( s )
+def log_info(s):
+    app.logger.info(s)
 
 
 def valid_username(username):
-    UsernameRE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-    return UsernameRE.match(username)
+    username_re = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+    return username_re.match(username)
+
 
 def valid_password(password):
-    PasswordRE = re.compile(r"^.{3,20}$")
-    return PasswordRE.match(password)
+    password_re = re.compile(r"^.{3,20}$")
+    return password_re.match(password)
+
 
 def valid_email(email):
-    EmailRE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
-    return EmailRE.match(email)
+    email_re = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
+    return email_re.match(email)
 
 
-
-PICTURE_EXT = set(['png', 'jpg', 'jpeg', 'gif'])
-
-def allowed_file( filename ):
+def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in PICTURE_EXT

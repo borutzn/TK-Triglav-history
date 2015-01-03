@@ -8,7 +8,7 @@
 
     <div class="player_data">mapa: {{ fdir }}, datoteka: <b>{{ fname }}</b><div><br>
 
-    <form  action="{{ url_for('Correct') }}" method="post">
+    <form  action="{{ url_for('correct') }}" method="post">
         <table><tr><th></th><th>ujemanje</th><th>ime datoteke</th></tr>
         {% for fn in fnames %}
             <tr><td><input type="radio" name="fname" value="{{ fn.fname }}"></td>

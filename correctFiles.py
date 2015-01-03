@@ -14,32 +14,32 @@ import sqlite3
 responseCache = {}
 
 
-def check_file(root, fname):
-    new_fname = ""
-    for c in fname:
+def check_file(file_root, file_name):
+    new_file_name = ""
+    for c in file_name:
         if ord(c) <= 128:
-            new_fname += c
+            new_file_name += c
         elif ord(c) == 138:
-            new_fname += 'Š'
+            new_file_name += 'Š'
         elif ord(c) == 142:
-            new_fname += 'Ž'
+            new_file_name += 'Ž'
         elif ord(c) == 154:
-            new_fname += 'š'
+            new_file_name += 'š'
         elif ord(c) == 158:
-            new_fname += 'ž'
+            new_file_name += 'ž'
         else:
             print(ord(c))
 
-    if fname == new_fname:
+    if file_name == new_file_name:
         return False
 
-    os.rename(os.path.join(root, fname), os.path.join(root, new_fname))
+    os.rename(os.path.join(file_root, file_name), os.path.join(root, new_file_name))
     return True
 
 
-def get_best_filename(year, att):
+def get_best_filename(y, att):
     filename, fit = "", 0.0
-    for f in os.listdir(FILES_BASEDIR+"/"+year):
+    for f in os.listdir(FILES_BASEDIR+"/"+y):
         newfit = difflib.SequenceMatcher(None, att, f).ratio()
         if newfit > fit:
             filename, fit = f, newfit
@@ -47,30 +47,30 @@ def get_best_filename(year, att):
     return filename, fit
 
 
-def check_att(year, att):
+def check_att(y, att):
     if att == "":
         return False
-    if os.path.exists(os.path.join(FILES_BASEDIR, year, att)):
+    if os.path.exists(os.path.join(FILES_BASEDIR, y, att)):
         return False
     return True
 
 
-def update_entry(ident, num, att):
+def update_entry(iden, num, att):
     conn = sqlite3.connect(DbName)
     curs = conn.cursor()
     if num == 1:
-        curs.execute("""UPDATE TennisEvents SET Att1=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': ident})
+        curs.execute("""UPDATE TennisEvents SET Att1=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     elif num == 2:
-        curs.execute("""UPDATE TennisEvents SET Att2=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': ident})
+        curs.execute("""UPDATE TennisEvents SET Att2=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     elif num == 3:
-        curs.execute("""UPDATE TennisEvents SET Att3=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': ident})
+        curs.execute("""UPDATE TennisEvents SET Att3=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     elif num == 4:
-        curs.execute("""UPDATE TennisEvents SET Att4=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': ident})
+        curs.execute("""UPDATE TennisEvents SET Att4=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
     conn.commit()                
 
 
-def update_att(ident, num, year, att):
-    (new_att, fit) = get_best_filename(year, att)
+def update_att(iden, num, y, att):
+    (new_att, fit) = get_best_filename(y, att)
     if att in responseCache:
         # print( "FOUND" + str(responseCache[att]) )
         change = responseCache[att][0]
@@ -86,7 +86,7 @@ def update_att(ident, num, year, att):
         change = raw_input("   Change (y/n)?")
         responseCache[att] = (change, new_att)
     if change == "y" or change == "a":
-        update_entry(ident, num, new_att)
+        update_entry(iden, num, new_att)
         if change == "y":
             print("-> Att changed")
         else:

@@ -1,7 +1,6 @@
 from config import DbName
 
 import datetime
-import logging
 import re
 import os
 
@@ -10,7 +9,7 @@ import sqlite3
 from flask import url_for
 # where from?? from __main__ import name
 
-from Utils import app, log_info, files_dir
+from Utils import log_info, files_dir
 
 
 class TennisEvent:
@@ -45,17 +44,17 @@ class TennisEvent:
         self.last_modified = self.created
 
     @classmethod
-    def resultValue(cls, v):
+    def result_value(cls, v):
         if v.isnumeric():
             return 4-int(v) if int(v) < 4 else 0
         return 0
         
     @classmethod
-    def getFname(cls, year, att):
+    def get_fname(cls, year, att):
         return url_for('static', filename="files/" + year + "/" + year + "_" + att)
         
     @classmethod
-    def correctAtt(cls, year, att):
+    def correct_att(cls, year, att):
         if att == "":
             return ""
             
@@ -82,7 +81,7 @@ class TennisEvent:
         return "00.00.0000"
 
     @classmethod
-    def date2Db(cls, d):
+    def date2db(cls, d):
         match = re.search(r"(\d{1,2})\.(\d{1,2})\.(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(3)), int(match.group(2)), int(match.group(1)))
@@ -101,7 +100,7 @@ class TennisEvent:
                 
         return "1900/01/01"
 
-    def put(self):
+    def put(cls):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
@@ -110,67 +109,67 @@ class TennisEvent:
                      (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
                      VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3, :Att4,
                      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                     {"Date": TennisEvent.date2Db(self.date), "Event": self.event, "Place": self.place,
-                     "Category": self.category, "Result": self.result, "Player": self.player, "Comment": self.comment,
-                     "Att1": self.att1, "Att2": self.att2, "Att3": self.att3, "Att4": self.att4} )
+                     {"Date": TennisEvent.date2Db(cls.date), "Event": cls.event, "Place": cls.place,
+                      "Category": cls.category, "Result": cls.result, "Player": cls.player, "Comment": cls.comment,
+                      "Att1": cls.att1, "Att2": cls.att2, "Att3": cls.att3, "Att4": cls.att4} )
         conn.commit()
-        self.clearData()
+        cls.clear_data()
         return curs.lastrowid
 
-    def update(self, Id):
+    def update(cls, iden):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        log_info("UPDATE %s" % str(Id))
+        log_info("UPDATE %s" % str(iden))
         curs.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
                      Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
                      WHERE Id=:Id""",
-                     {'Id': Id, 'Date': TennisEvent.date2Db(self.date), 'Event': self.event, 'Place': self.place,
-                     'Result': self.result, 'Player': self.player, 'Comment': self.comment,
-                     'Att1': self.att1, 'Att2': self.att2, 'Att3':self.att3, 'Att4': self.att4})
+                     {'Id': iden, 'Date': TennisEvent.date2db(cls.date), 'Event': cls.event, 'Place': cls.place,
+                      'Result': cls.result, 'Player': cls.player, 'Comment': cls.comment,
+                      'Att1': cls.att1, 'Att2': cls.att2, 'Att3': cls.att3, 'Att4': cls.att4})
         conn.commit()
-        self.clearData()
+        cls.clear_data()
                 
-    def updateComment(self, Id):
+    def update_comment(cls, iden):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
         curs.execute("""UPDATE TennisEvents SET Comment=:Comment, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                     {'Comment': self.comment, 'Id': Id})
+                     {'Comment': cls.comment, 'Id': iden})
         conn.commit()
-        self.clearData()
+        cls.clear_data()
                 
     @classmethod
-    def updateAtt(self, Id, Att, fname):
+    def update_att(cls, iden, att, fname):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        if Att == "1":
+        if att == "1":
             curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': Id})
-        elif Att == "2":
+                         {'fname': fname, 'Id': iden})
+        elif att == "2":
             curs.execute("""UPDATE TennisEvents SET Att2=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': Id})
-        elif Att == "3":
+                         {'fname': fname, 'Id': iden})
+        elif att == "3":
             curs.execute("""UPDATE TennisEvents SET Att3=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': Id})
-        elif Att == "4":
+                         {'fname': fname, 'Id': iden})
+        elif att == "4":
             curs.execute("""UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': Id})
+                         {'fname': fname, 'Id': iden})
         conn.commit()
-        # popravi tako, da se raje spremeni v cache-u, namesto: self.clearData()
+        # popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data()
                 
     @classmethod
-    def delete(cls, Id):
+    def delete(cls, iden):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        curs.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': Id})
+        curs.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         conn.commit()
-        cls.clearData()
+        cls.clear_data()
                 
     @classmethod
-    def fetchData(cls):
+    def fetch_data(cls):
         if cls.EventsCache is not None:
             return
             
@@ -186,10 +185,10 @@ class TennisEvent:
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(cls.EventsCache[idx]['Date'])
-            cls.EventsCache[idx]['Att1'] = cls.correctAtt(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'])
-            cls.EventsCache[idx]['Att2'] = cls.correctAtt(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'])
-            cls.EventsCache[idx]['Att3'] = cls.correctAtt(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'])
-            cls.EventsCache[idx]['Att4'] = cls.correctAtt(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'])
+            cls.EventsCache[idx]['Att1'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'])
+            cls.EventsCache[idx]['Att2'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'])
+            cls.EventsCache[idx]['Att3'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'])
+            cls.EventsCache[idx]['Att4'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'])
             cls.EventsIndex[val['Id']] = idx
             year = cls.EventsCache[idx]['Date'][:4]
             if year not in cls.Years:
@@ -199,13 +198,13 @@ class TennisEvent:
 
         p = dict()  # move collection to the upper for loop?
         for i in cls.EventsCache:
-            pName = i['Player']
-            pResult = cls.resultValue(i['Result'])
-            if pName in p:
-                p[pName][0] += 1
-                p[pName][1] += pResult
+            p_name = i['Player']
+            p_result = cls.result_value(i['Result'])
+            if p_name in p:
+                p[p_name][0] += 1
+                p[p_name][1] += p_result
             else:
-                p[pName] = list((1, pResult))
+                p[p_name] = list((1, p_result))
         cls.players = list()
         for k, v in p.iteritems():
             cls.players.append((k, v[0], v[1]))
@@ -213,114 +212,111 @@ class TennisEvent:
 
         log_info("Event cache reloaded (%d entries)" % len(cls.EventsCache))
 
-        @classmethod
-        def clearData(cls):
-            TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
+    @classmethod
+    def clear_data(cls):
+        TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
 
-        @classmethod
-        def get(cls, Ident):
-            cls.fetchData()
-            idx = cls.EventsIndex[Ident]
-            return cls.EventsCache[idx]
+    @classmethod
+    def get(cls, iden):
+        cls.fetch_data()
+        idx = cls.EventsIndex[iden]
+        return cls.EventsCache[idx]
 
-        @classmethod
-        def getYearPos(cls, year):
-            cls.fetchData()
-            log_info("get Y pos: " + year)
-            for idx, val in enumerate(cls.EventsCache):
-                print("ENTRY: " + val['Date'] + " - " + cls.EventsCache[idx]['Date'][:4])
-                if val['Date'][:4] == year:
-                    log_info("Found pos: " + str(idx))
-                    return idx
-            return 0
+    @classmethod
+    def get_year_pos(cls, year):
+        cls.fetch_data()
+        log_info("get Y pos: " + year)
+        for idx, val in enumerate(cls.EventsCache):
+            # log_info("ENTRY: " + val['Date'] + " - " + cls.EventsCache[idx]['Date'][:4])
+            if val['Date'][:4] == year:
+                log_info("Found pos: " + str(idx))
+                return idx
+        return 0
 
-        @classmethod
-        def getEventsPage(cls, start, pagelen):
-                cls.fetchData()                        
-                return cls.EventsCache[start:start+pagelen]               
+    @classmethod
+    def get_events_page(cls, start, pagelen):
+        cls.fetch_data()
+        return cls.EventsCache[start:start+pagelen]
 
-        @classmethod
-        def getPlayersEvents(cls, player ):
-            cls.fetchData()
-            r = list()
-            for ev in cls.EventsCache:
-                if ev['Player'] == player:
-                    r.append(ev)
-            return r
+    @classmethod
+    def get_players_events(cls, player):
+        cls.fetch_data()
+        r = list()
+        for ev in cls.EventsCache:
+            if ev['Player'] == player:
+                r.append(ev)
+        return r
 
-        @classmethod
-        def count(cls ):
-            cls.fetchData()           
-            return len(cls.EventsCache)
+    @classmethod
+    def count(cls):
+        cls.fetch_data()
+        return len(cls.EventsCache)
 
 
-
-'''
-DROP TABLE TennisPlayer;
-CREATE TABLE TennisPlayer( Ident INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER, 
-        Comment TEXT, Picture TEXT, Created DATE, LastModified DATE);
-DELETE FROM TennisPlayer;
-'''
 class TennisPlayer:
+    '''
+    DROP TABLE TennisPlayer;
+    CREATE TABLE TennisPlayer( Ident INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER,
+            Comment TEXT, Picture TEXT, Created DATE, LastModified DATE);
+    DELETE FROM TennisPlayer;
+    '''
 
-        PlayersCache = None
-        PlayersIndex = {}
+    PlayersCache = None
+    PlayersIndex = {}
 
-        def __init__(self, Name, Born="", Died="", Comment="", Picture=""):
-                self.Name = Name
-                self.Born = Born
-                self.Died = Died
-                self.Comment = Comment
-                self.Picture = Picture
+    def __init__(self, name, born="", died="", comment="", picture=""):
+        self.Name = name
+        self.Born = born
+        self.Died = died
+        self.Comment = comment
+        self.Picture = picture
 
-        @classmethod
-        def fetchData(cls):
-            if cls.PlayersCache != None:
-                return
+    @classmethod
+    def fetch_data(cls):
+        if cls.PlayersCache is not None:
+            return
             
-            conn = sqlite3.connect(DbName)
-            with conn:
-                conn.row_factory = sqlite3.Row
-                curs = conn.cursor()
-                curs.execute( "CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
-                curs.execute( "SELECT * FROM TennisPlayer" )
-                cls.PlayersCache = [ dict(row) for row in curs ]
-                conn.commit()
+        conn = sqlite3.connect(DbName)
+        with conn:
+            conn.row_factory = sqlite3.Row
+            curs = conn.cursor()
+            curs.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )")
+            curs.execute("SELECT * FROM TennisPlayer")
+            cls.PlayersCache = [dict(row) for row in curs]
+            conn.commit()
 
-            for idx, val in enumerate(cls.PlayersCache):
-                cls.PlayersIndex[val['Name']] = idx
+        for idx, val in enumerate(cls.PlayersCache):
+            cls.PlayersIndex[val['Name']] = idx
 
-            # app.logger.error( "CACHE " + str(cls.PlayersCache) )
-            # app.logger.error( "CACHE " + str(cls.PlayersIndex) )
-            app.logger.warning("Players cache reloaded (%d entries)" % len(cls.PlayersCache))
+        # app.logger.error( "CACHE " + str(cls.PlayersCache) )
+        # app.logger.error( "CACHE " + str(cls.PlayersIndex) )
+        log_info("Players cache reloaded (%d entries)" % len(cls.PlayersCache))
 
+    @classmethod
+    def clear_data(cls):
+        TennisPlayer.PlayersCache = None  # lazy approach - clear cache & reload again
 
-        @classmethod
-        def clearData(cls):
-                TennisPlayer.PlayersCache = None  # lazy approach - clear cache & reload again
+    @classmethod
+    def get(cls, name):
+        cls.fetch_data()
+        if name in cls.PlayersIndex:
+            # app.logger.error( "GET " + Name )
+            idx = cls.PlayersIndex[name]
+            # app.logger.error( "GET " + str(idx) )
+            # app.logger.error( "return " + str(cls.PlayersCache[idx]) )
+            return cls.PlayersCache[idx]
+        else:
+            return None
 
+    def update(self):
+        conn = sqlite3.connect(DbName)
+        curs = conn.cursor()
 
-        @classmethod
-        def get(cls, Name):
-            cls.fetchData()                        
-            if Name in cls.PlayersIndex:
-                # app.logger.error( "GET " + Name )
-                idx = cls.PlayersIndex[Name]
-                # app.logger.error( "GET " + str(idx) )
-                # app.logger.error( "return " + str(cls.PlayersCache[idx]) )
-                return cls.PlayersCache[idx]
-            else:
-                return None
-
-        def update(self):
-                conn = sqlite3.connect(DbName)
-                curs = conn.cursor()
-
-                curs.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
-                curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
-                             VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                             {"Name":self.Name, "Born":self.Born, "Died":self.Died,
-                             "Comment":self.Comment, "Picture":self.Picture})
-                conn.commit()                
-                self.clearData()
-                return curs.lastrowid
+        curs.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
+        curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
+                     VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
+                     {"Name": self.Name, "Born": self.Born, "Died": self.Died,
+                      "Comment": self.Comment, "Picture": self.Picture})
+        conn.commit()
+        self.clear_data()
+        return curs.lastrowid

@@ -2,9 +2,9 @@
 
 {% block content %}
 
-    <form action="{{ url_for('Player') }}" method="post">
+    <form action="{{ url_for('player') }}" method="post">
         &nbsp;&nbsp;
-        <a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+        <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Išči: <input type="text" name="search" value="{{ search }}">
     </form><br> 
@@ -15,7 +15,7 @@
             {% if (loop.index % 6 == 1) %}
                 <tr>
             {% endif %}
-            <td><a href="{{ url_for('Player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
+            <td><a href="{{ url_for('player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
             {% if (loop.index % 6 == 0) %}
                 </tr>
             {% endif %}

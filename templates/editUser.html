@@ -5,7 +5,7 @@
 {% block content %}
 
     <p><div class="page-title">Popravljanje podatkov uporabnika</div><br>
-    <form action="{{ url_for('EditUser') }}" method="post">
+    <form action="{{ url_for('edit_user') }}" method="post">
         <table>
 		<tr><th>uporabnik</th> <th>{{ user.username }}<input type="hidden" name="username" value="{{ user.username }}"></th></tr>
 		<tr><th>pravice</th> <td><select name="utype">

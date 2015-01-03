@@ -22,9 +22,9 @@
             {% endif %}
         </div>
         <div style="float:left; width:30%;">
-            &nbsp;&nbsp;<a href="{{ url_for('TennisMain') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+            &nbsp;&nbsp;<a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
             {% if current_user.is_authenticated() %}
-                &nbsp;&nbsp;<a href="{{ url_for('EditPlayer') }}?id={{ playername }}"><img src="{{ url_for('static',filename='edit-32.png') }}" title="Urejanje igralca"></a>
+                &nbsp;&nbsp;<a href="{{ url_for('edit_player') }}?id={{ playername }}"><img src="{{ url_for('static',filename='edit-32.png') }}" title="Urejanje igralca"></a>
             {% endif %}
         </div>
         <div style="clear:both;"></div>
@@ -35,7 +35,7 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><a href="{{ url_for('TennisMain') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
+                <br><a href="{{ url_for('tennis_main') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
                   <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th></th>{% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
@@ -71,14 +71,14 @@
             <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
             {% endif %}
                 {% if current_user.utype >= 3 %}
-                    <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
+                    <a href="{{ url_for('edit_event') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
                 {% endif %}
                 {% if current_user.utype >= 1 %}
-                    <a href="{{ url_for('EditComment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
+                    <a href="{{ url_for('edit_comment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
                 {% endif %}
             	{% if current_user.is_authenticated() %}
-                        <a href="{{ url_for('EditEvent') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
-                        <a href="{{ url_for('Delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
+                        <a href="{{ url_for('edit_event') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                        <a href="{{ url_for('delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
                 {% endif %}
             {% if current_user.is_authenticated() %}</td>{% endif %}
             </tr>
