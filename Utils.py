@@ -1,3 +1,5 @@
+from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
+
 import re
 import os
 
@@ -12,14 +14,12 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), aut
 from flask import Flask
 app = Flask(__name__)
 
-PICTURE_EXT = {'png', 'jpg', 'jpeg', 'gif'}
-
 
 if not app.debug:
     import logging
     from logging.handlers import RotatingFileHandler
 
-    file_handler = RotatingFileHandler('/tmp/TK.log', maxBytes=1*1024*1024, backupCount=10)
+    file_handler = RotatingFileHandler(LOG_FILE, maxBytes=LOG_SIZE, backupCount=LOG_COUNT)
     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [%(pathname)s:%(lineno)d]'))
     app.logger.setLevel(logging.INFO)
     file_handler.setLevel(logging.INFO)
@@ -48,4 +48,4 @@ def valid_email(email):
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in PICTURE_EXT
+           filename.rsplit('.', 1)[1] in ATT_EXT

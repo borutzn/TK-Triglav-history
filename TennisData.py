@@ -1,4 +1,4 @@
-from config import DbName
+from config import DB_NAME
 
 import datetime
 import re
@@ -12,13 +12,13 @@ from Utils import log_info, files_dir
 
 
 class TennisEvent:
-    '''
+    """
     DROP TABLE TennisEvents;
     CREATE TABLE TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT,
             Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT,
             Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE);
     DELETE FROM TennisEvents;
-    '''
+    """
 
     EventsCache = None
     EventsIndex = {}
@@ -99,8 +99,8 @@ class TennisEvent:
                 
         return "1900/01/01"
 
-    def put(cls):
-        connection = sqlite3.connect(DbName)
+    def put(self):
+        connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
         # log_info( "PUT: "+str(TennisEvent.date2Db(self.date)) + ": " + self.comment )
@@ -108,39 +108,39 @@ class TennisEvent:
                      (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
                      VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3, :Att4,
                      CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                     {"Date": TennisEvent.date2Db(cls.date), "Event": cls.event, "Place": cls.place,
-                      "Category": cls.category, "Result": cls.result, "Player": cls.player, "Comment": cls.comment,
-                      "Att1": cls.att1, "Att2": cls.att2, "Att3": cls.att3, "Att4": cls.att4})
+                     {"Date": TennisEvent.date2Db(self.date), "Event": self.event, "Place": self.place,
+                      "Category": self.category, "Result": self.result, "Player": self.player, "Comment": self.comment,
+                      "Att1": self.att1, "Att2": self.att2, "Att3": self.att3, "Att4": self.att4})
         connection.commit()
-        cls.clear_data()
+        self.clear_data()
         return cursor.lastrowid
 
-    def update(cls, iden):
-        connection = sqlite3.connect(DbName)
+    def update(self, iden):
+        connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
         log_info("UPDATE %s" % str(iden))
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
                        Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
                        WHERE Id=:Id""",
-                       {'Id': iden, 'Date': TennisEvent.date2db(cls.date), 'Event': cls.event, 'Place': cls.place,
-                        'Result': cls.result, 'Player': cls.player, 'Comment': cls.comment,
-                        'Att1': cls.att1, 'Att2': cls.att2, 'Att3': cls.att3, 'Att4': cls.att4})
+                       {'Id': iden, 'Date': TennisEvent.date2db(self.date), 'Event': self.event, 'Place': self.place,
+                        'Result': self.result, 'Player': self.player, 'Comment': self.comment,
+                        'Att1': self.att1, 'Att2': self.att2, 'Att3': self.att3, 'Att4': self.att4})
         connection.commit()
-        cls.clear_data()
+        self.clear_data()
                 
-    def update_comment(cls, iden):
-        connection = sqlite3.connect(DbName)
+    def update_comment(self, iden):
+        connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
         cursor.execute("""UPDATE TennisEvents SET Comment=:Comment, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                       {'Comment': cls.comment, 'Id': iden})
+                       {'Comment': self.comment, 'Id': iden})
         connection.commit()
-        cls.clear_data()
+        self.clear_data()
                 
     @classmethod
     def update_att(cls, iden, att, fname):
-        conn = sqlite3.connect(DbName)
+        conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
         if att == "1":
@@ -160,7 +160,7 @@ class TennisEvent:
                 
     @classmethod
     def delete(cls, iden):
-        connection = sqlite3.connect(DbName)
+        connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
@@ -172,7 +172,7 @@ class TennisEvent:
         if cls.EventsCache is not None:
             return
             
-        connection = sqlite3.connect(DbName)
+        connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
@@ -183,13 +183,14 @@ class TennisEvent:
 
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
+            # !!! correct cls.EventsCache[idx] with val !!!
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(cls.EventsCache[idx]['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'])
             cls.EventsCache[idx]['Att3'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'])
             cls.EventsCache[idx]['Att4'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'])
             cls.EventsIndex[val['Id']] = idx
-            year = cls.EventsCache[idx]['Date'][:4]
+            year = val['Date'][:4]
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
@@ -253,12 +254,12 @@ class TennisEvent:
 
 
 class TennisPlayer:
-    '''
+    """
     DROP TABLE TennisPlayer;
     CREATE TABLE TennisPlayer( Ident INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER,
             Comment TEXT, Picture TEXT, Created DATE, LastModified DATE);
     DELETE FROM TennisPlayer;
-    '''
+    """
 
     PlayersCache = None
     PlayersIndex = {}
@@ -275,7 +276,7 @@ class TennisPlayer:
         if cls.PlayersCache is not None:
             return
             
-        connection = sqlite3.connect(DbName)
+        connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
@@ -308,7 +309,7 @@ class TennisPlayer:
             return None
 
     def update(self):
-        conn = sqlite3.connect(DbName)
+        conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
         curs.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )

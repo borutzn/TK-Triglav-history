@@ -20,7 +20,7 @@
 		<a href="{{ url_for('logout') }}"><img src="{{ url_for('static',filename='unlock-24.png') }}" title="Odjava uporabnika"></a>
             {% else %}
 		<a href="{{ url_for('login', next=request.url) }}"><img src="{{ url_for('static',filename='lock-24.png') }}" title="Prijava uporabnika"></a> |
-		<a href="{{ url_for('signup') }}" ><img src="{{ url_for('static',filename='edit-24.png') }}" title="Registracija uporabnika"></a>
+		<a href="{{ url_for('signup') }}" ><img src="{{ url_for('static',filename='signin-24.png') }}" title="Registracija uporabnika"></a>
             {% endif %}
 	</div>
     </div><br>

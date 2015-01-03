@@ -5,13 +5,111 @@
 program by Borut Žnidar on 12.12.2014
 """
 
-from config import DbName, FILES_BASEDIR
+from config import DB_NAME, ATT_EXT
 
 import os
+import re
+import sys
+import csv
+import string
 import difflib
 import sqlite3
 
+from TennisData import TennisEvent
+
+from Utils import log_info
+
+
+files_basedir = os.path.join(os.path.dirname(__file__), 'static/files')
+
 responseCache = {}
+
+
+def convert_entry(row):
+    """
+       0. Leto - datum
+       1. * - datum je datum vira
+       2. Dogodek
+       3. Kraj
+       4. Spol - M, Z
+       5. Dvojice - D
+       6. Kategorija
+       7. Uvrstitev
+       8. Igralci
+       9. Priloga 1
+      10. Priloga 2
+      11. Priloga 3
+    """
+    entry = {}
+    last_col = 13
+    while (row[last_col] == "") and last_col > 1:
+        last_col -= 1
+    if last_col >= 2:
+        r = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
+        if r:
+            (d, m, y) = (int(r.group(1)), int(r.group(2)), int(r.group(3)))
+            entry["date"] = unicode("%02d.%02d.%04d" % (d, m, y))
+        else:
+            (d, m, y) = (0, 0, int(row[0]))
+            entry["date"] = unicode("%02d.%02d.%04s" % (d, m, y))
+        entry["event"] = unicode(row[2], "utf-8")
+        entry["place"] = unicode(row[3], "utf-8")
+        entry["sex"] = unicode(row[4], "utf-8")
+        entry["doubles"] = unicode(row[5], "utf-8")
+        entry["category"] = unicode(row[6], "utf-8")
+        entry["result"] = unicode(row[7], "utf-8")
+        entry["player"] = unicode(string.strip(row[8]), "utf-8")
+        r = re.search("\((\d{1,2})\)$", entry["player"])
+        if r:
+            age = r.group(1)  # save in the database
+            entry["player"] = entry["player"][:-5]
+        entry["eventAge"] = unicode(row[6], "utf-8")
+        entry["comment"] = unicode("")
+        if row[1] == '*':
+            entry["comment"] = u"vnešen datum vira; "
+        entry["att1"] = unicode(string.strip(row[9]), "utf-8")
+        if entry["att1"] != "" and not any(x in entry["att1"] for x in ATT_EXT):
+            entry["comment"] += entry["att1"] + "; "
+            entry["att1"] = ""
+        if entry["att1"] != "":
+            if d == 0 and m == 0:
+                entry["att1"] = "%d_%s" % (y, entry["att1"])
+            else:
+                entry["att1"] = "%d.%d.%d_%s" % (y, m, d, entry["att1"])
+
+        entry["att2"] = unicode(string.strip(row[10]), "utf-8")
+        if entry["att2"] != "" and not any(x in entry["att2"] for x in ATT_EXT):
+            entry["comment"] += entry["att2"] + "; "
+            entry["att2"] = ""
+        if entry["att2"] != "":
+            if d == 0 and m == 0:
+                entry["att2"] = "%d_%s" % (y, entry["att2"])
+            else:
+                entry["att2"] = "%d.%d.%d_%s" % (y, m, d, entry["att2"])
+
+        entry["att3"] = unicode(string.strip(row[11]), "utf-8")
+        if entry["att3"] != "" and not any(x in entry["att3"] for x in ATT_EXT):
+            entry["comment"] += entry["att3"] + "; "
+            entry["att3"] = ""
+        if entry["att3"] != "":
+            if d == 0 and m == 0:
+                entry["att3"] = "%d_%s" % (y, entry["att3"])
+            else:
+                entry["att3"] = "%d.%d.%d_%s" % (y, m, d, entry["att3"])
+
+        entry["att4"] = unicode(string.strip(row[12]), "utf-8")
+        if entry["att4"] != "" and not any(x in entry["att4"] for x in ATT_EXT):
+            entry["comment"] += entry["att4"] + "; "
+            entry["att4"] = ""
+        if entry["att4"] != "":
+            if d == 0 and m == 0:
+                entry["att4"] = "%d_%s" % (y, entry["att4"])
+            else:
+                entry["att4"] = "%d.%d.%d_%s" % (y, m, d, entry["att4"])
+
+        return True, entry
+    else:
+        return False, None
 
 
 def check_file(file_root, file_name):
@@ -39,7 +137,7 @@ def check_file(file_root, file_name):
 
 def get_best_filename(y, att):
     filename, fit = "", 0.0
-    for f in os.listdir(FILES_BASEDIR+"/"+y):
+    for f in os.listdir(files_basedir+"/"+y):
         newfit = difflib.SequenceMatcher(None, att, f).ratio()
         if newfit > fit:
             filename, fit = f, newfit
@@ -50,13 +148,13 @@ def get_best_filename(y, att):
 def check_att(y, att):
     if att == "":
         return False
-    if os.path.exists(os.path.join(FILES_BASEDIR, y, att)):
+    if os.path.exists(os.path.join(files_basedir, y, att)):
         return False
     return True
 
 
 def update_entry(iden, num, att):
-    connection = sqlite3.connect(DbName)
+    connection = sqlite3.connect(DB_NAME)
     cursor = connection.cursor()
     if num == 1:
         cursor.execute("""UPDATE TennisEvents SET Att1=:att, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""", {'att': att, 'Id': iden})
@@ -94,25 +192,55 @@ def update_att(iden, num, y, att):
         return 1
     return 0
 
+
 print
 print("STEP 1: Clearing database")
 delete = raw_input("Delete all data from TennisEvents (y/n)?")
 if delete == "y":
     print("-> Data deleted")
-    conn = sqlite3.connect(DbName)
+    conn = sqlite3.connect(DB_NAME)
     curs = conn.cursor()
     curs.execute("DELETE FROM TennisEvents")
     conn.commit()
 
 print
 print("STEP 2: Importing data")
+"""
+    - generate data from Execel: Export to text (Unicode)
+    - convert to UTF-8
+    - change/reduce all pictures with: mogrify -resize 500 */*JPG; jpg
+"""
+
+line = 0
+if len(sys.argv) > 1:
+    filename = sys.argv[1]
+else:
+    filename = input("file name")
+if filename != "":
+    with open(filename, 'rb') as csvfile:
+        string_reader = csv.reader(csvfile, delimiter="\t", quotechar='"')
+        for row in string_reader:
+            line += 1
+            if line == 1:
+                continue
+            # log_info("Row: %s" % (row) )
+            (ok, entry) = convert_entry(row)
+            # log_info("Entry: %s - %s" % (str(ok), entry))
+            if ok:
+                if line % 20 == 0:
+                    log_info("IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
+                e = TennisEvent(date=entry["date"], event=entry["event"], place=entry["place"],
+                                category="%s %s %s" % (entry["category"], entry["doubles"], entry["sex"]),
+                                result=entry["result"], player=entry["player"], comment=entry["comment"],
+                                att1=entry["att1"], att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
+                e.put()
 
 
 print
-print("STEP 2: Translating filenames from Windows-1250 to UTF-8")
+print("STEP 3: Translating filenames from Windows-1250 to UTF-8")
 changed_files = 0
 try:
-    for root, directory, files in os.walk(FILES_BASEDIR):
+    for root, directory, files in os.walk(files_basedir):
         print("DIR: " + str(root))
         for fname in files:
             if check_file(root, fname):
@@ -122,9 +250,9 @@ except ValueError:  # No files in directory - nothing to select from
 
 
 print
-print("STEP 3: correcting attachements in the DB")
+print("STEP 4: correcting attachements in the DB")
 changed_atts = 0
-conn = sqlite3.connect(DbName)
+conn = sqlite3.connect(DB_NAME)
 with conn:
     conn.row_factory = sqlite3.Row
     curs = conn.cursor()
@@ -144,12 +272,12 @@ for row in EventsCache:
     if check_att(year, row["Att4"]):
         changed_atts += update_att(ident, 4, year, row["Att4"])
 
-    print
-    print("STEP 4: resizing oversized pictures")
-    for ext in ('JPG', 'jpg'):
-        cmd = "mogrify -resize 500 %s/*/*.%s" % (FILES_BASEDIR, ext)
-        print("  run: %s" % cmd)
-        os.system(cmd)
+print
+print("STEP 5: resizing oversized pictures")
+for ext in ('JPG', 'jpg'):
+    cmd = "mogrify -resize 500 %s/*/*.%s" % (files_basedir, ext)
+    print("  run: %s" % cmd)
+    os.system(cmd)
 
-    print("-------------------------")
-    print("SUMMARY: %d files changed; %d attachements changed" % (changed_files, changed_atts))
+print("-------------------------")
+print("SUMMARY: %d files changed; %d attachements changed" % (changed_files, changed_atts))
