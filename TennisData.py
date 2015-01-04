@@ -84,17 +84,17 @@ class TennisEvent:
         match = re.search(r"(\d{1,2})\.(\d{1,2})\.(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(3)), int(match.group(2)), int(match.group(1)))
-            log_info("date2Db to: "+str(d))
+            # log_info("date2Db to: "+str(d))
             return d
         match = re.search(r"(\d{1,2})\.(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(2)), int(match.group(1)), 0)
-            log_info("date2Db to: "+str(d))
+            # log_info("date2Db to: "+str(d))
             return d
         match = re.search(r"(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(1)), 0, 0)
-            log_info("date2Db to: "+str(d))
+            # log_info("date2Db to: "+str(d))
             return d
                 
         return "1900/01/01"
