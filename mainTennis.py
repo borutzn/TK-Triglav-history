@@ -50,8 +50,8 @@ def show_player():
     if request.method == 'POST':
         search = request.form['search']
 
-    # app.logger.info( "search: " + str(search) )
-    log_info( "players: " + str(TennisEvent.players) )
+    # log_info( "search: " + str(search) )
+    # log_info( "players: " + str(TennisEvent.players) )
     if search == "":
         players = list(TennisEvent.players)
     else:
