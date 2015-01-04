@@ -51,7 +51,7 @@ def show_player():
         search = request.form['search']
 
     # app.logger.info( "search: " + str(search) )
-    # app.logger.info( "players: " + str(TennisEvent.players) )
+    log_info( "players: " + str(TennisEvent.players) )
     if search == "":
         players = list(TennisEvent.players)
     else:
