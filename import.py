@@ -197,7 +197,7 @@ def update_att(iden, num, y, att):
 
 print
 print("STEP 1: Clearing database")
-delete = raw_input("Delete all data from TennisEvents (y/n)?")
+delete = raw_input("Delete all data from TennisEvents (y/n)? ")
 if delete == "y":
     print("-> Data deleted")
     conn = sqlite3.connect(DB_NAME)
@@ -216,7 +216,7 @@ line = 0
 if len(sys.argv) > 1:
     filename = sys.argv[1]
 else:
-    filename = input("file name")
+    filename = raw_input("Input filename ("" for no)? ")
 if filename != "":
     with open(filename, 'rb') as csvfile:
         string_reader = csv.reader(csvfile, delimiter="\t", quotechar='"')
@@ -279,7 +279,7 @@ for row in EventsCache:
 print
 print("STEP 5: resizing oversized pictures")
 for ext in ATT_EXT:
-    cmd = "mogrify -resize 500 %s/*/*.%s" % (files_basedir, ext)
+    cmd = "mogrify -resize 500 %s/*/*%s" % (files_basedir, ext)
     print("  run: %s" % cmd)
     os.system(cmd)
 
