@@ -62,7 +62,7 @@ def convert_entry(row):
         entry["player"] = unicode(string.strip(row[8]), "utf-8")
         r = re.search("\((\d{1,2})\)$", entry["player"])
         if r:
-            entry["playerAge"] = r.group(1)
+            entry["playerBorn"] = r.group(1)
             entry["player"] = entry["player"][:-5]
         else:
             entry["playerBorn"] = ""
@@ -218,6 +218,7 @@ if len(sys.argv) > 1:
 else:
     filename = input("file name")
 if filename != "":
+    print( "  importing from %s" % filename )
     with open(filename, 'rb') as csvfile:
         string_reader = csv.reader(csvfile, delimiter="\t", quotechar='"')
         for row in string_reader:
@@ -235,7 +236,7 @@ if filename != "":
                                  player=entry["player"], comment=entry["comment"],
                                  att1=entry["att1"], att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
                 ev.put()
-                if entry["playerAge"] != "":
+                if entry["playerBorn"] != "":
                     pl = TennisPlayer(name=entry["player"], born=entry["playerBorn"])
                     pl.update()
 
