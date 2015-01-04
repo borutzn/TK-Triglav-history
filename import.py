@@ -236,7 +236,7 @@ if filename != "":
                                  player=entry["player"], comment=entry["comment"],
                                  att1=entry["att1"], att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
                 ev.put()
-                if entry["playerBorn"] != "":
+                if entry["player"] != "" and entry["playerBorn"] != "":
                     pl = TennisPlayer(name=entry["player"], born=entry["playerBorn"])
                     pl.update()
 

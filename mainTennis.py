@@ -98,7 +98,7 @@ def edit_player():
             p = TennisPlayer(name=name, born=born, died=died, comment=comment, picture=picture)
             p.update()
 
-    return redirect(url_for("player"))
+    return redirect(url_for("show_player"))
 
 
 @app.route("/comment", methods=['GET', 'POST'])
