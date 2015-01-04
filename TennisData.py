@@ -184,25 +184,16 @@ class TennisEvent:
 
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
-            # !!! correct cls.EventsCache[idx] with val !!!
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
             cls.EventsCache[idx]['Att3'] = cls.correct_att(val['Date'][:4], val['Att3'])
             cls.EventsCache[idx]['Att4'] = cls.correct_att(val['Date'][:4], val['Att4'])
-            """ toDelete
-            cls.EventsCache[idx]['LocalDate'] = cls.date2user(cls.EventsCache[idx]['Date'])
-            cls.EventsCache[idx]['Att1'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'])
-            cls.EventsCache[idx]['Att2'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'])
-            cls.EventsCache[idx]['Att3'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'])
-            cls.EventsCache[idx]['Att4'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'])
-            """
             cls.EventsIndex[val['Id']] = idx
             year = val['Date'][:4]
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
-        log_info(cls.Years)
 
         p = dict()  # move collection to the upper for loop?
         for i in cls.EventsCache:
@@ -233,11 +224,8 @@ class TennisEvent:
     @classmethod
     def get_year_pos(cls, year):
         cls.fetch_data()
-        log_info("get Y pos: " + year)
         for idx, val in enumerate(cls.EventsCache):
-            # log_info("ENTRY: " + val['Date'] + " - " + cls.EventsCache[idx]['Date'][:4])
             if val['Date'][:4] == year:
-                log_info("Found pos: " + str(idx))
                 return idx
         return 0
 

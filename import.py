@@ -266,16 +266,16 @@ with conn:
     conn.commit()
 
 for row in EventsCache:
-    ident = row["Id"]
+    iden = row["Id"]
     year = row["Date"][:4]
     if check_att(year, row["Att1"]):
-        changed_atts += update_att(ident, 1, year, row["Att1"])
+        changed_atts += update_att(iden, 1, year, row["Att1"])
     if check_att(year, row["Att2"]):
-        changed_atts += update_att(ident, 2, year, row["Att2"])
+        changed_atts += update_att(iden, 2, year, row["Att2"])
     if check_att(year, row["Att3"]):
-        changed_atts += update_att(ident, 3, year, row["Att3"])
+        changed_atts += update_att(iden, 3, year, row["Att3"])
     if check_att(year, row["Att4"]):
-        changed_atts += update_att(ident, 4, year, row["Att4"])
+        changed_atts += update_att(iden, 4, year, row["Att4"])
 
 print
 print("STEP 5: resizing oversized pictures")
