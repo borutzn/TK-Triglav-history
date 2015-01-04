@@ -105,12 +105,13 @@ class TennisEvent:
 
         # log_info( "PUT: "+str(TennisEvent.date2Db(self.date)) + ": " + self.comment )
         cursor.execute("""INSERT INTO TennisEvents
-                     (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
-                     VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3, :Att4,
-                     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                     {"Date": TennisEvent.date2Db(self.date), "Event": self.event, "Place": self.place,
-                      "Category": self.category, "Result": self.result, "Player": self.player, "Comment": self.comment,
-                      "Att1": self.att1, "Att2": self.att2, "Att3": self.att3, "Att4": self.att4})
+                       (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
+                        VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
+                        :Att4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
+                       {"Date": TennisEvent.date2db(self.date), "Event": self.event, "Place": self.place,
+                        "Category": self.category, "Result": self.result, "Player": self.player,
+                        "Comment": self.comment, "Att1": self.att1, "Att2": self.att2, "Att3": self.att3,
+                        "Att4": self.att4})
         connection.commit()
         self.clear_data()
         return cursor.lastrowid
@@ -184,11 +185,18 @@ class TennisEvent:
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
             # !!! correct cls.EventsCache[idx] with val !!!
+            cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
+            cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
+            cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
+            cls.EventsCache[idx]['Att3'] = cls.correct_att(val['Date'][:4], val['Att3'])
+            cls.EventsCache[idx]['Att4'] = cls.correct_att(val['Date'][:4], val['Att4'])
+            """ toDelete
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(cls.EventsCache[idx]['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att2'])
             cls.EventsCache[idx]['Att3'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att3'])
             cls.EventsCache[idx]['Att4'] = cls.correct_att(cls.EventsCache[idx]['Date'][:4], cls.EventsCache[idx]['Att4'])
+            """
             cls.EventsIndex[val['Id']] = idx
             year = val['Date'][:4]
             if year not in cls.Years:

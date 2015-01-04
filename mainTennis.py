@@ -91,7 +91,7 @@ def edit_player():
             comment = request.form['Comment']
             picture = request.form['Picture']
             upload_file = request.files['upload']
-            if file and allowed_file(file.filename):
+            if file and allowed_file(upload_file.filename):
                 picture = os.path.join("players", secure_filename(file.filename))
                 filename = os.path.join(files_dir, picture)
                 upload_file.save(os.path.join(filename))
@@ -482,16 +482,20 @@ def edit_user():
         return redirect(url_for("edit_user"))
 
 
-@app.route("/test.json", methods=['GET'], defaults={'action': 'test'})
-@app.route("/events.json", methods=['GET'], defaults={'action': 'events'})
-@app.route("/people.json", methods=['GET'], defaults={'action': 'people'})
+@app.route("/test.json", methods=['GET'], defaults={'action': 'test', 'format': 'json'})
+@app.route("/events.csv", methods=['GET'], defaults={'action': 'events', 'format': 'csv'})
+@app.route("/people.csv", methods=['GET'], defaults={'action': 'people', 'format': 'csv'})
+@app.route("/events.json", methods=['GET'], defaults={'action': 'events', 'format': 'json'})
+@app.route("/people.json", methods=['GET'], defaults={'action': 'people', 'format': 'json'})
 @login_required
-def json(action):
+def json(action, format):
     if request.method == 'GET':
         if action == 'events':
-            return jsonify(**TennisEvent)
+            if format == "json":
+                return jsonify(**TennisEvent)
         elif action == 'people':
-            return jsonify(**TennisPlayer)
+            if format == "json":
+                return jsonify(**TennisPlayer)
         elif action == 'test':
             return jsonify({"test": "test"})
 

@@ -15,7 +15,7 @@ import string
 import difflib
 import sqlite3
 
-from TennisData import TennisEvent
+from TennisData import TennisEvent, TennisPlayer
 
 from Utils import log_info
 
@@ -25,8 +25,7 @@ files_basedir = os.path.join(os.path.dirname(__file__), 'static/files')
 responseCache = {}
 
 
-def convert_entry(row):
-    """
+""" CSV fields structure
        0. Leto - datum
        1. * - datum je datum vira
        2. Dogodek
@@ -39,7 +38,8 @@ def convert_entry(row):
        9. Priloga 1
       10. Priloga 2
       11. Priloga 3
-    """
+"""
+def convert_entry(row):
     entry = {}
     last_col = 13
     while (row[last_col] == "") and last_col > 1:
@@ -54,16 +54,18 @@ def convert_entry(row):
             entry["date"] = unicode("%02d.%02d.%04s" % (d, m, y))
         entry["event"] = unicode(row[2], "utf-8")
         entry["place"] = unicode(row[3], "utf-8")
-        entry["sex"] = unicode(row[4], "utf-8")
-        entry["doubles"] = unicode(row[5], "utf-8")
-        entry["category"] = unicode(row[6], "utf-8")
+        sex = unicode(row[4], "utf-8")
+        doubles = "dvojice" if unicode(row[5], "utf-8") != "" else ""
+        category = unicode(row[6], "utf-8")
+        entry["category"] = "%s %s %s" % (sex, category, doubles)
         entry["result"] = unicode(row[7], "utf-8")
         entry["player"] = unicode(string.strip(row[8]), "utf-8")
         r = re.search("\((\d{1,2})\)$", entry["player"])
         if r:
-            age = r.group(1)  # save in the database
+            entry["playerAge"] = r.group(1)
             entry["player"] = entry["player"][:-5]
-        entry["eventAge"] = unicode(row[6], "utf-8")
+        else:
+            entry["playerBorn"] = ""
         entry["comment"] = unicode("")
         if row[1] == '*':
             entry["comment"] = u"vnešen datum vira; "
@@ -136,13 +138,13 @@ def check_file(file_root, file_name):
 
 
 def get_best_filename(y, att):
-    filename, fit = "", 0.0
+    best_filename, fit = "", 0.0
     for f in os.listdir(files_basedir+"/"+y):
         newfit = difflib.SequenceMatcher(None, att, f).ratio()
         if newfit > fit:
-            filename, fit = f, newfit
+            best_filename, fit = f, newfit
     # print( "%s (%d%%)" % (fname, 100*fit) )
-    return filename, fit
+    return best_filename, fit
 
 
 def check_att(y, att):
@@ -208,7 +210,6 @@ print("STEP 2: Importing data")
 """
     - generate data from Execel: Export to text (Unicode)
     - convert to UTF-8
-    - change/reduce all pictures with: mogrify -resize 500 */*JPG; jpg
 """
 
 line = 0
@@ -229,11 +230,14 @@ if filename != "":
             if ok:
                 if line % 20 == 0:
                     log_info("IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
-                e = TennisEvent(date=entry["date"], event=entry["event"], place=entry["place"],
-                                category="%s %s %s" % (entry["category"], entry["doubles"], entry["sex"]),
-                                result=entry["result"], player=entry["player"], comment=entry["comment"],
-                                att1=entry["att1"], att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
-                e.put()
+                ev = TennisEvent(date=entry["date"], event=entry["event"], place=entry["place"],
+                                 category=entry["category"], result=entry["result"],
+                                 player=entry["player"], comment=entry["comment"],
+                                 att1=entry["att1"], att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
+                ev.put()
+                if entry["playerAge"] != "":
+                    pl = TennisPlayer(name=entry["player"], born=entry["playerBorn"])
+                    pl.update()
 
 
 print
@@ -274,7 +278,7 @@ for row in EventsCache:
 
 print
 print("STEP 5: resizing oversized pictures")
-for ext in ('JPG', 'jpg'):
+for ext in ATT_EXT:
     cmd = "mogrify -resize 500 %s/*/*.%s" % (files_basedir, ext)
     print("  run: %s" % cmd)
     os.system(cmd)
