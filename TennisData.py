@@ -177,7 +177,9 @@ class TennisEvent:
         with connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
-            cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
+            cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, "
+                           "Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, "
+                           "Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
             cursor.execute("SELECT * FROM TennisEvents ORDER by date")
             cls.EventsCache = [dict(row) for row in cursor]
             connection.commit()
@@ -276,7 +278,8 @@ class TennisPlayer:
         with connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
-            cursor.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )")
+            cursor.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER,
+                           Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
             cursor.execute("SELECT * FROM TennisPlayer")
             cls.PlayersCache = [dict(row) for row in cursor]
             connection.commit()
@@ -308,7 +311,8 @@ class TennisPlayer:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
-        curs.execute("CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER, Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )" )
+        curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
+                     Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
         curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
                      VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
                      {"Name": self.Name, "Born": self.Born, "Died": self.Died,

@@ -23,7 +23,7 @@ import difflib
 
 from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-# from werkzeug import secure_filename
+from werkzeug import secure_filename
 
 
 from TennisData import TennisEvent, TennisPlayer
@@ -98,7 +98,7 @@ def edit_player():
             p = TennisPlayer(name=name, born=born, died=died, comment=comment, picture=picture)
             p.update()
 
-    return redirect(url_for("show_player" ))
+    return redirect(url_for("show_player"))
 
 
 @app.route("/comment", methods=['GET', 'POST'])
@@ -482,19 +482,19 @@ def edit_user():
         return redirect(url_for("edit_user"))
 
 
-@app.route("/test.json", methods=['GET'], defaults={'action': 'test', 'format': 'json'})
-@app.route("/events.csv", methods=['GET'], defaults={'action': 'events', 'format': 'csv'})
-@app.route("/people.csv", methods=['GET'], defaults={'action': 'people', 'format': 'csv'})
-@app.route("/events.json", methods=['GET'], defaults={'action': 'events', 'format': 'json'})
-@app.route("/people.json", methods=['GET'], defaults={'action': 'people', 'format': 'json'})
+@app.route("/test.json", methods=['GET'], defaults={'action': 'test', 'fmt': 'json'})
+@app.route("/events.csv", methods=['GET'], defaults={'action': 'events', 'fmt': 'csv'})
+@app.route("/people.csv", methods=['GET'], defaults={'action': 'people', 'fmt': 'csv'})
+@app.route("/events.json", methods=['GET'], defaults={'action': 'events', 'fmt': 'json'})
+@app.route("/people.json", methods=['GET'], defaults={'action': 'people', 'fmt': 'json'})
 @login_required
-def json(action, format):
+def json(action, fmt):
     if request.method == 'GET':
         if action == 'events':
-            if format == "json":
+            if fmt == "json":
                 return jsonify(**TennisEvent)
         elif action == 'people':
-            if format == "json":
+            if fmt == "json":
                 return jsonify(**TennisPlayer)
         elif action == 'test':
             return jsonify({"test": "test"})

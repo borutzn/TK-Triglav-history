@@ -20,7 +20,7 @@ from TennisData import TennisEvent, TennisPlayer
 from Utils import log_info
 
 
-files_basedir = os.path.join(os.path.dirname(__file__), 'static/files')
+files_basedir = os.path.join(os.path.dirname(__file__), 'static', 'files')
 
 responseCache = {}
 
@@ -62,7 +62,7 @@ def convert_entry(row):
         entry["player"] = unicode(string.strip(row[8]), "utf-8")
         r = re.search("\((\d{1,2})\)$", entry["player"])
         if r:
-            entry["playerBorn"] = r.group(1)
+            entry["playerBorn"] = "19" + r.group(1)
             entry["player"] = entry["player"][:-5]
         else:
             entry["playerBorn"] = ""
