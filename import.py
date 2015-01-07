@@ -279,10 +279,12 @@ for row in EventsCache:
 
 print
 print("STEP 5: resizing oversized pictures")
-for ext in ATT_EXT:
-    cmd = "mogrify -resize 500 %s/*/*%s" % (files_basedir, ext)
-    print("  run: %s" % cmd)
-    os.system(cmd)
+mogrify = raw_input("Mogrify the pictures (y/n)? ")
+if delete == "y":
+    for ext in ATT_EXT:
+        cmd = "mogrify -resize 500 %s/*/*%s" % (files_basedir, ext)
+        print("  run: %s" % cmd)
+        os.system(cmd)
 
 print("-------------------------")
 print("SUMMARY: %d files changed; %d attachements changed" % (changed_files, changed_atts))
