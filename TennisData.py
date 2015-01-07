@@ -8,6 +8,7 @@ import json
 import sqlite3
 
 from flask import url_for, Response
+from flask_login import current_user
 
 from Utils import log_info, files_dir
 
@@ -121,7 +122,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("UPDATE %s" % str(iden))
+        log_info("AUDIT: Event %d update by %s." % (iden, str(current_user.username)))
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
                        Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
                        WHERE Id=:Id""",
@@ -145,6 +146,7 @@ class TennisEvent:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
+        log_info("AUDIT: Event %d attachment update by %s." % (iden, str(current_user.username)))
         if att == "1":
             curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
@@ -165,6 +167,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
+        log_info("AUDIT: Event %d deleted by %s." % (iden, str(current_user.username)))
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         connection.commit()
         cls.clear_data()
@@ -212,7 +215,7 @@ class TennisEvent:
             cls.players.append((k, v[0], v[1]))
         cls.players.sort(key=lambda player: player[2], reverse=True)
 
-        log_info("Event cache reloaded (%d entries)" % len(cls.EventsCache))
+        log_info("AUDIT: Event cache reloaded (%d entries)." % len(cls.EventsCache))
 
     @classmethod
     def clear_data(cls):
@@ -254,8 +257,6 @@ class TennisEvent:
 
     @classmethod
     def jsonify(cls):
-        #r = "".join( jsonify(ev) for ev in cls.EventsCache)
-        #return "{ " + r + " }"
         return Response(json.dumps(cls.EventsCache),  mimetype='application/json')
 
 
@@ -297,7 +298,7 @@ class TennisPlayer:
 
         # app.logger.error( "CACHE " + str(cls.PlayersCache) )
         # app.logger.error( "CACHE " + str(cls.PlayersIndex) )
-        log_info("Players cache reloaded (%d entries)" % len(cls.PlayersCache))
+        log_info("AUDIT: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
     def clear_data(cls):
@@ -319,6 +320,7 @@ class TennisPlayer:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
+        log_info("AUDIT: Player %s update by %s." % (self.Name, str(current_user.username)))
         curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
                      Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
         curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
@@ -328,3 +330,8 @@ class TennisPlayer:
         conn.commit()
         self.clear_data()
         return curs.lastrowid
+
+
+    @classmethod
+    def jsonify(cls):
+        return Response(json.dumps(cls.PlayersCache),  mimetype='application/json')

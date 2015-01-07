@@ -184,8 +184,7 @@ def delete():
         event = TennisEvent.get(ident)
         log_info("DELETE: " + str(event))
         return render_template("delete.html", event=event, date=TennisEvent.date2user(event['Date']))
-        # CORRECT date=...
-        
+
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             TennisEvent.delete(request.form["Id"])
@@ -240,7 +239,7 @@ def correct():
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     if request.method == 'GET':
-        log_info("request for /")
+        log_info("AUDIT: page % requested by %s." %  (request.path, str(current_user.username)))
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
@@ -259,136 +258,6 @@ def tennis_main():
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
                            nextPage=pos+PAGELEN if pos < events_len-PAGELEN else events_len-PAGELEN,
                            start=pos, count=events_len)
-
-
-def convert_entry(row):
-    """
-       0. Leto - datum
-       1. * - datum je datum vira
-       2. Dogodek
-       3. Kraj
-       4. Spol - M, Z
-       5. Dvojice - D
-       6. Kategorija
-       7. Uvrstitev
-       8. Igralci
-       9. Priloga 1
-      10. Priloga 2
-      11. Priloga 3
-    """
-    entry = {}
-    last_col = 13
-    while (row[last_col] == "") and last_col > 1:
-        last_col -= 1
-    if last_col >= 2:
-        r = re.search("^(\d{1,2})\.(\d{1,2})\.(\d{2,4})", row[0])
-        if r:
-            (d, m, y) = (int(r.group(1)), int(r.group(2)), int(r.group(3)))
-            entry["date"] = unicode("%02d.%02d.%04d" % (d, m, y))
-        else:
-            (d, m, y) = (0, 0, int(row[0]))
-            entry["date"] = unicode("%02d.%02d.%04s" % (d, m, y))
-        entry["event"] = unicode(row[2], "utf-8")
-        entry["place"] = unicode(row[3], "utf-8")
-        entry["sex"] = unicode(row[4], "utf-8")
-        entry["doubles"] = unicode(row[5], "utf-8")
-        entry["category"] = unicode(row[6], "utf-8")
-        entry["result"] = unicode(row[7], "utf-8")
-        entry["player"] = unicode(string.strip(row[8]), "utf-8")
-        r = re.search("\((\d{1,2})\)$", entry["player"])
-        if r:
-            age = r.group(1)  # save in the database
-            entry["player"] = entry["player"][:-5]
-        entry["eventAge"] = unicode(row[6], "utf-8")
-        entry["comment"] = unicode("")
-        if row[1] == '*':
-            entry["comment"] = u"vnešen datum vira; "
-        entry["att1"] = unicode(string.strip(row[9]), "utf-8")
-        if entry["att1"] != "" and not any(x in entry["att1"] for x in ATT_EXT):
-            entry["comment"] += entry["att1"] + "; "
-            entry["att1"] = ""
-        if entry["att1"] != "":
-            if d == 0 and m == 0:
-                entry["att1"] = "%d_%s" % (y, entry["att1"])
-            else:
-                entry["att1"] = "%d.%d.%d_%s" % (y, m, d, entry["att1"])
-
-        entry["att2"] = unicode(string.strip(row[10]), "utf-8")
-        if entry["att2"] != "" and not any(x in entry["att2"] for x in ATT_EXT):
-            entry["comment"] += entry["att2"] + "; "
-            entry["att2"] = ""
-        if entry["att2"] != "":
-            if d == 0 and m == 0:
-                entry["att2"] = "%d_%s" % (y, entry["att2"])
-            else:
-                entry["att2"] = "%d.%d.%d_%s" % (y, m, d, entry["att2"])
-
-        entry["att3"] = unicode(string.strip(row[11]), "utf-8")
-        if entry["att3"] != "" and not any(x in entry["att3"] for x in ATT_EXT):
-            entry["comment"] += entry["att3"] + "; "
-            entry["att3"] = ""
-        if entry["att3"] != "":
-            if d == 0 and m == 0:
-                entry["att3"] = "%d_%s" % (y, entry["att3"])
-            else:
-                entry["att3"] = "%d.%d.%d_%s" % (y, m, d, entry["att3"])
-
-        entry["att4"] = unicode(string.strip(row[12]), "utf-8")
-        if entry["att4"] != "" and not any(x in entry["att4"] for x in ATT_EXT):
-            entry["comment"] += entry["att4"] + "; "
-            entry["att4"] = ""
-        if entry["att4"] != "":
-            if d == 0 and m == 0:
-                entry["att4"] = "%d_%s" % (y, entry["att4"])
-            else:
-                entry["att4"] = "%d.%d.%d_%s" % (y, m, d, entry["att4"])
-
-        return True, entry
-    else:
-        return False, None
-
-
-@app.route('/Upload', methods=['GET', 'POST'])
-def upload_csv():
-    """
-    - generate data from Execel: Export to text (Unicode)
-    - convert to UTF-8
-    - change/reduce all pictures with: mogrify -resize 500 */*JPG; jpg
-    """
-    if request.method == 'GET':
-        return render_template("uploadFile.html")
-    elif request.method == 'POST':
-        line = 0
-        f_upload = request.files['file']
-        local_fname = os.path.join(files_dir, secure_filename(f_upload.filename))
-        f_upload.save(local_fname)
-        with open(local_fname, 'rb') as csvfile:
-            string_reader = csv.reader(csvfile, delimiter="\t", quotechar='"')
-            for row in string_reader:
-                line += 1
-                if line == 1:
-                    continue
-                # log_info("Row: %s" % (row) )
-                (ok, entry) = convert_entry(row)
-                # log_info("Entry: %s - %s" % (str(ok), entry))
-                if ok:
-                    if line % 20 == 0:
-                        log_info("IMPORT l.%d: %s - %s" % (line, entry['date'], entry['event']))
-                    e = TennisEvent(date=entry["date"], event=entry["event"], place=entry["place"],
-                                    category="%s %s %s" % (entry["category"], entry["doubles"], entry["sex"]),
-                                    result=entry["result"], player=entry["player"],
-                                    comment=entry["comment"], att1=entry["att1"],
-                                    att2=entry["att2"], att3=entry["att3"], att4=entry["att4"])
-                    e.put()
-        return redirect(url_for("tennis_main"))
-
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.anonymous_user = Anonymous
-app.secret_key = os.urandom(24)
-app.config['SECURITY_PASSWORD_HASH'] = 'sha512_crypt'
-app.config['SECURITY_PASSWORD_SALT'] = '$2a$16$PnnIgfMwk0jGX4SkHqS0P0'
 
 
 @login_manager.user_loader
@@ -414,7 +283,7 @@ def login():
             user = User(username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'])
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
-                log_info("AUDIT - User login: " + user.username)
+                log_info("AUDIT: User %s login." % user.username)
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
         return render_template("login.html", username=username,
@@ -443,7 +312,7 @@ def signup():
             user = User(username=username, password=pass1, email=email)
             user.put()
             login_user(user)
-            log_info("AUDIT - New user: " + user.username)
+            log_info("AUDIT: New user %s created." % user.username)
             return redirect(url_for("tennis_main"))
 
         return render_template("signup.html", username=username, userMsg=user_msg, password=pass1,
@@ -453,7 +322,7 @@ def signup():
 @app.route("/logout")
 @login_required
 def logout():
-    log_info("AUDIT - User logout: " + str(current_user.username))
+    log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
     return redirect(url_for("tennis_main"))
 
@@ -490,12 +359,13 @@ def edit_user():
 @login_required
 def json(action, fmt):
     if request.method == 'GET':
+        log_info("AUDIT: Data export (%s,%s) by %s." %  (action, fmt, str(current_user.username)))
         if action == 'events':
             if fmt == "json":
                 return TennisEvent.jsonify()
         elif action == 'people':
             if fmt == "json":
-                return jsonify(**TennisPlayer)
+                return TennisPlayer.jsonify()
         elif action == 'test':
             return jsonify({"test": "test"})
 
@@ -504,12 +374,12 @@ def json(action, fmt):
 @login_required
 def shutdown():
     if request.method == 'GET':
-        log_info(appname + ": system shutdown requested")
+        log_info("AUDIT: System shutdown requested by %s." %  str(current_user.username))
         return render_template("shutdown.html")
             
     elif request.method == 'POST':
         if request.form["Status"] == "Ugasni":
-            log_info(appname + ": system shutdown confirmed and executed")
+            log_info("AUDIT: System shutdown confirmed and executed")
             os.system("sudo shutdown -h 0")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
