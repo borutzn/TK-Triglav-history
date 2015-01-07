@@ -492,7 +492,9 @@ def json(action, fmt):
     if request.method == 'GET':
         if action == 'events':
             if fmt == "json":
-                return jsonify(**TennisEvent)
+                for p in TennisPlayer.EventsCache:
+                    jsonify(p)
+                return ""
         elif action == 'people':
             if fmt == "json":
                 return jsonify(**TennisPlayer)
