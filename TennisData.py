@@ -6,7 +6,7 @@ import os
 
 import sqlite3
 
-from flask import url_for
+from flask import url_for, jsonify
 
 from Utils import log_info, files_dir
 
@@ -249,6 +249,11 @@ class TennisEvent:
     def count(cls):
         cls.fetch_data()
         return len(cls.EventsCache)
+
+
+    @classmethod
+    def jsonify(cls):
+        return jsonify(cls.EventsCache)
 
 
 class TennisPlayer:
