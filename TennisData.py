@@ -61,7 +61,7 @@ class TennisEvent:
             
         s = list(att)
         att = "".join(s)
-        if os.path.exists(os.path.join(files_dir, year,att)):
+        if os.path.exists(os.path.join(files_dir, year, att)):
             return att
         else:
             # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
@@ -254,7 +254,6 @@ class TennisEvent:
         cls.fetch_data()
         return len(cls.EventsCache)
 
-
     @classmethod
     def jsonify(cls):
         return Response(json.dumps(cls.EventsCache),  mimetype='application/json')
@@ -330,7 +329,6 @@ class TennisPlayer:
         conn.commit()
         self.clear_data()
         return curs.lastrowid
-
 
     @classmethod
     def jsonify(cls):

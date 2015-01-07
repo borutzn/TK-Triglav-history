@@ -12,11 +12,8 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, PAGELEN, ATT_EXT
+from config import Production, PAGELEN
 
-import string
-import csv
-import re
 import os
 import logging
 import difflib
@@ -239,7 +236,7 @@ def correct():
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     if request.method == 'GET':
-        log_info("AUDIT: page % requested by %s." %  (request.path, str(current_user.username)))
+        log_info("AUDIT: page % requested by %s." % (request.path, str(current_user.username)))
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
@@ -258,6 +255,13 @@ def tennis_main():
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
                            nextPage=pos+PAGELEN if pos < events_len-PAGELEN else events_len-PAGELEN,
                            start=pos, count=events_len)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.anonymous_user = Anonymous
+app.secret_key = os.urandom(24)
+app.config['SECURITY_PASSWORD_HASH'] = 'sha512_crypt'
+app.config['SECURITY_PASSWORD_SALT'] = '$2a$16$PnnIgfMwk0jGX4SkHqS0P0'
 
 
 @login_manager.user_loader
@@ -359,7 +363,7 @@ def edit_user():
 @login_required
 def json(action, fmt):
     if request.method == 'GET':
-        log_info("AUDIT: Data export (%s,%s) by %s." %  (action, fmt, str(current_user.username)))
+        log_info("AUDIT: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
         if action == 'events':
             if fmt == "json":
                 return TennisEvent.jsonify()
@@ -374,7 +378,7 @@ def json(action, fmt):
 @login_required
 def shutdown():
     if request.method == 'GET':
-        log_info("AUDIT: System shutdown requested by %s." %  str(current_user.username))
+        log_info("AUDIT: System shutdown requested by %s." % str(current_user.username))
         return render_template("shutdown.html")
             
     elif request.method == 'POST':
