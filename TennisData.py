@@ -3,10 +3,11 @@ from config import DB_NAME
 import datetime
 import re
 import os
+import json
 
 import sqlite3
 
-from flask import url_for, jsonify
+from flask import url_for, Response
 
 from Utils import log_info, files_dir
 
@@ -253,8 +254,9 @@ class TennisEvent:
 
     @classmethod
     def jsonify(cls):
-        r = "".join( jsonify(ev) for ev in cls.EventsCache)
-        return "{ " + r + " }"
+        #r = "".join( jsonify(ev) for ev in cls.EventsCache)
+        #return "{ " + r + " }"
+        return Response(json.dumps(cls.EventsCache),  mimetype='application/json')
 
 
 class TennisPlayer:
