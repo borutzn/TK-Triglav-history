@@ -253,7 +253,8 @@ class TennisEvent:
 
     @classmethod
     def jsonify(cls):
-        return jsonify(cls.EventsCache[0])
+        r = "".join( jsonify(ev) for ev in cls.EventsCache)
+        return "{ " + r + " }"
 
 
 class TennisPlayer:
