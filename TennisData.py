@@ -59,7 +59,7 @@ class TennisEvent:
             
         s = list(att)
         att = "".join(s)
-        if os.path.exists(os.path.join(files_dir, year+"/"+att)):
+        if os.path.exists(os.path.join(files_dir, year,att)):
             return att
         else:
             # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
