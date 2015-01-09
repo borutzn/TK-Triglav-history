@@ -250,7 +250,6 @@ def tennis_main():
 
     events = TennisEvent.get_events_page(pos, PAGELEN)
     events_len = TennisEvent.count()
-    flash("Successful start")
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players[:20], years=TennisEvent.Years,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
@@ -289,6 +288,7 @@ def login():
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
                 log_info("AUDIT: User %s login." % user.username)
+                flash("Login successful.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
         return render_template("login.html", username=username,
@@ -329,6 +329,7 @@ def signup():
 def logout():
     log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
+    flash("Login successful.")
     return redirect(url_for("tennis_main"))
 
 
