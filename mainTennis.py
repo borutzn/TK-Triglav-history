@@ -288,7 +288,7 @@ def login():
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
                 log_info("AUDIT: User %s login." % user.username)
-                flash("Login successful.")
+                flash("Prijava uspešna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
         return render_template("login.html", username=username,
@@ -329,7 +329,7 @@ def signup():
 def logout():
     log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
-    flash("Login successful.")
+    flash("Odjava uspešna.")
     return redirect(url_for("tennis_main"))
 
 
@@ -387,6 +387,7 @@ def shutdown():
         if request.form["Status"] == "Ugasni":
             log_info("AUDIT: System shutdown confirmed and executed")
             os.system("sudo shutdown -h 0")
+        flash("Če je bilo ugašanje uspešno, stran ne bo več dosegljiva. :-)")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
