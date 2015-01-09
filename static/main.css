@@ -80,6 +80,7 @@ th {
 }
 
 .flashes {
+    width: 500px;
     color: black;
     background: #759252;
 }
