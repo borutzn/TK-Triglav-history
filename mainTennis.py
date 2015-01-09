@@ -236,7 +236,7 @@ def correct():
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     if request.method == 'GET':
-        log_info("AUDIT: page % requested by %s." % (request.path, str(current_user.username)))
+        log_info("AUDIT: page %s requested by %s." % (request.path, str(current_user.username)))
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
@@ -250,6 +250,7 @@ def tennis_main():
 
     events = TennisEvent.get_events_page(pos, PAGELEN)
     events_len = TennisEvent.count()
+    flash("Successful start")
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players[:20], years=TennisEvent.Years,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
