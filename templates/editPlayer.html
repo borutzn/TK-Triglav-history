@@ -8,10 +8,18 @@
     <form action="{{ url_for('edit_player') }}" method="post" enctype="multipart/form-data">
         <table>
 		<tr><th>igralec</th> <th>{{ player.Name }}<input type="hidden" name="Name" value="{{ player.Name }}"></th></tr>
-		<tr><th>leto rojstva</th> <td><input type="text" name="Born" value="{{ player.Born }}"></td></tr>
-		<tr><th>leto smrti</th> <td><input type="text" name="Died" value="{{ player.Died }}"></td></tr>
-		<tr><th>opombe</th> <td><textarea rows="6" cols="60" name="Comment">{{ player.Comment }}</textarea></td></tr>
-		<tr><th>slika</th> <td><input type="text" size="60" name="Picture" value="{{ player.Picture }}"><br>
+		<tr><th>leto rojstva</th> <td><label>
+            <input type="text" name="Born" value="{{ player.Born }}">
+        </label></td></tr>
+		<tr><th>leto smrti</th> <td><label>
+            <input type="text" name="Died" value="{{ player.Died }}">
+        </label></td></tr>
+		<tr><th>opombe</th> <td><label>
+            <textarea rows="6" cols="60" name="Comment">{{ player.Comment }}</textarea>
+        </label></td></tr>
+		<tr><th>slika</th> <td><label>
+            <input type="text" size="60" name="Picture" value="{{ player.Picture }}">
+        </label><br>
                                        <input name="upload" type="file"> </td></tr>
 	</table> <br>
 	<input type="Submit" name="Status" id="button" value="Shrani">

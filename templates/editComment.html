@@ -13,12 +13,16 @@
 		<tr><th>Rezultat:</th> <td>{{ event.Result }}</td></tr>
 		<tr><th>Igralec:</th> <td>{{ event.Player }}</td></tr>
 		{% if current_user.is_authenticated() %}
-                    <tr><th>Komentar:</th> <td><textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea></td></tr>
+                    <tr><th>Komentar:</th> <td><label>
+                        <textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea>
+                    </label></td></tr>
                     <input type="hidden" name="addcomment" value="">
                 {% else %}
                     <tr><th rowspan="2">Komentar:</th> <td>{{ event.Comment }}</td></tr>
                     <input type="hidden" name="comment" value="{{ event.Comment }}">
-                    <tr><td><textarea rows="4" cols="60" name="addcomment"></textarea></td></tr>
+                    <tr><td><label>
+                        <textarea rows="4" cols="60" name="addcomment"></textarea>
+                    </label></td></tr>
                 {% endif %}
 		<tr><th>Dokument 1:</th> <td>{{ event.Att1 }}</td></tr>
 		<tr><th>Dokument 2:</th> <td>{{ event.Att2 }}</td></tr>

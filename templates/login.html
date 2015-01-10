@@ -7,13 +7,19 @@
     <table>
         <tr>
             <td style="text-align:right;">Uporabnik</td>
-            <td><input type="text" name="username" value="{{username}}"></td>
+            <td><label>
+                <input type="text" name="username" value="{{username}}">
+            </label></td>
         </tr><tr>
             <td style="text-align:right;">Geslo</td>
-            <td><input type="password" name="password"></td><br>
+            <td><label>
+                <input type="password" name="password">
+            </label><br></td>
             <td style="color:red;">{{loginMsg}}</td>
         </tr><tr>
-            <td></td><td><input type="checkbox" value="1" name="remember">Zapomni si prijavo<br></td>
+            <td></td><td><label>
+        <input type="checkbox" value="1" name="remember">
+    </label>Zapomni si prijavo<br></td>
         </tr>
     </table>
     <input type="hidden" value="0" name="remember" >
