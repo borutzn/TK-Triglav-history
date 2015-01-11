@@ -25,12 +25,11 @@ class MainTennisTestCase(unittest.TestCase):
 
     def test_login_logout(self):
         rv = self.login('borut1', 'borut')
-        assert 'Prijava uspeš' in unicode(rv.data)
-        # rv = self.logout()
-        # assert 'Odjava uspe' in rv.data
-        # rv = self.login('adminx', 'default')
-        # print( str(rv.data)[:1000] )
-        # assert 'Prijava neuspe' in rv.data
+        assert 'Prijava uspes' in unicode(rv.data)
+        rv = self.logout()
+        assert 'Odjava uspe' in rv.data
+        rv = self.login('adminx', 'default')
+        assert 'Prijava neuspe' in rv.data
         # rv = self.login('admin', 'defaultx')
         # print( str(rv.data)[:1000] )
         # assert 'Prijava neuspe' in rv.data

@@ -291,7 +291,7 @@ def login():
                 flash("Prijava uspesna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
-        flash("Prijava neuspešna.")
+        flash("Prijava neuspesna.")
         return render_template("login.html", username=username, loginMsg="Prijava neuspešna.", password="")
 
 
@@ -306,13 +306,22 @@ def signup():
         pass2 = request.form['verify']
         email = request.form['email']
         user_msg = "Neustrezno uporabniško ime." if not valid_username(username) else ""
+        if not valid_username(username):
+            flash("Neustrezno uporabniško ime.")
         pass1_msg = "Neustrezno geslo." if not valid_password(pass1) else ""
+        if not valid_password(pass1):
+            flash("Neustrezno geslo.")
         pass2_msg = "Geslo se ne ujema." if pass1 != pass2 else ""
+        if not valid_password(pass1):
+            flash("Geslo se ne ujema.")
         email_msg = "Neustrezen poštni predal." if not valid_email(email) else ""
+        if not valid_password(pass1):
+            flash("Neustrezen poštni predal.")
         if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
             user = User.get_by_user(username)
             if user is not None:
                 user_msg = "Uporabnik že obstaja."
+                flash("Uporabnik že obstaja.")
         if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
             user = User(username=username, password=pass1, email=email)
             user.put()
