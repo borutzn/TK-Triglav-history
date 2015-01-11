@@ -39,6 +39,8 @@ responseCache = {}
       10. Priloga 2
       11. Priloga 3
 """
+
+
 def convert_entry(row):
     entry = {}
     last_col = 13
@@ -218,7 +220,7 @@ if len(sys.argv) > 1:
 else:
     filename = raw_input("Input filename ("" for no)? ")
 if filename != "":
-    print( "  importing from %s" % filename )
+    print("  importing from %s" % filename)
     with open(filename, 'rb') as csvfile:
         string_reader = csv.reader(csvfile, delimiter="\t", quotechar='"')
         for row in string_reader:
