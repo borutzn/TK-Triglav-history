@@ -22,10 +22,10 @@ class MainTennisTestCase(unittest.TestCase):
         pass
 
     def login(self, username, password):
-        return self.app.post('/login', data=dict(username=username, password=password), follow_redirects=False)
+        return self.app.post('/login', data=dict(username=username, password=password), follow_redirects=True)
 
     def logout(self):
-        return self.app.get('/logout', follow_redirects=False)
+        return self.app.get('/logout', follow_redirects=True)
 
     def test_login_logout(self):
         rv = self.login('borut1', 'borut')
