@@ -288,11 +288,12 @@ def login():
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
                 log_info("AUDIT: User %s login." % user.username)
-                flash("Prijava uspesna.")
+                flash("Prijava uspešna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
+        flash("Prijava neuspešna.")
         return render_template("login.html", username=username,
-                               loginMsg="Invalid login.", password="")
+                               loginMsg="Prijava neuspešna.", password="")
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -305,14 +306,14 @@ def signup():
         pass1 = request.form['password']
         pass2 = request.form['verify']
         email = request.form['email']
-        user_msg = "That's not a valid username." if not valid_username(username) else ""
-        pass1_msg = "That wasn't a valid password." if not valid_password(pass1) else ""
-        pass2_msg = "Your password didn't match." if pass1 != pass2 else ""
-        email_msg = "That's not a valid email." if not valid_email(email) else ""
+        user_msg = "Neustrezno uporabniško ime." if not valid_username(username) else ""
+        pass1_msg = "Neustrezno geslo." if not valid_password(pass1) else ""
+        pass2_msg = "Geslo se ne ujema." if pass1 != pass2 else ""
+        email_msg = "Neustrezen poštni predal." if not valid_email(email) else ""
         if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
             user = User.get_by_user(username)
             if user is not None:
-                user_msg = "That user already exists."
+                user_msg = "Uporabnik že obstaja."
         if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
             user = User(username=username, password=pass1, email=email)
             user.put()
@@ -329,7 +330,7 @@ def signup():
 def logout():
     log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
-    flash("Odjava uspesna.")
+    flash("Odjava uspešna.")
     return redirect(url_for("tennis_main"))
 
 
