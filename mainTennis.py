@@ -291,7 +291,7 @@ def login():
                 flash("Prijava uspešna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
-        flash("Prijava neuspešna.")
+        flash("Prijava neuspesna.")
         return render_template("login.html", username=username,
                                loginMsg="Prijava neuspešna.", password="")
 
@@ -319,6 +319,7 @@ def signup():
             user.put()
             login_user(user)
             log_info("AUDIT: New user %s created." % user.username)
+            flash("UKreiran nov uporabnik.")
             return redirect(url_for("tennis_main"))
 
         return render_template("signup.html", username=username, userMsg=user_msg, password=pass1,
@@ -330,7 +331,7 @@ def signup():
 def logout():
     log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
-    flash("Odjava uspešna.")
+    flash("Odjava uspesna.")
     return redirect(url_for("tennis_main"))
 
 
