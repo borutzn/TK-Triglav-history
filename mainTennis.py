@@ -291,8 +291,8 @@ def login():
                 flash("Prijava uspesna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
-        flash("Prijava neuspesna.")
-        return render_template("login.html", username=username, loginMsg="Prijava neuspesna.", password="")
+        flash("Prijava neuspešna.")
+        return render_template("login.html", username=username, loginMsg="Prijava neuspešna.", password="")
 
 
 @app.route("/signup", methods=['GET', 'POST'])
