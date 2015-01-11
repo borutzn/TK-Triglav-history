@@ -29,7 +29,7 @@ class MainTennisTestCase(unittest.TestCase):
 
     def test_login_logout(self):
         rv = self.login('borut1', 'borut')
-        print( str(rv) )
+        print( str(rv.data) )
         assert 'Prijava uspešna' in rv.data
         rv = self.logout()
         assert 'Odjava uspešna' in rv.data
