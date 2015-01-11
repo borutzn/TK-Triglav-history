@@ -319,7 +319,7 @@ def signup():
             user.put()
             login_user(user)
             log_info("AUDIT: New user %s created." % user.username)
-            flash("UKreiran nov uporabnik.")
+            flash("Kreiran nov uporabnik.")
             return redirect(url_for("tennis_main"))
 
         return render_template("signup.html", username=username, userMsg=user_msg, password=pass1,
