@@ -25,16 +25,15 @@ class MainTennisTestCase(unittest.TestCase):
 
     def test_login_logout(self):
         rv = self.login('borut1', 'borut')
-        assert "prijava" in "testingšč"
-        assert 'Prijava uspe' in rv.data
-        rv = self.logout()
-        assert 'Odjava uspe' in rv.data
-        #rv = self.login('adminx', 'default')
-        #print( str(rv.data)[:1000] )
-        #assert 'Prijava neuspe' in rv.data
-        #rv = self.login('admin', 'defaultx')
-        #print( str(rv.data)[:1000] )
-        #assert 'Prijava neuspe' in rv.data
+        assert 'Prijava uspeš' in unicode(rv.data)
+        # rv = self.logout()
+        # assert 'Odjava uspe' in rv.data
+        # rv = self.login('adminx', 'default')
+        # print( str(rv.data)[:1000] )
+        # assert 'Prijava neuspe' in rv.data
+        # rv = self.login('admin', 'defaultx')
+        # print( str(rv.data)[:1000] )
+        # assert 'Prijava neuspe' in rv.data
 
 if __name__ == '__main__':
     unittest.main()
