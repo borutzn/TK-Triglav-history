@@ -30,9 +30,9 @@ class MainTennisTestCase(unittest.TestCase):
         print( str(rv.data) )
         assert 'Odjava uspe' in rv.data
         rv = self.login('adminx', 'default')
-        assert 'Prijava neuspešna' in rv.data
+        assert 'Prijava neuspe' in rv.data
         rv = self.login('admin', 'defaultx')
-        assert 'Prijava neuspešna' in rv.data
+        assert 'Prijava neuspe' in rv.data
 
 if __name__ == '__main__':
     unittest.main()
