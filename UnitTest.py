@@ -12,13 +12,9 @@ import unittest
 class MainTennisTestCase(unittest.TestCase):
 
     def setUp(self):
-        # self.db_fd, mainTennis.app.config['DATABASE'] = tempfile.mkstemp()
-        # mainTennis.app.config['TESTING'] = True
         self.app = mainTennis.app.test_client()
 
     def tearDown(self):
-        # os.close(self.db_fd)
-        # os.unlink(mainTennis.app.config['DATABASE'])
         pass
 
     def login(self, username, password):
@@ -29,10 +25,10 @@ class MainTennisTestCase(unittest.TestCase):
 
     def test_login_logout(self):
         rv = self.login('borut1', 'borut')
-        print( str(rv.data) )
-        assert 'Prijava ' in rv.data
+        assert 'Prijava uspesna' in rv.data
         rv = self.logout()
-        assert 'Odjava ' in rv.data
+        print( str(rv.data) )
+        assert 'Odjava uspesna' in rv.data
         rv = self.login('adminx', 'default')
         assert 'Invalid username' in rv.data
         rv = self.login('admin', 'defaultx')

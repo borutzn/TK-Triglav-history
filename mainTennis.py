@@ -329,7 +329,7 @@ def signup():
 def logout():
     log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
-    flash("Odjava uspešna.")
+    flash("Odjava uspesna.")
     return redirect(url_for("tennis_main"))
 
 
