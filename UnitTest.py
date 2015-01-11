@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 __author__ = 'Borut'
 
 # import os
@@ -25,10 +28,10 @@ class MainTennisTestCase(unittest.TestCase):
         return self.app.get('/logout', follow_redirects=True)
 
     def test_login_logout(self):
-        rv = self.login('admin', 'default')
-        assert 'You were logged in' in rv.data
+        rv = self.login('borut1', 'borut')
+        assert 'Prijava uspešna' in rv.data
         rv = self.logout()
-        assert 'You were logged out' in rv.data
+        assert 'Odjava uspešna' in rv.data
         rv = self.login('adminx', 'default')
         assert 'Invalid username' in rv.data
         rv = self.login('admin', 'defaultx')
