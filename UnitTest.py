@@ -27,11 +27,12 @@ class MainTennisTestCase(unittest.TestCase):
         rv = self.login('borut1', 'borut')
         assert 'Prijava uspe' in rv.data
         rv = self.logout()
-        print( str(rv.data) )
         assert 'Odjava uspe' in rv.data
         rv = self.login('adminx', 'default')
+        print( str(rv.data)[:1000] )
         assert 'Prijava neuspe' in rv.data
         rv = self.login('admin', 'defaultx')
+        print( str(rv.data)[:1000] )
         assert 'Prijava neuspe' in rv.data
 
 if __name__ == '__main__':
