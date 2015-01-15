@@ -236,7 +236,6 @@ def correct():
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     if request.method == 'GET':
-        log_info("AUDIT: page %s requested by %s." % (request.path, str(current_user.username)))
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
@@ -378,7 +377,9 @@ def json(action, fmt):
         log_info("AUDIT: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
         if action == 'events':
             if fmt == "json":
-                return TennisEvent.jsonify()
+                return TennisEvent.export('J')
+            elif fmt == "csv":
+                return TennisEvent.export('C')
         elif action == 'people':
             if fmt == "json":
                 return TennisPlayer.jsonify()

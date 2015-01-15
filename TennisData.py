@@ -3,6 +3,9 @@ from config import DB_NAME
 import datetime
 import re
 import os
+import sys
+import csv
+import StringIO
 import json
 
 import sqlite3
@@ -61,11 +64,15 @@ class TennisEvent:
             
         s = list(att)
         att = "".join(s)
-        if os.path.exists(os.path.join(files_dir, year, att)):
-            return att
-        else:
-            # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
-            return "err_"+att
+        try:
+            p = os.path.join(files_dir, year, att)
+            if os.path.exists(p):
+                return att
+            else:
+                # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
+                return "err_"+att
+        except:
+            log_info("ERROR: unknown error %s" % sys.exc_info()[0])
 
     @classmethod
     def date2user(cls, date):
@@ -219,7 +226,7 @@ class TennisEvent:
 
     @classmethod
     def clear_data(cls):
-        TennisEvent.EventsCache = None  #  lazy approach - clear cache & reload again
+        TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
 
     @classmethod
     def get(cls, iden):
@@ -255,8 +262,15 @@ class TennisEvent:
         return len(cls.EventsCache)
 
     @classmethod
-    def jsonify(cls):
-        return Response(json.dumps(cls.EventsCache),  mimetype='application/json')
+    def export(cls, typ):
+        if typ == 'J':
+            return Response(json.dumps(cls.EventsCache),  mimetype='application/json')
+        elif typ == 'C':
+            out = StringIO.StringIO()
+            csv_writer = csv.writer(out, delimiter=';', quotechar='"')
+            csv_writer.writerow(cls.EventsCache[0])
+            # with open('eggs.csv', 'wb') as csvfile:
+            # for ev in cls.EventsCache:
 
 
 class TennisPlayer:
