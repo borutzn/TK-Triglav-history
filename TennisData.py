@@ -264,11 +264,14 @@ class TennisEvent:
     @classmethod
     def export(cls, typ):
         if typ == 'J':
-            return Response(json.dumps(cls.EventsCache),  mimetype='application/json')
+            return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
+            fieldnames = ['Date', 'Event', 'Place', 'Category']
             out = StringIO.StringIO()
-            csv_writer = csv.writer(out, delimiter=';', quotechar='"')
-            csv_writer.writerow(cls.EventsCache[0])
+            csv_out = csv.DictWriter(out, fieldnames=fieldnames, delimiter=';', quotechar='"')
+            csv_out.writerow(['test', 'test1'])
+            log_info(csv_out)
+            return Response(csv_out, mimetype='application/json')
             # with open('eggs.csv', 'wb') as csvfile:
             # for ev in cls.EventsCache:
 
