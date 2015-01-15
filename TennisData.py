@@ -219,7 +219,7 @@ class TennisEvent:
 
     @classmethod
     def clear_data(cls):
-        TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
+        TennisEvent.EventsCache = None  #  lazy approach - clear cache & reload again
 
     @classmethod
     def get(cls, iden):
