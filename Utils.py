@@ -27,11 +27,12 @@ if not app.debug:
     app.logger.info('TK start')
 
 
+# possible fields: datetime.datetime.today().ctime(), request.data, request.remote_addr, request.method
+#                  ', '.join([': '.join(x) for x in request.headers])
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("Audit: " + '; '.join([request.remote_addr, request.url, request.data,
-                                               ', '.join([': '.join(x) for x in request.headers])]))
+        app.logger.info("Audit: " + ': ' + request.remote_addr, request.url)
 
 
 def log_info(s):
