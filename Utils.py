@@ -2,7 +2,6 @@ from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
 
 import re
 import os
-import datetime
 
 import jinja2
 
@@ -31,8 +30,8 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info('\t'.join([datetime.datetime.today().ctime(), request.remote_addr, request.method, request.url,
-                                   request.data, ', '.join([': '.join(x) for x in request.headers])]))
+        app.logger.info("Audit: " + '; '.join([request.remote_addr, request.url, request.data,
+                                               ', '.join([': '.join(x) for x in request.headers])]))
 
 
 def log_info(s):
