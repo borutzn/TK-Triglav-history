@@ -122,7 +122,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("AUDIT: Event %d update by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Event %s update by %s." % (iden, str(current_user.username)))
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
                        Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
                        WHERE Id=:Id""",
@@ -146,7 +146,7 @@ class TennisEvent:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
-        log_info("AUDIT: Event %d attachment update by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Event %s attachment update by %s." % (iden, str(current_user.username)))
         if att == "1":
             curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
@@ -167,7 +167,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("AUDIT: Event %d deleted by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Event %s deleted by %s." % (iden, str(current_user.username)))
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         connection.commit()
         cls.clear_data()

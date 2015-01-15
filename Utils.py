@@ -2,6 +2,7 @@ from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
 
 import re
 import os
+import datetime
 
 import jinja2
 
@@ -11,7 +12,7 @@ template_dir = os.path.join(os.path.dirname(__file__), 'template')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
 
 
@@ -25,6 +26,13 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('TK start')
+
+
+@app.before_request
+def pre_request_logging():
+    if 'text/html' in request.headers['Accept']:
+        app.logger.info('\t'.join([datetime.datetime.today().ctime(), request.remote_addr, request.method, request.url,
+                                   request.data, ', '.join([': '.join(x) for x in request.headers])]))
 
 
 def log_info(s):
