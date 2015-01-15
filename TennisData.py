@@ -261,13 +261,12 @@ class TennisEvent:
         if typ == 'J':
             return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
-            # fieldnames = ['Id','Date', 'LocalDate', 'Event', 'Place', 'Category', 'Player', 'Result', 'Comment',
-            #               'Att1', 'Att2', 'Att3', 'Att4', 'Source', 'Created', 'LastModified']
             csv_out = UnicodeCsvWriter(delimiter=';', quotechar='"')
-            out = csv_out.convert_row([cls.EventsCache[0]['Date'], cls.EventsCache[0]['Event'],
-                                      cls.EventsCache[0]['Player']])
-            log_info(out)
-            return Response(out, mimetype='text/PLAIN')
+            out = ""
+            for ev in cls.EventsCache:
+                out.append( csv_out.convert_row([cls.EventsCache[0]['Date'], cls.EventsCache[0]['Event'],
+                                      cls.EventsCache[0]['Player']]) + '\n')
+            return Response(out, mimetype='text/csv')
 
 
 class TennisPlayer:
