@@ -12,6 +12,7 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), aut
 
 
 from flask import Flask, request
+from flask_login import current_user
 app = Flask(__name__)
 
 
@@ -32,7 +33,8 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("Audit: " + ': ' + request.remote_addr, request.url)
+        app.logger.info("Audit: %s requested by %s (%s)" %
+                        (str(current_user.username), request.url[38:], request.remote_addr))
 
 
 def log_info(s):
