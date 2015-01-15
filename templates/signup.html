@@ -3,35 +3,36 @@
 {% block content %}
 
 <form method="post">
-	<h1>Signup</h1><br>
+    <p><div class="page-title">Registracija uporabnika</div>
 	<table>
 		<tr>
-			<td style="text-align:right;">Username</td>
+			<td style="text-align:right;">Uporabniško ime</td>
 			<td><label>
                 <input type="text" name="username" value="{{username}}">
             </label></td>
 			<td style="color:red;">{{userMsg}}</td>
 		</tr><tr>
-			<td style="text-align:right;">Password</td>
+			<td style="text-align:right;">Geslo</td>
 			<td><label>
                 <input type="password" name="password">
             </label></td>
 			<td style="color:red;">{{pass1Msg}}</td>
 		</tr><tr>
-			<td style="text-align:right;">Verify Password</td>
+			<td style="text-align:right;">Ponovi geslo</td>
 			<td><label>
                 <input type="password" name="verify">
             </label></td>
 			<td style="color:red;">{{pass2Msg}}</td>
 		</tr><tr>
-			<td style="text-align:right;">Email (optional)</td>
+			<td style="text-align:right;">El. pošta (neobvezno)</td>
 			<td><label>
                 <input type="text" name="email" value="{{email}}">
             </label></td>
 			<td style="color:red;">{{emailMsg}}</td>
 		</tr>
 	</table>
-	<input type="submit">
+    <br>
+    <input type="submit" value="Registriraj">
 </form>
 
 {% endblock %}

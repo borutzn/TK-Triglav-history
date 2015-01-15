@@ -304,33 +304,33 @@ def signup():
         pass1 = request.form['password']
         pass2 = request.form['verify']
         email = request.form['email']
-        user_msg = "Neustrezno uporabniško ime." if not valid_username(username) else ""
+        failed = False
         if not valid_username(username):
+            failed = True
             flash("Neustrezno uporabniško ime.")
-        pass1_msg = "Neustrezno geslo." if not valid_password(pass1) else ""
         if not valid_password(pass1):
+            failed = True
             flash("Neustrezno geslo.")
-        pass2_msg = "Geslo se ne ujema." if pass1 != pass2 else ""
-        if not valid_password(pass1):
+        if pass1 != pass2:
+            failed = True
             flash("Geslo se ne ujema.")
-        email_msg = "Neustrezen poštni predal." if not valid_email(email) else ""
-        if not valid_password(pass1):
+        if not valid_email(email):
+            failed = True
             flash("Neustrezen poštni predal.")
-        if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
+        if not failed:
             user = User.get_by_user(username)
             if user is not None:
-                user_msg = "Uporabnik že obstaja."
+                failed = True
                 flash("Uporabnik že obstaja.")
-        if (user_msg == "") and (pass1_msg == "") and (pass2_msg == "") and (email_msg == ""):
-            user = User(username=username, password=pass1, email=email)
-            user.put()
-            login_user(user)
-            log_info("AUDIT: New user %s created." % user.username)
-            flash("Kreiran nov uporabnik.")
-            return redirect(url_for("tennis_main"))
+        if failed:
+            return render_template("signup.html", username=username, password=pass1, verify=pass2, email=email)
 
-        return render_template("signup.html", username=username, userMsg=user_msg, password=pass1,
-                               pass1Msg=pass1_msg, verify=pass2, pass2Msg=pass2_msg, email=email, emailMsg=email_msg)
+        user = User(username=username, password=pass1, email=email)
+        user.put()
+        login_user(user)
+        log_info("AUDIT: New user %s created." % user.username)
+        flash("Kreiran nov uporabnik.")
+        return redirect(url_for("tennis_main"))
 
 
 @app.route("/logout")
