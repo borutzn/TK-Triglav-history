@@ -215,7 +215,7 @@ class TennisEvent:
             cls.players.append((k, v[0], v[1]))
         cls.players.sort(key=lambda player: player[2], reverse=True)
 
-        log_info("AUDIT: Event cache reloaded (%d entries)." % len(cls.EventsCache))
+        log_info("AUDIT: Event cache reloaded (%d entries, %d players)." % (len(cls.EventsCache), len(cls.players)))
 
     @classmethod
     def clear_data(cls):
