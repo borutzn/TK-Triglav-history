@@ -264,8 +264,8 @@ class TennisEvent:
             csv_out = UnicodeCsvWriter(delimiter=';', quotechar='"')
             out = ""
             for ev in cls.EventsCache:
-                out.append( csv_out.convert_row([cls.EventsCache[0]['Date'], cls.EventsCache[0]['Event'],
-                                      cls.EventsCache[0]['Player']]) + '\n')
+                out += csv_out.convert_row([cls.EventsCache[0]['Date'], cls.EventsCache[0]['Event'],
+                                      cls.EventsCache[0]['Player']]) + '\n'
             return Response(out, mimetype='text/csv')
 
 
