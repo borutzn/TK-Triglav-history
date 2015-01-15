@@ -269,7 +269,7 @@ class TennisEvent:
             fieldnames = ['Date', 'Event', 'Place', 'Category']
             out = StringIO.StringIO()
             csv_out = csv.DictWriter(out, fieldnames=fieldnames, delimiter=';', quotechar='"')
-            csv_out.writerow(cls.EvensCache[0])
+            csv_out.writerow(cls.EventsCache[0])
             log_info(csv_out)
             return Response(csv_out, mimetype='application/json')
             # with open('eggs.csv', 'wb') as csvfile:
