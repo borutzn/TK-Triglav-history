@@ -1,7 +1,7 @@
 from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
 
-import re
-import os
+import re, os
+import csv, codecs, cStringIO
 
 import jinja2
 
@@ -59,3 +59,21 @@ def valid_email(email):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ATT_EXT
+
+
+class UnicodeCsvWriter:
+    # A CSV writer which will write rows to CSV file "f", which is encoded in the given encoding.
+
+    def __init__(self, dialect=csv.excel, encoding="utf-8", **kwds):
+        self.queue = cStringIO.StringIO()
+        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def convert_row(self, row):
+        self.writer.writerow([s.encode("utf-8") for s in row])
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # ... and reencode it into the target encoding
+        data = self.encoder.encode(data)
+        return data

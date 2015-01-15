@@ -1,11 +1,6 @@
 from config import DB_NAME
 
-import datetime
-import re
-import os
-import sys
-import csv
-import StringIO
+import datetime, re, os, sys
 import json
 
 import sqlite3
@@ -13,7 +8,7 @@ import sqlite3
 from flask import url_for, Response
 from flask_login import current_user
 
-from Utils import log_info, files_dir
+from Utils import log_info, files_dir, UnicodeCsvWriter
 
 
 class TennisEvent:
@@ -266,15 +261,13 @@ class TennisEvent:
         if typ == 'J':
             return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
-            fieldnames = ['Id','Date', 'LocalDate', 'Event', 'Place', 'Category', 'Player', 'Result', 'Comment',
-                          'Att1', 'Att2', 'Att3', 'Att4', 'Source', 'Created', 'LastModified']
-            out = StringIO.StringIO()
-            csv_out = csv.DictWriter(out, fieldnames=fieldnames, delimiter=';', quotechar='"')
-            csv_out.writerow(cls.EventsCache[0])
-            log_info(csv_out)
+            # fieldnames = ['Id','Date', 'LocalDate', 'Event', 'Place', 'Category', 'Player', 'Result', 'Comment',
+            #               'Att1', 'Att2', 'Att3', 'Att4', 'Source', 'Created', 'LastModified']
+            csv_out = UnicodeCsvWriter(delimiter=';', quotechar='"')
+            out = csv_out.convert_row([cls.EventsCache[0]['Date'], cls.EventsCache[0]['Event'],
+                                      cls.EventsCache[0]['Player']])
+            log_info(out)
             return Response(csv_out, mimetype='application/json')
-            # with open('eggs.csv', 'wb') as csvfile:
-            # for ev in cls.EventsCache:
 
 
 class TennisPlayer:
