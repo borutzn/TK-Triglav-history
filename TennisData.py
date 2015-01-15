@@ -267,7 +267,7 @@ class TennisEvent:
             out = csv_out.convert_row([cls.EventsCache[0]['Date'], cls.EventsCache[0]['Event'],
                                       cls.EventsCache[0]['Player']])
             log_info(out)
-            return Response(csv_out, mimetype='application/json')
+            return Response(out, mimetype='text/PLAIN')
 
 
 class TennisPlayer:
