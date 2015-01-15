@@ -266,7 +266,7 @@ class TennisEvent:
         if typ == 'J':
             return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
-            fieldnames = ['Id','Date', 'Event', 'Place', 'Category', 'Player', 'Comment',
+            fieldnames = ['Id','Date', 'LocalDate', 'Event', 'Place', 'Category', 'Player', 'Result', 'Comment',
                           'Att1', 'Att2', 'Att3', 'Att4', 'Source', 'Created', 'LastModified']
             out = StringIO.StringIO()
             csv_out = csv.DictWriter(out, fieldnames=fieldnames, delimiter=';', quotechar='"')
