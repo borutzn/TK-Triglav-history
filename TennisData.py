@@ -262,9 +262,9 @@ class TennisEvent:
             return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
             csv_out = UnicodeCsvWriter(delimiter=';', quotechar='"')
-            out = ""
+            out = csv_out.convert_row(['Date', 'Event', 'Player'])
             for ev in cls.EventsCache:
-                out += csv_out.convert_row([ev['Date'], ev['Event'], ev['Player']]) # + '\n'
+                out += csv_out.convert_row([ev['Date'], ev['Event'], ev['Player']])
             return Response(out, mimetype='text/csv')
 
 
