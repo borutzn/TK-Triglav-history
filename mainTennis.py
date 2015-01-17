@@ -286,10 +286,12 @@ def login():
             user = User(username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'])
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
+                session['user'] = user.username
                 log_info("AUDIT: User %s login." % user.username)
                 flash("Prijava uspesna." + str(session))
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
+        session['user'] = None
         flash("Prijava neuspesna.")
         return render_template("login.html", username=username, password="")
 
@@ -328,16 +330,18 @@ def signup():
         user = User(username=username, password=pass1, email=email)
         user.put()
         login_user(user)
+        session['user'] = None
         log_info("AUDIT: New user %s created." % user.username)
-        flash("Kreiran nov uporabnik.")
+        flash("Kreiran in prijavljen nov uporabnik.")
         return redirect(url_for("tennis_main"))
 
 
 @app.route("/logout")
 @login_required
 def logout():
-    log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
+    session['user'] = None
+    log_info("AUDIT: User %s logout." % str(current_user.username))
     flash("Odjava uspesna.")
     return redirect(url_for("tennis_main"))
 
