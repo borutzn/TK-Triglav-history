@@ -4,7 +4,7 @@
 
 <form method="post">
     <div style="float:left; width:45%;">
-        <p><div class="page-title">Registracija uporabnika</div>
+        <p><div class="page-title">Registracija novega uporabnika</div>
     </div>
     <div style="float:left; width:30%;">
         &nbsp;&nbsp;<a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
@@ -16,25 +16,21 @@
 			<td><label>
                 <input type="text" name="username" value="{{username}}">
             </label></td>
-			<td style="color:red;">{{userMsg}}</td>
 		</tr><tr>
 			<td style="text-align:right;">Geslo</td>
 			<td><label>
                 <input type="password" name="password">
             </label></td>
-			<td style="color:red;">{{pass1Msg}}</td>
 		</tr><tr>
 			<td style="text-align:right;">Ponovi geslo</td>
 			<td><label>
                 <input type="password" name="verify">
             </label></td>
-			<td style="color:red;">{{pass2Msg}}</td>
 		</tr><tr>
 			<td style="text-align:right;">El. pošta (neobvezno)</td>
 			<td><label>
                 <input type="text" name="email" value="{{email}}">
             </label></td>
-			<td style="color:red;">{{emailMsg}}</td>
 		</tr>
 	</table>
     <br>

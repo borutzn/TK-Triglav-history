@@ -16,7 +16,7 @@
                 &nbsp;&nbsp;
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-               Leto: <label>
+               Leto: {{ events[0].Date[:4] }}<label>
                 <select name="search">
                     {% for year in years %}
                     <option value="{{ year }}">{{ year }}</option>
