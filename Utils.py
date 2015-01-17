@@ -14,6 +14,7 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), aut
 from flask import Flask, request
 from flask_login import current_user
 app = Flask(__name__)
+app.secret_key = os.urandom(30)
 
 
 if not app.debug:

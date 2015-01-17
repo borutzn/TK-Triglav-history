@@ -18,7 +18,7 @@ import os
 import logging
 import difflib
 
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, request, redirect, url_for, session, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug import secure_filename
 
@@ -287,11 +287,11 @@ def login():
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
                 log_info("AUDIT: User %s login." % user.username)
-                flash("Prijava uspesna.")
+                flash("Prijava uspesna."+str(session))
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
         flash("Prijava neuspesna.")
-        return render_template("login.html", username=username, loginMsg="Prijava neuspešna.", password="")
+        return render_template("login.html", username=username, password="")
 
 
 @app.route("/signup", methods=['GET', 'POST'])
