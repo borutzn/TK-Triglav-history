@@ -292,7 +292,7 @@ def login():
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
         session.pop('user', None)
-        flash("Prijava neuspesna.")
+        flash(u"Prijava neuspešna.")
         return render_template("login.html", username=username, password="")
 
 
@@ -309,21 +309,21 @@ def signup():
         failed = False
         if not valid_username(username):
             failed = True
-            flash("Neustrezno uporabniško ime.")
+            flash(u"Neustrezno uporabniško ime.")
         if not valid_password(pass1):
             failed = True
-            flash("Neustrezno geslo.")
+            flash(u"Neustrezno geslo.")
         if pass1 != pass2:
             failed = True
-            flash("Geslo se ne ujema.")
+            flash(u"Geslo se ne ujema.")
         if not valid_email(email):
             failed = True
-            flash("Neustrezen poštni predal.")
+            flash(u"Neustrezen poštni predal.")
         if not failed:
             user = User.get_by_user(username)
             if user is not None:
                 failed = True
-                flash("Uporabnik že obstaja.")
+                flash(u"Uporabnik že obstaja.")
         if failed:
             return render_template("signup.html", username=username, password=pass1, verify=pass2, email=email)
 
@@ -332,7 +332,7 @@ def signup():
         login_user(user)
         session['user'] = None
         log_info("AUDIT: New user %s created." % user.username)
-        flash("Kreiran in prijavljen nov uporabnik.")
+        flash(u"Kreiran in prijavljen nov uporabnik.")
         return redirect(url_for("tennis_main"))
 
 
@@ -342,7 +342,7 @@ def logout():
     logout_user()
     session.pop('user', None)
     log_info("AUDIT: User %s logout." % str(current_user.username))
-    flash("Odjava uspesna.")
+    flash(u"Odjava uspešna.")
     return redirect(url_for("tennis_main"))
 
 
@@ -402,7 +402,7 @@ def shutdown():
         if request.form["Status"] == "Ugasni":
             log_info("AUDIT: System shutdown confirmed and executed")
             os.system("sudo shutdown -h 0")
-        flash("Če je bilo ugašanje uspešno, stran ne bo več dosegljiva. :-)")
+        flash(u"Če je bilo ugašanje uspešno, stran ne bo več dosegljiva. :-)")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
