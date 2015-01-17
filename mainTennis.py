@@ -288,10 +288,10 @@ def login():
                 login_user(user, remember=remember_me)
                 session['user'] = user.username
                 log_info("AUDIT: User %s login." % user.username)
-                flash("Prijava uspesna." + str(session))
+                flash("Prijava uspešna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
-        session['user'] = None
+        session.pop('user', None)
         flash("Prijava neuspesna.")
         return render_template("login.html", username=username, password="")
 
@@ -340,7 +340,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    session['user'] = None
+    session.pop('user', None)
     log_info("AUDIT: User %s logout." % str(current_user.username))
     flash("Odjava uspesna.")
     return redirect(url_for("tennis_main"))
