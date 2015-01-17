@@ -288,7 +288,7 @@ def login():
                 login_user(user, remember=remember_me)
                 session['user'] = user.username
                 log_info("AUDIT: User %s login." % user.username)
-                flash("Prijava uspešna.")
+                flash(u"Prijava uspešna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
         session.pop('user', None)
