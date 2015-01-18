@@ -258,13 +258,15 @@ class TennisEvent:
 
     @classmethod
     def export(cls, typ):
+        export_rows = ['Date', 'Event', 'Category', 'Place', 'Player', 'Att1', 'Att2', 'Att3', 'Att4']
         if typ == 'J':
             return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
             csv_out = UnicodeCsvWriter(delimiter=';', quotechar='"')
-            out = csv_out.convert_row(['Date', 'Event', 'Player'])
+            out = csv_out.convert_row(export_rows)
             for ev in cls.EventsCache:
-                out += csv_out.convert_row([ev['Date'], ev['Event'], ev['Player']])
+                out += csv_out.convert_row([ev['Date'], ev['Event'], ev['Category'], ev['Place'], ev['Player'],
+                                            ev['Att1'], ev['Att2'], ev['Att3'], ev['Att4']])
             return Response(out, mimetype='text/csv')
 
 

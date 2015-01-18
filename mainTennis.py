@@ -370,13 +370,12 @@ def edit_user():
         return redirect(url_for("edit_user"))
 
 
-@app.route("/test.json", methods=['GET'], defaults={'action': 'test', 'fmt': 'json'})
-@app.route("/events.csv", methods=['GET'], defaults={'action': 'events', 'fmt': 'csv'})
-@app.route("/people.csv", methods=['GET'], defaults={'action': 'people', 'fmt': 'csv'})
-@app.route("/events.json", methods=['GET'], defaults={'action': 'events', 'fmt': 'json'})
-@app.route("/people.json", methods=['GET'], defaults={'action': 'people', 'fmt': 'json'})
+@app.route("/events.csv", methods=['GET'], endpoint="events.csv", defaults={'action': 'events', 'fmt': 'csv'})
+@app.route("/people.csv", methods=['GET'], endpoint="people.csv", defaults={'action': 'people', 'fmt': 'csv'})
+@app.route("/events.json", methods=['GET'], endpoint="events.json", defaults={'action': 'events', 'fmt': 'json'})
+@app.route("/people.json", methods=['GET'], endpoint="people.json", defaults={'action': 'people', 'fmt': 'json'})
 @login_required
-def json(action, fmt):
+def export(action, fmt):
     if request.method == 'GET':
         log_info("AUDIT: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
         if action == 'events':
@@ -387,8 +386,6 @@ def json(action, fmt):
         elif action == 'people':
             if fmt == "json":
                 return TennisPlayer.jsonify()
-        elif action == 'test':
-            return jsonify({"test": "test"})
 
 
 @app.route("/shutdown", methods=['GET', 'POST'])

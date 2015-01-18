@@ -39,6 +39,8 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
                 {% endif %}
             </form>
         </div>
