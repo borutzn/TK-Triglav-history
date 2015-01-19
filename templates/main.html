@@ -16,14 +16,20 @@
                 &nbsp;&nbsp;
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-               Leto: <label><select name="search">
+                Igralec: <label><select name="search">
+                <input type="submit" value="IzberiI">
+                    {% for player in players %}
+                        <option value="{{ player }}">{{ player }}</option>
+                    {% endfor %}
+                </select></label>
+                Leto: <label><select name="search">
                     {% for year in years %}
                         <option value="{{ year }}"
                             {% if year ==  events[0].Date[:4] %} selected {%  endif %}
                         >{{ year }}</option>
                     {% endfor %}
                 </select></label>
-                <input type="submit" value="Izberi">
+                <input type="submit" value="IzberiL">
                 {% if current_user.is_authenticated() %}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -134,13 +140,13 @@
     {% if players %}
         <br>Najpogostejši igralci:<br style="line-height:30px;">
         <table>
-        {% for player in players %}
+        {% for player in players[:20] %}
             <tr>
             <td><a href="{{ url_for('show_player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
             </tr>
         {% endfor %}
         </table>
-        <a href="{{ url_for('show_player') }}">...</a><br>
+        <a href="{{ url_for('show_player') }}">vsi igralci</a><br>
         <br>
     {% endif %}
     </div>

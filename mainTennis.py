@@ -18,7 +18,7 @@ import os
 import logging
 import difflib
 
-from flask import render_template, request, redirect, url_for, session, flash, jsonify
+from flask import render_template, request, redirect, url_for, session, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug import secure_filename
 
@@ -250,7 +250,7 @@ def tennis_main():
     events = TennisEvent.get_events_page(pos, PAGELEN)
     events_len = TennisEvent.count()
     return render_template("main.html", events=events, production=Production,
-                           players=TennisEvent.players[:20], years=TennisEvent.Years,
+                           players=TennisEvent.players, years=TennisEvent.Years,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
                            nextPage=pos+PAGELEN if pos < events_len-PAGELEN else events_len-PAGELEN,
                            start=pos, count=events_len)
