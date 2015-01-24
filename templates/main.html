@@ -18,10 +18,9 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 Igralec: <label><select name="search">
                     {% for player in players %}
-                        <option value="{{ player }}">{{ player }}</option>
+                        <option value="{{ player[1] }}">{{ player }}</option>
                     {% endfor %}
                 </select></label>
-                <input type="submit" value="IzberiI">
                 Leto: <label><select name="search">
                     {% for year in years %}
                         <option value="{{ year }}"
@@ -29,7 +28,7 @@
                         >{{ year }}</option>
                     {% endfor %}
                 </select></label>
-                <input type="submit" value="IzberiL">
+                <input type="submit" value="Izberi">
                 {% if current_user.is_authenticated() %}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
