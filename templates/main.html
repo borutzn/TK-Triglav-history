@@ -17,7 +17,7 @@
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;Igralec: <label><select name="search">
                     {% for player in players %}
-                        <option value="{{ player[1][0] }}">{{ player }}</option>
+                        <option value="{{ player[1] }}">{{ player }}</option>
                     {% endfor %}
                 </select></label>
                 &nbsp;&nbsp;Leto: <label><select name="search">
