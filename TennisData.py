@@ -211,11 +211,13 @@ class TennisEvent:
             else:
                 p[p_name] = 1
         cls.players = list()
+        cls.top_players = list()
         for k, v in p.iteritems():
-            cls.players.append((k, v))
-        cls.players.sort(key=lambda player: player[1], reverse=True)
-        cls.top_players = cls.players[:20]
-        cls.players.sort(key=lambda player: player[0])
+            cls.players.append(k)
+            cls.top_players.append((k, v))
+        cls.players.sort()
+        cls.top_players.sort(key=lambda player: player[1], reverse=True)
+        cls.top_players = cls.top_players[:20]
 
         log_info("AUDIT: Event cache reloaded (%d entries, %d players)." % (len(cls.EventsCache), len(cls.players)))
 
