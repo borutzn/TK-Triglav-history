@@ -244,8 +244,6 @@ def tennis_main():
         select_player = request.form['select_player']
         event_filter = request.form['event_filter']
         select_year = request.form['select_year']
-        log_info( "TEST: "+ str(select_player))
-        log_info( "TEST: "+ select_player)
         if select_player != "Izberi igralca":
             return redirect(url_for("show_player") + "?n=" + select_player)
         else:
