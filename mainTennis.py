@@ -59,7 +59,6 @@ def show_player():
                 players.append(p)
         # app.logger.info( "players: " + str(players) )
 
-    players.sort(key=lambda player: player[0])
     return render_template("players.html", players=players, search=search)
 
 
@@ -250,7 +249,7 @@ def tennis_main():
     events = TennisEvent.get_events_page(pos, PAGELEN)
     events_len = TennisEvent.count()
     return render_template("main.html", events=events, production=Production,
-                           players=TennisEvent.players, years=TennisEvent.Years,
+                           players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
                            nextPage=pos+PAGELEN if pos < events_len-PAGELEN else events_len-PAGELEN,
                            start=pos, count=events_len)
