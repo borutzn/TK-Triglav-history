@@ -206,16 +206,16 @@ class TennisEvent:
         p = dict()  # move collection to the upper for loop?
         for i in cls.EventsCache:
             p_name = i['Player']
-            p_result = cls.result_value(i['Result'])
             if p_name in p:
                 p[p_name][0] += 1
-                p[p_name][1] += p_result
             else:
-                p[p_name] = list((1, p_result))
+                p[p_name] = list((1))
         cls.players = list()
         for k, v in p.iteritems():
-            cls.players.append((k, v[0], v[1]))
+            cls.players.append((k, v[0]))
         cls.players.sort(key=lambda player: player[2], reverse=True)
+        cls.top_players = cls.players[:20]
+        cls.players.sort(key=lambda player: player[0])
 
         log_info("AUDIT: Event cache reloaded (%d entries, %d players)." % (len(cls.EventsCache), len(cls.players)))
 
