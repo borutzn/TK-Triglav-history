@@ -16,17 +16,17 @@
                 &nbsp;&nbsp;
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
 
-                &nbsp;&nbsp;&nbsp;&nbsp;Igralec: <label><select name="igralec">
+                &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
                       <option value="Izberi igralca">Izberi igralca</option>
                     {% for player in players %}
                         <option value="{{ player[1] }}">{{ player }}</option>
                     {% endfor %}
                 </select></label>
 
-                Dogodek: <label>
+                &nbsp;&nbsp;dogodek: <label>
                 <input type="text" name="event_filter" value="{{ event_filter }}">
 
-                &nbsp;&nbsp;Leto: <label><select name="leto">
+                &nbsp;&nbsp;leto: <label><select name="select_year">
                     {% for year in years %}
                         <option value="{{ year }}"
                             {% if year ==  events[0].Date[:4] %} selected {%  endif %}

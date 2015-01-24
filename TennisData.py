@@ -1,6 +1,9 @@
 from config import DB_NAME
 
-import datetime, re, os, sys
+import datetime
+import re
+import os
+import sys
 import json
 
 import sqlite3
@@ -24,7 +27,8 @@ class TennisEvent:
     EventsIndex = {}
     Years = []
     players = list()
-        
+    top_players = list()
+
     def __init__(self, date="", event="", place="", category="", result="",
                  player="", comment="", att1="", att2="", att3="", att4="", source=""):
         self.date = date
