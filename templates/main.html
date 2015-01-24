@@ -15,13 +15,18 @@
                 <a href="{{ url_for('tennis_main') }}?p={{prevPage}}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
                 &nbsp;&nbsp;
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
-                &nbsp;&nbsp;&nbsp;&nbsp;Igralec: <label><select name="search">
+
+                &nbsp;&nbsp;&nbsp;&nbsp;Igralec: <label><select name="igralec">
                       <option value="Izberi igralca">Izberi igralca</option>
                     {% for player in players %}
                         <option value="{{ player[1] }}">{{ player }}</option>
                     {% endfor %}
                 </select></label>
-                &nbsp;&nbsp;Leto: <label><select name="search">
+
+                Dogodek: <label>
+                <input type="text" name="event_filter" value="{{ event_filter }}">
+
+                &nbsp;&nbsp;Leto: <label><select name="leto">
                     {% for year in years %}
                         <option value="{{ year }}"
                             {% if year ==  events[0].Date[:4] %} selected {%  endif %}
@@ -29,6 +34,7 @@
                     {% endfor %}
                 </select></label>
                 <input type="submit" value="Izberi">
+
                 {% if current_user.is_authenticated() %}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

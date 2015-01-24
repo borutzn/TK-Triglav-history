@@ -241,8 +241,12 @@ def tennis_main():
         except ValueError:
             pos = 0
     elif request.method == 'POST':
-        year = request.form['search']
-        pos = TennisEvent.get_year_pos(year)
+        player = request.form['igralec']
+        year = request.form['leto']
+        if player != "Izberi igralca":
+            return redirect(url_for("show_player") + "?n=" + player)
+        else:
+            pos = TennisEvent.get_year_pos(year)
     else:
         pos = 0
 
