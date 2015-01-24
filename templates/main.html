@@ -16,6 +16,7 @@
                 &nbsp;&nbsp;
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;Igralec: <label><select name="search">
+                      <option value="Izberi igralca">Izberi igralca</option>
                     {% for player in players %}
                         <option value="{{ player[1] }}">{{ player }}</option>
                     {% endfor %}
