@@ -207,12 +207,12 @@ class TennisEvent:
         for i in cls.EventsCache:
             p_name = i['Player']
             if p_name in p:
-                p[p_name] +=  1
+                p[p_name] += 1
             else:
                 p[p_name] = 1
         cls.players = list()
         for k, v in p.iteritems():
-            cls.players.append((k, v[0]))
+            cls.players.append((k, v))
         cls.players.sort(key=lambda player: player[2], reverse=True)
         cls.top_players = cls.players[:20]
         cls.players.sort(key=lambda player: player[0])
