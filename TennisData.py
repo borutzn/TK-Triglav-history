@@ -213,7 +213,7 @@ class TennisEvent:
         cls.players = list()
         for k, v in p.iteritems():
             cls.players.append((k, v))
-        cls.players.sort(key=lambda player: player[2], reverse=True)
+        cls.players.sort(key=lambda player: player[1], reverse=True)
         cls.top_players = cls.players[:20]
         cls.players.sort(key=lambda player: player[0])
 
