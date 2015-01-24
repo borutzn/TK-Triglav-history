@@ -18,7 +18,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 Igralec: <label><select name="search">
                     {% for player in players %}
-                        <option value="{{ player[1] }}">{{ player }}</option>
+                        <option value="{{ player[1][0] }}">{{ player }}</option>
                     {% endfor %}
                 </select></label>
                 Leto: <label><select name="search">
