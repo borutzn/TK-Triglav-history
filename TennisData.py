@@ -248,15 +248,18 @@ class TennisEvent:
         cls.fetch_data()
         events = list()
         pos = start-1
+        search = 0  # 0-no search, 1-string, 2-regex
+        if event_filter != "":
+            search = 1 if event_filter.isalnum() else 2
+            log_info("SEARCH=" + int(search))
         while (len(events) < page_len) and (pos < len(cls.EventsCache)):
             pos += 1
-            # if event_filter == "":
-            #     cls.EventsCache[start:start+pagelen]
-            if (event_filter != "") and (cls.EventsCache[pos]['Event'][:len(event_filter)] != event_filter[:len(event_filter)]):
+            if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
+                continue
+            if (search == 2) and not re.search(event_filter, cls.EventsCache[pos]['Event']):
                 continue
             events.append(cls.EventsCache[pos])
         return events
-        # return cls.EventsCache[start:start+pagelen]
 
     @classmethod
     def get_players_events(cls, player):
