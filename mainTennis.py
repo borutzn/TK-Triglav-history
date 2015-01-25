@@ -256,6 +256,10 @@ def tennis_main():
 
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     events_len = TennisEvent.count()
+    if (events_len == 0):
+        flash(u"Noben dogodek ne ustreza iskanju.")
+        return redirect(url_for("tennis_main"))
+
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
