@@ -247,12 +247,14 @@ class TennisEvent:
     def get_events_page(cls, start, page_len=PAGELEN, event_filter="", collapsed_groups=()):
         cls.fetch_data()
         events = list()
-        pos = start
+        pos = start-1
         while (len(events) < page_len) and (pos < len(cls.EventsCache)):
+            pos += 1
             # if event_filter == "":
             #     cls.EventsCache[start:start+pagelen]
+            if (cls.EventsCache[pos]['Event'][0] == 'D'):
+                continue
             events.append(cls.EventsCache[pos])
-            pos += 1
         log_info("GET PAGE: %d - %s" % (len(events), events))
         return events
         # return cls.EventsCache[start:start+pagelen]
