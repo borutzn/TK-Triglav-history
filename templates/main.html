@@ -17,7 +17,7 @@
                 <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
-                      <option value=""></option>
+                     <option value=""></option>
                     {% for player in players %}
                         {%  if player|length > 2 %}
                             <option value="{{ player }}">{{ player }}</option>
