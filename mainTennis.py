@@ -234,6 +234,7 @@ def correct():
 @app.route("/", methods=['GET', 'POST'])
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
+    event_filter = ""
     if request.method == 'GET':
         try:
             p = request.args.get('p')
@@ -246,6 +247,8 @@ def tennis_main():
         select_year = request.form['select_year']
         if select_player != "Izberi igralca":
             return redirect(url_for("show_player") + "?n=" + select_player)
+        elif event_filter != "":
+            pos = 0
         else:
             pos = TennisEvent.get_year_pos(select_year)
     else:
