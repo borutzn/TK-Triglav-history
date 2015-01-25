@@ -19,12 +19,15 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
                       <option value="Izberi igralca">Izberi igralca</option>
                     {% for player in players %}
-                        <option value="{{ player }}">{{ player }}</option>
+                        {%  if len(player) > 2 %}
+                            <option value="{{ player }}">{{ player }}</option>
+                        {%  endif %}
                     {% endfor %}
                 </select></label>
 
                 &nbsp;&nbsp;dogodek: <label>
                 <input type="text" name="event_filter" size="10" value="{{ event_filter }}">
+                </label>
 
                 &nbsp;&nbsp;leto: <label><select name="select_year">
                     {% for year in years %}
