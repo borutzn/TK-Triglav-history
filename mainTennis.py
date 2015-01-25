@@ -258,6 +258,7 @@ def tennis_main():
     events_len = TennisEvent.count()
     if (events_len == 0):
         flash(u"Noben dogodek ne ustreza iskanju.")
+        log_info(u"Noben dogodek ne ustreza iskanju.")
         return redirect(url_for("tennis_main"))
 
     return render_template("main.html", events=events, production=Production,
