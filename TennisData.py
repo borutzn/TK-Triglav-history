@@ -1,4 +1,4 @@
-from config import DB_NAME
+from config import DB_NAME, PAGELEN
 
 import datetime
 import re
@@ -244,9 +244,18 @@ class TennisEvent:
         return 0
 
     @classmethod
-    def get_events_page(cls, start, pagelen):
+    def get_events_page(cls, start, page_len=PAGELEN, event_filter="", collapsed_groups=()):
         cls.fetch_data()
-        return cls.EventsCache[start:start+pagelen]
+        events = list()
+        pos = start
+        while (len(events) < page_len) and (pos < len(cls.EventsCache)):
+            # if event_filter == "":
+            #     cls.EventsCache[start:start+pagelen]
+            events.append(cls.EventsCache[pos])
+            pos += 1
+        log_info("GET PAGE: %d - %s" % (len(events), events))
+        return events
+        # return cls.EventsCache[start:start+pagelen]
 
     @classmethod
     def get_players_events(cls, player):

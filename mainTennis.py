@@ -251,7 +251,7 @@ def tennis_main():
     else:
         pos = 0
 
-    events = TennisEvent.get_events_page(pos, PAGELEN)
+    events = TennisEvent.get_events_page(pos, pagelen=PAGELEN, event_filter=event_filter, collapsed_groups=())
     events_len = TennisEvent.count()
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
