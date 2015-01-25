@@ -19,7 +19,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
                       <option value="Izberi igralca">Izberi igralca</option>
                     {% for player in players %}
-                        {%  if len(player) > 2 %}
+                        {%  if player|length > 2 %}
                             <option value="{{ player }}">{{ player }}</option>
                         {%  endif %}
                     {% endfor %}
