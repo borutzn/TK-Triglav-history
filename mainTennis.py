@@ -256,8 +256,8 @@ def tennis_main():
 
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     events_len = TennisEvent.count()
-    log_info("EVENTS: "+str(events_len))
-    if (events_len == 0):
+    log_info("EVENTS: "+str(len(events)))
+    if (len(events) == 0):
         flash(u"Noben dogodek ne ustreza iskanju.")
         return redirect(url_for("tennis_main"))
 
