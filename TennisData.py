@@ -252,7 +252,7 @@ class TennisEvent:
             pos += 1
             # if event_filter == "":
             #     cls.EventsCache[start:start+pagelen]
-            if (cls.EventsCache[pos]['Event'][:2] == event_filter[:2]):
+            if (cls.EventsCache[pos]['Event'][:3] == event_filter[:3]):
                 continue
             events.append(cls.EventsCache[pos])
         return events
