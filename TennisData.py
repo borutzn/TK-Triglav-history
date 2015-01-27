@@ -111,7 +111,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info( "PUT: "+str(TennisEvent.date2Db(self.date)) + ": " + self.comment )
+        log_info( "AUDIT: New event put by %s" % (str(current_user.username)))
         cursor.execute("""INSERT INTO TennisEvents
                        (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
                         VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
