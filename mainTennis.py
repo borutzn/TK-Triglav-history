@@ -143,7 +143,6 @@ def add_event():
 @app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='duplicate')
 @login_required
 def edit_event(update):
-    log_info("EDIT_EVENT")
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
@@ -155,9 +154,7 @@ def edit_event(update):
         return render_template("editEvent.html", event=event)
 
     elif request.method == 'POST':
-        log_info("POST")
         if request.form["Status"] == "Shrani":
-            log_info("CreateEvent %s - %s" % (str(update), str(request.form)))
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category"],
                              result=request.form["result"], player=request.form["player"],
