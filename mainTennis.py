@@ -161,7 +161,7 @@ def edit_event(update):
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"], source=request.form["source"])
-            log_info("UPDATE:", str(update))
+            log_info("UPDATE: ", str(update))
             if update:
                 ev.update(request.form["Id"])
             else:
