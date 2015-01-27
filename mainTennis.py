@@ -351,9 +351,9 @@ def signup():
 @app.route("/logout")
 @login_required
 def logout():
+    log_info("AUDIT: User %s logout." % str(current_user.username))
     logout_user()
     session.pop('user', None)
-    log_info("AUDIT: User %s logout." % str(current_user.username))
     flash(u"Odjava uspešna.")
     return redirect(url_for("tennis_main"))
 
