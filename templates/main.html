@@ -7,7 +7,7 @@
 
     
     <div style="position:relative; height:35px;">
-        <div style="float:left; width:70%;">
+        <div style="float:left; width:90%;">
             <form action="{{ url_for('tennis_main') }}" method="post">
                 &nbsp;&nbsp;
                 <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
@@ -76,7 +76,7 @@
                 <br><a href="{{ url_for('tennis_main') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
-                  <tr><th>datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th>igralec</th><th></th>{% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
+                    <tr><th style="width:80px;">datum</th><th>dogodek</th><th>kraj</th><th>kategorija</th><th>rezultat</th><th>igralec</th><th></th>{% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
             {% endif %}
             <tr>
             <td style="">
