@@ -41,8 +41,9 @@ body {
 }
 
 #button {
+    font-family: Calibri, Helvetica, Arial, sans-serif;
+    font-size: 12pt;
     border-radius: 3px;
-    font-size: 11pt;
     cursor: pointer;
 }
 #button:hover {
