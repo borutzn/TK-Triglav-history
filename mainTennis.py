@@ -408,7 +408,7 @@ def audit():
             if l[30:37] != "AUDIT: ":
                 continue
             p = string.find(l, ' [', 37)
-            out += "%s %d %s\r\n" % (l[:16], p, l[37:p])
+            out += "%s %s\r\n" % (l[:16], l[37:p])
     f.close()
     return Response(out, mimetype='text/plain')
 
