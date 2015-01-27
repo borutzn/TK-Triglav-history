@@ -19,7 +19,7 @@ import string
 import logging
 import difflib
 
-from flask import render_template, request, redirect, url_for, session, flash
+from flask import render_template, request, redirect, url_for, session, flash, Response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug import secure_filename
 
@@ -154,8 +154,9 @@ def edit_event(update):
         return render_template("editEvent.html", event=event)
 
     elif request.method == 'POST':
+        log_info("POST")
         if request.form["Status"] == "Shrani":
-            # log_info("CreateEvent" + str(request.form))
+            log_info("CreateEvent %s - %s" % (str(update), str(request.form)))
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category"],
                              result=request.form["result"], player=request.form["player"],
@@ -411,7 +412,7 @@ def audit():
             p = string.find(l, ' [', 37)
             out += "%s %d %s\n" % (l[:16], p, l[37:p])
     f.close()
-    return out
+    return Response(out, mimetype='text/csv')
 
 
 @app.route("/shutdown", methods=['GET', 'POST'])
