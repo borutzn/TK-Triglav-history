@@ -55,6 +55,8 @@
                     <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
                 {% endif %}
             </form>
         </div>
@@ -80,7 +82,7 @@
                         <th style="width:140px;">kraj</th>
                         <th style="width:80px;">kategorija</th><th style="width:40px;">rezultat</th>
                         <th style="width:150px;">igralec</th><th style="width:60px;"></th>
-                        {% if current_user.is_authenticated() %}<th style="width:120px;"></th>{% endif %}</tr>
+                        {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
             {% endif %}
             <tr>
             <td style="">
