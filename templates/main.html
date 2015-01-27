@@ -133,7 +133,7 @@
                 <a href="{{ url_for('edit_comment') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
             {% endif %}
             {% if current_user.is_authenticated() %}
-                <a href="{{ url_for('edit_event') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                <a href="{{ url_for('duplicate') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
                 <a href="{{ url_for('delete') }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
             {% endif %}
             {% if current_user.is_authenticated() %}</td>{% endif %}

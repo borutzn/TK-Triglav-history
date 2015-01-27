@@ -140,7 +140,7 @@ def add_event():
 
 
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
-@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='Duplicate')
+@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='duplicate')
 @login_required
 def edit_event(update):
     if request.method == 'GET':
@@ -412,7 +412,7 @@ def audit():
             p = string.find(l, ' [', 37)
             out += "%s %d %s\r\n" % (l[:16], p, l[37:p])
     f.close()
-    return Response(out, mimetype='text/csv')
+    return Response(out, mimetype='text/plain')
 
 
 @app.route("/shutdown", methods=['GET', 'POST'])
