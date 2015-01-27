@@ -26,7 +26,7 @@
                 </select></label>
 
                 &nbsp;&nbsp;dogodek: <label>
-                <input type="text" name="event_filter" size="10" value="{{ event_filter }}">
+                <input type="text" name="event_filter" size="10" placeholder="išči dogodek" value="{{ event_filter }}">
                 </label>
 
                 &nbsp;&nbsp;leto: <label><select name="select_year">
@@ -144,6 +144,7 @@
     <div style="height:30px;"></div>
     </div>
 
+    <!--
     <div style="float:right; background:#94BEFA; padding:15px;">
     {% if players %}
         <br>Najpogostejši igralci:<br style="line-height:30px;">
@@ -158,5 +159,6 @@
         <br>
     {% endif %}
     </div>
+    -->
 
 {% endblock %}		
