@@ -76,8 +76,9 @@
                 <br><a href="{{ url_for('tennis_main') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
-                    <tr><th style="width:80px;">datum</th><th>dogodek</th><th>kraj</th>
-                        <th style="width:100px;">kategorija</th><th style="width:40px;">rezultat</th>
+                    <tr><th style="width:80px;">datum</th><th>dogodek</th>
+                        <th style="width:100px;">kraj</th>
+                        <th style="width:80px;">kategorija</th><th style="width:40px;">rezultat</th>
                         <th style="width:150px;">igralec</th><th style="width:60px;"></th>
                         {% if current_user.is_authenticated() %}<th></th>{% endif %}</tr>
             {% endif %}
