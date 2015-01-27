@@ -140,7 +140,7 @@ def add_event():
 
 
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
-@app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='duplicate')
+@app.route("/duplicate", methods=['GET', 'POST'], endpoint='duplicate', defaults={'update': False})
 @login_required
 def edit_event(update):
     if request.method == 'GET':
