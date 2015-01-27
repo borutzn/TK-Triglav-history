@@ -15,6 +15,7 @@ appname = "TK-Triglav-History"
 from config import Production, PAGELEN
 
 import os
+import string
 import logging
 import difflib
 
@@ -397,6 +398,20 @@ def export(action, fmt):
         elif action == 'people':
             if fmt == "json":
                 return TennisPlayer.jsonify()
+
+
+@app.route("/audit", methods=['GET'])
+@login_required
+def audit():
+    out = ""
+    with open('/tmp/TK.log', 'r') as f:
+        for l in f:
+            if l[30:37] != "AUDIT: ":
+                continue
+            p = string.find(l, ' [', 37)
+            out += "%s %d %s" % (l[:16], p, l[37:p])
+    f.close()
+    return out
 
 
 @app.route("/shutdown", methods=['GET', 'POST'])
