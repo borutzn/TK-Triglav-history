@@ -143,6 +143,7 @@ def add_event():
 @app.route("/duplicate", methods=['GET', 'POST'], defaults={'update': False}, endpoint='duplicate')
 @login_required
 def edit_event(update):
+    log_info("EDIT_EVENT")
     if request.method == 'GET':
         try:
             ident = int(request.args.get('id'))
