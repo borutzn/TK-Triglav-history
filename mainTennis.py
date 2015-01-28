@@ -211,7 +211,7 @@ def correct():
             fname = request.args.get('f')
             next_pg = request.args.get('next')
         except (ValueError, TypeError) as e:
-            # return redirect(url_for("tennis_main"))
+            #  return redirect(url_for("tennis_main"))
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         fnames = []
