@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<form action="{{ url_for('add_event') }}" method="post">
+<form method="post">
         <table id="player-table">
 		<tr><td>Datum:</td><td><label>
             <input style="width:3cm" type="text" name="date" value="{{ event.date }}">

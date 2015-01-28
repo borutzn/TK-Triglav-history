@@ -8,7 +8,7 @@
 
     <div class="player_data">mapa: {{ fdir }}, datoteka: <b>{{ fname }}</b></div><br>
 
-    <form  action="{{ url_for('correct') }}" method="post">
+    <form method="post">
         <table><tr><th></th><th>ujemanje</th><th>ime datoteke</th></tr>
         {% for fn in fnames %}
             <tr><td><label>
