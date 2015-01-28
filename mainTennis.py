@@ -117,7 +117,8 @@ def edit_comment():
                 comment += "; " + request.form["addcomment"]
             ev = TennisEvent(comment=comment)
             ev.update_comment(request.form["Id"])
-        return redirect(url_for("tennis_main"))
+        # return redirect(url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/add", methods=['GET', 'POST'])
@@ -136,7 +137,8 @@ def add_event():
                              comment=request.form["comment"])
             log_info("PUT: ")
             ev.put()
-        return redirect(url_for("tennis_main"))
+        # return redirect(url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
@@ -166,7 +168,8 @@ def edit_event(update):
                 ev.update(request.form["Id"])
             else:
                 ev.put()
-        return redirect(url_for("tennis_main"))
+        # return redirect(url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/delete", methods=['GET', 'POST'])
@@ -185,7 +188,8 @@ def delete():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             TennisEvent.delete(request.form["Id"])
-        return redirect(url_for("tennis_main"))
+        # return redirect(url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/reload", methods=['GET'])
@@ -193,7 +197,7 @@ def delete():
 def data_reload():
     if request.method == 'GET':
         TennisEvent.clear_data()
-    return redirect(request.args.get("next"))
+    return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/correct", methods=['GET', 'POST'])
@@ -207,7 +211,8 @@ def correct():
             fname = request.args.get('f')
             next_pg = request.args.get('next')
         except ValueError:
-            return redirect(url_for("tennis_main"))
+            # return redirect(url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_main"))
 
         fnames = []
         try:
@@ -218,8 +223,9 @@ def correct():
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
         except ValueError:
             # No files in directory - nothing to select from
-            return redirect(url_for("tennis_main"))
-            
+            # return redirect(url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_main"))
+
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
         if len(fnames) > 10:
             fnames = fnames[:10]
@@ -229,7 +235,8 @@ def correct():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Shrani"[:5]):
             TennisEvent.update_att(request.form["ident"], request.form["att"], request.form["fname"])
-        return redirect(request.form["next"])
+        # return redirect(request.form["next"])
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -256,16 +263,18 @@ def tennis_main():
         pos = 0
 
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
-    events_len = TennisEvent.count()
+    all_events_len = TennisEvent.count()
+    log_info( "SGET_EVENTS: %d %s" % (len(events), str(events)))
     if (len(events) == 0):
         flash(u"Noben dogodek ne ustreza.")
-        return redirect(url_for("tennis_main"))
+        # return redirect(url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
-                           nextPage=pos+PAGELEN if pos < events_len-PAGELEN else events_len-PAGELEN,
-                           start=pos, count=events_len)
+                           nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
+                           start=pos, count=all_events_len)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

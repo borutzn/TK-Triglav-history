@@ -34,8 +34,8 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("AUDIT: %s requested by %s (%s)" %
-                        (request.url[39:], str(current_user.username), request.remote_addr))
+        app.logger.info("AUDIT: %s (%s) requested %s" %
+                        (str(current_user.username), request.remote_addr, request.url[38:]))
 
 
 def log_info(s):
