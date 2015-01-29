@@ -10,11 +10,11 @@
         <div style="float:left; width:90%;">
             <form method="post">
                 &nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+                <a href="{{ url_for('tennis_main',next=request.url) }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main') }}?p={{prevPage}}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
+                <a href="{{ url_for('tennis_main',next=request.url, p=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
                 &nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main') }}?p={{nextPage}}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
+                <a href="{{ url_for('tennis_main',next=request.url, p=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
                      <option value=""></option>
@@ -75,7 +75,7 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><a href="{{ url_for('tennis_main') }}?p={{pos}}" class="year">{{ event.Date[:4] }}</a>
+                <br><a href="{{ url_for('tennis_main', p=pos) }}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
                     <tr><th style="width:80px;">datum</th><th>dogodek</th>
@@ -100,43 +100,43 @@
             <td style=""> {{ event.Result }} </td>
             <td style=""> 
                 {% if event.Player != "" %}
-                    <a href="{{ url_for('show_player') }}?n={{ event.Player }}">{{ event.Player }}</a>
+                    <a href="{{ url_for('show_player',next=request.url, n=event.Player) }}">{{ event.Player }}</a>
                 {% endif %}
             </td>
             <td style="">
             {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                 <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att1}}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
             {% elif event.Att1 != "" and event.Att1[:4] == "err_" and current_user.is_authenticated() %}
-                <a href="{{ url_for('correct',next=request.url) }}?id={{ event.Id }}&att=1&d={{year}}&f={{event.Att1[4:]}}&next={{ request.url }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+                <a href="{{ url_for('correct',next=request.url, id=event.Id, att=1, d=year, f=event.Att1[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att2 != "" and event.Att2[:4] != "err_"%}
                 <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
             {% elif event.Att2 != "" and event.Att2[:4] == "err_" and current_user.is_authenticated() %}
-                <a href="{{ url_for('correct',next=request.url) }}?id={{ event.Id }}&att=2&d={{year}}&f={{event.Att2[4:]}}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+                <a href="{{ url_for('correct',next=request.url, id=event.Id, att=2, d=year, f=event.Att2[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att3 != "" and event.Att3[:4] != "err_"%}
                 <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att3}}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
             {% elif event.Att3 != "" and event.Att3[:4] == "err_" and current_user.is_authenticated() %}
-                <a href="{{ url_for('correct',next=request.url) }}?id={{ event.Id }}&att=3&d={{year}}&f={{event.Att3[4:]}}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+                <a href="{{ url_for('correct',next=request.url, id=event.Id, att=3, d=year, f=event.Att3[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att4 != "" and event.Att4[:4] != "err_"%}
                 <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att4}}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
             {% elif event.Att4 != "" and event.Att4[:4] == "err_" and current_user.is_authenticated() %}
-                <a href="{{ url_for('correct',next=request.url) }}?id={{ event.Id }}&att=4&d={{year}}&f={{event.Att4[4:]}}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+                <a href="{{ url_for('correct',next=request.url, id=event.Id, att=4, d=year, f=event.Att4[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             </td>
             {% if current_user.is_authenticated() %}
                 <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
             {% endif %}
             {% if current_user.utype >= 3 %}
-                <a href="{{ url_for('edit_event',next=request.url) }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
+                <a href="{{ url_for('edit_event',next=request.url, id=event.Id) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
             {% endif %}
             {% if current_user.utype >= 1 %}
-                <a href="{{ url_for('edit_comment',next=request.url) }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
+                <a href="{{ url_for('edit_comment',next=request.url, id=event.Id) }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
             {% endif %}
             {% if current_user.is_authenticated() %}
-                <a href="{{ url_for('duplicate',next=request.url) }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
-                <a href="{{ url_for('delete',next=request.url) }}?id={{ event.Id }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
+                <a href="{{ url_for('duplicate',next=request.url, id=event.Id) }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                <a href="{{ url_for('delete',next=request.url, id=event.Id) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
             {% endif %}
             {% if current_user.is_authenticated() %}</td>{% endif %}
             </tr>
