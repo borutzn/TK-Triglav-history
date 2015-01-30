@@ -105,17 +105,17 @@
             </td>
             <td style="">
             {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att1}}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att1) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
             {% elif event.Att1 != "" and event.Att1[:4] == "err_" and current_user.is_authenticated() %}
                 <a href="{{ url_for('correct',next=request.url, id=event.Id, att=1, d=year, f=event.Att1[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att2 != "" and event.Att2[:4] != "err_"%}
-                <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att2) }}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
             {% elif event.Att2 != "" and event.Att2[:4] == "err_" and current_user.is_authenticated() %}
                 <a href="{{ url_for('correct',next=request.url, id=event.Id, att=2, d=year, f=event.Att2[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att3 != "" and event.Att3[:4] != "err_"%}
-                <a href="{{ url_for('static',filename='/files/') }}{{year}}/{{event.Att3}}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att3) }}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
             {% elif event.Att3 != "" and event.Att3[:4] == "err_" and current_user.is_authenticated() %}
                 <a href="{{ url_for('correct',next=request.url, id=event.Id, att=3, d=year, f=event.Att3[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
