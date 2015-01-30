@@ -24,7 +24,7 @@
         <div style="float:left; width:30%;">
             &nbsp;&nbsp;<a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
             {% if current_user.is_authenticated() %}
-                &nbsp;&nbsp;<a href="{{ url_for('edit_player',next=request.url,id=event.Id) }}"><img src="{{ url_for('static',filename='edit-32.png') }}" title="Urejanje igralca"></a>
+                &nbsp;&nbsp;<a href="{{ url_for('edit_player',next=request.url,id=playername) }}"><img src="{{ url_for('static',filename='edit-32.png') }}" title="Urejanje igralca"></a>
             {% endif %}
         </div>
         <div style="clear:both;"></div>
@@ -55,7 +55,7 @@
             <td> {{ event.Result }} </td>
             <td>
                 {% if event.Att1 != "" %}
-                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att1) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
+                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.Att1}}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
                 {% endif %}
                 {% if event.Att2 != "" %}
                     <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.Att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
