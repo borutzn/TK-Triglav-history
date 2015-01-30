@@ -17,7 +17,7 @@
             {% if (loop.index % 6 == 1) %}
                 <tr>
             {% endif %}
-            <td><a href="{{ url_for('show_player') }}?n={{player}}">{{ player }}</a></td>
+            <td><a href="{{ url_for('show_player',n=player) }}">{{ player }}</a></td>
             {% if (loop.index % 6 == 0) %}
                 </tr>
             {% endif %}
