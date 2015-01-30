@@ -399,7 +399,7 @@ def upload_picture():
         if request.form["Status"] == "Shrani":
             year=request.form["select_year"]
             upload_picture = request.files['upload']
-            log_info("UPLOAD %s, %s." % (year, str(upload_picture.filename)))
+            log_info("UPLOAD %s, %s, %s." % (year, upload_picture.filename, allowed_file(upload_picture.filename)))
             if upload_picture and allowed_file(upload_picture.filename):
                 picture = os.path.join(year, secure_filename(upload_picture.filename))
                 filename = os.path.join(files_dir, picture)
