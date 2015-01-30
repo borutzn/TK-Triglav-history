@@ -399,12 +399,14 @@ def upload_picture():
         if request.form["Status"] == "Shrani":
             year = request.form["select_year"]
             upload_file = request.files['upload']
-            log_info("UPLOAD %s, %s, %s." % (year, upload_file.filename, allowed_file(upload_file.filename)))
             if upload_file and allowed_file(upload_file.filename):
-                picture = os.path.join(year, secure_filename(upload_file.filename))
-                filename = os.path.join(files_dir, picture)
-                log_info("UPLOAD %s, %s." % (picture, filename))
-                upload_file.save(os.path.join(filename))
+                picture_dir = os.path.join(files_dir, secure_filename(year))
+                if not os.path.exists(picture_dir):
+                    log_info("Audit: directory %s created." % (picture_dir))
+                    os.makedirs(picture_dir)
+                picture = os.path.join(picture_dir, secure_filename(upload_file.filename))
+                log_info("UPLOAD %s, %s." % (picture))
+                upload_file.save(picture)
                 flash(u"Slika uspešno prenešena.")
             else:
                 flash(u"NAPAKA: Neustrezna slika.")
