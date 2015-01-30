@@ -104,7 +104,7 @@ def edit_comment():
         try:
             ident = int(request.args.get('id'))
         except ValueError:
-            flash(u"Napaka: comment - napačen identifikator")
+            flash(u"Napaka: comment - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
@@ -147,7 +147,7 @@ def edit_event(update):
         try:
             ident = int(request.args.get('id'))
         except ValueError:
-            flash(u"Napaka: edit_event - napačen identifikator")
+            flash(u"Napaka: edit_event - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
@@ -177,7 +177,7 @@ def delete():
         try:
             ident = int(request.args.get('id'))
         except ValueError:
-            flash(u"Napaka: delete - napačen identifikator")
+            flash(u"Napaka: delete - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
@@ -210,7 +210,7 @@ def correct():
             next_pg = request.args.get('next')
         except (ValueError, TypeError) as e:
             log_info("ERROR: %s" % str(e))
-            flash(u"Napaka: correct - napačen parameter")
+            flash(u"Napaka: correct - napačen parameter.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         fnames = []
@@ -222,7 +222,7 @@ def correct():
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
         except ValueError:
             # No files in directory - nothing to select from
-            flash(u"Napaka: ni razpoložljivih datotek")
+            flash(u"Napaka: ni razpoložljivih datotek.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
@@ -373,7 +373,7 @@ def edit_user():
             try:
                 iden = int(request.args.get('id'))
             except ValueError:
-                flash(u"Napaka: edit_user - napačen identifikator")
+                flash(u"Napaka: edit_user - napačen identifikator.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
 
             user = User.get_by_id(iden)
@@ -405,9 +405,9 @@ def upload_picture():
                 filename = os.path.join(files_dir, picture)
                 log_info("UPLOAD %s, %s." % (picture, filename))
                 upload_file.save(os.path.join(filename))
-                flash(u"Slika uspešno prenešena")
+                flash(u"Slika uspešno prenešena.")
             else:
-                flash(u"NAPAKA: Neustrezna slika")
+                flash(u"NAPAKA: Neustrezna slika.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
