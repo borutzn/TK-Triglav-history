@@ -87,11 +87,11 @@ def edit_player():
             died = request.form['Died']
             comment = request.form['Comment']
             picture = request.form['Picture']
-            upload_file = request.files['upload']
-            if file and allowed_file(upload_file.filename):
-                picture = os.path.join("players", secure_filename(file.filename))
+            upload_picture = request.files['upload']
+            if upload_picture and allowed_file(upload_picture.filename):
+                picture = os.path.join("players", secure_filename(upload_picture.filename))
                 filename = os.path.join(files_dir, picture)
-                upload_file.save(os.path.join(filename))
+                upload_picture.save(os.path.join(filename))
             p = TennisPlayer(name=name, born=born, died=died, comment=comment, picture=picture)
             p.update()
 
@@ -398,13 +398,14 @@ def upload_picture():
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
             year=request.form["select_year"]
-            upload_file = request.files['upload']
-            if file and allowed_file(upload_file.filename):
-                picture = os.path.join(year, secure_filename(file.filename))
+            upload_picture = request.files['upload']
+            log_info("UPLOAD %s, %s." % (year, str(upload_picture)))
+            flash(u"Slika uspešno prenešena")
+            if upload_picture and allowed_file(upload_picture.filename):
+                picture = os.path.join(year, secure_filename(upload_picture.filename))
                 filename = os.path.join(files_dir, picture)
                 log_info("UPLOAD %s, %s." % (picture, filename))
-                upload_file.save(os.path.join(filename))
-            flash(u"Slika uspešno prenešena")
+                upload_picture.save(os.path.join(filename))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
