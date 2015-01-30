@@ -95,7 +95,7 @@ def edit_player():
             p = TennisPlayer(name=name, born=born, died=died, comment=comment, picture=picture)
             p.update()
 
-    return redirect(url_for("show_player"))
+    return redirect(request.args.get("next") or url_for("show_player"))
 
 
 @app.route("/comment", methods=['GET', 'POST'])
@@ -104,7 +104,8 @@ def edit_comment():
         try:
             ident = int(request.args.get('id'))
         except ValueError:
-            return redirect(url_for("tennis_main"))
+            flash(u"Napaka: comment - napačen identifikator")
+            return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
         log_info("Com: " + str(event))
@@ -117,7 +118,6 @@ def edit_comment():
                 comment += "; " + request.form["addcomment"]
             ev = TennisEvent(comment=comment)
             ev.update_comment(request.form["Id"])
-        # return redirect(url_for("tennis_main"))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -135,9 +135,7 @@ def add_event():
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
-            log_info("PUT: ")
             ev.put()
-        # return redirect(url_for("tennis_main"))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -149,7 +147,8 @@ def edit_event(update):
         try:
             ident = int(request.args.get('id'))
         except ValueError:
-            return redirect(url_for("tennis_main"))
+            flash(u"Napaka: edit_event - napačen identifikator")
+            return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
         # log_info( "RENDER " + str(event['LocalDate']) )
@@ -168,7 +167,6 @@ def edit_event(update):
                 ev.update(request.form["Id"])
             else:
                 ev.put()
-        # return redirect(url_for("tennis_main"))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -179,7 +177,8 @@ def delete():
         try:
             ident = int(request.args.get('id'))
         except ValueError:
-            return redirect(url_for("tennis_main"))
+            flash(u"Napaka: delete - napačen identifikator")
+            return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
         log_info("DELETE: " + str(event))
@@ -188,7 +187,6 @@ def delete():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             TennisEvent.delete(request.form["Id"])
-        # return redirect(url_for("tennis_main"))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -212,7 +210,7 @@ def correct():
             next_pg = request.args.get('next')
         except (ValueError, TypeError) as e:
             log_info("ERROR: %s" % str(e))
-            # return redirect(url_for("tennis_main"))
+            flash(u"Napaka: correct - napačen parameter")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         fnames = []
@@ -224,7 +222,7 @@ def correct():
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
         except ValueError:
             # No files in directory - nothing to select from
-            # return redirect(url_for("tennis_main"))
+            flash(u"Napaka: ni razpoložljivih datotek")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
@@ -236,7 +234,6 @@ def correct():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Shrani"[:5]):
             TennisEvent.update_att(request.form["ident"], request.form["att"], request.form["fname"])
-        # return redirect(request.form["next"])
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -269,7 +266,6 @@ def tennis_main():
     # log_info( "GET_EVENTS: %d %s" % (len(events), str(events)))
     if (len(events) == 0):
         flash(u"Noben dogodek ne ustreza.")
-        # return redirect(url_for("tennis_main"))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
     return render_template("main.html", events=events, production=Production,
@@ -356,7 +352,7 @@ def signup():
         session['user'] = None
         log_info("AUDIT: New user %s created." % user.username)
         flash(u"Kreiran in prijavljen nov uporabnik.")
-        return redirect(url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/logout")
@@ -366,7 +362,7 @@ def logout():
     logout_user()
     session.pop('user', None)
     flash(u"Odjava uspešna.")
-    return redirect(url_for("tennis_main"))
+    return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/editUser", methods=['GET', 'POST'])
@@ -377,7 +373,8 @@ def edit_user():
             try:
                 iden = int(request.args.get('id'))
             except ValueError:
-                return redirect(url_for("tennis_main"))
+                flash(u"Napaka: edit_user - napačen identifikator")
+                return redirect(request.args.get("next") or url_for("tennis_main"))
 
             user = User.get_by_id(iden)
             return render_template("editUser.html", user=user)
@@ -390,7 +387,7 @@ def edit_user():
             u = User(username=request.form["username"], utype=request.form["utype"],
                      active=request.form["active"], email=request.form["email"])
             u.update(request.form["ident"])
-        return redirect(url_for("edit_user"))
+        return redirect(request.args.get("next") or url_for("edit_user"))
 
 
 @app.route("/events.csv", methods=['GET'], endpoint="events.csv", defaults={'action': 'events', 'fmt': 'csv'})
