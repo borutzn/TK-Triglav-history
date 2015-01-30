@@ -21,7 +21,7 @@ import difflib
 
 from flask import render_template, request, redirect, url_for, session, flash, Response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 
 from TennisData import TennisEvent, TennisPlayer
@@ -87,11 +87,11 @@ def edit_player():
             died = request.form['Died']
             comment = request.form['Comment']
             picture = request.form['Picture']
-            upload_picture = request.files['upload']
-            if upload_picture and allowed_file(upload_picture.filename):
-                picture = os.path.join("players", secure_filename(upload_picture.filename))
+            upload_file = request.files['upload']
+            if upload_file and allowed_file(upload_file.filename):
+                picture = os.path.join("players", secure_filename(upload_file.filename))
                 filename = os.path.join(files_dir, picture)
-                upload_picture.save(os.path.join(filename))
+                upload_file.save(os.path.join(filename))
             p = TennisPlayer(name=name, born=born, died=died, comment=comment, picture=picture)
             p.update()
 
@@ -262,9 +262,9 @@ def tennis_main():
 
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     all_events_len = TennisEvent.count()
-    log_info( "GET_EVENTS: %d" % (len(events)))
+    log_info("GET_EVENTS: %d" % (len(events)))
     # log_info( "GET_EVENTS: %d %s" % (len(events), str(events)))
-    if (len(events) == 0):
+    if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
@@ -390,22 +390,24 @@ def edit_user():
         return redirect(request.args.get("next") or url_for("edit_user"))
 
 
-@app.route("/upload_picture", methods=['GET','POST'])
+@app.route("/upload_picture", methods=['GET', 'POST'])
 @login_required
 def upload_picture():
     if request.method == 'GET':
         return render_template("uploadPicture.html", years=TennisEvent.Years)
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            year=request.form["select_year"]
-            upload_picture = request.files['upload']
-            log_info("UPLOAD %s, %s, %s." % (year, upload_picture.filename, allowed_file(upload_picture.filename)))
-            if upload_picture and allowed_file(upload_picture.filename):
-                picture = os.path.join(year, secure_filename(upload_picture.filename))
+            year = request.form["select_year"]
+            upload_file = request.files['upload']
+            log_info("UPLOAD %s, %s, %s." % (year, upload_file.filename, allowed_file(upload_file.filename)))
+            if upload_file and allowed_file(upload_file.filename):
+                picture = os.path.join(year, secure_filename(upload_file.filename))
                 filename = os.path.join(files_dir, picture)
                 log_info("UPLOAD %s, %s." % (picture, filename))
-                upload_picture.save(os.path.join(filename))
+                upload_file.save(os.path.join(filename))
                 flash(u"Slika uspešno prenešena")
+            else:
+                flash(u"NAPAKA: Neustrezna slika")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
