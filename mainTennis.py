@@ -390,11 +390,22 @@ def edit_user():
         return redirect(request.args.get("next") or url_for("edit_user"))
 
 
-@app.route("/upload_picture", methods=['GET'])
+@app.route("/upload_picture", methods=['GET','POST'])
 @login_required
 def upload_picture():
     if request.method == 'GET':
         return render_template("uploadPicture.html", years=TennisEvent.Years)
+    elif request.method == 'POST':
+        if request.form["Status"] == "Shrani":
+            year=request.form["select_year"]
+            upload_file = request.files['upload']
+            if file and allowed_file(upload_file.filename):
+                picture = os.path.join(year, secure_filename(file.filename))
+                filename = os.path.join(files_dir, picture)
+                log_info("UPLOAD %s, %s." % (picture, filename))
+                upload_file.save(os.path.join(filename))
+            flash(u"Slika uspešno prenešena")
+        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/events.csv", methods=['GET'], endpoint="events.csv", defaults={'action': 'events', 'fmt': 'csv'})
