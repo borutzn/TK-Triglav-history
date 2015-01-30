@@ -392,7 +392,7 @@ def edit_user():
 
 @app.route("/upload_picture", methods=['GET'])
 @login_required
-def upload_picture(action, fmt):
+def upload_picture():
     if request.method == 'GET':
         return render_template("uploadPicture.html", years=TennisEvent.Years)
 
