@@ -100,7 +100,7 @@
             <td style=""> {{ event.Result }} </td>
             <td style=""> 
                 {% if event.Player != "" %}
-                    <a href="{{ url_for('show_player',next=request.url, n=event.Player) }}">{{ event.Player }}</a>
+                    <a href="{{ url_for('show_player',n=event.Player) }}">{{ event.Player }}</a>
                 {% endif %}
             </td>
             <td style="">
