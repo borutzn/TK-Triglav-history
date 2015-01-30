@@ -152,7 +152,7 @@ def edit_event(update):
 
         event = TennisEvent.get(ident)
         # log_info( "RENDER " + str(event['LocalDate']) )
-        return render_template("editEvent.html", event=event)
+        return render_template("editEvent.html", event=event, atts=["att1","att2"])
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":

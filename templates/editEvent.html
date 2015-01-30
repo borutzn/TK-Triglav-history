@@ -30,6 +30,13 @@
         </label></td></tr>
 		<tr><th>Dokument 1:</th> <td><label>
             <input style="width:10cm" type="text" name="att1" value="{{ event.Att1 }}">
+            {% if atts and current_user.utype >= 3 %}
+                <label><select name="select_att1">
+                    {% for att in atts %}
+                        <option value="{{ att }}">{{ att }}</option>
+                    {% endfor %}
+                </select></label>
+            {%  endif %}
         </label></td></tr>
 		<tr><th>Dokument 2:</th> <td><label>
             <input style="width:10cm" type="text" name="att2" value="{{ event.Att2 }}">
