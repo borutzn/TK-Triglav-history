@@ -55,16 +55,16 @@
             <td> {{ event.Result }} </td>
             <td>
                 {% if event.Att1 != "" %}
-                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.Att1}}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
+                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att1) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
                 {% endif %}
                 {% if event.Att2 != "" %}
-                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.Att2}}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
+                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att2) }}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
                 {% endif %}
                 {% if event.Att3 != "" %}
-                    <a href="s{{ url_for('static',filename='files/') }}{{year}}/{{event.Att3}}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
+                    <a href="s{{ url_for('static',filename='files/'+year+'/'+event.Att3) }}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
                 {% endif %}
                 {% if event.Att4 != "" %}
-                    <a href="{{ url_for('static',filename='files/') }}{{year}}/{{event.Att4}}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
+                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att4) }}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
                 {% endif %}
             </td>
             {% if current_user.is_authenticated() %}
