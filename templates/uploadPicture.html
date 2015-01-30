@@ -1,0 +1,20 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p><div class="page-title">Nalaganje nove slike na strežnik</div><br>
+    <form method="post" enctype="multipart/form-data">
+        leto: <label><select name="select_year">
+        {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}
+        </select></label>
+
+        <input name="upload" type="file"> </td></tr<input type="Submit" name="Status" id="button" value="Shrani">
+	    <input type="Submit" name="Status" id="button" value="Prekliči">
+    	<button type="Reset"               id="button" value="Reset">Obnovi</button>
+    </form>
+
+{% endblock %}	

@@ -390,6 +390,13 @@ def edit_user():
         return redirect(request.args.get("next") or url_for("edit_user"))
 
 
+@app.route("/upload_picture", methods=['GET'])
+@login_required
+def upload_picture(action, fmt):
+    if request.method == 'GET':
+        return render_template("uploadPicture.html", years=TennisEvent.Years)
+
+
 @app.route("/events.csv", methods=['GET'], endpoint="events.csv", defaults={'action': 'events', 'fmt': 'csv'})
 @app.route("/people.csv", methods=['GET'], endpoint="people.csv", defaults={'action': 'people', 'fmt': 'csv'})
 @app.route("/events.json", methods=['GET'], endpoint="events.json", defaults={'action': 'events', 'fmt': 'json'})
