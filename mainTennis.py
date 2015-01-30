@@ -153,8 +153,7 @@ def edit_event(update):
         event = TennisEvent.get(ident)
         atts_dir = os.path.join(files_dir, event["Date"][:4])
         log_info("ATTS: %s" % atts_dir)
-        atts = [f for f in os.listdir(atts_dir)]
-        # log_info( "RENDER " + str(event['LocalDate']) )
+        atts = [""] + [f for f in os.listdir(atts_dir)]
         return render_template("editEvent.html", event=event, atts=atts)
 
     elif request.method == 'POST':

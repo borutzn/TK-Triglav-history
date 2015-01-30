@@ -33,7 +33,9 @@
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="select_att1">
                     {% for att in atts %}
-                        <option value="{{ att }}">{{ att }}</option>
+                        <option value="{{ att }}"
+                            {% if att ==  event.att1 %} selected {%  endif %}
+                        >{{ att }}</option>
                     {% endfor %}
                 </select></label>
             {%  endif %}
