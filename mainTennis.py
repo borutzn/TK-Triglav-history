@@ -405,7 +405,7 @@ def upload_picture():
                     log_info("Audit: directory %s created." % (picture_dir))
                     os.makedirs(picture_dir)
                 picture = os.path.join(picture_dir, secure_filename(upload_file.filename))
-                log_info("UPLOAD %s, %s." % (picture))
+                log_info("UPLOAD %s." % (picture))
                 upload_file.save(picture)
                 flash(u"Slika uspešno prenešena.")
             else:
