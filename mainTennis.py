@@ -151,8 +151,11 @@ def edit_event(update):
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
+        atts_dir = os.path.join(files_dir, event["Date"][:4])
+        log_info("ATTS: %s" % atts_dir)
+        atts = [f for f in os.listdir(atts_dir)]
         # log_info( "RENDER " + str(event['LocalDate']) )
-        return render_template("editEvent.html", event=event, atts=["att1","att2"])
+        return render_template("editEvent.html", event=event, atts=atts)
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -402,11 +405,11 @@ def upload_picture():
             if upload_file and allowed_file(upload_file.filename):
                 picture_dir = os.path.join(files_dir, secure_filename(year))
                 if not os.path.exists(picture_dir):
-                    log_info("Audit: directory %s created." % (picture_dir))
+                    log_info("Audit: directory %s created." % picture_dir)
                     os.makedirs(picture_dir)
                 picture = os.path.join(picture_dir, secure_filename(upload_file.filename))
-                log_info("UPLOAD %s." % (picture))
                 upload_file.save(picture)
+                log_info("Audit: picture %s uploaded." % picture)
                 flash(u"Slika uspešno prenešena.")
             else:
                 flash(u"NAPAKA: Neustrezna slika.")
