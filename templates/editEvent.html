@@ -42,12 +42,39 @@
         </label></td></tr>
 		<tr><th>Dokument 2:</th> <td><label>
             <input style="width:10cm" type="text" name="att2" value="{{ event.Att2 }}">
+            {% if atts and current_user.utype >= 3 %}
+                <label><select name="select_att2">
+                    {% for att in atts %}
+                        <option value="{{ att }}"
+                            {% if att ==  event.Att2 %} selected {%  endif %}
+                        >{{ att }}</option>
+                    {% endfor %}
+                </select></label>
+            {%  endif %}
         </label></td></tr>
 		<tr><th>Dokument 3:</th> <td><label>
             <input style="width:10cm" type="text" name="att3" value="{{ event.Att3 }}">
+            {% if atts and current_user.utype >= 3 %}
+                <label><select name="select_att3">
+                    {% for att in atts %}
+                        <option value="{{ att }}"
+                            {% if att ==  event.Att3 %} selected {%  endif %}
+                        >{{ att }}</option>
+                    {% endfor %}
+                </select></label>
+            {%  endif %}
         </label></td></tr>
 		<tr><th>Dokument 4:</th> <td><label>
             <input style="width:10cm" type="text" name="att4" value="{{ event.Att4 }}">
+            {% if atts and current_user.utype >= 3 %}
+                <label><select name="select_att4">
+                    {% for att in atts %}
+                        <option value="{{ att }}"
+                            {% if att ==  event.Att4 %} selected {%  endif %}
+                        >{{ att }}</option>
+                    {% endfor %}
+                </select></label>
+            {%  endif %}
         </label></td></tr>
 		<tr><th>Vir:</th> <td><label>
             <input type="text" name="source" value="{{ event.Source }}">
