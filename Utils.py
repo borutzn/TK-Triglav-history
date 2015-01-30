@@ -59,6 +59,7 @@ def valid_email(email):
 
 
 def allowed_file(filename):
+    log_info("ALLOWED %s-%s." % (filename,filename.rsplit('.', 1)[1]))
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ATT_EXT
 
