@@ -399,13 +399,13 @@ def upload_picture():
         if request.form["Status"] == "Shrani":
             year=request.form["select_year"]
             upload_picture = request.files['upload']
-            log_info("UPLOAD %s, %s." % (year, str(upload_picture)))
-            flash(u"Slika uspešno prenešena")
+            log_info("UPLOAD %s, %s." % (year, str(upload_picture.filename)))
             if upload_picture and allowed_file(upload_picture.filename):
                 picture = os.path.join(year, secure_filename(upload_picture.filename))
                 filename = os.path.join(files_dir, picture)
                 log_info("UPLOAD %s, %s." % (picture, filename))
                 upload_picture.save(os.path.join(filename))
+                flash(u"Slika uspešno prenešena")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
