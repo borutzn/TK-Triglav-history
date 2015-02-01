@@ -113,13 +113,13 @@ class TennisEvent:
 
         log_info("AUDIT: New event put by %s" % (str(current_user.username)))
         cursor.execute("""INSERT INTO TennisEvents
-                       (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
+                       (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Source,Created,LastModified)
                         VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
-                        :Att4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
+                        :Att4, :Source, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
                        {"Date": TennisEvent.date2db(self.date), "Event": self.event, "Place": self.place,
                         "Category": self.category, "Result": self.result, "Player": self.player,
                         "Comment": self.comment, "Att1": self.att1, "Att2": self.att2, "Att3": self.att3,
-                        "Att4": self.att4})
+                        "Att4": self.att4, "Source": self.source})
         connection.commit()
         self.clear_data()
         return cursor.lastrowid
@@ -131,10 +131,10 @@ class TennisEvent:
         log_info("AUDIT: Event %s update by %s." % (iden, str(current_user.username)))
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Category=:Category,
                         Result=:Result, Player=:Player, Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3,
-                        Att4=:Att4, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                        Att4=:Att4, Source=:Source, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                        {'Id': iden, 'Date': TennisEvent.date2db(self.date), 'Event': self.event, 'Place': self.place,
-                        'Result': self.result, 'Player': self.player, 'Comment': self.comment,
-                        'Att1': self.att1, 'Att2': self.att2, 'Att3': self.att3, 'Att4': self.att4})
+                        'Result': self.result, 'Player': self.player, 'Comment': self.comment, 'Att1': self.att1,
+                        'Att2': self.att2, 'Att3': self.att3, 'Att4': self.att4, 'Source': self.source})
         connection.commit()
         self.clear_data()
                 
@@ -277,15 +277,17 @@ class TennisEvent:
 
     @classmethod
     def export(cls, typ):
-        export_rows = ['Date', 'Event', 'Category', 'Place', 'Player', 'Att1', 'Att2', 'Att3', 'Att4']
+        export_rows = ['Date', 'Event', 'Place', 'Category', 'Result', 'Player', 'Comment', 'Att1', 'Att2', 'Att3',
+                       'Att4', 'Source']
         if typ == 'J':
             return Response(json.dumps(cls.EventsCache), mimetype='application/json')
         elif typ == 'C':
             csv_out = UnicodeCsvWriter(delimiter=';', quotechar='"')
             out = csv_out.convert_row(export_rows)
             for ev in cls.EventsCache:
-                out += csv_out.convert_row([ev['Date'], ev['Event'], ev['Category'], ev['Place'], ev['Player'],
-                                            ev['Att1'], ev['Att2'], ev['Att3'], ev['Att4']])
+                out += csv_out.convert_row([ev['Date'], ev['Event'], ev['Place'], ev['Category'], ev['Result'],
+                                            ev['Player'], ev['Comment'], ev['Att1'], ev['Att2'], ev['Att3'],
+                                            ev['Att4'], ev['Source']])
             return Response(out, mimetype='text/csv')
 
 
