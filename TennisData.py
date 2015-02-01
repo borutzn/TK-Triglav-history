@@ -116,10 +116,9 @@ class TennisEvent:
                        (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Source,Created,LastModified)
                         VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
                         :Att4, :Source, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                       {"Date": TennisEvent.date2db(self.date), "Event": self.event, "Place": self.place,
-                        "Category": self.category, "Result": self.result, "Player": self.player,
-                        "Comment": self.comment, "Att1": self.att1, "Att2": self.att2, "Att3": self.att3,
-                        "Att4": self.att4, "Source": self.source})
+                       {"Date": TennisEvent.date2db(self.date), "Event":self.event, "Place":self.place,
+                        "Category":self.category, "Result":self.result, "Player":self.player, "Comment":self.comment,
+                        "Att1":self.att1, "Att2":self.att2, "Att3":self.att3, "Att4":self.att4, "Source":self.source})
         connection.commit()
         self.clear_data()
         return cursor.lastrowid
@@ -132,9 +131,9 @@ class TennisEvent:
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Category=:Category,
                         Result=:Result, Player=:Player, Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3,
                         Att4=:Att4, Source=:Source, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                       {'Id': iden, 'Date': TennisEvent.date2db(self.date), 'Event': self.event, 'Place': self.place,
-                        'Result': self.result, 'Player': self.player, 'Comment': self.comment, 'Att1': self.att1,
-                        'Att2': self.att2, 'Att3': self.att3, 'Att4': self.att4, 'Source': self.source})
+                       {'Id':iden, 'Date':TennisEvent.date2db(self.date), 'Event':self.event, 'Place':self.place,
+                        'Category':self.category, 'Result':self.result, 'Player':self.player, 'Comment':self.comment,
+                        'Att1':self.att1, 'Att2':self.att2, 'Att3':self.att3, 'Att4':self.att4, 'Source':self.source})
         connection.commit()
         self.clear_data()
                 
