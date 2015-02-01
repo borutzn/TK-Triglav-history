@@ -23,8 +23,9 @@ class User(UserMixin):
     commenter = 1
     author = 2
     editor = 3
-    admin = 4
-    
+    data admin = 4
+    app admin = 5
+
     def __init__(self, username, utype=reader, active=True, password=None, pw_hash=None, email=None, ident=None):
         self.ident = ident
         self.username = username

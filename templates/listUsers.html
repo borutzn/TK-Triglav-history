@@ -22,8 +22,10 @@
 					avtor
 				{% elif user.utype == 3 %}
 					urednik
-				{% else %}
+				{% elif user.utype == 4 %}
 					administrator
+				{% else %}
+					razvijalec
 				{% endif %}
 			</td>
 			<td>{% if user.active %} da {% else %} ne {% endif %}</td>

@@ -57,6 +57,8 @@
                     <a href="{{ url_for('upload_picture',next=request.url) }}"><img src="{{ url_for('static',filename='upload-32.png') }}" title="Naloži novo sliko"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
+                {% endif %}
+                {% if current_user.utype >= 5 %}
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
                 {% endif %}
