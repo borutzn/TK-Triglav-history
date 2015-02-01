@@ -17,14 +17,14 @@ DELETE FROM Users;
 
 class User(UserMixin):
     '''
-        utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 4-admin (+delete)
+        utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 4-admin (+delete), 5-developer
     '''
     reader = 0
     commenter = 1
     author = 2
     editor = 3
-    data admin = 4
-    app admin = 5
+    data_admin = 4
+    app_admin = 5
 
     def __init__(self, username, utype=reader, active=True, password=None, pw_hash=None, email=None, ident=None):
         self.ident = ident
