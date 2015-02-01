@@ -73,7 +73,7 @@ class UnicodeCsvWriter:
         self.encoder = codecs.getincrementalencoder(encoding)()
 
     def convert_row(self, row):
-        log_info("CONVERT ROW: "+unicode(row))
+        # log_info("CONVERT ROW: "+unicode(row))
         self.writer.writerow([s.encode("utf-8") if s else '' for s in row])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
