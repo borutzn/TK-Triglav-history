@@ -216,7 +216,7 @@ class TennisEvent:
                 p[p_name] += 1
             else:
                 p[p_name] = 1
-        log_info("AUDIT: Event cache reload #4.")
+        log_info("AUDIT: Event cache reload #4. ")
         cls.players = list()
         cls.top_players = list()
         for k, v in p.iteritems():
