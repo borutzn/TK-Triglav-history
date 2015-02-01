@@ -111,7 +111,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info( "AUDIT: New event put by %s" % (str(current_user.username)))
+        log_info("AUDIT: New event put by %s" % (str(current_user.username)))
         cursor.execute("""INSERT INTO TennisEvents
                        (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Created,LastModified)
                         VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
@@ -129,9 +129,9 @@ class TennisEvent:
         cursor = connection.cursor()
 
         log_info("AUDIT: Event %s update by %s." % (iden, str(current_user.username)))
-        cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Result=:Result, Player=:Player,
-                       Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3, Att4=:Att4, LastModified=CURRENT_TIMESTAMP
-                       WHERE Id=:Id""",
+        cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Category=:Category,
+                        Result=:Result, Player=:Player, Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3,
+                        Att4=:Att4, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                        {'Id': iden, 'Date': TennisEvent.date2db(self.date), 'Event': self.event, 'Place': self.place,
                         'Result': self.result, 'Player': self.player, 'Comment': self.comment,
                         'Att1': self.att1, 'Att2': self.att2, 'Att3': self.att3, 'Att4': self.att4})

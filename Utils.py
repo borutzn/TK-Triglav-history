@@ -40,7 +40,6 @@ def pre_request_logging():
 
 
 def log_info(s):
-    app.logger.info("LOG")
     app.logger.info(s)
 
 
