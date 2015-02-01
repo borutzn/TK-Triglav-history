@@ -7,7 +7,8 @@
     <p><div class="page-title">Popravljanje podatkov uporabnika</div><br>
     <form method="post">
         <table>
-		<tr><th>uporabnik</th> <th>{{ user.username }}<input type="hidden" name="username" value="{{ user.username }}"></th></tr>
+		<tr><th>uporabnik</th>
+            <th>{{ user.username }}<input type="hidden" name="username" value="{{ user.username }}"></th></tr>
 		<tr><th>pravice</th> <td><label>
             <select name="utype">
                 <option value="0" {% if user.utype==0 %}selected{% endif %}>bralec</option>

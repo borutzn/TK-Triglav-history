@@ -31,7 +31,8 @@
 			</td>
 			<td>{% if user.active %} da {% else %} ne {% endif %}</td>
 			<td>{{ user.email}}</td>
-            <td><a href="{{ url_for('edit_user',id=user.ident) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi uporabnika"></a>
+            <td><a href="{{ url_for('edit_user',id=user.ident) }}">
+                <img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi uporabnika"></a>
 			</tr>
 		{% endfor %}
 		</table> <br>
