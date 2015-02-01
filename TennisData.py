@@ -182,6 +182,7 @@ class TennisEvent:
         if cls.EventsCache is not None:
             return
             
+        log_info("AUDIT: Event cache reload #1.")
         connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
@@ -193,6 +194,7 @@ class TennisEvent:
             cls.EventsCache = [dict(row) for row in cursor]
             connection.commit()
 
+        log_info("AUDIT: Event cache reload #2.")
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
@@ -206,6 +208,7 @@ class TennisEvent:
                 cls.Years.append(year)
         cls.Years.sort()
 
+        log_info("AUDIT: Event cache reload #3.")
         p = dict()  # move collection to the upper for loop?
         for i in cls.EventsCache:
             p_name = i['Player']
@@ -213,6 +216,7 @@ class TennisEvent:
                 p[p_name] += 1
             else:
                 p[p_name] = 1
+        log_info("AUDIT: Event cache reload #4.")
         cls.players = list()
         cls.top_players = list()
         for k, v in p.iteritems():
