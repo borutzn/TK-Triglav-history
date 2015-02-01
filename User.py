@@ -3,8 +3,6 @@ import sqlite3
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from Utils import log_info
-
 
 DbName = "TennisHistory.db"
 
@@ -16,18 +14,18 @@ DELETE FROM Users;
 
 
 class User(UserMixin):
-    '''
+    """
         utype - user type: 0-reader, 1-(+comment), 2-author (+append), 3-editor (+edit), 4-admin (+delete), 5-developer
-    '''
+    """
     reader = 0
     commenter = 1
     author = 2
     editor = 3
-    data_admin = 4
-    app_admin = 5
+    admin = 4
+    developer = 5
 
     def __init__(self, username, utype=reader, active=True, password=None, pw_hash=None, email=None, ident=None):
-        self.ident = ident
+        self.iden = ident
         self.username = username
         self.utype = utype
         self.active = active
@@ -52,10 +50,10 @@ class User(UserMixin):
         return True
 
     def get_id(self):
-        return unicode(self.ident)
+        return unicode(self.iden)
 
     def get_utype(self):
-        return True  # self.utype)
+        return self.utype
 
     @classmethod
     def get_by_id(cls, ident):
@@ -104,19 +102,16 @@ class User(UserMixin):
                      VALUES (:username, :pw_hash, :utype, :active, :email)""",
                      {"username": self.username, "pw_hash": self.pw_hash, "utype": self.utype, "active": self.active,
                       "email": self.email})
-        self.id = curs.lastrowid
+        self.iden = curs.lastrowid
         conn.commit()                
 
     def update(self, iden):
         conn = sqlite3.connect(DbName)
         curs = conn.cursor()
 
-        log_info("before update")
         curs.execute("""UPDATE Users SET utype=:utype, active=:active, email=:email WHERE ident=:ident""",
                      {'utype': self.utype, 'active': self.active, 'email': self.email, 'ident': iden})
-        log_info("before commit")
-        conn.commit()                
-        log_info("after comit")
+        conn.commit()
 
 
 class Anonymous(AnonymousUserMixin):
