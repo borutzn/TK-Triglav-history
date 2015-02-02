@@ -296,6 +296,16 @@ class TennisEvent:
             response = make_response(out)
             response.headers["Content-Disposition"] = "attachment; filename=books.csv"
             return response
+"""
+si = StringIO.StringIO()
+cw = csv.writer(si)
+for row in csvList:
+    cw.writerow(row)
+output = make_response(si.getvalue())
+output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+output.headers["Content-type"] = "text/csv"
+return output
+"""
 """ http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
 r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
 if r.status_code == 200:
