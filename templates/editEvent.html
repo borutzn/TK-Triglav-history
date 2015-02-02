@@ -29,7 +29,6 @@
             <textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea>
         </label></td></tr>
 		<tr><th>Dokument 1:</th> <td><label>
-            <!-- <input style="width:10cm" type="text" name="select_att1" value="{{ event.Att1 }}"> -->
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att1">
                     {% for att in atts %}
@@ -39,6 +38,7 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
+            <input style="width:10cm" type="text" name="select_att1" value="{{ event.Att1 }}">
         </label></td></tr>
 		<tr><th>Dokument 2:</th> <td><label>
             <input style="width:10cm" type="text" name="att2" value="{{ event.Att2 }}">
