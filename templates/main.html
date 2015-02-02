@@ -43,14 +43,11 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('add_event',next=request.url) }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
                 {% endif %}
-                {% if current_user.utype >= 2 %}
+                {% if current_user.utype >= 4 %}
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('edit_user',next=request.url) }}"><img src="{{ url_for('static',filename='group-32.png') }}" title="Uredi uporabnike"></a>
                 {% endif %}
                 {% if current_user.utype >= 4 %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('upload_picture',next=request.url) }}"><img src="{{ url_for('static',filename='upload-32.png') }}" title="Naloži novo sliko"></a>
                 {% endif %}
@@ -58,9 +55,11 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('data_reload',next=request.url) }}"><img src="{{ url_for('static',filename='sync-32.png') }}" title="Ponovno naloži podatke"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
+                    <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
                 {% endif %}
             </form>
         </div>
