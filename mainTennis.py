@@ -158,8 +158,8 @@ def edit_event(update):
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            log_info("ATT1: %s - %s, %s." % (request.form["att1"]==request.form["select_att1"],
-                                             request.form["att1"], request.form["select_att1"]))
+            # log_info("ATT1: %s - %s, %s." % (request.form["att1"]==request.form["select_att1"],
+            #                                  request.form["att1"], request.form["select_att1"]))
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category"],
                              result=request.form["result"], player=request.form["player"],
