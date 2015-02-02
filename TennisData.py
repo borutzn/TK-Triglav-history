@@ -8,7 +8,7 @@ import json
 
 import sqlite3
 
-from flask import url_for, Response
+from flask import url_for, Response, make_response
 from flask_login import current_user
 
 from Utils import log_info, files_dir, UnicodeCsvWriter
@@ -192,7 +192,7 @@ class TennisEvent:
             cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, "
                            "Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, "
                            "Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
-            cursor.execute("SELECT * FROM TennisEvents ORDER by date")
+            cursor.execute("SELECT * FROM TennisEvents ORDER by Date, Event")
             cls.EventsCache = [dict(row) for row in cursor]
             connection.commit()
 
