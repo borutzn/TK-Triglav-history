@@ -5,6 +5,7 @@ import re
 import os
 import sys
 import json
+import zipfile
 
 import sqlite3
 
@@ -296,6 +297,27 @@ class TennisEvent:
             response = make_response(out)
             response.headers["Content-Disposition"] = "attachment; filename=books.csv"
             return response
+        elif typ == 'Z':
+            timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M%S')
+            zfname = 'TK-Triglav-History-' + str(timestamp) + '.zip'
+            zf = zipfile.ZipFile(files_dir + zfname, 'a')
+            # for f in download_list:
+            #   zf.write(downloaddir + f, f)
+            zf.close()
+            # TODO: remove zipped files, move zip to archive
+
+            response = make_response()
+            response.headers['Cache-Control'] = 'no-cache'
+            response.headers['Content-Type'] = 'application/zip'
+            response.headers['X-Accel-Redirect'] = '/files/' + zf.filename
+            return response
+""" http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
+r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
+if r.status_code == 200:
+    return Response(r.content,
+            mimetype='application/zip',
+            headers={'Content-Disposition':'attachment;filename=zones.zip'})
+"""
 """
 si = StringIO.StringIO()
 cw = csv.writer(si)
@@ -305,13 +327,6 @@ output = make_response(si.getvalue())
 output.headers["Content-Disposition"] = "attachment; filename=export.csv"
 output.headers["Content-type"] = "text/csv"
 return output
-"""
-""" http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
-r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
-if r.status_code == 200:
-    return Response(r.content,
-            mimetype='application/zip',
-            headers={'Content-Disposition':'attachment;filename=zones.zip'})
 """
 
 
