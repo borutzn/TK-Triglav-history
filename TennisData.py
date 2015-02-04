@@ -304,7 +304,7 @@ class TennisEvent:
             # for f in download_list:
             #   zf.write(downloaddir + f, f)
             zf.close()
-            # TODO:  remove zipped files, move zip to archive
+            # TODO: remove zipped files, move zip to archive
 
             response = make_response()
             response.headers['Cache-Control'] = 'no-cache'

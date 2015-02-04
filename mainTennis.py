@@ -417,6 +417,7 @@ def upload_picture():
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
+@app.route("/events.zip", methods=['GET'], endpoint="events.zip", defaults={'action': 'events', 'fmt': 'zip'})
 @app.route("/events.csv", methods=['GET'], endpoint="events.csv", defaults={'action': 'events', 'fmt': 'csv'})
 @app.route("/people.csv", methods=['GET'], endpoint="people.csv", defaults={'action': 'people', 'fmt': 'csv'})
 @app.route("/events.json", methods=['GET'], endpoint="events.json", defaults={'action': 'events', 'fmt': 'json'})
@@ -430,6 +431,8 @@ def export(action, fmt):
                 return TennisEvent.export('J')
             elif fmt == "csv":
                 return TennisEvent.export('C')
+            elif fmt == "zip":
+                return TennisEvent.export('Z')
         elif action == 'people':
             if fmt == "json":
                 return TennisPlayer.jsonify()
