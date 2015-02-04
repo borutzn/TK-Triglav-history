@@ -301,7 +301,7 @@ class TennisEvent:
             timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M')
             zfname = 'TK-Triglav-History-' + str(timestamp) + '.zip'
             zf = zipfile.ZipFile(os.path.join(files_dir, zfname), 'a')
-            zf.write(os.path.join(files_dir, "main.css"), "main.css")
+            zf.write(os.path.join(files_dir, "IMAG0031.JPG"), "IMAG0031.JPG")
             # for f in download_list:
             #   zf.write(downloaddir + f, f)
             zf.close()
