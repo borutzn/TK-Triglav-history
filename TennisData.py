@@ -298,9 +298,10 @@ class TennisEvent:
             response.headers["Content-Disposition"] = "attachment; filename=books.csv"
             return response
         elif typ == 'Z':
-            timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M%S')
+            timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M')
             zfname = 'TK-Triglav-History-' + str(timestamp) + '.zip'
-            zf = zipfile.ZipFile(files_dir + zfname, 'a')
+            zf = zipfile.ZipFile(os.join(files_dir, zfname), 'a')
+            zf.write(os.join(files_dir, "main.css"), "main.css")
             # for f in download_list:
             #   zf.write(downloaddir + f, f)
             zf.close()
