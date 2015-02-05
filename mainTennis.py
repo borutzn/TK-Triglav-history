@@ -295,7 +295,7 @@ def list_files():
             if year_dir.match(year):
                 for fname in fnames:
                     # log_info("FILE: " + str(fname))
-                    files.append(os.path.join(year, str(fname)))
+                    files.append(os.path.join(year[1:], str(fname)))
     except ValueError:  # No files in directory - nothing to select from
         pass
 
