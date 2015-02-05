@@ -289,7 +289,9 @@ def edit_file():
     dir_len = len(files_dir)
     try:
         for root, directory, files in os.walk(files_dir):
+            log_info("ROOT: " + str(root))
             year = root[dir_len:]
+            log_info("Y: " + str(year))
             for fname in files:
                 log_info("FILE: " + fname)
                 files.append({'year': year, 'name': fname})
