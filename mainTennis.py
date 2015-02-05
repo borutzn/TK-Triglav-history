@@ -293,7 +293,7 @@ def edit_file():
             year = root[dir_len:]
             log_info("Y: " + str(year))
             for fname in fnames:
-                log_info("FILE: " + str(fname))
+                # log_info("FILE: " + str(fname))
                 files.append({'year': year, 'name': str(fname)})
     except ValueError:  # No files in directory - nothing to select from
         pass
