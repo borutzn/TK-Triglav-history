@@ -288,8 +288,9 @@ def edit_file():
     files = []
     try:
         for root, directory, files in os.walk(files_dir):
-            log_info("DIR: " + str(root))
+            log_info("DIR: " + str(directory))
             for fname in files:
+                log_info("FILE: " + str(fname))
                 files.append({'year': str(directory), 'name': fname})
     except ValueError:  # No files in directory - nothing to select from
         pass
