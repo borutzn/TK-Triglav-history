@@ -263,6 +263,7 @@ class TennisEvent:
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 continue
             if (search == 2) and not re.search(event_filter, cls.EventsCache[pos]['Event']):
+                # ToDo: namesto re.search raje re.match
                 continue
             events.append(cls.EventsCache[pos])
         return events
