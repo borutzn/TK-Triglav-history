@@ -6,7 +6,7 @@ import csv, codecs, cStringIO
 import jinja2
 
 
-files_dir = os.path.join(os.path.dirname(__file__), 'static/files')
+files_dir = os.path.join(os.path.dirname(__file__), 'static', 'files')
 template_dir = os.path.join(os.path.dirname(__file__), 'template')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 

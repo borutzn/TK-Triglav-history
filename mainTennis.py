@@ -286,11 +286,20 @@ def edit_file():
     if request.method == 'POST':
         search = request.form['search']
     files = []
-    files.append({'year': '1998', 'name': 'test'})
-    files.append({'year': '1999', 'name': 'test2'})
+    try:
+        for root, directory, files in os.walk(files_dir):
+            print("DIR: " + str(root))
+            for fname in files:
+                files.append({'year': str(directory), 'name': fname})
+    except ValueError:  # No files in directory - nothing to select from
+        pass
+
+    #    files.append({'year': '1998', 'name': 'test'})
+    #    files.append({'year': '1999', 'name': 'test2'})
     return render_template("listFiles.html", files=files, search=search)
 
 
+# User functions
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.anonymous_user = Anonymous
