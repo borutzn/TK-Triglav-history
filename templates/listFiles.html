@@ -19,10 +19,10 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><div class="year">{{ event.Date[:4] }}</div>
+                <br><div class="year">{{ year }}</div>
                 {% set year = file.year %}
                 <table class="main-table">
-                    <tr><th style="width:100px;">ime daotteke</th><th></th>
+                    <tr><th style="width:300px;">ime datoteke</th><th></th>
             {% endif %}
              <tr>
              <td><a href="{{ url_for('edit_file', y=file.year, n=file.name) }}">{{ file.year }}/{{ file.name }}</a></td>
