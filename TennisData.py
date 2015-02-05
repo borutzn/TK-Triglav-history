@@ -257,7 +257,7 @@ class TennisEvent:
         search = 0  # 0-no search, 1-string, 2-regex
         if event_filter != "":
             search = 1 if event_filter.isalnum() else 2
-            log_info("SEARCH=" + str(search))
+            log_info("SEARCH= " + str(search))
         while (len(events) < page_len) and (pos < len(cls.EventsCache)-1):
             pos += 1
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
