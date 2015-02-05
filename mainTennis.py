@@ -298,8 +298,7 @@ def edit_file():
     except ValueError:  # No files in directory - nothing to select from
         pass
 
-    #    files.append({'year': '1998', 'name': 'test'})
-    #    files.append({'year': '1999', 'name': 'test2'})
+    files.sort()
     return render_template("listFiles.html", files=files, search=search)
 
 
