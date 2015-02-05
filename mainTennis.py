@@ -15,6 +15,7 @@ appname = "TK-Triglav-History"
 from config import Production, PAGELEN
 
 import os
+import re
 import string
 import logging
 import difflib
@@ -286,15 +287,18 @@ def edit_file():
     if request.method == 'POST':
         search = request.form['search']
     files = []
+    year_dir = re.compile(r"^/\d{4}$")
     dir_len = len(files_dir)
     try:
         for root, dirs, fnames in os.walk(files_dir):
             log_info("ROOT: " + str(root))
             year = root[dir_len:]
             log_info("Y: " + str(year))
-            for fname in fnames:
-                # log_info("FILE: " + str(fname))
-                files.append({'year': year, 'name': str(fname)})
+            if year_dir.match(year):
+                log_info("Year: " + str(year[1:]))
+                for fname in fnames:
+                    # log_info("FILE: " + str(fname))
+                    files.append({'year': year, 'name': str(fname)})
     except ValueError:  # No files in directory - nothing to select from
         pass
 
