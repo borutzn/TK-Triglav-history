@@ -298,7 +298,7 @@ def list_files():
             if year_pattern.match(year):
                 for fname in fnames:
                     filename = str(fname) # ToDo: kateri field fname = filename?
-                    if search_pattern and search_pattern.match(filename):
+                    if not search_pattern or search_pattern.match(filename):
                         # log_info("FILE: " + filename)
                         files.append(os.path.join(year[1:], filename))
     except ValueError:  # No files in directory - nothing to select from
