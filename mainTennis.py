@@ -279,7 +279,7 @@ def tennis_main():
                            start=pos, count=all_events_len)
 
 
-@app.route("/file", methods=['GET', 'POST'])
+@app.route("/files", methods=['GET', 'POST'])
 @login_required
 def edit_file():
     search = ""

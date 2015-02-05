@@ -17,7 +17,7 @@
             {% if (loop.index % 3 == 1) %}
                 <tr>
             {% endif %}
-            <td><a href="{{ url_for('edit_file',n=player) }}">{{ file.year/file.name }}</a></td>
+            <td><a href="{{ url_for('edit_file',n=player) }}">{{ file.year }}/{{ file.name }}</a></td>
             {% if (loop.index % 3 == 0) %}
                 </tr>
             {% endif %}
