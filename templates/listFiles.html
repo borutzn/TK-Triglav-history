@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <form method="post">
+        &nbsp;&nbsp;
+        <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Išči: <label>
+        <input type="text" name="search" value="{{ search }}">
+    </label>
+    </form><br> 
+
+    {% if files %}
+        <table>
+        {% for file in files %}
+            {% if (loop.index % 3 == 1) %}
+                <tr>
+            {% endif %}
+            <td><a href="{{ url_for('edit_file',n=player) }}">{{ file.year/file.name }}</a></td>
+            {% if (loop.index % 3 == 0) %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tr></table>
+    {% endif %}
+    
+
+{% endblock %}		

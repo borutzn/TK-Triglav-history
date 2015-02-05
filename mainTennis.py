@@ -278,6 +278,19 @@ def tennis_main():
                            nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
                            start=pos, count=all_events_len)
 
+
+@app.route("/file", methods=['GET', 'POST'])
+@login_required
+def edit_file():
+    search = ""
+    if request.method == 'POST':
+        search = request.form['search']
+    files = []
+    files.append({'year': '1998', 'name': 'test'})
+    files.append({'year': '1999', 'name': 'test2'})
+    return render_template("listFiles.html", files=files, search=search)
+
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.anonymous_user = Anonymous
