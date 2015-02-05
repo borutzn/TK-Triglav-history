@@ -5,6 +5,10 @@
     <form method="post">
         &nbsp;&nbsp;
         <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+        {% if current_user.utype >= 4 %}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ url_for('upload_picture',next=request.url) }}"><img src="{{ url_for('static',filename='upload-32.png') }}" title="Naloži novo sliko"></a>
+        {% endif %}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Išči: <label>
         <input type="text" name="search" value="{{ search }}">
@@ -19,17 +23,21 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><div class="year">{{ year }}</div>
                 {% set year = file.year %}
+                <br><div class="year">{{ year }}</div>
                 <table class="main-table">
                     <tr><th style="width:300px;">ime datoteke</th><th></th>
             {% endif %}
              <tr>
-             <td><a href="{{ url_for('edit_file', y=file.year, n=file.name) }}">{{ file.year }}/{{ file.name }}</a></td>
-             <td>cmds</td>
-            </tr>
+             <td><a href="{{ url_for('edit_file', y=file.year, n=file.name) }}">{{ file.name }}</a></td>
+             <td>
+            {% if current_user.utype >= 4 %}
+                <a href="{{ url_for('edit_file',next=request.url, y=file.year, n=file.name) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi datoteko"></a>
+                <a href="{{ url_for('delete_file',next=request.url, y=file.year, n=file.name) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši datoteko"></a>
+            {% endif %}
+             </td></tr>
         {% endfor %}
-        </tr></table>
+        </table>
     {% endif %}
     
 
