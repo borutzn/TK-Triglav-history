@@ -289,10 +289,10 @@ def edit_file():
     dir_len = len(files_dir)
     try:
         for root, directory, files in os.walk(files_dir):
-            log_info("ROOT: " + root[dir_len:])
+            year = root[dir_len:]
             for fname in files:
                 log_info("FILE: " + fname)
-                # files.append({'year': str(directory), 'name': fname})
+                files.append({'year': year, 'name': fname})
     except ValueError:  # No files in directory - nothing to select from
         pass
 
