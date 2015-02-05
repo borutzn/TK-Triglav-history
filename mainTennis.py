@@ -283,12 +283,13 @@ def tennis_main():
 @app.route("/files", methods=['GET', 'POST'])
 @login_required
 def list_files():
-    search = ""
+    search_pattern = None
     if request.method == 'POST':
         search = request.form['search']
+        if search != "":
+            search_pattern = re.compile(r"%s" % search)
     files = []
     year_pattern = re.compile(r"^/\d{4}$")
-    search_pattern = re.compile(search)
     dir_len = len(files_dir)
     try:
         for root, dirs, fnames in os.walk(files_dir):
@@ -296,7 +297,7 @@ def list_files():
             if year_pattern.match(year):
                 for fname in fnames:
                     filename = str(fname) # ToDo: kateri field fname = filename?
-                    if search and search_pattern.match(filename):
+                    if search_pattern and search_pattern.match(filename):
                         # log_info("FILE: " + filename)
                         files.append(os.path.join(year[1:], filename))
     except ValueError:  # No files in directory - nothing to select from
