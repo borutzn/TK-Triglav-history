@@ -282,7 +282,7 @@ def tennis_main():
 
 @app.route("/files", methods=['GET', 'POST'])
 @login_required
-def edit_file():
+def list_files():
     search = ""
     if request.method == 'POST':
         search = request.form['search']
@@ -291,14 +291,11 @@ def edit_file():
     dir_len = len(files_dir)
     try:
         for root, dirs, fnames in os.walk(files_dir):
-            log_info("ROOT: " + str(root))
             year = root[dir_len:]
-            log_info("Y: " + str(year))
             if year_dir.match(year):
-                log_info("Year: " + str(year[1:]))
                 for fname in fnames:
                     # log_info("FILE: " + str(fname))
-                    files.append({'year': year, 'name': str(fname)})
+                    files.append(os.path.join(year, fname))
     except ValueError:  # No files in directory - nothing to select from
         pass
 

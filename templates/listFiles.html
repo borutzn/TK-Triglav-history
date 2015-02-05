@@ -19,21 +19,21 @@
         {% set year = 0 %}
         <table>
         {% for file in files %}
-            {% if year != file.year %}
+            {% if year != file[:4] %}
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                {% set year = file.year %}
+                {% set year = file[:4] %}
                 <br><div class="year">{{ year }}</div>
                 <table class="main-table">
                     <tr><th style="width:300px;">ime datoteke</th><th></th>
             {% endif %}
              <tr>
-             <td><a href="{{ url_for('edit_file', y=file.year, n=file.name) }}">{{ file.name }}</a></td>
+             <td><a href="{{ url_for('edit_file', n=file) }}">{{ file }}</a></td>
              <td>
             {% if current_user.utype >= 4 %}
-                <a href="{{ url_for('edit_file',next=request.url, y=file.year, n=file.name) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi datoteko"></a>
-                <a href="{{ url_for('edit_file',next=request.url, y=file.year, n=file.name) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši datoteko"></a>
+                <a href="{{ url_for('list_files',next=request.url, n=file) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi datoteko"></a>
+                <a href="{{ url_for('list_files',next=request.url, n=file) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši datoteko"></a>
             {% endif %}
              </td></tr>
         {% endfor %}
