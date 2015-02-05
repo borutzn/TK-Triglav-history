@@ -12,15 +12,21 @@
     </form><br> 
 
     {% if files %}
+        {% set year = 0 %}
         <table>
         {% for file in files %}
-            {% if (loop.index % 3 == 1) %}
-                <tr>
+            {% if year != file.year %}
+                {% if year != 0 %}
+                    </table>
+                {% endif %}
+                {% set year = file.year %}
+                <table class="main-table">
+                    <tr><th style="width:100px;">ime daotteke</th><th></th>
             {% endif %}
-            <td><a href="{{ url_for('edit_file',n=player) }}">{{ file.year }}/{{ file.name }}</a></td>
-            {% if (loop.index % 3 == 0) %}
-                </tr>
-            {% endif %}
+             <tr>
+             <td><a href="{{ url_for('edit_file', y=file.year, n=file.name) }}">{{ file.year }}/{{ file.name }}</a></td>
+             <td>cmds</td>
+            </tr>
         {% endfor %}
         </tr></table>
     {% endif %}
