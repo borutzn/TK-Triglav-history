@@ -286,9 +286,9 @@ class TennisEvent:
             # log_info("ATT: "+ev['Att1']+":"+att)
             if (ev['Date'][:4] != att[:4]):
                 continue
-            log_info(ev['Date'][:4]+":"+att[:4])
-            log_info(att+"->"+ev['Att1'])
-            if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
+            # log_info(ev['Date'][:4]+":"+att[:4])
+            log_info(att[5:]+"->"+ev['Att1'])
+            if (ev['Att1'] == att[5:]) or (ev['Att2'] == att[5:]) or (ev['Att3'] == att[5:]) or (ev['Att4'] == att[5:]):
                 r.append("%s - %s" % (ev['LocalDate'], ev['Event']))
         return r
 
