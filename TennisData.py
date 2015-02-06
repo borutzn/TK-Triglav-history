@@ -171,6 +171,28 @@ class TennisEvent:
         # popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data()
                 
     @classmethod
+    def update_all_atts(cls, old_year, old_att, new_att):
+        for ev in cls.EventsCache:
+            # log_info("ATT: "+ev['Att1']+":"+att)
+            if (ev['Date'][:4] != old_year):
+                continue
+            # log_info(ev['Date'][:4]+":"+att[:4])
+            # log_info(str(att==ev['Att1'])+" - "+att+" -> Att1:"+ev['Att1'])
+            if ev['Att1'] == old_att:
+                log_info("CHANGE ATT1 id=%d, %s -> %s" % (ev['Id'], ev['Att1'], new_att))
+                # cls.update_att(ev['Id'], 1, new_att)
+            if ev['Att2'] == old_att:
+                log_info("CHANGE ATT2 id=%d, %s -> %s" % (ev['Id'], ev['Att2'], new_att))
+                # cls.update_att(ev['Id'], 2, new_att)
+            if ev['Att3'] == old_att:
+                log_info("CHANGE ATT3 id=%d, %s -> %s" % (ev['Id'], ev['Att3'], new_att))
+                # cls.update_att(ev['Id'], 3, new_att)
+            if ev['Att4'] == old_att:
+                log_info("CHANGE ATT4 id=%d, %s -> %s" % (ev['Id'], ev['Att4'], new_att))
+                # cls.update_att(ev['Id'], 4, new_att)
+        return
+
+    @classmethod
     def delete(cls, iden):
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
