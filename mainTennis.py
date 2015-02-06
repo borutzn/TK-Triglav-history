@@ -322,11 +322,7 @@ def list_files():
 @login_required
 def delete_file():
     if request.method == 'GET':
-        try:
-            fname = int(request.args.get('n'))
-        except ValueError:
-            flash(u"Napaka: delete_file - napačen identifikator.")
-            return redirect(request.args.get("next") or url_for("tennis_main"))
+        fname = request.args.get('n')
         log_info("DELETE: " + fname)
         return render_template("deleteFile.html", fname=fname)
     elif request.method == 'POST':
