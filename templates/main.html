@@ -50,6 +50,8 @@
                 {% if current_user.utype >= 4 %}
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('upload_picture',next=request.url) }}"><img src="{{ url_for('static',filename='upload-32.png') }}" title="Naloži novo sliko"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('list_files',next=request.url) }}"><img src="{{ url_for('static',filename='files-32.png') }}" title="Urejanje slik"></a>
                 {% endif %}
                 {% if current_user.utype >= 5 %}
                     &nbsp;&nbsp;&nbsp;&nbsp;
