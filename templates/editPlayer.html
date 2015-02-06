@@ -6,7 +6,7 @@
 
     <p><div class="page-title">Popravljanje podatkov igralca</div><br>
     <form method="post" enctype="multipart/form-data">
-        <table>
+        <table  id="player-table">
 		<tr><th>igralec</th> <th>{{ player.Name }}<input type="hidden" name="Name" value="{{ player.Name }}"></th></tr>
 		<tr><th>leto rojstva</th> <td><label>
             <input type="text" name="Born" value="{{ player.Born }}">
