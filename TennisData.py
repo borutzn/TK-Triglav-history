@@ -281,15 +281,14 @@ class TennisEvent:
     def get_events_with_att(cls, att):
         cls.fetch_data()
         r = list()
-        r.append("STaRT")
         for ev in cls.EventsCache:
-            log_info("ATT: "+ev['Att1']+":"+att)
+            # log_info("ATT: "+ev['Att1']+":"+att)
             if (ev['Date'][:4] != att[:4]):
                 continue
-            log_info(ev['Date'][:4]+":"+att[:4])
+            # log_info(ev['Date'][:4]+":"+att[:4])
             att = att[5:]
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
-                r.append("%s %s" % (ev['Date'], ev['Event']))
+                r.append("%s - %s" % (ev['LocalDate'], ev['Event']))
         return r
 
     @classmethod
