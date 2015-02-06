@@ -292,7 +292,7 @@ def list_files():
             try:  # ToDo: correct all try's like this
                 search_pattern = re.compile(r"%s" % search)
             except re.error as e:
-                log_info("Error: list_files/re.compile (%d): %s" % (e.errno, e.strerror))
+                log_info("Error: re.error in list_files/re.compile (%d): %s" % (e.errno, e.strerror))
                 flash("Napaka pri nizu za iskanje")
                 return redirect(request.args.get("next") or url_for("list_files"))
             except:
@@ -311,7 +311,7 @@ def list_files():
                     if not search_pattern or search_pattern.match(filename):
                         files.append(os.path.join(year[1:], filename))
     except ValueError as e:  # No files in directory - nothing to select from
-        log_info("Error: list_files/os.walk (%d): %s" % (e.errno, e.strerror))
+        log_info("Error: ValueError in list_files/os.walk")
         pass
 
     files.sort()
