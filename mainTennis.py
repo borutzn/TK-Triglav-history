@@ -307,9 +307,9 @@ def list_files():
             if year_pattern.match(year):
                 for fname in fnames:
                     filename = str(fname)  # ToDo: kateri field fname = filename?
-                    log_info( "FILE: %s, %s" % (type(fname), str(fname)))
-                    if not search_pattern or search_pattern.match(filename):
-                        files.append(os.path.join(year[1:], filename))
+                    log_info( "FILE: %s, %s" % (type(fname), fname))
+                    if not search_pattern or search_pattern.match(fname):
+                        files.append(os.path.join(year[1:], fname))
     except ValueError as e:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass
@@ -327,7 +327,7 @@ def delete_file():
         except ValueError:
             flash(u"Napaka: delete_file - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
-        log_info("DELETE: " + n)
+        log_info("DELETE: " + fname)
         return render_template("deleteFile.html", fname=fname)
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
