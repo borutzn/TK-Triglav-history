@@ -290,10 +290,10 @@ def list_files():
     if request.method == 'POST':
         search = request.form['search']
         if search != "":
-            try:  # ToDo: correct all try's like this
+            try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
                 search_pattern = re.compile(r"%s" % search)
             except re.error as e:
-                log_info("Error: re.error in list_files/re.compile (%d): %s" % (e.errno, e.strerror))
+                log_info("Error: re.error in list_files/re.compile")
                 flash("Napaka pri nizu za iskanje")
                 return redirect(request.args.get("next") or url_for("list_files"))
             except:
