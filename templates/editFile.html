@@ -8,7 +8,7 @@
     <form method="post">
         <table>
 		<tr><th>leto</th>
-            <td><td><label><select name="new_year">
+            <td><label><select name="new_year">
                 {% for y in years %}
                     <option value="{{ y }}"{% if y == year %} selected {%  endif %}>{{ y }}</option>
                 {% endfor %}

@@ -328,7 +328,7 @@ def edit_file():
             old_fname = os.path.join(secure_filename(request.form['old_year']), secure_filename(request.form['old_fname']))
             new_fname = os.path.join(secure_filename(request.form['new_year']), secure_filename(request.form['new_fname']))
             log_info("Audit: rename file %s -> %s" % (old_fname, new_fname))
-            # os.remove(os.path.join(files_dir, fname))
+            os.rename(os.path.join(files_dir, old_fname), os.path.join(files_dir, new_fname))
         return redirect(request.args.get("next") or url_for("tennis_main"))
         # ToDo: preveri vse forme in uporabo secure_filename
 
