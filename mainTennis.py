@@ -129,7 +129,7 @@ def add_event():
         return render_template("addEvent.html", event=[])
 
     elif request.method == 'POST':
-        logging.error("ADD: "+str(request.form))
+        log_info("ADD: "+str(request.form))
         if request.form["Status"] == "Shrani":
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category"],
