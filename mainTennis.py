@@ -153,7 +153,7 @@ def edit_event(update):
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
-        atts_dir = os.path.join(files_dir, event["Date"][:4])
+        atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
         atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
         atts.sort()
         return render_template("editEvent.html", event=event, atts=atts)
@@ -221,8 +221,9 @@ def correct():
 
         fnames = []
         try:
-            log_info(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir))
-            for f in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+fdir)):
+            log_info(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+secure_filename(fdir)))
+            # ToDo: correct to files_dir
+            for f in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+secure_filename(fdir))):
                 s = list(f)
                 f = "".join(s)
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
@@ -307,10 +308,10 @@ def list_files():
             if year_pattern.match(year):
                 for fname in fnames:
                     filename = str(fname)  # ToDo: kateri field fname = filename?
-                    log_info( "FILE: %s, %s" % (type(fname), fname))
+                    log_info("FILE: %s, %s" % (type(fname), fname))
                     if not search_pattern or search_pattern.match(fname):
-                        files.append(os.path.join(year[1:], fname))
-    except ValueError as e:  # No files in directory - nothing to select from
+                        files.append(os.path.join(year[1:], secure_filename(fname)))
+    except ValueError:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass
 
@@ -323,14 +324,14 @@ def list_files():
 def delete_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        log_info("DELETE: " + fname)
         return render_template("deleteFile.html", fname=fname)
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
-            os.remove(request.form['Id'])
-            pass
+            fname = secure_filename(request.form['Id'])
+            log_info("Audit: delete file %s" % fname)
+            os.remove(os.path.join(files_dir, fname))
         return redirect(request.args.get("next") or url_for("tennis_main"))
-
+        # ToDo: preveri vse forme in uporabo secure_filename
 
 # User functions
 login_manager = LoginManager()
