@@ -307,7 +307,7 @@ def list_files():
             if year_pattern.match(year):
                 for fname in fnames:
                     if not search_pattern or search_pattern.match(fname):
-                        files.append(os.path.join(year[1:], secure_filename(fname)))
+                        files.append(os.path.join(year[1:], fname))
     except ValueError:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass

@@ -5,7 +5,7 @@
 program by Borut Žnidar on 12.12.2014
 """
 
-from config import DB_NAME, ATT_EXT
+from config import DB_NAME, ATT_EXT, PIC_RESIZE
 
 import os
 import re
@@ -284,7 +284,7 @@ print("STEP 5: resizing oversized pictures")
 mogrify = raw_input("Mogrify the pictures (y/n)? ")
 if delete == "y":
     for ext in ATT_EXT:
-        cmd = "mogrify -resize 500 %s/*/*%s" % (files_dir, ext)
+        cmd = "mogrify -resize %d %s/*/*%s" % (PIC_RESIZE, files_dir, ext)
         print("  run: %s" % cmd)
         os.system(cmd)
 
