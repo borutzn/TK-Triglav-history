@@ -281,7 +281,9 @@ class TennisEvent:
     def get_events_with_att(cls, att):
         cls.fetch_data()
         r = list()
+        r.append("STaRT")
         for ev in cls.EventsCache:
+            log_info("ATT: "+ev['Att1']+":"+att)
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
                 r.append("%s %s" % (ev.Date, ev.Event))
         return r

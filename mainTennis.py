@@ -325,8 +325,10 @@ def edit_file():
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years, events=events)
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
-            old_fname = os.path.join(secure_filename(request.form['old_year']), secure_filename(request.form['old_fname']))
-            new_fname = os.path.join(secure_filename(request.form['new_year']), secure_filename(request.form['new_fname']))
+            old_fname = \
+                os.path.join(secure_filename(request.form['old_year']), secure_filename(request.form['old_fname']))
+            new_fname = \
+                os.path.join(secure_filename(request.form['new_year']), secure_filename(request.form['new_fname']))
             log_info("Audit: rename file %s to %s" % (old_fname, new_fname))
             os.rename(os.path.join(files_dir, old_fname), os.path.join(files_dir, new_fname))
         return redirect(request.args.get("next") or url_for("tennis_main"))
