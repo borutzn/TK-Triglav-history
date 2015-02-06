@@ -8,13 +8,13 @@
     <form method="post">
         <table  id="player-table">
 		<tr><th>leto</th>
-            <td><label><select name="new_year">
+            <td><label><select name="new_year" {% if events %}disabled{% endif %}>
                 {% for y in years %}
                     <option value="{{ y }}"{% if y == year %} selected {%  endif %}>{{ y }}</option>
                 {% endfor %}
             </select></label></td></tr>
 		<tr><th>datoteka</th>
-            <td><input style="width:250px" type="text" name="new_fname" value="{{ fname }}"></td></tr>
+            <td><label><input style="width:250px" type="text" name="new_fname" value="{{ fname }}"></label></td></tr>
         <tr><th>Dogodki</th>
             <td>
                 {% for event in events %}
@@ -25,6 +25,7 @@
 	<input type="hidden" name="old_year" value="{{ year }}">
 	<input type="hidden" name="old_fname" value="{{ fname }}">
 	<input type="Submit" name="Status" id="button" value="Popravi">
+	<input type="Submit" name="Status" id="button" value="Kopiraj">
 	<input type="Submit" name="Status" id="button" value="Prekliči">
 	<button type="Reset"               id="button" value="Reset">Obnovi</button>
     </form>

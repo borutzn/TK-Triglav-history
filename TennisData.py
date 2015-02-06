@@ -189,7 +189,7 @@ class TennisEvent:
                 # cls.update_att(ev['Id'], 3, new_att)
             if ev['Att4'] == old_att:
                 log_info("CHANGE ATT4 id=%d, %s -> %s" % (ev['Id'], ev['Att4'], new_att))
-                cls.update_att(ev['Id'], 4, new_att)
+                cls.update_att(ev['Id'], 4, new_att)  # ToDo: preveri delovanje!!
         return
 
     @classmethod

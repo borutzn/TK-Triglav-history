@@ -17,8 +17,8 @@ from config import Production, PAGELEN
 import os
 import re
 import sys
+import shutil
 import string
-import logging
 import difflib
 
 from flask import render_template, request, redirect, url_for, session, flash, Response
@@ -324,15 +324,18 @@ def edit_file():
         events = TennisEvent.get_events_with_att(fname)
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years, events=events)
     elif request.method == 'POST':
+        old_year, old_fname = request.form['old_year'], request.form['old_fname']
+        new_year, new_fname = secure_filename(request.form['new_year']), secure_filename(request.form['new_fname'])
+        old_att = os.path.join(files_dir, old_year, old_fname)
+        new_att = os.path.join(files_dir, new_year, new_fname)
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
-            old_year, old_fname = request.form['old_year'], request.form['old_fname']
-            new_year, new_fname = secure_filename(request.form['new_year']), secure_filename(request.form['new_fname'])
-            log_info("Audit: rename file %s to %s" % (old_fname, new_fname))
-            old_att = os.path.join(files_dir, old_year, old_fname)
-            new_att = os.path.join(files_dir, new_year, new_fname)
-            os.rename(old_att, new_att)
-            # ToDo: if old_year != new_year, all events will loose the attachment
+            log_info("Audit: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            os.rename(old_att, new_att) # ToDo: if old_year != new_year, all events will loose the attachment
             TennisEvent.update_all_atts(old_year, old_fname, new_fname)
+        elif request.form["Status"][:5] == unicode("Kopiraj"[:5]):
+            log_info("Audit: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            shutil.copyfile(old_att, new_att)
+
         return redirect(request.args.get("next") or url_for("tennis_main"))
         # ToDo: preveri vse forme in uporabo secure_filename
 
