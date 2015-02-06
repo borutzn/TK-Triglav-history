@@ -16,6 +16,7 @@ from config import Production, PAGELEN
 
 import os
 import re
+import sys
 import string
 import logging
 import difflib
@@ -288,7 +289,15 @@ def list_files():
     if request.method == 'POST':
         search = request.form['search']
         if search != "":
-            search_pattern = re.compile(r"%s" % search)
+            try:  # ToDo: correct all try's like this
+                search_pattern = re.compile(r"%s" % search)
+            except re.error as e:
+                log_info("Error: list_files/re.compile (%d): %s" % (e.errno, e.strerror))
+                flash("Napaka pri nizu za iskanje")
+                return redirect(request.args.get("next") or url_for("list_files"))
+            except:
+                log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
+                raise
     files = []
     year_pattern = re.compile(r"^/\d{4}$")
     dir_len = len(files_dir)
@@ -297,11 +306,12 @@ def list_files():
             year = root[dir_len:]
             if year_pattern.match(year):
                 for fname in fnames:
-                    filename = str(fname) # ToDo: kateri field fname = filename?
+                    filename = str(fname)  # ToDo: kateri field fname = filename?
+                    log_info( "FILE: %s, %s" % (type(fname), str(fname)))
                     if not search_pattern or search_pattern.match(filename):
-                        # log_info("FILE: " + filename)
                         files.append(os.path.join(year[1:], filename))
-    except ValueError:  # No files in directory - nothing to select from
+    except ValueError as e:  # No files in directory - nothing to select from
+        log_info("Error: list_files/os.walk (%d): %s" % (e.errno, e.strerror))
         pass
 
     files.sort()
