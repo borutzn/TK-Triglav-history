@@ -1,0 +1,26 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p><div class="page-title">Popravljanje datoteke</div><br>
+    <form method="post">
+        <table>
+		<tr><th>leto</th>
+            <td><td><label><select name="new_year">
+                {% for y in years %}
+                    <option value="{{ y }}"{% if y == year %} selected {%  endif %}>{{ y }}</option>
+                {% endfor %}
+            </select></label></td></tr>
+		<tr><th>datoteka</th>
+            <td><input style="width:250px" type="text" name="new_fname" value="{{ fname }}"></td></tr>
+	</table> <br>
+	<input type="hidden" name="old_year" value="{{ year }}">
+	<input type="hidden" name="old_fname" value="{{ fname }}">
+	<input type="Submit" name="Status" id="button" value="Popravi">
+	<input type="Submit" name="Status" id="button" value="Prekliči">
+	<button type="Reset"               id="button" value="Reset">Obnovi</button>
+    </form>
+
+{% endblock %}	

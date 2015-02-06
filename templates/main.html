@@ -32,7 +32,7 @@
                 &nbsp;&nbsp;leto: <label><select name="select_year">
                     {% for year in years %}
                         <option value="{{ year }}"
-                            {% if year ==  events[0].Date[:4] %} selected {%  endif %}
+                            {% if year == events[0].Date[:4] %} selected {%  endif %}
                         >{{ year }}</option>
                     {% endfor %}
                 </select></label>

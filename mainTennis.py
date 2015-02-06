@@ -292,7 +292,7 @@ def list_files():
         if search != "":
             try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
                 search_pattern = re.compile(r"%s" % search)
-            except re.error as e:
+            except re.error:
                 log_info("Error: re.error in list_files/re.compile")
                 flash("Napaka pri nizu za iskanje")
                 return redirect(request.args.get("next") or url_for("list_files"))
@@ -307,8 +307,6 @@ def list_files():
             year = root[dir_len:]
             if year_pattern.match(year):
                 for fname in fnames:
-                    filename = str(fname)  # ToDo: kateri field fname = filename?
-                    log_info("FILE: %s, %s" % (type(fname), fname))
                     if not search_pattern or search_pattern.match(fname):
                         files.append(os.path.join(year[1:], secure_filename(fname)))
     except ValueError:  # No files in directory - nothing to select from
@@ -317,6 +315,22 @@ def list_files():
 
     files.sort()
     return render_template("listFiles.html", files=files, search=search)
+
+
+@app.route("/editFile", methods=['GET', 'POST'])
+@login_required
+def edit_file():
+    if request.method == 'GET':
+        fname = request.args.get('n')
+        return render_template("deleteFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years)
+    elif request.method == 'POST':
+        if request.form["Status"][:5] == unicode("Popravi"[:5]):
+            old_fname = os.path.join(secure_filename(request.form['old_year']), secure_filename(request.form['old_fname']))
+            new_fname = os.path.join(secure_filename(request.form['new_year']), secure_filename(request.form['new_fname']))
+            log_info("Audit: rename file %s -> %s" % (old_fname, new_fname))
+            # os.remove(os.path.join(files_dir, fname))
+        return redirect(request.args.get("next") or url_for("tennis_main"))
+        # ToDo: preveri vse forme in uporabo secure_filename
 
 
 @app.route("/deleteFile", methods=['GET', 'POST'])
@@ -332,6 +346,7 @@ def delete_file():
             os.remove(os.path.join(files_dir, fname))
         return redirect(request.args.get("next") or url_for("tennis_main"))
         # ToDo: preveri vse forme in uporabo secure_filename
+
 
 # User functions
 login_manager = LoginManager()
