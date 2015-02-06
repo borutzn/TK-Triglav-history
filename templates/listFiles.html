@@ -5,15 +5,13 @@
     <form method="post">
         &nbsp;&nbsp;
         <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Išči: <label><input type="text" name="search" value="{{ search }}"></label>
         {% if current_user.utype >= 4 %}
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="{{ url_for('upload_picture',next=request.url) }}"><img src="{{ url_for('static',filename='upload-32.png') }}" title="Naloži novo sliko"></a>
         {% endif %}
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Išči: <label>
-        <input type="text" name="search" value="{{ search }}">
-    </label>
-    </form><br> 
+    </form><br>
 
     {% if files %}
         {% set year = 0 %}
