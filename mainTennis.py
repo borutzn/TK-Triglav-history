@@ -318,6 +318,24 @@ def list_files():
     return render_template("listFiles.html", files=files, search=search)
 
 
+@app.route("/deleteFile", methods=['GET', 'POST'])
+@login_required
+def delete_file():
+    if request.method == 'GET':
+        try:
+            fname = int(request.args.get('n'))
+        except ValueError:
+            flash(u"Napaka: delete_file - napačen identifikator.")
+            return redirect(request.args.get("next") or url_for("tennis_main"))
+        log_info("DELETE: " + n)
+        return render_template("deleteFile.html", fname=fname)
+    elif request.method == 'POST':
+        if request.form["Status"][:5] == unicode("Izbriši"[:5]):
+            # delete file "Id"
+            pass
+        return redirect(request.args.get("next") or url_for("tennis_main"))
+
+
 # User functions
 login_manager = LoginManager()
 login_manager.init_app(app)

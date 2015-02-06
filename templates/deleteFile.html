@@ -1,0 +1,17 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p><div class="page-title">Popravljanje datoteke</div><br>
+    <form method="post">
+        <table id="player-table">
+		<tr><th>Datoteka:</th> <td>{{ fname }}</td></tr>
+	</table> <br>
+	<input type="hidden" name="Id" value="{{ fname }}">
+	<input type="Submit" name="Status" id="button" value="Izbriši">
+	<input type="Submit" name="Status" id="button" value="Prekliči">
+</form>
+
+{% endblock %}	

@@ -4,24 +4,25 @@
 
 {% block content %}
 
-<form method="post">
+    <p><div class="page-title">Brisanje dogodka</div><br>
+    <form method="post">
         <table id="player-table">
-		<tr><th>Datum:</th> <td>{{ date }}</td></tr>
-		<tr><th>Dogodek:</th> <td>{{ event.Event }}</td></tr>
-		<tr><th>Kraj:</th> <td>{{ event.Place }}</td></tr>
-		<tr><th>Kategorija:</th> <td>{{ event.Category }}</td></tr>
-		<tr><th>Rezultat:</th> <td>{{ event.Result }}</td></tr>
-		<tr><th>Igralec:</th> <td>{{ event.Player }}</td></tr>
-                <tr><th>Komentar:</th> <td>{{ event.Comment }}</td></tr>
-		<tr><th>Dokument 1:</th> <td>{{ event.Att1 }}</td></tr>
-		<tr><th>Dokument 2:</th> <td>{{ event.Att2 }}</td></tr>
-		<tr><th>Dokument 3:</th> <td>{{ event.Att3 }}</td></tr>
-		<tr><th>Dokument 4:</th> <td>{{ event.Att4 }}</td></tr>
-		<tr><th>Vir:</th> <td>{{ event.Source }}</td></tr>
-	</table> <br>
-	<input type="hidden" name="Id" value="{{ event.Id }}">
-	<input type="Submit" name="Status" id="button" value="Izbriši">
-	<input type="Submit" name="Status" id="button" value="Prekliči">
-</form>
+    		<tr><th>Datum:</th> <td>{{ date }}</td></tr>
+	    	<tr><th>Dogodek:</th> <td>{{ event.Event }}</td></tr>
+		    <tr><th>Kraj:</th> <td>{{ event.Place }}</td></tr>
+    		<tr><th>Kategorija:</th> <td>{{ event.Category }}</td></tr>
+	    	<tr><th>Rezultat:</th> <td>{{ event.Result }}</td></tr>
+		    <tr><th>Igralec:</th> <td>{{ event.Player }}</td></tr>
+            <tr><th>Komentar:</th> <td>{{ event.Comment }}</td></tr>
+    		<tr><th>Dokument 1:</th> <td>{{ event.Att1 }}</td></tr>
+	    	<tr><th>Dokument 2:</th> <td>{{ event.Att2 }}</td></tr>
+		    <tr><th>Dokument 3:</th> <td>{{ event.Att3 }}</td></tr>
+    		<tr><th>Dokument 4:</th> <td>{{ event.Att4 }}</td></tr>
+	    	<tr><th>Vir:</th> <td>{{ event.Source }}</td></tr>
+	    </table> <br>
+	    <input type="hidden" name="Id" value="{{ event.Id }}">
+	    <input type="Submit" name="Status" id="button" value="Izbriši">
+	    <input type="Submit" name="Status" id="button" value="Prekliči">
+    </form>
 
 {% endblock %}	
