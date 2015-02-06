@@ -282,12 +282,13 @@ class TennisEvent:
         cls.fetch_data()
         r = list()
         log_info("SEARCH ATT "+att)
+        att_year = att[:4]
+        att = att[5:]
         for ev in cls.EventsCache:
             # log_info("ATT: "+ev['Att1']+":"+att)
-            if (ev['Date'][:4] != att[:4]):
+            if (ev['Date'][:4] != att_year):
                 continue
             # log_info(ev['Date'][:4]+":"+att[:4])
-            att = att[5:]
             log_info(str(att==ev['Att1'])+" - "+att+" -> Att1:"+ev['Att1'])
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
                 log_info("%s - %s" % (ev['LocalDate'], ev['Event']))
