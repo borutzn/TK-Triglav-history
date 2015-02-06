@@ -322,7 +322,7 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        return render_template("deleteFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years)
+        return render_template("editFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years)
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
             old_fname = os.path.join(secure_filename(request.form['old_year']), secure_filename(request.form['old_fname']))
