@@ -327,7 +327,7 @@ def delete_file():
         return render_template("deleteFile.html", fname=fname)
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
-            # delete file "Id"
+            os.remove(request.form['Id'])
             pass
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
