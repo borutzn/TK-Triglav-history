@@ -270,7 +270,6 @@ def tennis_main():
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     all_events_len = TennisEvent.count()
     log_info("GET_EVENTS: %d" % (len(events)))
-    # log_info( "GET_EVENTS: %d %s" % (len(events), str(events)))
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
@@ -322,7 +321,8 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        return render_template("editFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years)
+        events = TennisEvent.get_events_with_att(fname)
+        return render_template("editFile.html", year=fname[:4], fname=fname[5:], years=TennisEvent.Years, events=events)
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
             old_fname = os.path.join(secure_filename(request.form['old_year']), secure_filename(request.form['old_fname']))

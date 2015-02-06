@@ -278,6 +278,15 @@ class TennisEvent:
         return r
 
     @classmethod
+    def get_events_with_att(cls, att):
+        cls.fetch_data()
+        r = list()
+        for ev in cls.EventsCache:
+            if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
+                r.append("%s %s" % (ev.Date, ev.Event))
+        return r
+
+    @classmethod
     def count(cls):
         cls.fetch_data()
         return len(cls.EventsCache)
