@@ -284,6 +284,10 @@ class TennisEvent:
         r.append("STaRT")
         for ev in cls.EventsCache:
             log_info("ATT: "+ev['Att1']+":"+att)
+            if (ev['Date'][:4] != att[:4]):
+                continue
+            log_info(ev['Date'][:4]+":"+att[:4])
+            att = att[5:]
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
                 r.append("%s %s" % (ev.Date, ev.Event))
         return r
