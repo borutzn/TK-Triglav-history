@@ -222,8 +222,7 @@ def correct():
 
         fnames = []
         try:
-            log_info(os.path.join(files_dir, 'static', 'files', secure_filename(fdir)))
-            for f in os.listdir(os.path.join(files_dir, 'static', 'files', secure_filename(fdir))):
+            for f in os.listdir(os.path.join(files_dir, secure_filename(fdir))):
                 s = list(f)
                 f = "".join(s)
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
@@ -328,15 +327,10 @@ def edit_file():
     elif request.method == 'POST':
         log_info(str(request.form))
         old_year, old_fname = request.form['old_year'], request.form['old_fname']
-        log_info("1")
-        log_info("1"+str(request.form.get('new_year') or old_year))
         new_year = secure_filename(request.form.get('new_year') or old_year)
-        log_info("1a")
         new_fname = secure_filename(request.form['new_fname'])
-        log_info("2")
         old_att = os.path.join(files_dir, old_year, old_fname)
         new_att = os.path.join(files_dir, new_year, new_fname)
-        log_info("3")
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
             log_info("AUDIT: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             os.rename(old_att, new_att)  # ToDo: if old_year != new_year, all events will loose the attachment
