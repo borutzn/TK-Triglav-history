@@ -28,7 +28,7 @@
 		<tr><th>Komentar:</th> <td><label>
             <textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea>
         </label></td></tr>
-		<tr><th>Dokument 1:</th> <td><label>
+		<tr><th>Dokument 1:</th> <td>
             <!-- <input style="width:10cm" type="text" name="att1" value="{{ event.Att1 }}"> -->
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att1">
@@ -39,8 +39,8 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-        </label></td></tr>
-		<tr><th>Dokument 2:</th> <td><label>
+        {{ event.Att1 }}</td></tr>
+		<tr><th>Dokument 2:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att2">
                     {% for att in atts %}
@@ -50,8 +50,8 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-        </label></td></tr>
-		<tr><th>Dokument 3:</th> <td><label>
+        {{ event.Att2 }}</td></tr>
+		<tr><th>Dokument 3:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att3">
                     {% for att in atts %}
@@ -61,8 +61,8 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-        </label></td></tr>
-		<tr><th>Dokument 4:</th> <td><label>
+        {{ event.Att3 }}</td></tr>
+		<tr><th>Dokument 4:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att4">
                     {% for att in atts %}
@@ -72,7 +72,7 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-        </label></td></tr>
+        {{ event.Att4 }}</td></tr>
 		<tr><th>Vir:</th> <td><label>
             <input type="text" name="source" value="{{ event.Source }}">
         </label></td></tr>
