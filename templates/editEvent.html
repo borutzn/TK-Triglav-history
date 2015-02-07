@@ -40,7 +40,7 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-            {%  if show == 1 %}{{ event.Att1 }}{% endif %}
+            {%  if show == 0 %}{{ event.Att1 }}{% endif %}
         </td></tr>
 		<tr><th>Dokument 2:</th> <td>
             {% if atts and current_user.utype >= 3 %}
@@ -53,7 +53,7 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-            {%  if show == 1 %}{{ event.Att2 }}{% endif %}
+            {%  if show == 0 %}{{ event.Att2 }}{% endif %}
         </td></tr>
 		<tr><th>Dokument 3:</th> <td>
             {% if atts and current_user.utype >= 3 %}
@@ -66,7 +66,7 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-            {%  if show == 1 %}{{ event.Att3 }}{% endif %}
+            {%  if show == 0 %}{{ event.Att3 }}{% endif %}
         </td></tr>
 		<tr><th>Dokument 4:</th> <td>
             {% if atts and current_user.utype >= 3 %}
@@ -79,7 +79,7 @@
                     {% endfor %}
                 </select></label>
             {%  endif %}
-            {%  if show == 1 %}{{ event.Att4 }}{% endif %}
+            {%  if show == 0 %}{{ event.Att4 }}{% endif %}
         </td></tr>
 		<tr><th>Vir:</th> <td><label>
             <input type="text" name="source" value="{{ event.Source }}">
