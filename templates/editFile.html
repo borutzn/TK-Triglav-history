@@ -15,6 +15,9 @@
             </select></label></td></tr>
 		<tr><th>datoteka</th>
             <td><label><input style="width:250px" type="text" name="new_fname" value="{{ fname }}"></label></td></tr>
+        <tr><th>Velikost</th><td> </td></tr>
+        <tr><th>Zmanjšaj na (1024x1024)</th>
+            <td><label><input type="checkbox" value="1" name="remember"></label></td></tr>
         <tr><th>Dogodki</th>
             <td>
                 {% for event in events %}
@@ -29,5 +32,9 @@
 	<input type="Submit" name="Status" id="button" value="Prekliči">
 	<button type="Reset"               id="button" value="Reset">Obnovi</button>
     </form>
+
+    <div>
+        <img src="{{ url_for('static',filename=fname) }}">
+    </div>
 
 {% endblock %}	
