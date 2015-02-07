@@ -222,9 +222,8 @@ def correct():
 
         fnames = []
         try:
-            log_info(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+secure_filename(fdir)))
-            # ToDo: correct to files_dir
-            for f in os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/files/'+secure_filename(fdir))):
+            log_info(os.path.join(files_dir, 'static', 'files', secure_filename(fdir)))
+            for f in os.listdir(os.path.join(files_dir, 'static', 'files', secure_filename(fdir))):
                 s = list(f)
                 f = "".join(s)
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
@@ -322,7 +321,7 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        fsize = "%d MB" % math.trunc(os.path.getsize(fname)/1024/1024)
+        fsize = "%d MB" % math.trunc(os.path.getsize(os.path.join(files_dir,fname))/1024/1024)
         events = TennisEvent.get_events_with_att(fname)
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events)
@@ -355,7 +354,6 @@ def delete_file():
             log_info("Audit: delete file %s" % fname)
             os.remove(os.path.join(files_dir, fname))
         return redirect(request.args.get("next") or url_for("tennis_main"))
-        # ToDo: preveri vse forme in uporabo secure_filename
 
 
 # User functions
