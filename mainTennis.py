@@ -330,7 +330,8 @@ def edit_file():
         old_year, old_fname = request.form['old_year'], request.form['old_fname']
         log_info("1")
         log_info("1"+str(request.form.get('new_year') or old_year))
-        new_year = secure_filename(request.form['new_year'] or old_year)
+        new_year = secure_filename(request.form.get('new_year') or old_year)
+        log_info("1a")
         new_fname = secure_filename(request.form['new_fname'])
         log_info("2")
         old_att = os.path.join(files_dir, old_year, old_fname)
