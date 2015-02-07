@@ -5,9 +5,9 @@
 {% block content %}
 
     <p><div class="page-title">Popravljanje datoteke</div><br>
-    <form method="post">
+    <div style="float:left; width:20%;"><form method="post">
         <table  id="player-table">
-		<tr><th>leto</th>
+		<tr><th style="width:100px">leto</th>
             <td><label><select name="new_year" {% if events %}disabled{% endif %}>
                 {% for y in years %}
                     <option value="{{ y }}"{% if y == year %} selected {%  endif %}>{{ y }}</option>
@@ -31,9 +31,9 @@
 	<input type="Submit" name="Status" id="button" value="Kopiraj">
 	<input type="Submit" name="Status" id="button" value="Prekliči">
 	<button type="Reset"               id="button" value="Reset">Obnovi</button>
-    </form>
+    </form></div>
 
-    <div>
+    <div  style="float:left; width:80%;">>
         <img src="{{ url_for('static',filename='/files/'+year+'/'+fname) }}">
     </div>
 
