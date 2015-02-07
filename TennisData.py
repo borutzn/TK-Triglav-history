@@ -155,6 +155,7 @@ class TennisEvent:
         curs = conn.cursor()
 
         log_info("AUDIT: Event %s attachment update by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Update: %s, %s, %s." % (iden, att, fname))
         if att == "1":
             curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
