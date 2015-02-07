@@ -321,7 +321,7 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        fsize = "%d MB" % math.trunc(os.path.getsize(os.path.join(files_dir,fname))/1024/1024)
+        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir,fname))/1024)
         events = TennisEvent.get_events_with_att(fname)
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events)
