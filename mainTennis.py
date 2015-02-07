@@ -21,7 +21,6 @@ import math
 import shutil
 import string
 import difflib
-import PIL
 
 from flask import render_template, request, redirect, url_for, session, flash, Response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -323,9 +322,7 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        fsize = "%d" % math.trunc(os.path.getsize(fname)/1024/1024)
-        im = PIL.Image.open(fname)
-        fsize = "%s (%d,%d)" % (fsize, im.size[0], im.size[1])
+        fsize = "%d MB" % math.trunc(os.path.getsize(fname)/1024/1024)
         events = TennisEvent.get_events_with_att(fname)
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events)
