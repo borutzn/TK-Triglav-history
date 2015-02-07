@@ -326,16 +326,20 @@ def edit_file():
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events)
     elif request.method == 'POST':
+        log_info(str(request.form))
         old_year, old_fname = request.form['old_year'], request.form['old_fname']
+        log_info("1")
         new_year, new_fname = secure_filename(request.form['new_year']), secure_filename(request.form['new_fname'])
+        log_info("2")
         old_att = os.path.join(files_dir, old_year, old_fname)
         new_att = os.path.join(files_dir, new_year, new_fname)
+        log_info("3")
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
-            log_info("Audit: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            log_info("AUDIT: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             os.rename(old_att, new_att)  # ToDo: if old_year != new_year, all events will loose the attachment
             TennisEvent.update_all_atts(old_year, old_fname, new_fname)
         elif request.form["Status"][:5] == unicode("Kopiraj"[:5]):
-            log_info("Audit: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            log_info("AUDIT: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             shutil.copyfile(old_att, new_att)
 
         return redirect(request.args.get("next") or url_for("tennis_main"))
