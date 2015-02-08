@@ -158,7 +158,8 @@
             <table>
             {% for player in top_players %}
                 <tr>{% if player[0] != "" %}
-                    <td><a href="{{ url_for('show_player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
+                    <td><a href="{{ url_for('show_player') }}?n={{player[0]}}">{{ player[0] }}</a>
+                        <label style="font-size:10pt;">{{player[1]}}x</label></td>
                 {% endif %}</tr>
             {% endfor %}
             </table><br>
