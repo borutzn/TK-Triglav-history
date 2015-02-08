@@ -30,8 +30,8 @@
         </label></td></tr>
 		<tr><th>Dokument 1:</th> <td>
             {% if atts and current_user.utype >= 3 %}
+                {% set show = 0 %}
                 <label><select name="att1">
-                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
                             {% if att ==  event.Att1 %} selected {% set show = 1 %}{%  endif %}
