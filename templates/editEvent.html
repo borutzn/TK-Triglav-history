@@ -29,16 +29,15 @@
             <textarea rows="4" cols="60" name="comment">{{ event.Comment }}</textarea>
         </label></td></tr>
 		<tr><th>Dokument 1:</th> <td>
-            <!-- <input style="width:10cm" type="text" name="att1" value="{{ event.Att1 }}"> -->
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att1">
                     {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
                             {% if att ==  event.Att1 %} selected {% set show = 1 %}{%  endif %}
-                        >{{ att }}</option>
+                        >{{ att }} {{ show }}</option>
                     {% endfor %}
-                </select></label>
+                </select>{{ show }}</label>
                 {%  if show == 0 %}{{ event.Att1 }}{% endif %}
             {%  endif %}
         </td></tr>
