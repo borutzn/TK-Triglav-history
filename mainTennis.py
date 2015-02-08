@@ -12,7 +12,7 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, PAGELEN
+from config import Production, PAGELEN, PIC_RESIZE
 
 import os
 import re
@@ -320,24 +320,28 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir,fname))/1024)
+        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, fname))/1024)
         events = TennisEvent.get_events_with_att(fname)
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events)
     elif request.method == 'POST':
-        log_info(str(request.form))
         old_year, old_fname = request.form['old_year'], request.form['old_fname']
         new_year = secure_filename(request.form.get('new_year') or old_year)
         new_fname = secure_filename(request.form['new_fname'])
         old_att = os.path.join(files_dir, old_year, old_fname)
         new_att = os.path.join(files_dir, new_year, new_fname)
+
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
             log_info("AUDIT: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
-            os.rename(old_att, new_att)  # ToDo: if old_year != new_year, all events will loose the attachment
+            os.rename(old_att, new_att)
             TennisEvent.update_all_atts(old_year, old_fname, new_fname)
         elif request.form["Status"][:5] == unicode("Kopiraj"[:5]):
             log_info("AUDIT: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             shutil.copyfile(old_att, new_att)
+        if "1" in request.form.getlist('resize'):
+            cmd = "mogrify -resize %d %s" % (PIC_RESIZE, new_att)
+            log_info("Audit: %s" % cmd)
+            os.system(cmd)
 
         return redirect(request.args.get("next") or url_for("tennis_main"))
         # ToDo: preveri vse forme in uporabo secure_filename
