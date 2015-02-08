@@ -32,7 +32,7 @@
             <!-- <input style="width:10cm" type="text" name="att1" value="{{ event.Att1 }}"> -->
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att1">
-                    {% set show=0 %}
+                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
                             {% if att ==  event.Att1 %} selected {% set show = 1 %}{%  endif %}
@@ -58,7 +58,7 @@
 		<tr><th>Dokument 3:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att3">
-                    {% set show=0 %}
+                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
                             {% if att ==  event.Att3 %} selected {% set show = 1 %}{%  endif %}
@@ -71,7 +71,7 @@
 		<tr><th>Dokument 4:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att4">
-                    {% set show=0 %}
+                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
                             {% if att ==  event.Att4 %} selected {% set show = 1 %}{%  endif %}

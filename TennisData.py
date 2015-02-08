@@ -154,8 +154,9 @@ class TennisEvent:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
+        if type(att) != type(str):
+            att = str(att)
         log_info("AUDIT: Event %s attachment update by %s." % (iden, str(current_user.username)))
-        log_info("AUDIT: Update: %s, %s, %s." % (iden, att, fname))
         if att == "1":
             curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
@@ -175,20 +176,20 @@ class TennisEvent:
     def update_all_atts(cls, old_year, old_att, new_att):
         for ev in cls.EventsCache:
             # log_info("ATT: "+ev['Att1']+":"+att)
-            if (ev['Date'][:4] != old_year):
+            if ev['Date'][:4] != old_year:
                 continue
             if ev['Att1'] == old_att:
                 log_info("CHANGE ATT1 id=%d, %s -> %s" % (ev['Id'], ev['Att1'], new_att))
-                cls.update_att(ev['Id'], 1, new_att)
+                cls.update_att(ev['Id'], "1", new_att)
             if ev['Att2'] == old_att:
                 log_info("CHANGE ATT2 id=%d, %s -> %s" % (ev['Id'], ev['Att2'], new_att))
-                cls.update_att(ev['Id'], 2, new_att)
+                cls.update_att(ev['Id'], "2", new_att)
             if ev['Att3'] == old_att:
                 log_info("CHANGE ATT3 id=%d, %s -> %s" % (ev['Id'], ev['Att3'], new_att))
-                cls.update_att(ev['Id'], 3, new_att)
+                cls.update_att(ev['Id'], "3", new_att)
             if ev['Att4'] == old_att:
                 log_info("CHANGE ATT4 id=%d, %s -> %s" % (ev['Id'], ev['Att4'], new_att))
-                cls.update_att(ev['Id'], 4, new_att)
+                cls.update_att(ev['Id'], "4", new_att)
         return
 
     @classmethod
@@ -276,6 +277,12 @@ class TennisEvent:
         events = list()
         pos = start-1
         search = 0  # 0-no search, 1-string, 2-regex
+        try:
+            search_pattern = re.compile(r"%s" % event_filter)
+        except re.error:
+            search, search_pattern = 1, event_filter
+            log_info("Error: re.error in get_events_page/re.compile")
+
         if event_filter != "":
             search = 1 if event_filter.isalnum() else 2
             log_info("SEARCH=" + str(search))
@@ -283,8 +290,7 @@ class TennisEvent:
             pos += 1
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 continue
-            if (search == 2) and not re.search(event_filter, cls.EventsCache[pos]['Event']):
-                # ToDo: namesto re.search raje re.match
+            if (search == 2) and not re.match(search_pattern, cls.EventsCache[pos]['Event']):
                 continue
             events.append(cls.EventsCache[pos])
         return events
@@ -306,7 +312,7 @@ class TennisEvent:
         att_year = att[:4]
         att = att[5:]
         for ev in cls.EventsCache:
-            if (ev['Date'][:4] != att_year):
+            if ev['Date'][:4] != att_year:
                 continue
             # log_info(str(att==ev['Att1'])+" - "+att+" -> Att1:"+ev['Att1'])
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
