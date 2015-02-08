@@ -48,14 +48,14 @@
                     <a href="{{ url_for('edit_user',next=request.url) }}"><img src="{{ url_for('static',filename='group-32.png') }}" title="Uredi uporabnike"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('list_files',next=request.url) }}"><img src="{{ url_for('static',filename='files-32.png') }}" title="Urejanje slik"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('data_reload',next=request.url) }}"><img src="{{ url_for('static',filename='sync-32.png') }}" title="Ponovno naloži podatke"></a>
                 {% endif %}
                 {% if current_user.utype >= 5 %}
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('data_reload',next=request.url) }}"><img src="{{ url_for('static',filename='sync-32.png') }}" title="Ponovno naloži podatke"></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
                 {% endif %}
