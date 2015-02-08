@@ -247,10 +247,12 @@ def correct():
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     event_filter = ""
+    showStat = "0"
     if request.method == 'GET':
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
+            showStat = request.args.get('s')
         except ValueError:
             pos = 0
     elif request.method == 'POST':
@@ -277,7 +279,7 @@ def tennis_main():
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
                            nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
-                           start=pos, count=all_events_len)
+                           start=pos, count=all_events_len, showStat=showStat)
 
 
 @app.route("/files", methods=['GET', 'POST'])

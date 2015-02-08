@@ -151,21 +151,21 @@
     <div style="height:30px;"></div>
     </div>
 
-    <!--
-    <div style="float:right; background:#94BEFA; padding:15px;">
-    {% if players %}
-        <br>Najpogostejši igralci:<br style="line-height:30px;">
-        <table>
-        {% for player in top_players %}
-            <tr>
-            <td><a href="{{ url_for('show_player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
-            </tr>
-        {% endfor %}
-        </table><br>
-        <a href="{{ url_for('show_player') }}">vsi igralci</a><br>
-        <br>
-    {% endif %}
-    </div>
-    -->
+    {% if showStat == "1" %}
+        <div style="float:right; background:#94BEFA; padding:15px;">
+        {% if players %}
+            <br>Najpogostejši igralci:<br style="line-height:30px;">
+            <table>
+            {% for player in top_players %}
+                <tr>
+                <td><a href="{{ url_for('show_player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
+                </tr>
+            {% endfor %}
+            </table><br>
+            <a href="{{ url_for('show_player') }}">vsi igralci</a><br>
+            <br>
+        {% endif %}
+        </div>
+    {%  endif %}
 
 {% endblock %}		
