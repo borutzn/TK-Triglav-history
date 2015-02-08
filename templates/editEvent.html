@@ -34,10 +34,13 @@
                 <label><select name="att1">
                     {% for att in atts %}
                         <option value="{{ att }}"
-                            {% if att ==  event.Att1 %} selected {% set show = 1 %}{%  endif %}
+                            {% if att ==  event.Att1 %}
+                                selected
+                                {% set show = 1 %}
+                            {%  endif %}
                         >{{ att }} {{ show }}</option>
-                    {% endfor %}
-                </select>{{ show }}</label>
+                    {% endfor %}1:{{ show }}.
+                </select>2:{{ show }}.</label>
                 {%  if show == 0 %}{{ event.Att1 }}{% endif %}
             {%  endif %}
         </td></tr>
