@@ -30,57 +30,48 @@
         </label></td></tr>
 		<tr><th>Dokument 1:</th> <td>
             {% if atts and current_user.utype >= 3 %}
-                {% set show = 0 %}
                 <label><select name="att1">
                     {% for att in atts %}
-                        <option value="{{ att }}"
-                            {% if att ==  event.Att1 %}
-                                selected
-                                {% set show = 1 %}
-                            {%  endif %}
-                        >{{ att }} {{ show }}</option>
-                    {% endfor %}1:{{ show }}.
-                </select>2:{{ show }}.</label>
-                {%  if show == 0 %}{{ event.Att1 }}{% endif %}
+                        <option value="{{ att }}"{% if att ==  event.Att1 %} selected {%  endif %}>{{ att }} </option>
+                    {% endfor %}
+                </select></label>
+                {%  if event.Att1 not in atts %}{{ event.Att1 }}{% endif %}
             {%  endif %}
         </td></tr>
 		<tr><th>Dokument 2:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att2">
-                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
-                            {% if att ==  event.Att2 %} selected {% set show = 1 %}{%  endif %}
+                            {% if att ==  event.Att2 %} selected {%  endif %}
                         >{{ att }}</option>
                     {% endfor %}
                 </select></label>
-                {%  if show == 0 %}{{ event.Att2 }}{% endif %}
+                {%  if event.Att2 not in atts %}{{ event.Att2 }}{% endif %}
             {%  endif %}
         </td></tr>
 		<tr><th>Dokument 3:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att3">
-                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
-                            {% if att ==  event.Att3 %} selected {% set show = 1 %}{%  endif %}
+                            {% if att ==  event.Att3 %} selected {%  endif %}
                         >{{ att }}</option>
                     {% endfor %}
                 </select></label>
-                {%  if show == 0 %}{{ event.Att3 }}{% endif %}
+                {%  if event.Att3 not in atts %}{{ event.Att3 }}{% endif %}
             {%  endif %}
         </td></tr>
 		<tr><th>Dokument 4:</th> <td>
             {% if atts and current_user.utype >= 3 %}
                 <label><select name="att4">
-                    {% set show = 0 %}
                     {% for att in atts %}
                         <option value="{{ att }}"
-                            {% if att ==  event.Att4 %} selected {% set show = 1 %}{%  endif %}
+                            {% if att ==  event.Att4 %} selected {%  endif %}
                         >{{ att }}</option>
                     {% endfor %}
                 </select></label>
-                {%  if show == 0 %}{{ event.Att4 }}{% endif %}
+                {%  if event.Att4 not in atts %}{{ event.Att4 }}{% endif %}
             {%  endif %}
         </td></tr>
 		<tr><th>Vir:</th> <td><label>
