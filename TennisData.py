@@ -175,7 +175,6 @@ class TennisEvent:
     @classmethod
     def update_all_atts(cls, old_year, old_att, new_att):
         for ev in cls.EventsCache:
-            # log_info("ATT: "+ev['Att1']+":"+att)
             if ev['Date'][:4] != old_year:
                 continue
             if ev['Att1'] == old_att:
@@ -290,7 +289,7 @@ class TennisEvent:
             pos += 1
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 continue
-            if (search == 2) and not re.match(search_pattern, cls.EventsCache[pos]['Event']):
+            if (search == 2) and not search_pattern.match(cls.EventsCache[pos]['Event']):
                 continue
             events.append(cls.EventsCache[pos])
         return events
