@@ -157,7 +157,7 @@
             <br>Najpogostejši igralci:<br style="line-height:30px;">
             <table>
             {% for player in top_players %}
-                <tr>{% if player != "" %}
+                <tr>{% if player[0] != "" %}
                     <td><a href="{{ url_for('show_player') }}?n={{player[0]}}">{{ player[0] }}</a> ({{player[1]}}x)</td>
                 {% endif %}</tr>
             {% endfor %}
