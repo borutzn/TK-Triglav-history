@@ -276,15 +276,16 @@ class TennisEvent:
         events = list()
         pos = start-1
         search = 0  # 0-no search, 1-string, 2-regex
-        try:
-            search_pattern = re.compile(r"%s" % event_filter)
-        except re.error:
-            search, search_pattern = 1, event_filter
-            log_info("Error: re.error in get_events_page/re.compile")
 
         if event_filter != "":
             search = 1 if event_filter.isalnum() else 2
             log_info("SEARCH=" + str(search))
+        try:
+            search_pattern = re.compile(r"%s" % event_filter)
+        except re.error:
+            search, search_pattern = 1, event_filter
+            log_info("Error: re.error in get_events_page/re.compile - changed to string")
+
         while (len(events) < page_len) and (pos < len(cls.EventsCache)-1):
             pos += 1
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
