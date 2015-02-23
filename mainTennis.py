@@ -12,11 +12,12 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, PAGELEN, PIC_RESIZE
+from config import Production, PAGELEN, PIC_RESIZE, LOG_FILE
 
 import os
 import re
 import sys
+import glob
 import math
 import shutil
 import string
@@ -247,12 +248,12 @@ def correct():
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     event_filter = ""
-    showStat = "0"
+    show_stat = "0"
     if request.method == 'GET':
         try:
             p = request.args.get('p')
             pos = int(p) if p else 0
-            showStat = request.args.get('s')
+            show_stat = request.args.get('s')
         except ValueError:
             pos = 0
     elif request.method == 'POST':
@@ -279,7 +280,7 @@ def tennis_main():
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
                            nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
-                           start=pos, count=all_events_len, showStat=showStat)
+                           start=pos, count=all_events_len, showStat=show_stat)
 
 
 @app.route("/files", methods=['GET', 'POST'])
@@ -528,13 +529,14 @@ def export(action, fmt):
 @login_required
 def audit():
     out = ""
-    with open('/tmp/TK.log', 'r') as f:
-        for l in f:
-            if l[30:37] != "AUDIT: ":
-                continue
-            p = string.find(l, ' [', 37)
-            out += "%s %s\r\n" % (l[:16], l[37:p])
-    f.close()
+    for log_file in sorted(glob.glob(LOG_FILE)):
+        with open(log_file, 'r') as f:
+            for l in f:
+                if l[30:37] != "AUDIT: ":
+                    continue
+                p = string.find(l, ' [', 37)
+                out += "%s %s\r\n" % (l[:16], l[37:p])
+        f.close()
     return Response(out, mimetype='text/plain')
 
 
