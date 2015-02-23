@@ -529,7 +529,7 @@ def export(action, fmt):
 @login_required
 def audit():
     out = ""
-    for log_file in sorted(glob.glob(LOG_FILE+"*")):
+    for log_file in sorted(glob.glob(LOG_FILE+"*"), reverse=True):
         out += ("LOG_FILE: %s" % log_file)
         with open(log_file, 'r') as f:
             for l in f:
