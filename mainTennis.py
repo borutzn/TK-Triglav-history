@@ -530,7 +530,7 @@ def export(action, fmt):
 def audit():
     out = ""
     for log_file in sorted(glob.glob(LOG_FILE+"*"), reverse=True):
-        out += ("LOG_FILE: %s" % log_file)
+        out += ("\r\nLOG_FILE: %s\r\n" % log_file)
         with open(log_file, 'r') as f:
             for l in f:
                 if l[30:37] != "AUDIT: ":
