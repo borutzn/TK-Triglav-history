@@ -532,7 +532,7 @@ def audit():
     log_info("LOG_FILES %s" % LOG_FILE)
     log_info("LOG_FILES %s" % glob.glob(LOG_FILE))
     log_info("LOG_FILES %s" % sorted(glob.glob(LOG_FILE)))
-    for log_file in sorted(glob.glob(LOG_FILE)):
+    for log_file in sorted(glob.glob(LOG_FILE+"*")):
         log_info("LOG_FILE %s" % log_file)
         with open(log_file, 'r') as f:
             for l in f:
