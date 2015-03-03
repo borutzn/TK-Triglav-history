@@ -284,7 +284,7 @@ def tennis_main():
 @app.route("/files", methods=['GET', 'POST'])
 @login_required
 def list_files():
-    search = ""
+    search = " "
     search_pattern = None
     if request.method == 'POST':
         search = request.form['search']
