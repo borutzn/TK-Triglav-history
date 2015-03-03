@@ -488,12 +488,15 @@ def upload_picture():
         if request.form["Status"] == "Shrani":
             year = request.form["select_year"]
             upload_file = request.files['upload']
+            new_name = request.form['new_name']
             if upload_file and allowed_file(upload_file.filename):
                 picture_dir = os.path.join(files_dir, secure_filename(year))
                 if not os.path.exists(picture_dir):
                     log_info("Audit: directory %s created." % picture_dir)
                     os.makedirs(picture_dir)
-                picture = os.path.join(picture_dir, secure_filename(upload_file.filename))
+                new_name = secure_filename(upload_file.filename) if new_name == "" else secure_filename(new_name)
+                log_info("Saving file: %s" % new_name)
+                picture = os.path.join(picture_dir, new_name)
                 upload_file.save(picture)
                 log_info("Audit: picture %s uploaded." % picture)
                 flash(u"Slika uspešno prenešena.")
