@@ -12,7 +12,17 @@
         {% endfor %}
         </select></label>
 
-        <input name="upload" type="file"> <br><br><br>
+        <input type="file" name="upload"> <br><br>
+
+        Spremeni ime slike na strežniku: <br>
+        Obstoječe: <label><select name="old_name">
+            <option value="Ne spremeni" selected>Ne spremeni</option>
+            {% for att in atts %}
+                <option value="{{ att }}">{{ att }}</option>
+            {% endfor %}
+        </select></label>
+        Novo: <input type="text" name="new_name"> <br><br><br>
+
         <input type="Submit" name="Status" id="button" value="Shrani">
 	    <input type="Submit" name="Status" id="button" value="Prekliči">
     	<button type="Reset"               id="button" value="Reset">Obnovi</button>

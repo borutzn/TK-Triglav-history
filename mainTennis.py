@@ -170,7 +170,6 @@ def edit_event(update):
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"], source=request.form["source"])
-            log_info("UPDATE: " + str(update))
             if update:
                 ev.update(request.form["Id"])
             else:
@@ -271,7 +270,6 @@ def tennis_main():
 
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     all_events_len = TennisEvent.count()
-    log_info("GET_EVENTS: %d" % (len(events)))
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
