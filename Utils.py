@@ -77,8 +77,7 @@ ip_re = re.compile(r"Country: \((.*)\) \((.*)\)") # .*City: \((.*)\)")
 def ip_to_country(ip):
     if ip not in ip_cache:
         response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
-        log_info(response)
-        log_info(ip_re.search(response).groups())
+        # log_info(ip_re.search(response).groups())
         ip_cache[ip] = ip_re.search(response).group(1)
     return ip_cache[ip]
 
