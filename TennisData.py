@@ -12,7 +12,7 @@ import sqlite3
 from flask import url_for, Response, make_response, send_file
 from flask_login import current_user
 
-from Utils import log_info, files_dir, UnicodeCsvWriter
+from Utils import log_info, base_dir, files_dir, UnicodeCsvWriter
 
 
 class TennisEvent:
