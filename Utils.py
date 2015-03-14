@@ -70,14 +70,14 @@ def allowed_file(filename):
 
 
 ip_cache = {}
+ip_re = re.compile(r"Country \([\S]+\)")
 
 
 def ip_to_country(ip):
-    if ip in ip_cache:
-        return ip_cache[ip]
-    response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
-    ip_cache[ip] = response
-    return response
+    if ip not in ip_cache:
+        response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
+        ip_cache[ip] = ip_re.match(response)
+    return ip_cache[ip]
 
 
 class UnicodeCsvWriter:
