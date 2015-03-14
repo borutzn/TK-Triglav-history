@@ -344,7 +344,9 @@ class TennisEvent:
             zf.write(os.path.join(files_dir, "IMAG0031.JPG"), "IMAG0031.JPG")
             # for f in download_list:
             #   zf.write(downloaddir + f, f)
+            log_info(zf.filename)
             zf.close()
+            log_info(zf.filename)
             # TODO: remove zipped files, move zip to archive
 
             response = make_response()
