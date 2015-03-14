@@ -340,16 +340,19 @@ class TennisEvent:
         elif typ == 'Z':
             timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M')
             zfname = 'TK-Triglav-History-' + str(timestamp) + '.zip'
-            zf = zipfile.ZipFile(os.path.join(files_dir, zfname), 'a')
+            zf = zipfile.ZipFile(os.path.join(base_dir, zfname), 'a')
             zf.write(os.path.join(base_dir, "TennisHistory.db"), "TennisHistory.db")
             zf.write(os.path.join(files_dir, "IMAG0031.JPG"), "static/files/IMAG0031.JPG")
-            # for f in download_list:
-            #   zf.write(downloaddir + f, f)
+            try:
+                for root, dirs, fnames in os.walk(files_dir):
+                    for f in fnames:
+                        zf.write(os.path.join(base_dir, f), os.path.join(base_dir[len(files_dir):], f))
+            except ValueError:
+                pass
             zf.close()
             # TODO: remove zipped files, move zip to archive
 
-            return send_file(os.path.join('static', 'files', zfname),
-                             attachment_filename='events.zip', as_attachment=True)
+            return send_file(zfname, attachment_filename=zfname, as_attachment=True)
 
 
 class TennisPlayer:
