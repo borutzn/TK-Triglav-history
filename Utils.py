@@ -10,8 +10,9 @@ import urllib
 import jinja2
 
 
-files_dir = os.path.join(os.path.dirname(__file__), 'static', 'files')
-template_dir = os.path.join(os.path.dirname(__file__), 'template')
+base_dir = os.path.dirname(__file__)
+files_dir = os.path.join(base_dir, 'static', 'files')
+template_dir = os.path.join(base_dir, 'template')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 
