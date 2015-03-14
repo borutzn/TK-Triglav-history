@@ -1,7 +1,11 @@
 from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
 
-import re, os
-import csv, codecs, cStringIO
+import re
+import os
+import csv
+import codecs
+import cStringIO
+import urllib
 
 import jinja2
 
@@ -37,8 +41,8 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("AUDIT: %s (%s) requested %s" %
-                        (str(current_user.username), request.remote_addr, request.url[38:]))
+        app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
+                        ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
 
 
 def log_info(s):
@@ -63,6 +67,17 @@ def valid_email(email):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ATT_EXT
+
+
+ip_cache = {}
+
+
+def ip_to_country(ip):
+    if ip in ip_cache:
+        return ip_cache[ip]
+    response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
+    ip_cache[ip] = response
+    return response
 
 
 class UnicodeCsvWriter:
