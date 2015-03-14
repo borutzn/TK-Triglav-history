@@ -350,7 +350,7 @@ class TennisEvent:
             response = make_response()
             response.headers['Cache-Control'] = 'no-cache'
             response.headers['Content-Type'] = 'application/zip'
-            response.headers['X-Accel-Redirect'] = zf.filename
+            response.headers['X-Accel-Redirect'] = '/static/files/' + zfname
             log_info('/static/files/' + zf.filename)
             return response
 """ http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
