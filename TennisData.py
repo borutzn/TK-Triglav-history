@@ -338,7 +338,7 @@ class TennisEvent:
             response.headers["Content-Disposition"] = "attachment; filename=books.csv"
             return response
         elif typ == 'Z':
-            timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M')
+            timestamp = datetime.datetime.now().strftime('%d.%m.%Y')
             zfname = 'TK-Triglav-History-' + str(timestamp) + '.zip'
             zf = zipfile.ZipFile(os.path.join(base_dir, zfname), 'a')
             zf.write(os.path.join(base_dir, "TennisHistory.db"), "TennisHistory.db")
@@ -346,11 +346,11 @@ class TennisEvent:
             try:
                 for root, dirs, fnames in os.walk(files_dir):
                     for f in fnames:
-                        zf.write(os.path.join(base_dir, f), os.path.join(root[len(files_dir):], f))
+                        zf.write(os.path.join(root, f), os.path.join(root[len(files_dir):], f))
             except ValueError:
                 pass
             zf.close()
-            # TODO: remove zipped files, move zip to archive
+            # TODO: remove zipped files
 
             return send_file(zfname, attachment_filename=zfname, as_attachment=True)
 
