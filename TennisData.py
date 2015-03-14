@@ -344,15 +344,14 @@ class TennisEvent:
             zf.write(os.path.join(files_dir, "IMAG0031.JPG"), "IMAG0031.JPG")
             # for f in download_list:
             #   zf.write(downloaddir + f, f)
-            log_info(zf.filename)
             zf.close()
-            log_info(zf.filename)
             # TODO: remove zipped files, move zip to archive
 
             response = make_response()
             response.headers['Cache-Control'] = 'no-cache'
             response.headers['Content-Type'] = 'application/zip'
-            response.headers['X-Accel-Redirect'] = '/files/' + zf.filename
+            log_info(zf.filename)
+            response.headers['X-Accel-Redirect'] = '/static/files/' + zf.filename
             return response
 """ http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
 r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
