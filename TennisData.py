@@ -341,36 +341,15 @@ class TennisEvent:
             timestamp = datetime.datetime.now().strftime('%Y%m%d:%H%M')
             zfname = 'TK-Triglav-History-' + str(timestamp) + '.zip'
             zf = zipfile.ZipFile(os.path.join(files_dir, zfname), 'a')
+            zf.write(os.path.join(files_dir, "TennisHistory.db"), "TennisHistory.db")
             zf.write(os.path.join(files_dir, "IMAG0031.JPG"), "IMAG0031.JPG")
             # for f in download_list:
             #   zf.write(downloaddir + f, f)
             zf.close()
             # TODO: remove zipped files, move zip to archive
 
-            # response = make_response()
-            # response.headers['Cache-Control'] = 'no-cache'
-            # response.headers['Content-Type'] = 'application/zip'
-            # response.headers['X-Accel-Redirect'] = 'static/files/' + zfname
             return send_file(os.path.join('static', 'files', zfname),
                              attachment_filename='events.zip', as_attachment=True)
-            # return response
-""" http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
-r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
-if r.status_code == 200:
-    return Response(r.content,
-            mimetype='application/zip',
-            headers={'Content-Disposition':'attachment;filename=zones.zip'})
-"""
-"""
-si = StringIO.StringIO()
-cw = csv.writer(si)
-for row in csvList:
-    cw.writerow(row)
-output = make_response(si.getvalue())
-output.headers["Content-Disposition"] = "attachment; filename=export.csv"
-output.headers["Content-type"] = "text/csv"
-return output
-"""
 
 
 class TennisPlayer:
