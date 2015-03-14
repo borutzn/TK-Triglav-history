@@ -9,7 +9,7 @@ import zipfile
 
 import sqlite3
 
-from flask import url_for, Response, make_response
+from flask import url_for, Response, make_response, send_file
 from flask_login import current_user
 
 from Utils import log_info, files_dir, UnicodeCsvWriter
@@ -347,12 +347,12 @@ class TennisEvent:
             zf.close()
             # TODO: remove zipped files, move zip to archive
 
-            response = make_response()
-            response.headers['Cache-Control'] = 'no-cache'
-            response.headers['Content-Type'] = 'application/zip'
-            response.headers['X-Accel-Redirect'] = 'static/files/' + zfname
-            log_info('static/files/' + zfname)
-            return response
+            # response = make_response()
+            # response.headers['Cache-Control'] = 'no-cache'
+            # response.headers['Content-Type'] = 'application/zip'
+            # response.headers['X-Accel-Redirect'] = 'static/files/' + zfname
+            return send_file(zf, attachment_filename='events.zip', as_attachment=True)
+            # return response
 """ http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
 r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
 if r.status_code == 200:
