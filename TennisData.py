@@ -346,7 +346,7 @@ class TennisEvent:
             try:
                 for root, dirs, fnames in os.walk(files_dir):
                     for f in fnames:
-                        zf.write(os.path.join(base_dir, f), os.path.join(base_dir[len(files_dir):], f))
+                        zf.write(os.path.join(base_dir, f), os.path.join(root[len(files_dir):], f))
             except ValueError:
                 pass
             zf.close()
