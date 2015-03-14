@@ -351,7 +351,8 @@ class TennisEvent:
             # response.headers['Cache-Control'] = 'no-cache'
             # response.headers['Content-Type'] = 'application/zip'
             # response.headers['X-Accel-Redirect'] = 'static/files/' + zfname
-            return send_file(files_dir+zfname, attachment_filename='events.zip', as_attachment=True)
+            return send_file(os.path.join('static', 'files', zfname),
+                             attachment_filename='events.zip', as_attachment=True)
             # return response
 """ http://stackoverflow.com/questions/26513542/flask-how-to-send-a-dynamically-generate-zipfile-to-the-client
 r = requests.post('http://ogre.adc4gis.com/convertJson', data = data)
