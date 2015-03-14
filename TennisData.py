@@ -341,7 +341,7 @@ class TennisEvent:
             timestamp = datetime.datetime.now().strftime('%d.%m.%Y')
             zip_name = 'TK-Triglav-History-' + str(timestamp) + '.zip'
             # TODO: create new file
-            zip_file = zipfile.ZipFile(os.path.join(base_dir, zip_name), 'a')
+            zip_file = zipfile.ZipFile(os.path.join(base_dir, zip_name), 'w')
             zip_file.write(os.path.join(base_dir, "TennisHistory.db"), "TennisHistory.db")
             try:
                 for root, dirs, fnames in os.walk(files_dir):

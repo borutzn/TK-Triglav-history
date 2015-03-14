@@ -71,15 +71,15 @@ def allowed_file(filename):
 
 
 ip_cache = {}
-ip_re = re.compile(r"^Country: \(([\S]+)\).City: \([\S]+\).$")
+ip_re = re.compile(r"Country: \(([\S]+)\)")
 
 
 def ip_to_country(ip):
     if ip not in ip_cache:
         response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
         log_info(response)
-        log_info(ip_re.match(response))
-        ip_cache[ip] = ip_re.match(response)
+        log_info(ip_re.search(response))
+        ip_cache[ip] = ip_re.search(response)
     return ip_cache[ip]
 
 
