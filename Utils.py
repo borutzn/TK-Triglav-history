@@ -71,7 +71,7 @@ def allowed_file(filename):
 
 
 ip_cache = {}
-ip_re = re.compile(r"Country: \(.+\)")
+ip_re = re.compile(r"Country: \((.*)\)")
 
 
 def ip_to_country(ip):
