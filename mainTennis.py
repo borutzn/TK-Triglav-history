@@ -354,12 +354,12 @@ def edit_file():
 def upload_picture():
     if request.method == 'GET':
         years = [request.args.get('y')] or TennisEvent.Years
-        log_info("YEAR %s" % str(request.args.get('y')))
-        log_info("YEAR %s" % str(request.args))
         files = []
         if len(years) == 1:
             dir_files = os.path.join(files_dir, secure_filename(years[0]))
+            log_info("DIR %s" % dir_files)
             files = [""] + [f for f in os.listdir(dir_files) if allowed_file(f)]
+            log_info("FILES %s" % str(files))
             files.sort()
         return render_template("uploadFile.html", years=years, files=files)
     elif request.method == 'POST':
