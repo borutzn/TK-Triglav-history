@@ -265,7 +265,7 @@ def tennis_main():
             pos = 0
         else:
             pos = TennisEvent.get_year_pos(select_year)
-            return redirect(url_for("tennis_main") + "?p=" + pos)
+            return redirect(url_for("tennis_main") + "?p=" + str(pos))
 
     else:
         pos = 0
