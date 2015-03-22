@@ -353,13 +353,15 @@ def edit_file():
 @login_required
 def upload_picture():
     if request.method == 'GET':
-        log_info("0")
         years = [request.args.get('y')] or TennisEvent.Years
         files = []
         log_info("01")
         if len(years) == 1:
+            log_info("01a")
             dir_files = os.path.join(files_dir, secure_filename(years[0]))
+            log_info("01b")
             files = [f for f in os.listdir(dir_files) if allowed_file(f)]
+            log_info("01c")
             files.sort()
         log_info("02")
         return render_template("uploadFile.html", years=years, files=files)
