@@ -356,10 +356,12 @@ def upload_picture():
         log_info("0")
         years = [request.args.get('y')] or TennisEvent.Years
         files = []
+        log_info("01")
         if len(years) == 1:
             dir_files = os.path.join(files_dir, secure_filename(years[0]))
             files = [f for f in os.listdir(dir_files) if allowed_file(f)]
             files.sort()
+        log_info("02")
         return render_template("uploadFile.html", years=years, files=files)
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
@@ -369,15 +371,12 @@ def upload_picture():
             new_name = request.form['new_name']
             log_info("REQ %s" % str(request.form))
             if not upload_file:
-                log_info("1")
                 flash(u"NAPAKA: Napačno ime datoteke za prenos..")
                 return redirect(url_for("upload_picture"))
             elif not allowed_file(upload_file.filename):
-                log_info("2")
                 flash(u"NAPAKA: Neustrezna vrsta datoteke.")
                 return redirect(url_for("upload_picture"))
             elif select_name != "" and new_name != "":
-                log_info("3")
                 flash(u"NAPAKA: Nastavi le Obstoječe ime ALI Spremeni ime.")
                 return redirect(url_for("upload_picture"))
             else:
