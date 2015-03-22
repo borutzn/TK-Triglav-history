@@ -353,7 +353,7 @@ def edit_file():
 @login_required
 def upload_picture():
     if request.method == 'GET':
-        years = request.args.get('y') or TennisEvent.Years
+        years = [request.args.get('y')] or TennisEvent.Years
         log_info("YEAR %s" % str(request.args.get('y')))
         log_info("YEAR %s" % str(request.args))
         files = []
