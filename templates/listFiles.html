@@ -16,7 +16,7 @@
     {% if files %}
         {% set year = 0 %}
         <table class="main-table">
-        {% for (file, size) in files %}
+        {% for (file, fsize) in files %}
             {% if year != file[:4] %}
                 {% if year != 0 %}
                     </table>
@@ -33,6 +33,7 @@
             {% endif %}
              <tr>
              <td>{{ file[5:] }}</td>
+             <td>{{ fsize }}</td>
              <td>
             {% if current_user.utype >= 4 %}
                 <a href="{{ url_for('static',filename='/files/'+file) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
