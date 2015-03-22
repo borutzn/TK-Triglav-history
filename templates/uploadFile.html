@@ -15,16 +15,17 @@
         <input type="file" name="upload"> <br><br>
 
         {%  if years|length == 1 %}
-            Obstoječi viri: <label><select name="select_file">
+            Obstoječi viri: <label><select name="select_name">
             <option value="izberi" selected>izberi obstoječe ime vira</option>
             {% for f in files %}
                 <option value="{{ f }}">{{ f }}</option>
             {% endfor %}
-            </select></label>
+            </select></label><br>
         {%  endif %}
         Spremeni ime vira:
         <input type="text" name="new_name" placeholder="ne spremeni imena">
          <br><br><br>
+
         <input type="Submit" name="Status" id="button" value="Shrani">
 	    <input type="Submit" name="Status" id="button" value="Prekliči">
     	<button type="Reset"               id="button" value="Reset">Obnovi</button>

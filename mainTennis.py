@@ -357,17 +357,18 @@ def upload_picture():
         files = []
         if len(years) == 1:
             dir_files = os.path.join(files_dir, secure_filename(years[0]))
-            log_info("DIR %s" % dir_files)
-            files = [""] + [f for f in os.listdir(dir_files) if allowed_file(f)]
-            log_info("FILES %s" % str(files))
+            files = [f for f in os.listdir(dir_files) if allowed_file(f)]
             files.sort()
         return render_template("uploadFile.html", years=years, files=files)
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            year = request.form["select_year"]
-            upload_file = request.files['upload']
+            year = request.form['select_year']
+            upload_file = request.files.get('upload')
+            select_name = request.form.get('select_name')
             new_name = request.form['new_name']
+            log_info("REQ %s" % str(request.form))
             if upload_file and allowed_file(upload_file.filename):
+                log_info("UPLOAD %s, %s, %s" % (upload_file.filename, select_name, new_name))
                 picture_dir = os.path.join(files_dir, secure_filename(year))
                 if not os.path.exists(picture_dir):
                     log_info("Audit: directory %s created." % picture_dir)
