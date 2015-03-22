@@ -353,8 +353,9 @@ def edit_file():
 @login_required
 def upload_picture():
     if request.method == 'GET':
-        years = request.form.get('y') or TennisEvent.Years
-        log_info("YEAR %s" % request.form)
+        years = request.args.get('y') or TennisEvent.Years
+        log_info("YEAR %s" % str(request.args.get('y')))
+        log_info("YEAR %s" % str(request.args))
         files = []
         if len(years) == 1:
             dir_files = os.path.join(files_dir, secure_filename(years[0]))
