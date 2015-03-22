@@ -367,20 +367,32 @@ def upload_picture():
             select_name = request.form.get('select_name')
             new_name = request.form['new_name']
             log_info("REQ %s" % str(request.form))
-            if upload_file and allowed_file(upload_file.filename):
+            if not upload_file:
+                flash(u"NAPAKA: Napačno ime datoteke za prenos..")
+                return redirect(url_for("upload_picture"))
+            elif not allowed_file(upload_file.filename):
+                flash(u"NAPAKA: Neustrezna vrsta datoteke.")
+                return redirect(url_for("upload_picture"))
+            elif select_name != "" and new_name != "":
+                flash(u"NAPAKA: Nastavi le Obstoječe ime ALI Spremeni ime.")
+                return redirect(url_for("upload_picture"))
+            else:
                 log_info("UPLOAD %s, %s, %s" % (upload_file.filename, select_name, new_name))
                 picture_dir = os.path.join(files_dir, secure_filename(year))
                 if not os.path.exists(picture_dir):
                     log_info("Audit: directory %s created." % picture_dir)
                     os.makedirs(picture_dir)
-                new_name = secure_filename(upload_file.filename) if new_name == "" else secure_filename(new_name)
-                log_info("Saving file: %s" % new_name)
-                picture = os.path.join(picture_dir, new_name)
+                if select_name != "":
+                    save_name = secure_filename(select_name)
+                elif new_name != "":
+                    save_name = secure_filename(new_name)
+                else:
+                    save_name = secure_filename(upload_file.filename)
+                log_info("Saving file: %s" % save_name)
+                picture = os.path.join(picture_dir, save_name)
                 upload_file.save(picture)
                 log_info("Audit: picture %s uploaded." % picture)
                 flash(u"Datoteka uspešno prenešena.")
-            else:
-                flash(u"NAPAKA: Neustrezna slika.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
