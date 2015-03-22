@@ -16,7 +16,7 @@
     {% if files %}
         {% set year = 0 %}
         <table class="main-table">
-        {% for file in files %}
+        {% for (file, size) in files %}
             {% if year != file[:4] %}
                 {% if year != 0 %}
                     </table>

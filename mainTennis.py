@@ -307,8 +307,8 @@ def list_files():
             if year_pattern.match(year):
                 for fname in fnames:
                     if not search_pattern or search_pattern.match(fname):
-                        # fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, fname))/1024)
-                        files.append(os.path.join(year[1:], fname))
+                        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, fname))/1024)
+                        files.append((os.path.join(year[1:], fname), fsize))
     except ValueError:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass
