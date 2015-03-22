@@ -353,6 +353,7 @@ def edit_file():
 @login_required
 def upload_picture():
     if request.method == 'GET':
+        log_info("0")
         years = [request.args.get('y')] or TennisEvent.Years
         files = []
         if len(years) == 1:
@@ -368,12 +369,15 @@ def upload_picture():
             new_name = request.form['new_name']
             log_info("REQ %s" % str(request.form))
             if not upload_file:
+                log_info("1")
                 flash(u"NAPAKA: Napačno ime datoteke za prenos..")
                 return redirect(url_for("upload_picture"))
             elif not allowed_file(upload_file.filename):
+                log_info("2")
                 flash(u"NAPAKA: Neustrezna vrsta datoteke.")
                 return redirect(url_for("upload_picture"))
             elif select_name != "" and new_name != "":
+                log_info("3")
                 flash(u"NAPAKA: Nastavi le Obstoječe ime ALI Spremeni ime.")
                 return redirect(url_for("upload_picture"))
             else:
