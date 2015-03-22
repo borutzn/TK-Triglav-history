@@ -16,7 +16,7 @@
 
         Spremeni ime slike: <br>
         <input type="text" name="new_name" placeholder="ne spremeni">
-        {%  if len(years) == 1 %}
+        {%  if years|length == 1 %}
             ime vira: <label><select name="select_file">
             <option value="izberi" selected>izberi obstoječe ime</option>
             {% for f in files %}
