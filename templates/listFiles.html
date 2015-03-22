@@ -29,11 +29,11 @@
                 {% endif %}
                 </div>
                 <table class="main-table">
-                    <tr><th style="width:500px;">ime vira</th><th></th>
+                    <tr><th style="width:500px;">ime vira</th><th style="width:50px; text-align: right;">velikost</th><th></th>
             {% endif %}
              <tr>
              <td>{{ file[5:] }}</td>
-             <td>{{ fsize }}</td>
+             <td style="text-align: right;">{{ fsize }}</td>
              <td>
             {% if current_user.utype >= 4 %}
                 <a href="{{ url_for('static',filename='/files/'+file) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
