@@ -7,16 +7,24 @@
     <p><div class="page-title">Nalaganje nove slike na strežnik</div><br>
     <form method="post" enctype="multipart/form-data">
         leto: <label><select name="select_year">
-        {% for year in years %}
-            <option value="{{ year }}">{{ year }}</option>
+        {% for y in years %}
+            <option value="{{ y }}">{{ y }}</option>
         {% endfor %}
         </select></label>
 
         <input type="file" name="upload"> <br><br>
 
         Spremeni ime slike: <br>
-        <input type="text" name="new_name" placeholder="ne spremeni"> <br><br><br>
-
+        <input type="text" name="new_name" placeholder="ne spremeni">
+        {%  if len(years) == 1 %}
+            ime vira: <label><select name="select_file">
+            <option value="izberi" selected>izberi obstoječe ime</option>
+            {% for f in files %}
+                <option value="{{ y }}">{{ y }}</option>
+            {% endfor %}
+            </select></label>
+        {%  endif %}
+         <br><br><br>
         <input type="Submit" name="Status" id="button" value="Shrani">
 	    <input type="Submit" name="Status" id="button" value="Prekliči">
     	<button type="Reset"               id="button" value="Reset">Obnovi</button>

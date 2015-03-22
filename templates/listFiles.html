@@ -24,7 +24,7 @@
                 {% set year = file[:4] %}
                 <br><div class="year">{{ year }}
                 {% if current_user.utype >= 4 %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('upload_picture',next=request.url, y=year) }}"><img src="{{ url_for('static',filename='upload-24.png') }}" title="Naloži nov vir v izbranem letu"></a>
                 {% endif %}
                 </div>

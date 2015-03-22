@@ -349,6 +349,38 @@ def edit_file():
         # ToDo: preveri vse forme in uporabo secure_filename
 
 
+@app.route("/upload_file", methods=['GET', 'POST'])
+@login_required
+def upload_picture():
+    if request.method == 'GET':
+        years = request.form.get('year') or TennisEvent.Years
+        files = []
+        if len(years) == 1:
+            dir_files = os.path.join(files_dir, secure_filename(years[0]))
+            files = [""] + [f for f in os.listdir(dir_files) if allowed_file(f)]
+            files.sort()
+        return render_template("uploadFile.html", years=years, files=files)
+    elif request.method == 'POST':
+        if request.form["Status"] == "Shrani":
+            year = request.form["select_year"]
+            upload_file = request.files['upload']
+            new_name = request.form['new_name']
+            if upload_file and allowed_file(upload_file.filename):
+                picture_dir = os.path.join(files_dir, secure_filename(year))
+                if not os.path.exists(picture_dir):
+                    log_info("Audit: directory %s created." % picture_dir)
+                    os.makedirs(picture_dir)
+                new_name = secure_filename(upload_file.filename) if new_name == "" else secure_filename(new_name)
+                log_info("Saving file: %s" % new_name)
+                picture = os.path.join(picture_dir, new_name)
+                upload_file.save(picture)
+                log_info("Audit: picture %s uploaded." % picture)
+                flash(u"Datoteka uspešno prenešena.")
+            else:
+                flash(u"NAPAKA: Neustrezna slika.")
+        return redirect(request.args.get("next") or url_for("tennis_main"))
+
+
 @app.route("/deleteFile", methods=['GET', 'POST'])
 @login_required
 def delete_file():
@@ -478,32 +510,6 @@ def edit_user():
                      active=request.form["active"], email=request.form["email"])
             u.update(request.form["ident"])
         return redirect(request.args.get("next") or url_for("edit_user"))
-
-
-@app.route("/upload_picture", methods=['GET', 'POST'])
-@login_required
-def upload_picture():
-    if request.method == 'GET':
-        return render_template("uploadPicture.html", years=TennisEvent.Years)
-    elif request.method == 'POST':
-        if request.form["Status"] == "Shrani":
-            year = request.form["select_year"]
-            upload_file = request.files['upload']
-            new_name = request.form['new_name']
-            if upload_file and allowed_file(upload_file.filename):
-                picture_dir = os.path.join(files_dir, secure_filename(year))
-                if not os.path.exists(picture_dir):
-                    log_info("Audit: directory %s created." % picture_dir)
-                    os.makedirs(picture_dir)
-                new_name = secure_filename(upload_file.filename) if new_name == "" else secure_filename(new_name)
-                log_info("Saving file: %s" % new_name)
-                picture = os.path.join(picture_dir, new_name)
-                upload_file.save(picture)
-                log_info("Audit: picture %s uploaded." % picture)
-                flash(u"Slika uspešno prenešena.")
-            else:
-                flash(u"NAPAKA: Neustrezna slika.")
-        return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/events.zip", methods=['GET'], endpoint="events.zip", defaults={'action': 'events', 'fmt': 'zip'})
