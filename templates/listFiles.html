@@ -35,6 +35,7 @@
              <td>{{ file[5:] }}</td>
              <td>
             {% if current_user.utype >= 4 %}
+                <a href="{{ url_for('static',filename='/files/'+file) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
                 <a href="{{ url_for('edit_file',next=request.url, n=file) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi vir"></a>
                 <a href="{{ url_for('delete_file',next=request.url, n=file) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši vir"></a>
             {% endif %}
