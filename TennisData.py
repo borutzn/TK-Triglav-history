@@ -67,14 +67,16 @@ class TennisEvent:
         att = "".join(s)
         try:
             att_path = os.path.join(files_dir, year, att)
-            # ToDo att = secure_filename(att)
-            att_path_sec = os.path.join(files_dir, year, secure_filename(att))
-            if os.path.exists(att_path) or os.path.exists(att_path_sec):
-                if att_path != att_path_sec: # correction of all unsecured attachments
+            # att_path_sec = os.path.join(files_dir, year, secure_filename(att))
+            if os.path.exists(att_path):  # or os.path.exists(att_path_sec):
+                if att != secure_filename(att): # correction of all unsecured attachments
+                    update_all_atts(year, att, secure_filename(att))
+                    '''
                     log_info("ERR: Unsecured filename %s" % att_path)
                     if not os.path.exists(att_path_sec):
                         log_info("AUDIT: rename file %s/%s to %s" % (year, att, att_path_sec))
                         os.rename(att_path, att_path_sec)
+                    '''
                 return att
             else:
                 # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
