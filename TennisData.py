@@ -70,7 +70,7 @@ class TennisEvent:
             # att_path_sec = os.path.join(files_dir, year, secure_filename(att))
             if os.path.exists(att_path):  # or os.path.exists(att_path_sec):
                 if att != secure_filename(att): # correction of all unsecured attachments
-                    update_all_atts(year, att, secure_filename(att))
+                    TennisEvent.update_all_atts(year, att, secure_filename(att))
                     '''
                     log_info("ERR: Unsecured filename %s" % att_path)
                     if not os.path.exists(att_path_sec):
