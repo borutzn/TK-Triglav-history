@@ -11,6 +11,7 @@ import sqlite3
 
 from flask import url_for, Response, make_response, send_file
 from flask_login import current_user
+from werkzeug.utils import secure_filename
 
 from Utils import log_info, base_dir, files_dir, UnicodeCsvWriter
 
@@ -66,20 +67,23 @@ class TennisEvent:
         att = "".join(s)
         try:
             att_path = os.path.join(files_dir, year, att)
-            # att_path_sec = os.path.join(files_dir, year, secure_filename(att))
+            att_sec = secure_filename(att)
+            att_path_sec = os.path.join(files_dir, year, att_sec)
             if os.path.exists(att_path):  # or os.path.exists(att_path_sec):
                 '''
-                from werkzeug.utils import secure_filename
                 if att != secure_filename(att): # correction of all unsecured attachments
                     TennisEvent.update_all_atts(year, att, secure_filename(att))
-                    log_info("ERR: Unsecured filename %s" % att_path)
+                    log_info("ERROR: Unsecured filename %s" % att_path)
                     if not os.path.exists(att_path_sec):
                         log_info("AUDIT: rename file %s/%s to %s" % (year, att, att_path_sec))
                         os.rename(att_path, att_path_sec)
                 '''
-                return att
-            else:
-                # log_info( "Bad filename: " + unicode(os.path.join(files_dir,year+"/"+att)) )
+                return att_sec
+            elif os.path.exists(att_path_sec):
+                TennisEvent.update_all_atts(year, att, secure_filename(att))
+                return secure_filename(att)
+            else:  # or os.path.exists(att_path_sec):
+                log_info( "ERROR: Bad filename " + unicode(os.path.join(files_dir,year+"/"+att)) )
                 return "err_"+att
         except:
             log_info("ERROR: unknown error %s" % sys.exc_info()[0])
