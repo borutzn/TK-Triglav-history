@@ -71,8 +71,8 @@ class TennisEvent:
             att_path_sec = os.path.join(files_dir, year, att_sec)
             if os.path.exists(att_path):  # or os.path.exists(att_path_sec):
                 '''
-                if att != secure_filename(att): # correction of all unsecured attachments
-                    TennisEvent.update_all_atts(year, att, secure_filename(att))
+                if att != att_sec: # correction of all unsecured attachments
+                    TennisEvent.update_all_atts(year, att, att_sec)
                     log_info("ERROR: Unsecured filename %s" % att_path)
                     if not os.path.exists(att_path_sec):
                         log_info("AUDIT: rename file %s/%s to %s" % (year, att, att_path_sec))
@@ -80,8 +80,8 @@ class TennisEvent:
                 '''
                 return att_sec
             elif os.path.exists(att_path_sec):
-                TennisEvent.update_all_atts(year, att, secure_filename(att))
-                return secure_filename(att)
+                TennisEvent.update_all_atts(year, att, att_sec)
+                return att_sec
             else:  # or os.path.exists(att_path_sec):
                 log_info( "ERROR: Bad filename " + unicode(os.path.join(files_dir,year+"/"+att)) )
                 return "err_"+att
