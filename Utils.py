@@ -44,7 +44,7 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("COOKIE: %s" % str(request.cookies[0].key))  # https://www.kirsle.net/wizards/flask-session.py
+        app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("SESSION: %s" % str(session))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
                         ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
