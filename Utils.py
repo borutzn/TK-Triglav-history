@@ -92,10 +92,12 @@ ip_cache = {}
 def ip_to_country(ip):
     if ip not in ip_cache:
         response = urllib.urlopen("http://freegeoip.net/json/%s" % ip).read()
+        result = json.loads(response.decode('utf8'))
+
         # response = requests.get("http://freegeoip.net/json/%s" % ip)
         log_info("CHECK: response1=%s" % response)
-        log_info("CHECK: response2=%s" % type(response))
-        ip_cache[ip] = "SI"
+        log_info("CHECK: response2=%s" % result.get('country_name', 'Neznana država'))
+        ip_cache[ip] = result.get('country_name', 'Neznana država')
 
         # response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
         # log_info(ip_re.search(response).groups())
