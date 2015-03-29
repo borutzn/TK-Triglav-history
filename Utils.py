@@ -18,7 +18,7 @@ template_dir = os.path.join(base_dir, 'template')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 
 
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_login import current_user
 app = Flask(__name__)
 app.secret_key = os.urandom(30)
@@ -45,6 +45,7 @@ if not app.debug:
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
         app.logger.info("COOKIE: %s" % str(request.cookies[0].key))  # https://www.kirsle.net/wizards/flask-session.py
+        app.logger.info("SESSION: %s" % str(session))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
                         ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
 

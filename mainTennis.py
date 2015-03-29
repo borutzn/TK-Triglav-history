@@ -342,10 +342,6 @@ def edit_file():
         elif request.form["Status"][:5] == unicode("Kopiraj"[:5]):
             log_info("AUDIT: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             shutil.copyfile(old_att, new_att)
-        if "1" in request.form.getlist('resize'):
-            cmd = "mogrify -resize %d %s" % (PIC_RESIZE, new_att)
-            log_info("Audit: %s" % cmd)
-            os.system(cmd)
 
         return redirect(request.args.get("next") or url_for("tennis_main"))
         # ToDo: preveri vse forme in uporabo secure_filename
