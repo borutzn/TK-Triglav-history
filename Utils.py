@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
 
 import re
@@ -42,9 +44,20 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
+        app.logger.info("COOKIE: %s" % str(request.cookies[0].key))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
                         ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
+
+
+'''
+Parameters:
+key – the key (name) of the cookie to be set.
+value – the value of the cookie.
+max_age – should be a number of seconds, or None (default) if the cookie should last only as long as the client’s browser session.
+expires – should be a datetime object or UNIX timestamp.
+domain – if you want to set a cross-domain cookie. For example, domain=".example.com" will set a cookie that is readable by the domain www.example.com, foo.example.com etc. Otherwise, a cookie will only be readable by the domain that set it.
+path – limits the cookie to a given path, per default it will span the whole domain.
+'''
 
 
 def log_info(s):
@@ -77,10 +90,14 @@ ip_re = re.compile(r"Country: \((.*)\) \((.*)\)")  # .*City: \((.*)\)")
 
 def ip_to_country(ip):
     if ip not in ip_cache:
+        response = urllib.urlopen("http://freegeoip.net/json/%s" % ip).read()
+        log_info("CHECK: response1=%s" % response)
+
         response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
         # log_info(ip_re.search(response).groups())
-        log_info("CHECK: response=%s" % response)
+        log_info("CHECK: response2=%s" % response)
         ip_cache[ip] = ip_re.search(response).group(1)
+
     return ip_cache[ip]
 
 

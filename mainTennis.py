@@ -552,6 +552,13 @@ def export(action, fmt):
                 return TennisPlayer.jsonify()
 
 
+@app.route("/stat", methods=['GET'])
+@login_required
+def stat():
+    out = "Dogodkov: %d,\nIgralcev: %d\n, Virov: %d" % (len(TennisEvent.EventsCache), len(TennisEvent.players), 0)
+    return Response(out, mimetype='text/plain')
+
+
 @app.route("/audit", methods=['GET'])
 @login_required
 def audit():
