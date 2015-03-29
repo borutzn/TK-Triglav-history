@@ -44,7 +44,7 @@ if not app.debug:
 @app.before_request
 def pre_request_logging():
     if 'text/html' in request.headers['Accept']:
-        app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
+        # app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("SESSION: %s" % str(session))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
                         ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
@@ -97,6 +97,7 @@ def ip_to_country(ip):
         response = urllib.urlopen("http://api.hostip.info/get_html.php?ip=%s&position=true" % ip).read()
         # log_info(ip_re.search(response).groups())
         log_info("CHECK: response2=%s" % response)
+        log_info("CHECK: response2=%s" % response.get('country_name'))
         ip_cache[ip] = ip_re.search(response).group(1)
 
     return ip_cache[ip]
