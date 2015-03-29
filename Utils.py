@@ -94,9 +94,7 @@ def ip_to_country(ip):
     if ip not in ip_cache:
         response = urllib.urlopen("http://freegeoip.net/json/%s" % ip).read()
         result = json.loads(response.decode('utf8')).get('country_name', '/')
-        if result == "":
-            result = "/"
-        ip_cache[ip] == result
+        ip_cache[ip] = result if result != "" else "/"
 
     return ip_cache[ip]
 
