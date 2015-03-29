@@ -5,6 +5,7 @@ from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
 import re
 import os
 import csv
+import json
 import codecs
 import cStringIO
 import urllib
