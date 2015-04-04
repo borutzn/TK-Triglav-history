@@ -320,7 +320,9 @@ def list_files():
         if not search_pattern or search_pattern.match(fname):
             files.append((os.path.join(year, fname), fsize))
 
+    log_info("before sort")
     files.sort()
+    log_info("after sort")
     return render_template("listFiles.html", files=files, search=search)
 
 
