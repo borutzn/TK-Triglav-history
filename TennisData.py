@@ -262,7 +262,7 @@ class TennisEvent:
         cls.top_players.sort(key=lambda player: player[1], reverse=True)
         cls.top_players = cls.top_players[:20]
 
-        sources = []
+        cls.sources = []
         year_pattern = re.compile(r"^/\d{4}$")
         dir_len = len(files_dir)
         try:
@@ -272,11 +272,11 @@ class TennisEvent:
                     for fname in fnames:
                         fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
                         events = len(TennisEvent.get_events_with_att(fname))
-                        sources.append((year[1:], fname, fsize, events))
+                        cls.sources.append((year[1:], fname, fsize, events))
         except ValueError:  # No files in directory - nothing to select from
             log_info("Error: ValueError in list_files/os.walk")
             pass
-        log_info( "SOURCE: %s" % str(sources))
+        log_info( "SOURCE: %s" % str(cls.sources))
 
         log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
