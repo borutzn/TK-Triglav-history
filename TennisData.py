@@ -5,6 +5,7 @@ import re
 import os
 import sys
 import json
+import math
 import zipfile
 
 import sqlite3
@@ -30,6 +31,7 @@ class TennisEvent:
     Years = []
     players = list()
     top_players = list()
+    sources = list()
 
     def __init__(self, date="", event="", place="", category="", result="",
                  player="", comment="", att1="", att2="", att3="", att4="", source=""):
@@ -83,7 +85,7 @@ class TennisEvent:
                 TennisEvent.update_all_atts(year, att, att_sec)
                 return att_sec
             else:  # or os.path.exists(att_path_sec):
-                log_info( "ERROR: Bad filename " + unicode(os.path.join(files_dir,year+"/"+att)) )
+                log_info("ERROR: Bad filename " + unicode(os.path.join(files_dir, year+"/"+att)))
                 return "err_"+att
         except:
             log_info("ERROR: unknown error %s" % sys.exc_info()[0])
@@ -260,7 +262,24 @@ class TennisEvent:
         cls.top_players.sort(key=lambda player: player[1], reverse=True)
         cls.top_players = cls.top_players[:20]
 
-        log_info("AUDIT: Event cache reloaded (%d entries, %d players)." % (len(cls.EventsCache), len(cls.players)))
+        sources = []
+        year_pattern = re.compile(r"^/\d{4}$")
+        dir_len = len(files_dir)
+        try:
+            for root, dirs, fnames in os.walk(files_dir):
+                year = root[dir_len:]
+                if year_pattern.match(year):
+                    for fname in fnames:
+                        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
+                        events = len(TennisEvent.get_events_with_att(fname))
+                        sources.append((year[1:], fname, fsize, events))
+        except ValueError:  # No files in directory - nothing to select from
+            log_info("Error: ValueError in list_files/os.walk")
+            pass
+        log_info( "SOURCE: %s" % str(sources))
+
+        log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
+                 (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
     @classmethod
     def clear_data(cls):
@@ -318,15 +337,12 @@ class TennisEvent:
     def get_events_with_att(cls, att):
         cls.fetch_data()
         r = list()
-        log_info("SEARCH ATT "+att)
         att_year = att[:4]
         att = att[5:]
         for ev in cls.EventsCache:
             if ev['Date'][:4] != att_year:
                 continue
-            # log_info(str(att==ev['Att1'])+" - "+att+" -> Att1:"+ev['Att1'])
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
-                log_info("%s - %s" % (ev['LocalDate'], ev['Event']))
                 r.append("%s - %s" % (ev['LocalDate'], ev['Event']))
         return r
 

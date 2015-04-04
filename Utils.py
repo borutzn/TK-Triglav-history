@@ -51,17 +51,6 @@ def pre_request_logging():
                         ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
 
 
-'''
-Parameters:
-key – the key (name) of the cookie to be set.
-value – the value of the cookie.
-max_age – should be a number of seconds, or None (default) if the cookie should last only as long as the client’s browser session.
-expires – should be a datetime object or UNIX timestamp.
-domain – if you want to set a cross-domain cookie. For example, domain=".example.com" will set a cookie that is readable by the domain www.example.com, foo.example.com etc. Otherwise, a cookie will only be readable by the domain that set it.
-path – limits the cookie to a given path, per default it will span the whole domain.
-'''
-
-
 def log_info(s):
     app.logger.info(s)
 
@@ -87,15 +76,12 @@ def allowed_file(filename):
 
 
 ip_cache = {}
-# ip_re = re.compile(r"Country: \((.*)\) \((.*)\)")  # .*City: \((.*)\)")
-
 
 def ip_to_country(ip):
     if ip not in ip_cache:
         response = urllib.urlopen("http://freegeoip.net/json/%s" % ip).read()
         result = json.loads(response.decode('utf8')).get('country_name', '/')
         ip_cache[ip] = result if result != "" else "/"
-
     return ip_cache[ip]
 
 
