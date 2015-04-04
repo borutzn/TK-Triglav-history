@@ -311,8 +311,6 @@ def list_files():
                     if not search_pattern or search_pattern.match(fname):
                         fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
                         files.append((os.path.join(year[1:], fname), fsize))
-            if len(files) >= 100:
-                break
     except ValueError:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass
@@ -322,7 +320,8 @@ def list_files():
             files.append((os.path.join(year, fname), fsize))
     '''
     files.sort()
-    log_info( "SOURCEs")
+    files = files[:100]
+    log_info("SOURCEs")
     return render_template("listFiles.html", files=files, search=search)
 
 
