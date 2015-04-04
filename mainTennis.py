@@ -288,6 +288,8 @@ def tennis_main():
 def list_files():
     search = ""
     search_pattern = None
+    p = request.args.get('p')
+    pos = int(p) if p else 0
     if request.method == 'POST':
         search = request.form['search']
         if search != "":
@@ -320,9 +322,11 @@ def list_files():
             files.append((os.path.join(year, fname), fsize))
     '''
     files.sort()
-    files = files[:100]
+    prev = pos-50 if pos > 50 else 0
+    next = pos+50 if pos < len(files)-50 else len(files)-50
+    files = files[pos:pos+50]
     log_info("SOURCEs")
-    return render_template("listFiles.html", files=files, search=search)
+    return render_template("listFiles.html", files=files, search=search, prevPage=prev, nextPage=next)
 
 
 @app.route("/editFile", methods=['GET', 'POST'])
