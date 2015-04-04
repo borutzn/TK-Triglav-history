@@ -301,7 +301,6 @@ def list_files():
                 log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
                 raise
     files = []
-    '''
     year_pattern = re.compile(r"^/\d{4}$")
     dir_len = len(files_dir)
     try:
@@ -312,6 +311,8 @@ def list_files():
                     if not search_pattern or search_pattern.match(fname):
                         fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
                         files.append((os.path.join(year[1:], fname), fsize))
+            if len(files) >= 100:
+                break
     except ValueError:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass
@@ -319,10 +320,9 @@ def list_files():
     for (year,fname,fsize,refs) in TennisEvent.sources:
         if not search_pattern or search_pattern.match(fname):
             files.append((os.path.join(year, fname), fsize))
-
-    log_info("before sort")
+    '''
     files.sort()
-    log_info("after sort")
+    log_info( "SOURCE: %s" % str(cls.sources))
     return render_template("listFiles.html", files=files, search=search)
 
 
