@@ -12,7 +12,7 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, PAGELEN, PIC_RESIZE, LOG_FILE
+from config import Production, PAGELEN, LOG_FILE
 
 import os
 import re
@@ -322,7 +322,7 @@ def list_files():
             files.append((os.path.join(year, fname), fsize))
     '''
     files.sort()
-    log_info( "SOURCE: %s" % str(cls.sources))
+    log_info( "SOURCEs")
     return render_template("listFiles.html", files=files, search=search)
 
 
