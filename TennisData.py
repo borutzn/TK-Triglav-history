@@ -277,6 +277,8 @@ class TennisEvent:
             log_info("Error: ValueError in list_files/os.walk")
             pass
         log_info( "SOURCE: %s" % str(cls.sources))
+        cls.sources.sort()
+        log_info( "sorted")
 
         log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
