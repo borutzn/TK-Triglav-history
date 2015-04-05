@@ -288,12 +288,13 @@ def tennis_main():
 def list_files():
     search = ""
     search_pattern = None
-    year = request.args.get('y')
+    year = request.args.get('y') or TennisEvent.Years[0]
     if request.method == 'POST':
-        search = request.form['search']
-        if search != "":
+        if request.args.get('select_year') != "":
+            year = request.args.get('select_year')
+        if request.form['search'] != "":
             try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
-                search_pattern = re.compile(r"%s" % search)
+                search_pattern = re.compile(r"%s" % request.form['search'])
             except re.error:
                 log_info("Error: re.error in list_files/re.compile")
                 flash("Napaka pri nizu za iskanje")
@@ -318,7 +319,7 @@ def list_files():
         pass
     files.sort()
     '''
-    for (y,fname,fsize,refs) in TennisEvent.sources:
+    for (y, fname, fsize, refs) in TennisEvent.sources:
         if (y == year) and (not search_pattern or search_pattern.match(fname)):
             files.append((y, fname, fsize, refs))
     try:
@@ -331,7 +332,8 @@ def list_files():
     prev_page = TennisEvent.Years[i-1] if i > 0 else 0
     next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else len(TennisEvent.Years)
     log_info("SOURCEs: %s" % str(files))
-    return render_template("listFiles.html", files=files, search=search, prevPage=prev_page, nextPage=next_page)
+    return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
+                           prevPage=prev_page, nextPage=next_page)
 
 
 @app.route("/editFile", methods=['GET', 'POST'])

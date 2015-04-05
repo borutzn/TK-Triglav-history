@@ -9,6 +9,14 @@
         <a href="{{ url_for('list_files',y=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
         &nbsp;&nbsp;
         <a href="{{ url_for('list_files',y=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
+        &nbsp;&nbsp; Leto: <label><select name="select_year">
+            {% for year in years %}
+                <option value="{{ year }}"
+                    {% if year == events[0].Date[:4] %} selected {%  endif %}
+                >{{ year }}</option>
+            {% endfor %}
+        </select></label>
+        <input type="submit" value="Izberi">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Išči: <label><input type="text" name="search" value="{{ search }}"></label>
         {% if current_user.utype >= 4 %}
