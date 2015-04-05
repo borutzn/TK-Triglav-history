@@ -290,6 +290,7 @@ def list_files():
     search_pattern = None
     year = request.args.get('y') or TennisEvent.Years[0]
     if request.method == 'POST':
+        log_info(str(request.args)
         if request.args.get('select_year') != "":
             year = request.args.get('select_year')
         if request.form['search'] != "":
@@ -325,13 +326,11 @@ def list_files():
     try:
         i = TennisEvent.Years.index(year)
     except ValueError:
-        log_info(str(TennisEvent.Years))
         log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %s" % year)
         i = 0
 
     prev_page = TennisEvent.Years[i-1] if i > 0 else 0
     next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else len(TennisEvent.Years)
-    log_info("SOURCEs: %s" % str(files))
     return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
                            prevPage=prev_page, nextPage=next_page)
 
