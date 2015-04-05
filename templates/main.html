@@ -71,6 +71,9 @@
     {% if events %}
         {% set year = 0 %}
         {% set pos = start %}
+        {% set prev_date = "" %}
+        {% set prev_event = "" %}
+        {% set prev_comment = "" %}
         {% for event in events %}
             {% if year != event.Date[:4] %}
                 {% if year != 0 %}
@@ -84,6 +87,13 @@
                         <th style="width:80px;">kategorija</th><th style="width:40px;">rezultat</th>
                         <th style="width:150px;">igralec</th><th style="width:80px;"></th>
                         {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
+            {% endif %}
+            {% if prev_comment != "" %}
+                <tr><td class="main-table-comment" colspan="6">{{ prev_comment }}<td></tr>
+                {% set prev_comment = "" %}
+            {% endif %}
+            {% if prev_date == event.Date and prev_event == event.Event %}
+                ///
             {% endif %}
             <tr>
             <td style="">
@@ -141,11 +151,14 @@
             {% endif %}
             {% if current_user.is_authenticated() %}</td>{% endif %}
             </tr>
-            {% if event.Comment != "" %}
-                <tr><td class="main-table-comment" colspan="6">{{ event.Comment }}<td></tr>
-            {% endif %}
+            {% set prev_date = event.Date %}
+            {% set prev_event = event.Event %}
+            {% set prev_comment = event.Comment %}
             {% set pos = pos + 1 %}
         {% endfor %}
+        {% if prev_comment != "" %}
+            <tr><td class="main-table-comment" colspan="6">{{ prev_comment }}<td></tr>
+        {% endif %}
         </table>
     {% endif %}
     <div style="height:30px;"></div>
