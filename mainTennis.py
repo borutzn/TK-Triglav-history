@@ -320,7 +320,7 @@ def list_files():
     files.sort()
     '''
     for (y, fname, fsize, refs) in TennisEvent.sources:
-        if not search_pattern or search_pattern.match(fname):
+        if not search_pattern and search_pattern.match(fname):
             log_info("FOUND: %s" % fname)
         if (y == year) and (not search_pattern or search_pattern.match(fname)):
             files.append((y, fname, fsize, refs))
