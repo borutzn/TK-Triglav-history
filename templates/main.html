@@ -166,7 +166,7 @@
             {% set pos = pos + 1 %}
         {% endfor %}
         {% if prev_comment != "" %}
-            <tr><td class="main-table-comment" style="border-right-style: none;"
+            <tr><td class="main-table-comment"
                     colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">{{ prev_comment }}</td></tr>
         {% endif %}
         <tr><td style="border-right-style: none;"
