@@ -88,11 +88,11 @@
                         <th style="width:150px;">igralec</th><th style="width:80px;"></th>
                         {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
             {% endif %}
-            {% if prev_comment != "" %}
+            {% set duplicate = prev_date == event.Date and prev_event == event.Event %}
+            {% if prev_comment != "" and not duplicate %}
                 <tr><td class="main-table-comment" colspan="6">{{ prev_comment }}<td></tr>
                 {% set prev_comment = "" %}
             {% endif %}
-            {% set duplicate = prev_date == event.Date and prev_event == event.Event %}
             <tr>
             {% if duplicate %}
                 <td></td><td></td>
