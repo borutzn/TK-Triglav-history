@@ -275,7 +275,6 @@ class TennisEvent:
         except ValueError:  # No files in directory - nothing to select from
             log_info("Error: ValueError in list_files/os.walk")
             pass
-        log_info("SOURCE: %s" % str(cls.sources[:10]))
 
         cls.sources.sort()
 
