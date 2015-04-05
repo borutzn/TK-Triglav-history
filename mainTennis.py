@@ -322,7 +322,7 @@ def list_files():
     for (y, fname, fsize, refs) in TennisEvent.sources:
         if not search_pattern and search_pattern.match(fname):
             log_info("FOUND: %s" % fname)
-        if (y == year) or (not search_pattern and search_pattern.match(fname)):
+        if (not search_pattern and (y == year)) or (search_pattern and search_pattern.match(fname)):
             files.append((y, fname, fsize, refs))
     try:
         i = TennisEvent.Years.index(year)
