@@ -276,9 +276,9 @@ class TennisEvent:
         except ValueError:  # No files in directory - nothing to select from
             log_info("Error: ValueError in list_files/os.walk")
             pass
-        log_info( "SOURCE: %s" % str(cls.sources[:10]))
+        log_info("SOURCE: %s" % str(cls.sources[:10]))
         cls.sources.sort()
-        log_info( "sorted")
+        log_info("sorted")
 
         log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
@@ -344,6 +344,7 @@ class TennisEvent:
         for ev in cls.EventsCache:
             if ev['Date'][:4] != att_year:
                 continue
+            log_info("CHECK: '%s' =?= '%s'" % (att, ev['Att1']))
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
                 r.append("%s - %s" % (ev['LocalDate'], ev['Event']))
         return r
