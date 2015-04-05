@@ -322,7 +322,13 @@ def list_files():
     for (y,fname,fsize,refs) in TennisEvent.sources:
         if (y == year) and (not search_pattern or search_pattern.match(fname)):
             files.append((y, fname, fsize, refs))
-    i = TennisEvent.Years.index(year)
+    try:
+        i = TennisEvent.Years.index(year)
+    except ValueError:
+        log_info(str(TennisEvent.Years))
+        log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %d" % year)
+        i = 0
+
     prev_page = TennisEvent.Years[i-1] if i > 0 else 0
     next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else len(TennisEvent.Years)
     log_info("SOURCEs: %s" % str(files))
