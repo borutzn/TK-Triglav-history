@@ -88,14 +88,15 @@
                         <th style="width:150px;">igralec</th><th style="width:80px;"></th>
                         {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
             {% endif %}
-            {% set duplicate = prev_date == event.Date and prev_event == event.Event %}
+            {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
             {% if prev_comment != "" and not duplicate %}
                 <tr><td class="main-table-comment" colspan="6">{{ prev_comment }}<td></tr>
                 {% set prev_comment = "" %}
             {% endif %}
             <tr>
             {% if duplicate %}
-                <td></td><td></td>
+                <td style="border-bottom-style: none;"></td><td style="border-bottom-style: none;"></td>
+                <td style="border-bottom-style: none;"></td>
             {% else %}
                 <td style="">
                 {% if event.Date[4:] == "/00/00" %}
@@ -107,8 +108,8 @@
                 {% endif %}
                 </td>
                 <td style=""> {{ event.Event }} </td>
+                <td style=""> {{ event.Place }} </td>
             {% endif %}
-            <td style=""> {{ event.Place }} </td>
             <td style=""> {{ event.Category }} </td>
             <td style=""> {{ event.Result }} </td>
             <td style=""> 
@@ -155,6 +156,7 @@
             </tr>
             {% set prev_date = event.Date %}
             {% set prev_event = event.Event %}
+            {% set prev_place = event.Place %}
             {% set prev_comment = event.Comment %}
             {% set pos = pos + 1 %}
         {% endfor %}
