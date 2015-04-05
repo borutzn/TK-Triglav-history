@@ -36,9 +36,9 @@
              <td style="text-align: right;">{{ refs }}</td>
             {% if current_user.utype >= 4 %}
                 <td> &nbsp;&nbsp;
-                    <a href="{{ url_for('static',filename='/files/'+file) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
-                    <a href="{{ url_for('edit_file',next=request.url, n=file) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi vir"></a>
-                    <a href="{{ url_for('delete_file',next=request.url, n=file) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši vir"></a>
+                    <a href="{{ url_for('static',filename='/files/'+fname) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
+                    <a href="{{ url_for('edit_file',next=request.url, n=fname) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi vir"></a>
+                    <a href="{{ url_for('delete_file',next=request.url, n=fname) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši vir"></a>
                 </td>
             {% endif %}
             </tr>
