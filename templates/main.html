@@ -77,6 +77,7 @@
         {% for event in events %}
             {% if year != event.Date[:4] %}
                 {% if year != 0 %}
+                    <td colspan="6"></td>
                     </table>
                 {% endif %}
                 <br><a href="{{ url_for('tennis_main',p=pos) }}" class="year">{{ event.Date[:4] }}</a>
@@ -163,6 +164,7 @@
         {% if prev_comment != "" %}
             <tr><td class="main-table-comment" colspan="6">{{ prev_comment }}<td></tr>
         {% endif %}
+        <td colspan="6"></td>
         </table>
     {% endif %}
     <div style="height:30px;"></div>
