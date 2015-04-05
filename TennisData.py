@@ -262,6 +262,7 @@ class TennisEvent:
         cls.top_players.sort(key=lambda player: player[1], reverse=True)
         cls.top_players = cls.top_players[:20]
 
+        EventSource.fetch_data()
         cls.sources = []
         year_pattern = re.compile(r"^/\d{4}$")
         dir_len = len(files_dir)
@@ -344,8 +345,8 @@ class TennisEvent:
         for ev in cls.EventsCache:
             if ev['Date'][:4] != att_year:
                 continue
-            log_info("CHECK: '%s' =?= '%s'" % (att, ev['Att1']))
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
+                log_info("FOUND: '%s' =?= '%s'" % (att, ev['Att1']))
                 r.append("%s - %s" % (ev['LocalDate'], ev['Event']))
         return r
 
@@ -391,8 +392,6 @@ class TennisEvent:
 class TennisPlayer:
     """
     DROP TABLE TennisPlayer;
-    CREATE TABLE TennisPlayer( Ident INTEGER PRIMARY KEY, Name TEXT, Born INTEGER, Died INTEGER,
-            Comment TEXT, Picture TEXT, Created DATE, LastModified DATE);
     DELETE FROM TennisPlayer;
     """
 
@@ -424,8 +423,6 @@ class TennisPlayer:
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx
 
-        # app.logger.error( "CACHE " + str(cls.PlayersCache) )
-        # app.logger.error( "CACHE " + str(cls.PlayersIndex) )
         log_info("AUDIT: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
@@ -462,3 +459,35 @@ class TennisPlayer:
     @classmethod
     def jsonify(cls):
         return Response(json.dumps(cls.PlayersCache),  mimetype='application/json')
+
+
+class EventSource:
+    """
+    DROP TABLE EventSource;
+    DELETE FROM EventSource;
+    """
+
+    SourcesCache = None
+
+    def __init__(self, year, file_name, desc="", players_on_picture=""):
+        self.Year = year
+        self.File_name = file_name
+        self.Desc = desc
+        self.Players_on_pic = players_on_picture
+
+    @classmethod
+    def fetch_data(cls):
+        if cls.SourcesCache is not None:
+            return
+
+        connection = sqlite3.connect(DB_NAME)
+        with connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource( Ident INTEGER PRIMARY KEY,
+                              year, TEXT, file_name TEXT, desc TEXT, players_on_pic TEXT);""")
+            cursor.execute("SELECT * FROM EventSources")
+            cls.SourcesCache = [dict(row) for row in cursor]
+            connection.commit()
+
+        log_info("AUDIT: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
