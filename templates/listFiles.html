@@ -18,7 +18,7 @@
     </form><br>
 
     {% if files %}
-        <div class="year">{{ year }}
+        <div class="year">{{ files[0][0] }}
             {% if current_user.utype >= 4 %}
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="{{ url_for('upload_picture',next=request.url, y=year) }}"><img src="{{ url_for('static',filename='upload-24.png') }}" title="Naloži nov vir v izbranem letu"></a>
