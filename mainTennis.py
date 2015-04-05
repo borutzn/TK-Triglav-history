@@ -330,7 +330,7 @@ def list_files():
         i = 0
 
     prev_page = TennisEvent.Years[i-1] if i > 0 else TennisEvent.Years[0]
-    next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else TennisEvent.Years[-1]
+    next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years)-1 else TennisEvent.Years[-1]
     return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
                            prevPage=prev_page, nextPage=next_page)
 
