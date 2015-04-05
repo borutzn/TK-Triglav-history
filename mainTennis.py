@@ -325,7 +325,7 @@ def list_files():
         i = TennisEvent.Years.index(year)
     except ValueError:
         log_info(str(TennisEvent.Years))
-        log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %d" % year)
+        log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %s" % year)
         i = 0
 
     prev_page = TennisEvent.Years[i-1] if i > 0 else 0
