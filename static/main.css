@@ -88,6 +88,12 @@ th {
     padding: 2px;
 }
 
+.main-table-comment {
+    font-size: 10pt;
+    border-top: thin dotted #16377A;
+    border-right: none;
+}
+
 .main-table td {
     border-top: thin solid #16377A;
 }
@@ -96,12 +102,6 @@ th {
     border-right: thin solid #16377A;
 }
 
-.main-table-comment {
-    font-size: 10pt;
-    border-top: thin dotted #16377A;
-    border-right: none;
-}
-                     
 .player-table {
     padding: 2px;
 }
