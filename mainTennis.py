@@ -290,7 +290,6 @@ def list_files():
     search_pattern = None
     year = request.args.get('y') or TennisEvent.Years[0]
     if request.method == 'POST':
-        log_info(str(request.form))
         if request.form['select_year'] != "":
             year = request.form['select_year']
         if request.form['search'] != "":
@@ -321,6 +320,8 @@ def list_files():
     files.sort()
     '''
     for (y, fname, fsize, refs) in TennisEvent.sources:
+        if not search_pattern or search_pattern.match(fname):
+            log_info("FOUND: %s" % fname)
         if (y == year) and (not search_pattern or search_pattern.match(fname)):
             files.append((y, fname, fsize, refs))
     try:
