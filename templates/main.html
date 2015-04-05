@@ -102,6 +102,9 @@
                 <td style="border-top-style: none;"></td>
             {% else %}
                 <td style="">
+                {{  prev_date == event.Date }}
+                {{  prev_event == event.Event }}
+                {{ prev_place == event.Place }}
                 {% if event.Date[4:] == "/00/00" %}
                     {{ event.Date[:4] }}
                 {% elif event.Date[7:] == "/00" %}
