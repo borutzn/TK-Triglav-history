@@ -292,7 +292,7 @@ def list_files():
     if request.method == 'POST':
         log_info(str(request.form))
         if request.form['select_year'] != "":
-            year = request.args.get('select_year')
+            year = request.form['select_year']
         if request.form['search'] != "":
             try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
                 search_pattern = re.compile(r"%s" % request.form['search'])
@@ -329,8 +329,8 @@ def list_files():
         log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %s" % year)
         i = 0
 
-    prev_page = TennisEvent.Years[i-1] if i > 0 else 0
-    next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else len(TennisEvent.Years)
+    prev_page = TennisEvent.Years[i-1] if i > 0 else TennisEvent.Years[0]
+    next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else TennisEvent.Years[-1]
     return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
                            prevPage=prev_page, nextPage=next_page)
 
