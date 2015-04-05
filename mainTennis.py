@@ -322,11 +322,11 @@ def list_files():
             files.append((os.path.join(year, fname), fsize))
     '''
     files.sort()
-    prev = pos-50 if pos > 50 else 0
-    next = pos+50 if pos < len(files)-50 else len(files)-50
+    prev_page = pos-50 if pos > 50 else 0
+    next_page = pos+50 if pos < len(files)-50 else len(files)-50
     files = files[pos:pos+50]
     log_info("SOURCEs")
-    return render_template("listFiles.html", files=files, search=search, prevPage=prev, nextPage=next)
+    return render_template("listFiles.html", files=files, search=search, prevPage=prev_page, nextPage=next_page)
 
 
 @app.route("/editFile", methods=['GET', 'POST'])
