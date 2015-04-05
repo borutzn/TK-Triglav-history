@@ -31,6 +31,7 @@ class TennisEvent:
     Years = []
     players = list()
     top_players = list()
+    sources = list()
 
     def __init__(self, date="", event="", place="", category="", result="",
                  player="", comment="", att1="", att2="", att3="", att4="", source=""):
@@ -261,7 +262,25 @@ class TennisEvent:
         cls.top_players.sort(key=lambda player: player[1], reverse=True)
         cls.top_players = cls.top_players[:20]
 
-        log_info("AUDIT: Event cache reloaded (%d entries, %d players)." % (len(cls.EventsCache), len(cls.players)))
+        year_pattern = re.compile(r"^/\d{4}$")
+        dir_len = len(files_dir)
+        try:
+            for root, dirs, fnames in os.walk(files_dir):
+                year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
+                if year_pattern.match(year):
+                    for fname in fnames:
+                        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
+                        no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:], fname)))
+                        cls.sources.append((year[1:], fname, fsize, no_events))
+        except ValueError:  # No files in directory - nothing to select from
+            log_info("Error: ValueError in list_files/os.walk")
+            pass
+        log_info("SOURCE: %s" % str(cls.sources[:10]))
+
+        cls.sources.sort()
+
+        log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
+                 (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
     @classmethod
     def clear_data(cls):
@@ -446,12 +465,13 @@ class EventSource:
     """
 
     SourcesCache = None
+    SourcesIndex = {}
 
     def __init__(self, year, file_name, desc="", players_on_picture=""):
-        self.Year = year
-        self.File_name = file_name
-        self.Desc = desc
-        self.Players_on_pic = players_on_picture
+        self.year = year
+        self.file_name = file_name
+        self.desc = desc
+        self.players_on_pic = players_on_picture
 
     @classmethod
     def fetch_data(cls):
@@ -468,29 +488,7 @@ class EventSource:
             cls.SourcesCache = [dict(row) for row in cursor]
             connection.commit()
 
-        # ToDo: check, if all Att? from TenisEvent is inside EvenSource
-
-        # Todo: check, if all TennisEvent files exists
-
-        # ToDo: check all files, that are not used
-
-        '''
-        year_pattern = re.compile(r"^/\d{4}$")
-        dir_len = len(files_dir)
-        try:
-            for root, dirs, fnames in os.walk(files_dir):
-                year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
-                if year_pattern.match(year):
-                    for fname in fnames:
-                        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
-                        no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:],fname)))
-                        cls.sources.append((year[1:], fname, fsize, no_events))
-        except ValueError:  # No files in directory - nothing to select from
-            log_info("Error: ValueError in list_files/os.walk")
-            pass
-        log_info("SOURCE: %s" % str(cls.sources[:10]))
-        '''
-
-        cls.SourcesCache.sort()
+        for idx, val in enumerate(cls.SourcesCache):
+            cls.SourcesIndex[val['file_name']] = idx
 
         log_info("AUDIT: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))

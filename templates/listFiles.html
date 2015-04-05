@@ -6,9 +6,9 @@
         &nbsp;&nbsp;
         <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="{{ url_for('list_files',p=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
+        <a href="{{ url_for('list_files',y=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
         &nbsp;&nbsp;
-        <a href="{{ url_for('list_files',p=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
+        <a href="{{ url_for('list_files',y=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Išči: <label><input type="text" name="search" value="{{ search }}"></label>
         {% if current_user.utype >= 4 %}
@@ -18,27 +18,22 @@
     </form><br>
 
     {% if files %}
-        {% set year = 0 %}
-        <table class="main-table">
-        {% for (file, fsize) in files %}
-            {% if year != file[:4] %}
-                {% if year != 0 %}
-                    </table>
-                {% endif %}
-                {% set year = file[:4] %}
-                <br><div class="year">{{ year }}
-                {% if current_user.utype >= 4 %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('upload_picture',next=request.url, y=year) }}"><img src="{{ url_for('static',filename='upload-24.png') }}" title="Naloži nov vir v izbranem letu"></a>
-                {% endif %}
-                </div>
-                <table class="main-table">
-                    <tr><th style="width:500px;">ime vira</th><th style="width:70px; text-align: right;">velikost</th>
-                    {% if current_user.utype >= 4 %}<th></th>{%  endif %}
+        <div class="year">{{ year }}
+            {% if current_user.utype >= 4 %}
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{{ url_for('upload_picture',next=request.url, y=year) }}"><img src="{{ url_for('static',filename='upload-24.png') }}" title="Naloži nov vir v izbranem letu"></a>
             {% endif %}
+        </div>
+        <table class="main-table">
+            <tr><th style="width:500px;">ime vira</th>
+                <th style="width:70px; text-align: right;">velikost</th>
+                <th style="width:40px; text-align: right;">referenc</th>
+            {% if current_user.utype >= 4 %}<th></th>{%  endif %}
+        {% for (year, fname, fsize, refs) in files %}
              <tr>
-             <td>{{ file[5:] }}</td>
+             <td>{{ fname }}</td>
              <td style="text-align: right;">{{ fsize }}</td>
+             <td style="text-align: right;">{{ refs }}</td>
             {% if current_user.utype >= 4 %}
                 <td> &nbsp;&nbsp;
                     <a href="{{ url_for('static',filename='/files/'+file) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>

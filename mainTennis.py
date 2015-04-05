@@ -288,8 +288,8 @@ def tennis_main():
 def list_files():
     search = ""
     search_pattern = None
-    p = request.args.get('p')
-    pos = int(p) if p else 0
+    year = request.args.get('y')
+    year = int(year) if year else TennisEvent.Years[0]
     if request.method == 'POST':
         search = request.form['search']
         if search != "":
@@ -303,6 +303,7 @@ def list_files():
                 log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
                 raise
     files = []
+    '''
     year_pattern = re.compile(r"^/\d{4}$")
     dir_len = len(files_dir)
     try:
@@ -316,16 +317,15 @@ def list_files():
     except ValueError:  # No files in directory - nothing to select from
         log_info("Error: ValueError in list_files/os.walk")
         pass
-    '''
-    for (year,fname,fsize,refs) in TennisEvent.sources:
-        if not search_pattern or search_pattern.match(fname):
-            files.append((os.path.join(year, fname), fsize))
-    '''
     files.sort()
-    prev_page = pos-50 if pos > 50 else 0
-    next_page = pos+50 if pos < len(files)-50 else len(files)-50
-    files = files[pos:pos+50]
-    log_info("SOURCEs")
+    '''
+    for (y,fname,fsize,refs) in TennisEvent.sources:
+        if (y == year) and (not search_pattern or search_pattern.match(fname)):
+            files.append((y, fname, fsize, refs))
+    i = TennisEvent.Years.index(year)
+    prev_page = TennisEvent.Years[i-1] if i > 0 else 0
+    next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years) else len(TennisEvent.Years)
+    log_info("SOURCEs: %s" % str(files))
     return render_template("listFiles.html", files=files, search=search, prevPage=prev_page, nextPage=next_page)
 
 
