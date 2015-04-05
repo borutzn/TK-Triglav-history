@@ -268,12 +268,11 @@ class TennisEvent:
         dir_len = len(files_dir)
         try:
             for root, dirs, fnames in os.walk(files_dir):
-                year = root[dir_len:]
+                year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
                 if year_pattern.match(year):
                     for fname in fnames:
                         fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
-                        no_events = len(TennisEvent.get_events_with_att(fname))
-                        log_info("FOUND %d" % no_events)
+                        no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:],fname)))
                         cls.sources.append((year[1:], fname, fsize, no_events))
         except ValueError:  # No files in directory - nothing to select from
             log_info("Error: ValueError in list_files/os.walk")
