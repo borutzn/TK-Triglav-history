@@ -272,8 +272,9 @@ class TennisEvent:
                 if year_pattern.match(year):
                     for fname in fnames:
                         fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
-                        events = len(TennisEvent.get_events_with_att(fname))
-                        cls.sources.append((year[1:], fname, fsize, events))
+                        no_events = len(TennisEvent.get_events_with_att(fname))
+                        log_info("FOUND %d" % no_events)
+                        cls.sources.append((year[1:], fname, fsize, no_events))
         except ValueError:  # No files in directory - nothing to select from
             log_info("Error: ValueError in list_files/os.walk")
             pass
@@ -346,7 +347,7 @@ class TennisEvent:
             if ev['Date'][:4] != att_year:
                 continue
             if (ev['Att1'] == att) or (ev['Att2'] == att) or (ev['Att3'] == att) or (ev['Att4'] == att):
-                log_info("FOUND: '%s' =?= '%s'" % (att, ev['Att1']))
+                log_info("FOUND: '%s'" % (att))
                 r.append("%s - %s" % (ev['LocalDate'], ev['Event']))
         return r
 
