@@ -78,14 +78,14 @@
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
             {% if prev_comment != "" and not duplicate %}
                 <tr><td class="main-table-comment" style="border-top: thin dotted #16377A; border-right-style: none;"
-                        colspan="{% if current_user.is_authenticated() %}7{% else %}6{% endif %}">
-                    {{ prev_comment }}1<td>2</tr>
+                        colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
+                    {{ prev_comment }}</td></tr>
                 {% set prev_comment = "" %}
             {% endif %}
             {% if year != event.Date[:4] %}
                 {% if year != 0 %}
                     <tr><td style="border-right-style: none;"
-                            {% if current_user.is_authenticated() %} colspan="8"{% else %} colspan="7"{% endif %}>
+                            colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
                     </td></tr>
                     </table>
                 {% endif %}
@@ -167,7 +167,7 @@
         {% endfor %}
         {% if prev_comment != "" %}
             <tr><td class="main-table-comment" style="border-right-style: none;"
-                    colspan="{% if current_user.is_authenticated() %}7{% else %}6{% endif %}">{{ prev_comment }}<td></tr>
+                    colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">{{ prev_comment }}</td></tr>
         {% endif %}
         <tr><td style="border-right-style: none;"
                 colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}"></td></tr>
