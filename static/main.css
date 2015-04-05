@@ -74,7 +74,6 @@ input {
 th {
     background:#94BEFA;
     border-top: thin solid #16377A;
-    border-bottom: thin solid #16377A;
     text-align:left;
     padding: 2px;
 }
@@ -108,7 +107,7 @@ th {
 
 .player-table td {
     border-right: thin solid #16377A;
-    border-bottom: thin solid #16377A;
+    border-top: thin solid #16377A;
 }
 
 .player-table tr:nth-child(1) td {
