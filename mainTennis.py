@@ -290,7 +290,7 @@ def list_files():
     search_pattern = None
     year = request.args.get('y') or TennisEvent.Years[0]
     if request.method == 'POST':
-        log_info(str(request.args)
+        log_info(str(request.args))
         if request.args.get('select_year') != "":
             year = request.args.get('select_year')
         if request.form['search'] != "":
