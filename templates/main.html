@@ -84,9 +84,7 @@
             {% endif %}
             {% if year != event.Date[:4] %}
                 {% if year != 0 %}
-                    <tr><td style="border-right-style: none;"
-                            colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
-                    </td></tr>
+                    <tr><td colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}"></td></tr>
                     </table>
                 {% endif %}
                 <br><a href="{{ url_for('tennis_main',p=pos) }}" class="year">{{ event.Date[:4] }}</a>
