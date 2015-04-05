@@ -91,7 +91,7 @@
             {% endif %}
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
             {% if prev_comment != "" and not duplicate %}
-                <tr><td class="main-table-comment" colspan="6">{{ prev_comment }}<td></tr>
+                <tr><td colspan="6" class="main-table-comment">{{ prev_comment }}<td></tr>
                 {% set prev_comment = "" %}
             {% endif %}
             <tr>
