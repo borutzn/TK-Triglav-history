@@ -96,7 +96,7 @@ th {
     border-right: thin solid #16377A;
 }
 
-td .main-table-comment {
+.main-table-comment {
     font-size: 10pt;
     border-top: thin dotted #16377A;
     border-right: none;
