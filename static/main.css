@@ -90,7 +90,7 @@ th {
 }
 
 .main-table td {
-    border-bottom: thin solid #16377A;
+    border-top: thin solid #16377A;
 }
 
 .main-table td:last-child {
