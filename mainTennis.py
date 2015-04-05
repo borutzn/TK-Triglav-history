@@ -287,14 +287,15 @@ def tennis_main():
 @login_required
 def list_files():
     search = ""
-    search_pattern = None
+    files_filter = None
     year = request.args.get('y') or TennisEvent.Years[0]
     if request.method == 'POST':
         if request.form['select_year'] != "":
             year = request.form['select_year']
         if request.form['search'] != "":
             try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
-                search_pattern = re.compile(r"%s" % request.form['search'])
+                files_filter = re.compile(r"%s" % request.form['search'])
+                log_info("SEARCH pattern %s" % str(files_filter))
             except re.error:
                 log_info("Error: re.error in list_files/re.compile")
                 flash("Napaka pri nizu za iskanje")
@@ -320,9 +321,9 @@ def list_files():
     files.sort()
     '''
     for (y, fname, fsize, refs) in TennisEvent.sources:
-        if search_pattern and search_pattern.match(fname):
+        if files_filter and files_filter.match(fname):
             log_info("FOUND: %s" % fname)
-        if (not search_pattern and (y == year)) or (search_pattern and search_pattern.match(fname)):
+        if (not files_filter and (y == year)) or (files_filter and files_filter.match(fname)):
             files.append((y, fname, fsize, refs))
     try:
         i = TennisEvent.Years.index(year)
