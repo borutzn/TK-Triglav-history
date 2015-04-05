@@ -487,7 +487,7 @@ class EventSource:
             cursor = connection.cursor()
             cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource( Ident INTEGER PRIMARY KEY,
                               year, TEXT, file_name TEXT, desc TEXT, players_on_pic TEXT);""")
-            cursor.execute("SELECT * FROM EventSources")
+            cursor.execute("SELECT * FROM EventSource")
             cls.SourcesCache = [dict(row) for row in cursor]
             connection.commit()
 
