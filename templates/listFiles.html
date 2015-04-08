@@ -51,6 +51,10 @@
             {% endif %}
             </tr>
         {% endfor %}
+         <tr>
+             <td></td><td></td><td></td>
+             {% if current_user.utype >= 4 %}<td></td>{% endif %}
+        </tr>
         </table>
     {% endif %}
     
