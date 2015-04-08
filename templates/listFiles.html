@@ -35,7 +35,7 @@
         <table class="main-table">
             <tr><th style="width:500px;">ime vira</th>
                 <th style="width:70px; text-align: right;">velikost</th>
-                <th style="width:40px; text-align: right;">referenc</th>
+                <th style="width:40px; text-align: right;">#</th>
             {% if current_user.utype >= 4 %}<th></th>{%  endif %}
         {% for (year, fname, fsize, refs) in files %}
              <tr>
@@ -52,8 +52,9 @@
             </tr>
         {% endfor %}
          <tr>
-             <td></td><td></td><td></td>
-             {% if current_user.utype >= 4 %}<td></td>{% endif %}
+            <tr><td style="border-right-style: none;"
+                    colspan="{% if current_user.utype >= 4 %}4{% else %}3{% endif %}">
+            </td></tr>
         </tr>
         </table>
     {% endif %}
