@@ -145,19 +145,17 @@
             {% endif %}
             </td>
             {% if current_user.is_authenticated() %}
-                <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
+                <td style="text-align:right;">
+                {% if current_user.utype >= 1 %}
+                    <a href="{{ url_for('edit_comment', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
+                {% endif %}
+                {% if current_user.utype >= 3 %}
+                    <a href="{{ url_for('edit_event', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
+                    <a href="{{ url_for('duplicate', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                    <a href="{{ url_for('delete', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
+                {% endif %}
+                </td>
             {% endif %}
-            {% if current_user.utype >= 3 %}
-                <a href="{{ url_for('edit_event', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
-            {% endif %}
-            {% if current_user.utype >= 1 %}
-                <a href="{{ url_for('edit_comment', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
-            {% endif %}
-            {% if current_user.is_authenticated() %}
-                <a href="{{ url_for('duplicate', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
-                <a href="{{ url_for('delete', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
-            {% endif %}
-            {% if current_user.is_authenticated() %}</td>{% endif %}
             </tr>
             {% set prev_date = event.Date %}
             {% set prev_event = event.Event %}
