@@ -262,7 +262,7 @@ class TennisEvent:
         cls.top_players.sort(key=lambda player: player[1], reverse=True)
         cls.top_players = cls.top_players[:20]
 
-        sources = list()
+        cls.sources = list()
         year_pattern = re.compile(r"^/\d{4}$")
         dir_len = len(files_dir)
         try:
