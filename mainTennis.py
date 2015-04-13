@@ -400,7 +400,7 @@ def upload_picture():
                 if not os.path.exists(picture_dir):
                     log_info("Audit: directory %s created." % picture_dir)
                     os.makedirs(picture_dir)
-                if select_name != "izberi":
+                if select_name and select_name != "izberi":
                     save_name = secure_filename(select_name)
                 elif new_name != "":
                     save_name = secure_filename(new_name)
