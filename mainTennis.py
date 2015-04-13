@@ -286,6 +286,44 @@ def tennis_main():
 @app.route("/files", methods=['GET', 'POST'])
 @login_required
 def list_files():
+    if request.method == 'GET':
+        search = ""
+        try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
+            files_filter = re.compile(r"%s" % request.args.get('s')) if request.args.get('s') else None
+            log_info("SEARCH pattern %s" % str(files_filter))
+        except re.error:
+            log_info("Error: re.error in list_files/re.compile")
+            flash("Napaka pri nizu za iskanje")
+            return redirect(request.args.get("next") or url_for("list_files"))
+        except:
+            log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
+            raise
+        year = request.args.get('y') or TennisEvent.Years[0]
+
+        files = []
+        for (y, fname, fsize, refs) in TennisEvent.sources:
+            if files_filter and files_filter.match(fname):
+                log_info("FOUND: %s" % fname)
+            if (not files_filter and (y == year)) or (files_filter and files_filter.match(fname)):
+                files.append((y, fname, fsize, refs))
+        try:
+            i = TennisEvent.Years.index(year)
+        except ValueError:
+            log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %s" % year)
+            i = 0
+
+        prev_page = TennisEvent.Years[i-1] if i > 0 else TennisEvent.Years[0]
+        next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years)-1 else TennisEvent.Years[-1]
+        return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
+                               prevPage=prev_page, nextPage=next_page)
+
+    elif request.method == 'POST':
+        year = request.form.get('select_year', None) or TennisEvent.Years[0]
+        search = request.form.get('search')
+        return redirect(url_for("list_files", y=year, s=search))
+
+
+'''
     search = ""
     files_filter = None
     year = request.args.get('y') or TennisEvent.Years[0]
@@ -304,22 +342,6 @@ def list_files():
                 log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
                 raise
     files = []
-    '''
-    year_pattern = re.compile(r"^/\d{4}$")
-    dir_len = len(files_dir)
-    try:
-        for root, dirs, fnames in os.walk(files_dir):
-            year = root[dir_len:]
-            if year_pattern.match(year):
-                for fname in fnames:
-                    if not search_pattern or search_pattern.match(fname):
-                        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
-                        files.append((os.path.join(year[1:], fname), fsize))
-    except ValueError:  # No files in directory - nothing to select from
-        log_info("Error: ValueError in list_files/os.walk")
-        pass
-    files.sort()
-    '''
     for (y, fname, fsize, refs) in TennisEvent.sources:
         if files_filter and files_filter.match(fname):
             log_info("FOUND: %s" % fname)
@@ -335,6 +357,7 @@ def list_files():
     next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years)-1 else TennisEvent.Years[-1]
     return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
                            prevPage=prev_page, nextPage=next_page)
+'''
 
 
 @app.route("/editFile", methods=['GET', 'POST'])
@@ -362,7 +385,6 @@ def edit_file():
             shutil.copyfile(old_att, new_att)
 
         return redirect(request.args.get("next") or url_for("tennis_main"))
-        # ToDo: preveri vse forme in uporabo secure_filename
 
 
 @app.route("/upload_file", methods=['GET', 'POST'])
