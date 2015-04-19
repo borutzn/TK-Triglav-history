@@ -54,7 +54,8 @@ def pre_request_settings():
 
 @app.after_request
 def post_request_settings(response):
-    app.logger.info("SESSION_post: %s" % str(session))
+    app.logger.info("SESSION_post")
+    # app.logger.info("SESSION_post: %s" % str(session))
 
 
 def log_info(s):
