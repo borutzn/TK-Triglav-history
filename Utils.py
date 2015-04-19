@@ -52,6 +52,7 @@ def pre_request_settings():
                         ip_to_country(request.remote_addr), request.remote_addr, request.url[38:]))
 
 
+@app.after_request
 def post_request_settings():
     app.logger.info("SESSION_post: %s" % str(session))
 
@@ -81,6 +82,7 @@ def allowed_file(filename):
 
 
 ip_cache = {}
+
 
 def ip_to_country(ip):
     if ip not in ip_cache:
