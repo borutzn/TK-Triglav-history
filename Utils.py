@@ -53,7 +53,7 @@ def pre_request_settings():
 
 
 @app.after_request
-def post_request_settings():
+def post_request_settings(response):
     app.logger.info("SESSION_post: %s" % str(session))
 
 
