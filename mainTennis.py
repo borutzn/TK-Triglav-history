@@ -287,9 +287,10 @@ def tennis_main():
 @login_required
 def list_files():
     if request.method == 'GET':
-        search = ""
+        year = request.args.get('y') or TennisEvent.Years[0]
+        search = request.args.get('s')
         try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
-            files_filter = re.compile(r"%s" % request.args.get('s')) if request.args.get('s') else None
+            files_filter = re.compile(r"%s" % search) if search else None
             log_info("SEARCH pattern %s" % str(files_filter))
         except re.error:
             log_info("Error: re.error in list_files/re.compile")
@@ -298,7 +299,6 @@ def list_files():
         except:
             log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
             raise
-        year = request.args.get('y') or TennisEvent.Years[0]
 
         files = []
         for (y, fname, fsize, refs) in TennisEvent.sources:
@@ -321,43 +321,6 @@ def list_files():
         year = request.form.get('select_year', None) or TennisEvent.Years[0]
         search = request.form.get('search')
         return redirect(url_for("list_files", y=year, s=search))
-
-
-'''
-    search = ""
-    files_filter = None
-    year = request.args.get('y') or TennisEvent.Years[0]
-    if request.method == 'POST':
-        if request.form['select_year'] != "":
-            year = request.form['select_year']
-        if request.form['search'] != "":
-            try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
-                files_filter = re.compile(r"%s" % request.form['search'])
-                log_info("SEARCH pattern %s" % str(files_filter))
-            except re.error:
-                log_info("Error: re.error in list_files/re.compile")
-                flash("Napaka pri nizu za iskanje")
-                return redirect(request.args.get("next") or url_for("list_files"))
-            except:
-                log_info("Error: list_files/re.compile: %s" % sys.exc_info()[0])
-                raise
-    files = []
-    for (y, fname, fsize, refs) in TennisEvent.sources:
-        if files_filter and files_filter.match(fname):
-            log_info("FOUND: %s" % fname)
-        if (not files_filter and (y == year)) or (files_filter and files_filter.match(fname)):
-            files.append((y, fname, fsize, refs))
-    try:
-        i = TennisEvent.Years.index(year)
-    except ValueError:
-        log_info("Error: ValueError in list_files/TennisEvent.Years.index for year %s" % year)
-        i = 0
-
-    prev_page = TennisEvent.Years[i-1] if i > 0 else TennisEvent.Years[0]
-    next_page = TennisEvent.Years[i+1] if i < len(TennisEvent.Years)-1 else TennisEvent.Years[-1]
-    return render_template("listFiles.html", files=files, search=search, years=TennisEvent.Years,
-                           prevPage=prev_page, nextPage=next_page)
-'''
 
 
 @app.route("/editFile", methods=['GET', 'POST'])
