@@ -245,7 +245,6 @@ def correct():
 
 @app.route("/", methods=['GET', 'POST'])
 def tennis_main():
-    #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
     log_info("/start")
     event_filter = ""
     show_stat = "0"

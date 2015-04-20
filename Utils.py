@@ -42,20 +42,23 @@ if not app.debug:
 
 # possible fields: datetime.datetime.today().ctime(), request.data, request.remote_addr, request.method, request.path
 #                  ', '.join([': '.join(x) for x in request.headers])
+#  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
 @app.before_request
 def pre_request_settings():
     session.modified = True  # alternative: session.permanent = True
-    app.logger.info("SESSION_pre: %s, %s" % (session.get("user", "/"), session.get("_id", "/")))  # https://www.kirsle.net/wizards/flask-session.py
     if 'text/html' in request.headers['Accept']:
+        # https://www.kirsle.net/wizards/flask-session.py
+        app.logger.info("SESSION_pre: %s, %s" % (session.get("user", "/"), session.get("_id", "/")))
         # app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
-        app.logger.info("AUDIT: %s (%s: %s) requested %s, %s" % (str(current_user.username),
-                        ip_to_country(request.remote_addr), request.remote_addr, request.endpoint, request.url[38:]))
+        app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
+                        ip_to_country(request.remote_addr), request.remote_addr, request.endpoint))
 
 
 @app.after_request
 def post_request_settings(response):
-    # app.logger.info("SESSION_post")
-    app.logger.info("SESSION_post: %s, %s" % (session.get("user", "/"), session.get("_id", "/")))
+    s = session.get("user",None)
+    if s:
+        app.logger.info("SESSION_post: %s, %s" % (s, session.get("_id", "")[-5:]))
     return response
 
 
