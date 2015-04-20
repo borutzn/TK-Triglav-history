@@ -48,9 +48,9 @@ def pre_request_settings():
     session.modified = True  # alternative: session.permanent = True
     if 'text/html' in request.headers['Accept']:
         # https://www.kirsle.net/wizards/flask-session.py
-        app.logger.info("SESSION_pre: %s, %s" % (session.get("user", "/"), session.get("_id", "/")))
         # app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
-        app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
+        app.logger.info("AUDIT: %s/%s/%s (%s: %s) requested %s" % (str(current_user.username),
+                        session.get("user", "/"), session.get("_id", "")[-5:],
                         ip_to_country(request.remote_addr), request.remote_addr, request.endpoint))
 
 

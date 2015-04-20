@@ -601,4 +601,5 @@ if __name__ == "__main__":
 else:
     log_info(appname + ": start")
 
-TennisEvent.fetch_data()
+# zakaj se požene 4x?
+# TennisEvent.fetch_data()
