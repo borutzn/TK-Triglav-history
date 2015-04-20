@@ -246,6 +246,7 @@ def correct():
 @app.route("/", methods=['GET', 'POST'])
 def tennis_main():
     #  http://flask.pocoo.org/docs/0.10/api/#incoming-request-data
+    log_info("/start")
     event_filter = ""
     show_stat = "0"
     if request.method == 'GET':
@@ -270,12 +271,14 @@ def tennis_main():
     else:
         pos = 0
 
+    log_info("/before get_events")
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     all_events_len = TennisEvent.count()
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
+    log_info("/before render")
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,
@@ -598,3 +601,5 @@ if __name__ == "__main__":
         app.run(host='127.0.0.1', port=80, debug=True)
 else:
     log_info(appname + ": start")
+
+TennisEvent.fetch_data()

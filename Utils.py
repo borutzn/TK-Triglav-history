@@ -44,8 +44,8 @@ if not app.debug:
 #                  ', '.join([': '.join(x) for x in request.headers])
 @app.before_request
 def pre_request_settings():
-    session.permanent = True  # alternative: session.modified = True
-    app.logger.info("SESSION_pre: %s" % str(session))  # https://www.kirsle.net/wizards/flask-session.py
+    session.modified = True  # alternative: session.permanent = True
+    app.logger.info("SESSION_pre: %s - %s" % (session.get("user", "/"), str(session)))  # https://www.kirsle.net/wizards/flask-session.py
     if 'text/html' in request.headers['Accept']:
         # app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
         app.logger.info("AUDIT: %s (%s: %s) requested %s" % (str(current_user.username),
@@ -55,7 +55,7 @@ def pre_request_settings():
 @app.after_request
 def post_request_settings(response):
     # app.logger.info("SESSION_post")
-    app.logger.info("SESSION_post: %s" % str(session))
+    app.logger.info("SESSION_post: %s - %s" % (session.get("user", "/"), str(session)))
     return response
 
 
