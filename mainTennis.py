@@ -270,7 +270,6 @@ def tennis_main():
     else:
         pos = 0
 
-    log_info("/before get_events")
     events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
     all_events_len = TennisEvent.count()
     if len(events) == 0:
