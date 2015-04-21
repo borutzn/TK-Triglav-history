@@ -600,5 +600,5 @@ if __name__ == "__main__":
 else:
     log_info(appname + ": start")
 
-# zakaj se požene 4x?
-# TennisEvent.fetch_data()
+# running 4 times, if max-procs=4 in fastcgi
+TennisEvent.fetch_data()

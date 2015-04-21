@@ -58,7 +58,7 @@ def pre_request_settings():
 def post_request_settings(response):
     s = session.get("user",None)
     if s:
-        app.logger.info("SESSION_post: %s, %s" % (s, session.get("_id", "")[-5:]))
+        app.logger.info("SESSION_post: %s, %s, %s" % (s, session.get("_id", "")[-5:], response.headers))
     return response
 
 
