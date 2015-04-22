@@ -245,7 +245,6 @@ def correct():
 
 @app.route("/", methods=['GET', 'POST'])
 def tennis_main():
-    log_info("/start")
     event_filter = ""
     show_stat = "0"
     if request.method == 'GET':
@@ -276,7 +275,6 @@ def tennis_main():
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
-    log_info("/before render")
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=pos-PAGELEN if pos > PAGELEN else 0,

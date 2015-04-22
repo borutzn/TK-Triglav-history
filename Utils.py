@@ -54,8 +54,8 @@ def pre_request_settings():
                         ip_to_country(request.remote_addr), request.remote_addr, request.endpoint))
 
 
-#@app.after_request
-#def post_request_settings(response):
+# @app.after_request
+# def post_request_settings(response):
 #    s = session.get("user",None)
 #    if s:
 #        app.logger.info("SESSION_post: %s, %s, %s" % (s, session.get("_id", "")[-5:], response.mimetype))
