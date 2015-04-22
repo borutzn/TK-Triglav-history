@@ -289,7 +289,7 @@ def tennis_main():
 def list_files():
     if request.method == 'GET':
         year = request.args.get('y') or TennisEvent.Years[0]
-        search = request.args.get('s')
+        search = request.args.get('s', '')
         try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
             files_filter = re.compile(r"%s" % search) if search else None
             log_info("SEARCH pattern %s" % str(files_filter))
