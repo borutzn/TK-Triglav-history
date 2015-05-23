@@ -35,7 +35,7 @@
                 {% if year != 0 %}
                     </table>
                 {% endif %}
-                <br><a href="{{ url_for('tennis_main',p=pos) }}" class="year">{{ event.Date[:4] }}</a>
+                <br><a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
                    <tr><th style="width:80px;">datum</th><th>dogodek</th><th style="width:140px;">kraj</th>
