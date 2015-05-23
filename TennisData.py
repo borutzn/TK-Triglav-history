@@ -326,6 +326,31 @@ class TennisEvent:
         return events
 
     @classmethod
+    def get_events_by_year(cls, year, event_filter=""):
+        cls.fetch_data()
+        events = list()
+        pos = TennisEvent.get_year_pos(year)
+        search = 0  # 0-no search, 1-string, 2-regex
+
+        if event_filter != "":
+            search = 1 if event_filter.isalnum() else 2
+            log_info("SEARCH=" + str(search))
+        try:
+            search_pattern = re.compile(r"%s" % event_filter)
+        except re.error:
+            search, search_pattern = 1, event_filter
+            log_info("Error: re.error in get_events_page/re.compile - changed to string")
+
+        while (cls.EventsCache[pos]['Date'][:4] == year):
+            pos += 1
+            if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
+                continue
+            if (search == 2) and not search_pattern.match(cls.EventsCache[pos]['Event']):
+                continue
+            events.append(cls.EventsCache[pos])
+        return events
+
+    @classmethod
     def get_players_events(cls, player):
         cls.fetch_data()
         r = list()
