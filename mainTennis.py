@@ -12,7 +12,7 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, LOG_FILE, IMG_EXT
+from config import Production, LOG_FILE, ATT_EXT, IMG_EXT
 
 import os
 import re
