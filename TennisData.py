@@ -342,7 +342,6 @@ class TennisEvent:
             search, search_pattern = 1, event_filter
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
-        log_info("pos=%d,%d" % (pos, len(cls.EventsCache)))
         while pos < len(cls.EventsCache):
             if year is not None and cls.EventsCache[pos]['Date'][:4] > year:
                 break
@@ -355,7 +354,6 @@ class TennisEvent:
             events.append(cls.EventsCache[pos])
             # log_info("add event: %d %s, %s" % (pos, cls.EventsCache[pos]['Date'], cls.EventsCache[pos]['Event']))
             pos += 1
-            log_info("pos=%d,%d" % (pos, len(cls.EventsCache)))
         return events
 
     @classmethod

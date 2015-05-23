@@ -275,6 +275,7 @@ def tennis_main():
 
     pictures = []
     log_info(IMG_EXT)
+    log_info(ATT_EXT)
     for src in TennisEvent.sources:
         if src[0] == year:
             log_info("year:%s, %d" % (src[1], src[3]))

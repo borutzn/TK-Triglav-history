@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT
+from config import LOG_FILE, LOG_SIZE, LOG_COUNT, ATT_EXT, IMG_EXT
 
 import re
 import os
