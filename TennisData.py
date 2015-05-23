@@ -351,6 +351,7 @@ class TennisEvent:
                 pos += 1
                 continue
             events.append(cls.EventsCache[pos])
+            log_info("append")
             pos += 1
         return events
 

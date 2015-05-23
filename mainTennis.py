@@ -273,7 +273,7 @@ def tennis_main():
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
-    year_idx = TennisEvent.Years.index(year)
+    year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
     year_len = len(TennisEvent.Years)
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
