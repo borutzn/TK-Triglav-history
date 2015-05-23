@@ -250,6 +250,8 @@ def tennis_main():
     if request.method == 'GET':
         try:
             year = request.args.get('y')
+            if year not in TennisEvent.Years:
+                year = TennisEvent.Years[0]
             show_stat = request.args.get('s')
         except ValueError:
             year = TennisEvent.Years[0]

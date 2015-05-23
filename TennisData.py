@@ -327,7 +327,7 @@ class TennisEvent:
 
     @classmethod
     def get_events_by_year(cls, year, event_filter=""):
-        log_info("GET_BY_YEAR "+year)
+        log_info("GET_BY_YEAR "+str(year))
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(year)
