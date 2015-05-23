@@ -12,7 +12,7 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, PAGELEN, LOG_FILE
+from config import Production, LOG_FILE
 
 import os
 import re
@@ -249,11 +249,10 @@ def tennis_main():
     show_stat = "0"
     if request.method == 'GET':
         try:
-            p = request.args.get('p')
-            pos = int(p) if p else 0
+            year = request.args.get('y')
             show_stat = request.args.get('s')
         except ValueError:
-            pos = 0
+            year = TennisEvent.Years[0]
     elif request.method == 'POST':
         select_player = request.form['select_player']
         event_filter = request.form['event_filter']
@@ -261,31 +260,29 @@ def tennis_main():
         if select_player != "":
             return redirect(url_for("show_player") + "?n=" + select_player)
         elif event_filter != "":
-            pos = 0
+            year = TennisEvent.Years[0]
         else:
-            pos = TennisEvent.get_year_pos(select_year)
-            # return redirect(url_for("tennis_main") + "?p=" + str(pos))
-
+            year = select_year
     else:
-        pos = 0
+        year = request.args.get('y')
 
     # events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
-    year = TennisEvent.EventsCache[pos]['Date'][:4]
+    # year = TennisEvent.EventsCache[pos]['Date'][:4]
     events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
-    all_events_len = TennisEvent.count()
-    year_idx = TennisEvent.Years.index(year)
-    year_len = len(TennisEvent.Years)
-    log_info("PREV=%s" % TennisEvent.Years[year_idx-1 if year_idx > 0 else 0])
-    log_info("NEXT=%s" % TennisEvent.Years[year_idx+1 if year_idx < year_len else year_len])
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
+    year_idx = TennisEvent.Years.index(year)
+    year_len = len(TennisEvent.Years)
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
-                           prevPage=pos-PAGELEN if pos > PAGELEN else 0,
-                           nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
-                           start=pos, count=all_events_len, showStat=show_stat)
+                           year=year,
+                           prevPage=TennisEvent.Years[year_idx-1 if year_idx > 0 else 0],
+                           nextPage=TennisEvent.Years[year_idx+1 if year_idx < year_len else year_len],
+                           # prevPage=pos-PAGELEN if pos > PAGELEN else 0,
+                           # nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
+                           count=TennisEvent.count(), showStat=show_stat)
 
 
 @app.route("/files", methods=['GET', 'POST'])
