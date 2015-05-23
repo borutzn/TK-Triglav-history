@@ -327,7 +327,7 @@ class TennisEvent:
 
     @classmethod
     def get_events_by_year(cls, year, event_filter=""):
-        log_info("GET_BY_YEAR "+str(year))
+        log_info("GET_BY_YEAR "+str(year)+", "+event_filter)
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(year)
@@ -342,7 +342,8 @@ class TennisEvent:
             search, search_pattern = 1, event_filter
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
-        while cls.EventsCache[pos]['Date'][:4] == year:
+        while (year is None or cls.EventsCache[pos]['Date'][:4] == year) and (pos < len(cls.EventsCache)):
+            log_info("event: %d %s, %s" % (pos, cls.EventsCache[pos]['Date'], cls.EventsCache[pos]['Event']))
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 pos += 1
                 continue
