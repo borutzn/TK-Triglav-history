@@ -343,12 +343,12 @@ class TennisEvent:
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
         while cls.EventsCache[pos]['Date'][:4] == year:
-            pos += 1
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 continue
             if (search == 2) and not search_pattern.match(cls.EventsCache[pos]['Event']):
                 continue
             events.append(cls.EventsCache[pos])
+            pos += 1
         return events
 
     @classmethod
