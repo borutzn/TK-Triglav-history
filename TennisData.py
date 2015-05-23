@@ -342,6 +342,7 @@ class TennisEvent:
             search, search_pattern = 1, event_filter
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
+        log_info("pos=%d" % pos)
         while (year is None or cls.EventsCache[pos]['Date'][:4] == year) and (pos < len(cls.EventsCache)):
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 pos += 1
