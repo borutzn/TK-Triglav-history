@@ -276,13 +276,13 @@ def tennis_main():
     year_len = len(TennisEvent.Years)
     year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
     for s in TennisEvent.sources:
-        log_info("src:%s" % str(s))
+        #log_info("src:%s" % str(s))
         if s[0] == year:
             log_info("src:%s, %d" % (s[1], s[3]))
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
-                           prevPage=TennisEvent.Years[year_idx-1 if year_idx > 0 else 0],
-                           nextPage=TennisEvent.Years[year_idx+1 if year_idx < year_len else year_len],
+                           prevPage=TennisEvent.Years[max(year_idx-1, 0)],
+                           nextPage=TennisEvent.Years[min(year_idx+1, year_len-1)],
                            count=TennisEvent.count(), showStat=show_stat)
 
 
