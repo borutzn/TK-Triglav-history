@@ -30,7 +30,7 @@ from werkzeug.utils import secure_filename
 
 from TennisData import TennisEvent, TennisPlayer
 
-from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, files_dir
+from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, allowed_image, files_dir
 
 from User import User, Anonymous
 
@@ -273,12 +273,16 @@ def tennis_main():
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
+    pictures = []
+    for src in TennisEvent.sources:
+        if src[0] == year:
+            log_info("year:%s, %d" % (src[1], src[3]))
+        if src[0] == year and allowed_image(src[1]):
+            pictures.append(src)
+            log_info("src:%s, %d" % (src[1], src[3]))
+
     year_len = len(TennisEvent.Years)
     year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
-    for s in TennisEvent.sources:
-        #log_info("src:%s" % str(s))
-        if s[0] == year:
-            log_info("src:%s, %d" % (s[1], s[3]))
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
                            prevPage=TennisEvent.Years[max(year_idx-1, 0)],

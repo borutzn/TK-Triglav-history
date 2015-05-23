@@ -85,6 +85,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ATT_EXT
 
+def allowed_image(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in IMG_EXT
 
 ip_cache = {}
 
