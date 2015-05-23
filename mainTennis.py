@@ -276,7 +276,6 @@ def tennis_main():
     year_len = len(TennisEvent.Years)
     year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
     for s in TennisEvent.sources:
-        log_info("src:%s" % str(s))
         if s[0] == year:
             log_info("src:%s, %d" % (s[1], s[4]))
     return render_template("main.html", events=events, production=Production,
