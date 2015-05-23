@@ -273,6 +273,10 @@ def tennis_main():
     year = TennisEvent.EventsCache[pos]['Date'][:4]
     events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
     all_events_len = TennisEvent.count()
+    year_idx = TennisEvent.Years.index(year)
+    year_len = len(TennisEvent.Years)
+    log_info("PREV=%s" % TennisEvent.Years[year_idx-1 if year_idx > 0 else 0])
+    log_info("NEXT=%s" % TennisEvent.Years[year_idx+1 if year_idx < year_len else year_len])
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
