@@ -301,7 +301,7 @@ class TennisEvent:
         return 0
 
     @classmethod
-    def get_events_page(cls, start, page_len=PAGELEN, event_filter="", collapsed_groups=()):
+    def get_events_page(cls, start, page_len=PAGELEN, event_filter=""):
         cls.fetch_data()
         events = list()
         pos = start-1
@@ -327,6 +327,7 @@ class TennisEvent:
 
     @classmethod
     def get_events_by_year(cls, year, event_filter=""):
+        log_info("GET_BY_YEAR "+year)
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(year)
@@ -341,7 +342,7 @@ class TennisEvent:
             search, search_pattern = 1, event_filter
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
-        while (cls.EventsCache[pos]['Date'][:4] == year):
+        while cls.EventsCache[pos]['Date'][:4] == year:
             pos += 1
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 continue
@@ -455,10 +456,7 @@ class TennisPlayer:
     def get(cls, name):
         cls.fetch_data()
         if name in cls.PlayersIndex:
-            # app.logger.error( "GET " + Name )
             idx = cls.PlayersIndex[name]
-            # app.logger.error( "GET " + str(idx) )
-            # app.logger.error( "return " + str(cls.PlayersCache[idx]) )
             return cls.PlayersCache[idx]
         else:
             return None

@@ -264,12 +264,14 @@ def tennis_main():
             pos = 0
         else:
             pos = TennisEvent.get_year_pos(select_year)
-            #return redirect(url_for("tennis_main") + "?p=" + str(pos))
+            # return redirect(url_for("tennis_main") + "?p=" + str(pos))
 
     else:
         pos = 0
 
-    events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
+    # events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
+    year = TennisEvent.EventsCache[pos]['Date'][:4]
+    events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
     all_events_len = TennisEvent.count()
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
