@@ -343,7 +343,6 @@ class TennisEvent:
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
         while (year is None or cls.EventsCache[pos]['Date'][:4] == year) and (pos < len(cls.EventsCache)):
-            log_info("event: %d %s, %s" % (pos, cls.EventsCache[pos]['Date'], cls.EventsCache[pos]['Event']))
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 pos += 1
                 continue
@@ -351,7 +350,7 @@ class TennisEvent:
                 pos += 1
                 continue
             events.append(cls.EventsCache[pos])
-            log_info("append")
+            log_info("add event: %d %s, %s" % (pos, cls.EventsCache[pos]['Date'], cls.EventsCache[pos]['Event']))
             pos += 1
         return events
 
