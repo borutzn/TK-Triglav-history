@@ -12,7 +12,7 @@ check syntactic errors with: "python mainTennis.py runserver -d"
 
 appname = "TK-Triglav-History"
 
-from config import Production, LOG_FILE
+from config import Production, LOG_FILE, IMG_EXT
 
 import os
 import re
@@ -274,6 +274,7 @@ def tennis_main():
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
     pictures = []
+    log_info(IMG_EXT)
     for src in TennisEvent.sources:
         if src[0] == year:
             log_info("year:%s, %d" % (src[1], src[3]))
