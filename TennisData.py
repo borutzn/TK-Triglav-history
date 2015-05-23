@@ -344,8 +344,10 @@ class TennisEvent:
 
         while cls.EventsCache[pos]['Date'][:4] == year:
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
+                pos += 1
                 continue
             if (search == 2) and not search_pattern.match(cls.EventsCache[pos]['Event']):
+                pos += 1
                 continue
             events.append(cls.EventsCache[pos])
             pos += 1

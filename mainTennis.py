@@ -260,14 +260,12 @@ def tennis_main():
         if select_player != "":
             return redirect(url_for("show_player") + "?n=" + select_player)
         elif event_filter != "":
-            year = TennisEvent.Years[0]
+            year = None
         else:
             year = select_year
     else:
         year = request.args.get('y')
 
-    # events = TennisEvent.get_events_page(pos, page_len=PAGELEN, event_filter=event_filter, collapsed_groups=())
-    # year = TennisEvent.EventsCache[pos]['Date'][:4]
     events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
@@ -277,11 +275,8 @@ def tennis_main():
     year_len = len(TennisEvent.Years)
     return render_template("main.html", events=events, production=Production,
                            players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
-                           year=year,
                            prevPage=TennisEvent.Years[year_idx-1 if year_idx > 0 else 0],
                            nextPage=TennisEvent.Years[year_idx+1 if year_idx < year_len else year_len],
-                           # prevPage=pos-PAGELEN if pos > PAGELEN else 0,
-                           # nextPage=pos+PAGELEN if pos < all_events_len-PAGELEN else all_events_len-PAGELEN,
                            count=TennisEvent.count(), showStat=show_stat)
 
 
