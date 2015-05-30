@@ -128,10 +128,11 @@ def edit_comment():
 @app.route("/add", methods=['GET', 'POST'])
 def add_event():
     if request.method == 'GET':
-        atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
-        atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
-        atts.sort()
-        return render_template("addEvent.html", event=[], atts=atts)
+        # ToDo: need year first
+        # atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
+        # atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
+        # atts.sort()
+        return render_template("addEvent.html", event=[])  # , atts=atts)
 
     elif request.method == 'POST':
         log_info("ADD: "+str(request.form))
