@@ -144,6 +144,10 @@ def add_event():
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
             ev.put()
+            # ToDo: test 9 and add 1-8
+            if request.form["player9"] != "":
+                ev.player = request.form["player9"]
+                ev.put()
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
