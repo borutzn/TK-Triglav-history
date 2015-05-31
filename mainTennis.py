@@ -152,6 +152,7 @@ def add_event(step):
     elif request.method == 'POST' and step == 2:
         log_info("ADD: "+str(request.form))
         if request.form["Status"] == "Shrani":
+            log_info("Shrani")
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category"],
                              result=request.form["result"], player=request.form["player"],
@@ -159,6 +160,7 @@ def add_event(step):
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
             ev.put()
+            log_info("Put")
             if request.form["player2"] != "":
                 ev.player = request.form["player2"]
                 ev.put()
