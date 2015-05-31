@@ -1,0 +1,23 @@
+<!-- # -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+    <p><div class="page-title">Vnos novega dogodka</div><br>
+    <ol>
+        <li>vnesi vse nove vire</li>
+        <li>vnesi vnesi dogodek</li>
+    </ol>
+    <table id="player-table">
+		<tr><td>Datum:</td><td><label>
+            <input style="width:3cm" type="text" name="date" value="{{ event.date }}">
+        </label></td></tr>
+	</table> <br>
+	<input type="Submit" name="Status" id="button" value="Dodaj vir">
+	<input type="Submit" name="Status" id="button" value="Dodaj dogodek">
+	<input type="Submit" name="Status" id="button" value="Prekliči">
+</form>
+
+{% endblock %}	

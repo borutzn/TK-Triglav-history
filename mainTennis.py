@@ -125,16 +125,28 @@ def edit_comment():
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
-@app.route("/add", methods=['GET', 'POST'])
-def add_event():
+@app.route("/add", methods=['GET', 'POST'], defaults={"step": 1})
+@app.route("/addEvent", methods=['GET', 'POST'], defaults={"step": 2})
+def add_event(step):
     if request.method == 'GET':
-        # ToDo: need year first
-        # atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
-        # atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
-        # atts.sort()
-        return render_template("addEvent.html", event=[])  # , atts=atts)
+        if step == 1:
+            return render_template("addEvent-S1.html")
+        elif step == 2:
+            # ToDo: need year first
+            # atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
+            # atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
+            # atts.sort()
+            return render_template("addEvent.html", event=[])  # , atts=atts)
 
-    elif request.method == 'POST':
+    elif request.method == 'POST' and step == 1:
+        log_info("ADD step1: "+str(request.form))
+        date = request.form["date"]
+        if request.form["Status"] == "Dodaj vir":
+            return url_for("upload_file", next=url_for("add_event"))
+        elif request.form["Status"] == "Dodaj dogodek":
+            return url_for("add_event", y="999")
+
+    elif request.method == 'POST' and step == 2:
         log_info("ADD: "+str(request.form))
         if request.form["Status"] == "Shrani":
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
@@ -144,7 +156,27 @@ def add_event():
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
             ev.put()
-            # ToDo: test 9 and add 1-8
+            if request.form["player2"] != "":
+                ev.player = request.form["player2"]
+                ev.put()
+            if request.form["player3"] != "":
+                ev.player = request.form["player3"]
+                ev.put()
+            if request.form["player4"] != "":
+                ev.player = request.form["player4"]
+                ev.put()
+            if request.form["player5"] != "":
+                ev.player = request.form["player5"]
+                ev.put()
+            if request.form["player6"] != "":
+                ev.player = request.form["player6"]
+                ev.put()
+            if request.form["player7"] != "":
+                ev.player = request.form["player7"]
+                ev.put()
+            if request.form["player8"] != "":
+                ev.player = request.form["player8"]
+                ev.put()
             if request.form["player9"] != "":
                 ev.player = request.form["player9"]
                 ev.put()
@@ -170,8 +202,6 @@ def edit_event(update):
 
     elif request.method == 'POST':
         if request.form["Status"] == "Shrani":
-            # log_info("ATT1: %s - %s, %s." % (request.form["att1"]==request.form["select_att1"],
-            #                                  request.form["att1"], request.form["select_att1"]))
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category"],
                              result=request.form["result"], player=request.form["player"],
