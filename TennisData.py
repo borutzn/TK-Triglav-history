@@ -138,7 +138,8 @@ class TennisEvent:
                         "Comment": self.comment, "Att1": self.att1, "Att2": self.att2, "Att3": self.att3,
                         "Att4": self.att4, "Source": self.source})
         connection.commit()
-        self.clear_data()
+        # self.clear_data()
+        self.fetch_data(sources=False)
         return cursor.lastrowid
 
     def update(self, iden):
@@ -154,8 +155,9 @@ class TennisEvent:
                         'Comment': self.comment, 'Att1': self.att1, 'Att2': self.att2, 'Att3': self.att3,
                         'Att4': self.att4, 'Source': self.source})
         connection.commit()
-        self.clear_data()
-                
+        # self.clear_data()
+        self.fetch_data(sources=False)
+
     def update_comment(self, iden):
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -163,8 +165,9 @@ class TennisEvent:
         cursor.execute("""UPDATE TennisEvents SET Comment=:Comment, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                        {'Comment': self.comment, 'Id': iden})
         connection.commit()
-        self.clear_data()
-                
+        # self.clear_data()
+        self.fetch_data(sources=False)
+
     @classmethod
     def update_att(cls, iden, att, fname):
         conn = sqlite3.connect(DB_NAME)
@@ -186,7 +189,7 @@ class TennisEvent:
             curs.execute("""UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
         conn.commit()
-        # ToDo: popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data()
+        # ToDo: popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data() -- ta hip ni ni?!!
                 
     @classmethod
     def update_all_atts(cls, old_year, old_att, new_att):
@@ -215,8 +218,9 @@ class TennisEvent:
         log_info("AUDIT: Event %s deleted by %s." % (iden, str(current_user.username)))
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         connection.commit()
-        cls.clear_data()
-                
+        # cls.clear_data()
+        cls.fetch_data(sources=False)
+
     @classmethod
     def fetch_data(cls, cache=True, atts=True, players=True, sources=True):
         if cls.EventsCache is not None:
