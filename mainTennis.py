@@ -129,9 +129,9 @@ def edit_comment():
 @app.route("/addEvent2", methods=['GET', 'POST'], endpoint='add_event2', defaults={"step": 2})
 def add_event(step):
     if request.method == 'GET':
-        date = request.args.get('d')
+        date = request.args.get('d',"")
         if step == 1:
-            return render_template("addEvent-S1.html", date=date)
+            return render_template("addEvent-S1.html", date=TennisEvent.date2user(date))
         elif step == 2:
             atts_dir = os.path.join(files_dir, secure_filename(date[:4]))
             try:
@@ -139,16 +139,16 @@ def add_event(step):
             except OSError:
                 atts = []
             atts.sort()
-            return render_template("addEvent-S2.html", date=date, atts=atts)
+            return render_template("addEvent-S2.html", date=TennisEvent.date2user(date), atts=atts)
 
     elif request.method == 'POST' and step == 1:
         log_info("ADD step1: "+str(request.form))
         date = TennisEvent.date2db(request.form["date"])
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_picture", y=date[:4],
-                                    next=url_for("add_event1", d=TennisEvent.date2user(date))))
+                                    next=url_for("add_event1", d=date)))
         elif request.form["Status"] == "Dodaj dogodek":
-            return redirect(url_for("add_event2", d=TennisEvent.date2user(date)))
+            return redirect(url_for("add_event2", d=date))
 
     elif request.method == 'POST' and step == 2:
         log_info("ADD: "+str(request.form))
