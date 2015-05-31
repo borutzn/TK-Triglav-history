@@ -125,8 +125,8 @@ def edit_comment():
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
-@app.route("/add", methods=['GET', 'POST'], defaults={"step": 1})
-@app.route("/addEvent", methods=['GET', 'POST'], endpoint='addEvent', defaults={"step": 2})
+@app.route("/addEvent1", methods=['GET', 'POST'], defaults={"step": 1})
+@app.route("/addEvent2", methods=['GET', 'POST'], endpoint='add_event2', defaults={"step": 2})
 def add_event(step):
     if request.method == 'GET':
         if step == 1:
@@ -144,7 +144,7 @@ def add_event(step):
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_file", next=url_for("add_event")))
         elif request.form["Status"] == "Dodaj dogodek":
-            return redirect(url_for("add_event", y="999"))
+            return redirect(url_for("add_event2", y="999"))
 
     elif request.method == 'POST' and step == 2:
         log_info("ADD: "+str(request.form))

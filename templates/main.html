@@ -41,7 +41,7 @@
                 {% if current_user.is_authenticated() %}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('add_event',next=request.url) }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
+                    <a href="{{ url_for('add_event1',next=request.url) }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
                 {% endif %}
                 {% if current_user.utype >= 4 %}
                     &nbsp;&nbsp;&nbsp;&nbsp;
