@@ -136,7 +136,7 @@ def add_event(step):
             # atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
             # atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
             # atts.sort()
-            return render_template("addEvent-S2.html", event=[])  # , atts=atts)
+            return render_template("addEvent-S2.html")  # , atts=atts)
 
     elif request.method == 'POST' and step == 1:
         log_info("ADD step1: "+str(request.form))
