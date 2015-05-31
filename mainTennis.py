@@ -136,15 +136,15 @@ def add_event(step):
             # atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
             # atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
             # atts.sort()
-            return render_template("addEvent.html", event=[])  # , atts=atts)
+            return render_template("addEvent-S2.html", event=[])  # , atts=atts)
 
     elif request.method == 'POST' and step == 1:
         log_info("ADD step1: "+str(request.form))
         date = request.form["date"]
         if request.form["Status"] == "Dodaj vir":
-            return url_for("upload_file", next=url_for("add_event"))
+            return redirect(url_for("upload_file", next=url_for("add_event")))
         elif request.form["Status"] == "Dodaj dogodek":
-            return url_for("add_event", y="999")
+            return redirect(url_for("add_event", y="999"))
 
     elif request.method == 'POST' and step == 2:
         log_info("ADD: "+str(request.form))
