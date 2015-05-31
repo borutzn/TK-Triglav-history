@@ -133,14 +133,16 @@ def add_event(step):
             return render_template("addEvent-S1.html")
         elif step == 2:
             # ToDo: need year first
-            # atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
-            # atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
-            # atts.sort()
-            return render_template("addEvent-S2.html")  # , atts=atts)
+            date = request.args.get('d')
+            atts_dir = os.path.join(files_dir, secure_filename(date[:4]))
+            atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
+            atts.sort()
+            return render_template("addEvent-S2.html", atts=atts)
 
     elif request.method == 'POST' and step == 1:
         log_info("ADD step1: "+str(request.form))
         date = request.form["date"]
+        # ToDo: check date!!
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_file", next=url_for("add_event")))
         elif request.form["Status"] == "Dodaj dogodek":
