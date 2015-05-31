@@ -141,8 +141,7 @@ def add_event(step):
 
     elif request.method == 'POST' and step == 1:
         log_info("ADD step1: "+str(request.form))
-        date = request.form["date"]
-        # ToDo: check date!!
+        date = TennisEvent.date2db(request.form["date"])
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_file", next=url_for("add_event")))
         elif request.form["Status"] == "Dodaj dogodek":
