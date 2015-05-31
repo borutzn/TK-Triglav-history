@@ -125,7 +125,7 @@ def edit_comment():
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
-@app.route("/addEvent1", methods=['GET', 'POST'], defaults={"step": 1})
+@app.route("/addEvent1", methods=['GET', 'POST'], endpoint='add_event1', defaults={"step": 1})
 @app.route("/addEvent2", methods=['GET', 'POST'], endpoint='add_event2', defaults={"step": 2})
 def add_event(step):
     if request.method == 'GET':
