@@ -131,7 +131,7 @@ def add_event(step):
     if request.method == 'GET':
         date = request.args.get('d',"")
         if step == 1:
-            return render_template("addEvent-S1.html", date=TennisEvent.date2user(date))
+            return render_template("addEvent-S1.html", date=TennisEvent.date2user(date) if date <> "" else "")
         elif step == 2:
             atts_dir = os.path.join(files_dir, secure_filename(date[:4]))
             try:

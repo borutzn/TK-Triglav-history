@@ -241,7 +241,6 @@ class TennisEvent:
             cursor.execute("SELECT * FROM TennisEvents ORDER by Date, Event, Category, Result")
             cls.EventsCache = [dict(row) for row in cursor]
             connection.commit()
-        log_info("AUDIT: Event cache reloaded SQL.")
 
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
@@ -255,7 +254,7 @@ class TennisEvent:
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
-        log_info("AUDIT: Event cache reloaded years&atts.")
+        log_info("AUDIT: Event cache reloaded cache.")
 
         if players:
             p = dict()  # move collection to the upper for loop?
