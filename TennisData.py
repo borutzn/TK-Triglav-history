@@ -227,7 +227,7 @@ class TennisEvent:
     def fetch_data(cls, force=False, players=True, sources=True):
         if force:
             cls.EventsCache = None
-        if cls.EventsCache is None:
+        if cls.EventsCache is not None:
             return
 
         log_info("AUDIT: Event cache reloaded start.")
