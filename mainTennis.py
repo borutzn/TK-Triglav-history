@@ -186,7 +186,8 @@ def add_event(step):
             if request.form["player9"] != "":
                 ev.player = request.form["player9"]
                 ev.put()
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(url_for("tennis_main", y=ev.date[-4:]))
+    return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
