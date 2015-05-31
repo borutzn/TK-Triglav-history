@@ -145,7 +145,7 @@ def add_event(step):
         log_info("ADD step1: "+str(request.form))
         date = TennisEvent.date2db(request.form["date"])
         if request.form["Status"] == "Dodaj vir":
-            return redirect(url_for("upload_picture", next=url_for("add_event1")))
+            return redirect(url_for("upload_picture", y=date[:4], next=url_for("add_event1")))
         elif request.form["Status"] == "Dodaj dogodek":
             return redirect(url_for("add_event2", d=TennisEvent.date2user(date)))
 
