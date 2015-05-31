@@ -408,7 +408,10 @@ def upload_picture():
         files = []
         if len(years) == 1:
             dir_files = os.path.join(files_dir, secure_filename(years[0]))
-            files = [f for f in os.listdir(dir_files) if allowed_file(f)]
+            try:
+                files = [f for f in os.listdir(dir_files) if allowed_file(f)]
+            except OSError:
+                files = []
             files.sort()
         return render_template("uploadFile.html", years=years, files=files)
     elif request.method == 'POST':
