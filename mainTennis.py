@@ -305,7 +305,8 @@ def tennis_main():
         elif event_filter != "":
             year = None
         else:
-            year = select_year
+            return redirect(url_for("main") + "?y=" + select_year)
+            # year = select_year
     else:
         year = request.args.get('y')
 
