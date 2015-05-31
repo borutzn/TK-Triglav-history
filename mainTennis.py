@@ -126,7 +126,7 @@ def edit_comment():
 
 
 @app.route("/add", methods=['GET', 'POST'], defaults={"step": 1})
-@app.route("/addEvent", methods=['GET', 'POST'], defaults={"step": 2})
+@app.route("/addEvent", methods=['GET', 'POST'], endpoint='addEvent', defaults={"step": 2})
 def add_event(step):
     if request.method == 'GET':
         if step == 1:
