@@ -218,66 +218,75 @@ class TennisEvent:
         cls.clear_data()
                 
     @classmethod
-    def fetch_data(cls):
+    def fetch_data(cls, cache=True, atts=True, players=True, sources=True):
         if cls.EventsCache is not None:
             return
             
-        connection = sqlite3.connect(DB_NAME)
-        with connection:
-            connection.row_factory = sqlite3.Row
-            cursor = connection.cursor()
-            cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT, "
-                           "Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, "
-                           "Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
-            cursor.execute("SELECT * FROM TennisEvents ORDER by Date, Event, Category, Result")
-            cls.EventsCache = [dict(row) for row in cursor]
-            connection.commit()
+        if cache:
+            log_info("AUDIT: Event cache reloaded start.")
+            connection = sqlite3.connect(DB_NAME)
+            with connection:
+                connection.row_factory = sqlite3.Row
+                cursor = connection.cursor()
+                cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT,"
+                               "Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, "
+                               "Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
+                cursor.execute("SELECT * FROM TennisEvents ORDER by Date, Event, Category, Result")
+                cls.EventsCache = [dict(row) for row in cursor]
+                connection.commit()
+            log_info("AUDIT: Event cache reloaded SQL.")
 
-        cls.years = []
-        for idx, val in enumerate(cls.EventsCache):
-            cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
-            cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
-            cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
-            cls.EventsCache[idx]['Att3'] = cls.correct_att(val['Date'][:4], val['Att3'])
-            cls.EventsCache[idx]['Att4'] = cls.correct_att(val['Date'][:4], val['Att4'])
-            cls.EventsIndex[val['Id']] = idx
-            year = val['Date'][:4]
-            if year not in cls.Years:
-                cls.Years.append(year)
-        cls.Years.sort()
+        if atts:
+            cls.years = []
+            for idx, val in enumerate(cls.EventsCache):
+                cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
+                cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
+                cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
+                cls.EventsCache[idx]['Att3'] = cls.correct_att(val['Date'][:4], val['Att3'])
+                cls.EventsCache[idx]['Att4'] = cls.correct_att(val['Date'][:4], val['Att4'])
+                cls.EventsIndex[val['Id']] = idx
+                year = val['Date'][:4]
+                if year not in cls.Years:
+                    cls.Years.append(year)
+            cls.Years.sort()
+            log_info("AUDIT: Event cache reloaded years&atts.")
 
-        p = dict()  # move collection to the upper for loop?
-        for i in cls.EventsCache:
-            p_name = i['Player']
-            if p_name in p:
-                p[p_name] += 1
-            else:
-                p[p_name] = 1
-        cls.players = list()
-        cls.top_players = list()
-        for k, v in p.iteritems():
-            cls.players.append(k)
-            cls.top_players.append((k, v))
-        cls.players.sort()
-        cls.top_players.sort(key=lambda player: player[1], reverse=True)
-        cls.top_players = cls.top_players[:20]
+        if players:
+            p = dict()  # move collection to the upper for loop?
+            for i in cls.EventsCache:
+                p_name = i['Player']
+                if p_name in p:
+                    p[p_name] += 1
+                else:
+                    p[p_name] = 1
+            cls.players = list()
+            cls.top_players = list()
+            for k, v in p.iteritems():
+                cls.players.append(k)
+                cls.top_players.append((k, v))
+            cls.players.sort()
+            cls.top_players.sort(key=lambda player: player[1], reverse=True)
+            cls.top_players = cls.top_players[:20]
+            log_info("AUDIT: Event cache reloaded players.")
 
-        cls.sources = list()
-        year_pattern = re.compile(r"^/\d{4}$")
-        dir_len = len(files_dir)
-        try:
-            for root, dirs, fnames in os.walk(files_dir):
-                year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
-                if year_pattern.match(year):
-                    for fname in fnames:
-                        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
-                        no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:], fname)))
-                        cls.sources.append((year[1:], fname, fsize, no_events))
-        except ValueError:  # No files in directory - nothing to select from
-            log_info("Error: ValueError in list_files/os.walk")
-            pass
+        if sources:
+            cls.sources = list()
+            year_pattern = re.compile(r"^/\d{4}$")
+            dir_len = len(files_dir)
+            try:
+                for root, dirs, fnames in os.walk(files_dir):
+                    year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
+                    if year_pattern.match(year):
+                        for fname in fnames:
+                            fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
+                            no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:], fname)))
+                            cls.sources.append((year[1:], fname, fsize, no_events))
+            except ValueError:  # No files in directory - nothing to select from
+                log_info("Error: ValueError in list_files/os.walk")
+                pass
 
-        cls.sources.sort()
+            cls.sources.sort()
+            log_info("AUDIT: Event cache reloaded sources.")
 
         log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))

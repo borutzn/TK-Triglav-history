@@ -132,7 +132,6 @@ def add_event(step):
         if step == 1:
             return render_template("addEvent-S1.html")
         elif step == 2:
-            # ToDo: need year first
             date = request.args.get('d')
             atts_dir = os.path.join(files_dir, secure_filename(date[:4]))
             try:
