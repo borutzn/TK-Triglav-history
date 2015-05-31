@@ -144,7 +144,7 @@ def add_event(step):
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_file", next=url_for("add_event")))
         elif request.form["Status"] == "Dodaj dogodek":
-            return redirect(url_for("add_event2", y="999"))
+            return redirect(url_for("add_event2", d=date))
 
     elif request.method == 'POST' and step == 2:
         log_info("ADD: "+str(request.form))
