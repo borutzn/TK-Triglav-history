@@ -129,10 +129,10 @@ def edit_comment():
 @app.route("/addEvent2", methods=['GET', 'POST'], endpoint='add_event2', defaults={"step": 2})
 def add_event(step):
     if request.method == 'GET':
+        date = request.args.get('d')
         if step == 1:
-            return render_template("addEvent-S1.html")
+            return render_template("addEvent-S1.html", date=date)
         elif step == 2:
-            date = request.args.get('d')
             atts_dir = os.path.join(files_dir, secure_filename(date[:4]))
             try:
                 atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
@@ -145,7 +145,7 @@ def add_event(step):
         log_info("ADD step1: "+str(request.form))
         date = TennisEvent.date2db(request.form["date"])
         if request.form["Status"] == "Dodaj vir":
-            return redirect(url_for("upload_picture", y=date[:4], next=url_for("add_event1")))
+            return redirect(url_for("upload_picture", y=date[:4], next=url_for("add_event1", d=date)))
         elif request.form["Status"] == "Dodaj dogodek":
             return redirect(url_for("add_event2", d=TennisEvent.date2user(date)))
 
