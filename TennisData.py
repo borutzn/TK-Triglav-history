@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from config import DB_NAME, PAGELEN
 
 import datetime
@@ -139,7 +141,7 @@ class TennisEvent:
                         "Att4": self.att4, "Source": self.source})
         connection.commit()
         # self.clear_data()
-        self.fetch_data(sources=False)
+        self.fetch_data(force=True, sources=False)
         return cursor.lastrowid
 
     def update(self, iden):
@@ -156,7 +158,7 @@ class TennisEvent:
                         'Att4': self.att4, 'Source': self.source})
         connection.commit()
         # self.clear_data()
-        self.fetch_data(sources=False)
+        self.fetch_data(force=True, sources=False)
 
     def update_comment(self, iden):
         connection = sqlite3.connect(DB_NAME)
@@ -166,7 +168,7 @@ class TennisEvent:
                        {'Comment': self.comment, 'Id': iden})
         connection.commit()
         # self.clear_data()
-        self.fetch_data(sources=False)
+        self.fetch_data(force=True, sources=False)
 
     @classmethod
     def update_att(cls, iden, att, fname):
@@ -189,7 +191,7 @@ class TennisEvent:
             curs.execute("""UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
         conn.commit()
-        # ToDo: popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data() -- ta hip ni ni?!!
+        # ToDo: popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data() -- ta hip ni nič!!
                 
     @classmethod
     def update_all_atts(cls, old_year, old_att, new_att):
@@ -219,41 +221,41 @@ class TennisEvent:
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         connection.commit()
         # cls.clear_data()
-        cls.fetch_data(sources=False)
+        cls.fetch_data(force=True, sources=False)
 
     @classmethod
-    def fetch_data(cls, cache=True, atts=True, players=True, sources=True):
-        if cls.EventsCache is not None:
+    def fetch_data(cls, force=False, players=True, sources=True):
+        if force:
+            cls.EventsCache = None
+        if cls.EventsCache is None:
             return
-            
-        if cache:
-            log_info("AUDIT: Event cache reloaded start.")
-            connection = sqlite3.connect(DB_NAME)
-            with connection:
-                connection.row_factory = sqlite3.Row
-                cursor = connection.cursor()
-                cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT,"
-                               "Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, "
-                               "Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
-                cursor.execute("SELECT * FROM TennisEvents ORDER by Date, Event, Category, Result")
-                cls.EventsCache = [dict(row) for row in cursor]
-                connection.commit()
-            log_info("AUDIT: Event cache reloaded SQL.")
 
-        if atts:
-            cls.years = []
-            for idx, val in enumerate(cls.EventsCache):
-                cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
-                cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
-                cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
-                cls.EventsCache[idx]['Att3'] = cls.correct_att(val['Date'][:4], val['Att3'])
-                cls.EventsCache[idx]['Att4'] = cls.correct_att(val['Date'][:4], val['Att4'])
-                cls.EventsIndex[val['Id']] = idx
-                year = val['Date'][:4]
-                if year not in cls.Years:
-                    cls.Years.append(year)
-            cls.Years.sort()
-            log_info("AUDIT: Event cache reloaded years&atts.")
+        log_info("AUDIT: Event cache reloaded start.")
+        connection = sqlite3.connect(DB_NAME)
+        with connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            cursor.execute("CREATE TABLE IF NOT EXISTS TennisEvents( Id INTEGER PRIMARY KEY, Date TEXT, Event TEXT,"
+                           "Place TEXT, Category TEXT, Result TEXT, Player TEXT, Comment TEXT, "
+                           "Att1 TEXT, Att2 TEXT, Att3 TEXT, Att4 TEXT, Source TEXT, Created DATE, LastModified DATE)")
+            cursor.execute("SELECT * FROM TennisEvents ORDER by Date, Event, Category, Result")
+            cls.EventsCache = [dict(row) for row in cursor]
+            connection.commit()
+        log_info("AUDIT: Event cache reloaded SQL.")
+
+        cls.years = []
+        for idx, val in enumerate(cls.EventsCache):
+            cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
+            cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
+            cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
+            cls.EventsCache[idx]['Att3'] = cls.correct_att(val['Date'][:4], val['Att3'])
+            cls.EventsCache[idx]['Att4'] = cls.correct_att(val['Date'][:4], val['Att4'])
+            cls.EventsIndex[val['Id']] = idx
+            year = val['Date'][:4]
+            if year not in cls.Years:
+                cls.Years.append(year)
+        cls.Years.sort()
+        log_info("AUDIT: Event cache reloaded years&atts.")
 
         if players:
             p = dict()  # move collection to the upper for loop?
