@@ -162,21 +162,12 @@ def add_event(step):
                              comment=request.form["comment"])
             ev.put()
             log_info("Put")
-            if request.form["player2"] != "":
-                ev.player = request.form["player2"]
-                ev.put()
-            if request.form["player3"] != "":
-                ev.player = request.form["player3"]
-                ev.put()
-            if request.form["player4"] != "":
-                ev.player = request.form["player4"]
-                ev.put()
-            if request.form["player5"] != "":
-                ev.player = request.form["player5"]
-                ev.put()
-            if request.form["player6"] != "":
-                ev.player = request.form["player6"]
-                ev.put()
+            for p in range(2, 7):
+                if request.form["player%d" % p] != "":
+                    ev.category = request.form["player%d" % p]
+                    ev.result = request.form["player%d" % p]
+                    ev.player = request.form["player%d" % p]
+                    ev.put()
             return redirect(url_for("tennis_main", y=ev.date[-4:]))
     return redirect(request.args.get("next") or url_for("tennis_main"))
 
