@@ -9,7 +9,7 @@
 		<tr><td>Datum:</td><td><label>
             <input style="width:3cm" type="text" name="date" value="{{ date }}">
         </label></td></tr>
-		<tr><td colspan="3">Dogodek:</td> <td><label>
+		<tr><td colspan="2">Dogodek:</td> <td><label>
             <input style="width:10cm" type="text" name="event">
         </label></td></tr>
 		<tr><td>Kraj:</td> <td><label>
@@ -18,9 +18,9 @@
 		<tr><td></td> <td></td> <td>Kategorija</td> <td>Uvrstitev</td></tr>
         {%  for i in range(1,6) %}
     		<tr><td>Igralec {{ i }}</td>
-                <td><label><input type="text" name="player{{ i }}"></label>
-                    <label><input style="width:3cm" type="text" name="category{{ i }}"></label>
-                    <label><input style="width:3cm" type="text" name="result{{ i }}"></label></td></tr>
+                <td><label><input type="text" name="player{{ i }}"></label></td>
+                <td><label><input style="width:3cm" type="text" name="category{{ i }}"></label></td>
+                <td><label><input style="width:3cm" type="text" name="result{{ i }}"></label></td></tr>
         {%  endfor %}
 		<tr><td>Komentar:</td><td><label><textarea rows="4" cols="60" name="comment"></textarea></label></td></tr>
 		<tr><td>Dokument 1:</td> <td><label>
