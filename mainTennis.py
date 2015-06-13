@@ -155,8 +155,8 @@ def add_event(step):
         if request.form["Status"] == "Shrani":
             log_info("Shrani"+request.form['att1'])
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
-                             place=request.form["place"], category=request.form["category"],
-                             result=request.form["result"], player=request.form["player"],
+                             place=request.form["place"], category=request.form["category1"],
+                             result=request.form["result1"], player=request.form["player1"],
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
@@ -176,15 +176,6 @@ def add_event(step):
                 ev.put()
             if request.form["player6"] != "":
                 ev.player = request.form["player6"]
-                ev.put()
-            if request.form["player7"] != "":
-                ev.player = request.form["player7"]
-                ev.put()
-            if request.form["player8"] != "":
-                ev.player = request.form["player8"]
-                ev.put()
-            if request.form["player9"] != "":
-                ev.player = request.form["player9"]
                 ev.put()
             return redirect(url_for("tennis_main", y=ev.date[-4:]))
     return redirect(request.args.get("next") or url_for("tennis_main"))
