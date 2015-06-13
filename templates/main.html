@@ -19,7 +19,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
                      <option value=""></option>
                     {% for player in players %}
-                        {%  if player|length > 2 %}
+                        {%  if player|length > 1 %}
                             <option value="{{ player }}">{{ player }}</option>
                         {%  endif %}
                     {% endfor %}
