@@ -21,9 +21,12 @@ jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), aut
 
 from flask import Flask, request, session
 from flask_login import current_user
+from flask_debugtoolbar import DebugToolbarExtension
 app = Flask(__name__)
 app.secret_key = os.urandom(30)
-
+if True:  # Debugging
+    app.debug = True
+    toolbar = DebugToolbarExtension(app)
 
 if not app.debug:
     import logging
