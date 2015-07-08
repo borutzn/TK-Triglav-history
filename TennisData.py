@@ -296,9 +296,9 @@ class TennisEvent:
         log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
-    @classmethod
-    def clear_data(cls):
-        TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
+#    @classmethod
+#    def clear_data(cls):
+#        TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
 
     @classmethod
     def get(cls, iden):

@@ -228,7 +228,7 @@ def delete():
 @login_required
 def data_reload():
     if request.method == 'GET':
-        TennisEvent.clear_data()
+        TennisEvent. fetch_data(force=True, players=True, sources=True)
     return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -282,6 +282,7 @@ def tennis_main():
             show_stat = request.args.get('s')
         except ValueError:
             year = TennisEvent.Years[0]
+            log_info("Error: GET / - setting year to %s" % year)
     elif request.method == 'POST':
         select_player = request.form['select_player']
         event_filter = request.form['event_filter']
@@ -299,6 +300,7 @@ def tennis_main():
     events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
+        log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
     pictures = []
