@@ -75,7 +75,6 @@ def edit_player():
             iden = request.args.get('id')
         except ValueError:
             iden = None
-        # log_info( 'editPlayer: ' + unicode(iden) )
         if iden is not None:
             player = TennisPlayer.get(iden)
             # log_info( "GOT " + unicode(player) )
@@ -108,6 +107,7 @@ def edit_comment():
         try:
             ident = int(request.args.get('id'))
         except ValueError:
+            log_info("Error: wrong edit_comment identifier (%s)" % request.args.get('id'))
             flash(u"Napaka: comment - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
@@ -164,8 +164,8 @@ def add_event(step):
             log_info("Put")
             for p in range(2, 7):
                 if request.form["player%d" % p] != "":
-                    ev.category = request.form["player%d" % p]
-                    ev.result = request.form["player%d" % p]
+                    ev.category = request.form["category%d" % p]
+                    ev.result = request.form["result%d" % p]
                     ev.player = request.form["player%d" % p]
                     ev.put()
             return redirect(url_for("tennis_main", y=ev.date[-4:]))
@@ -180,6 +180,7 @@ def edit_event(update):
         try:
             ident = int(request.args.get('id'))
         except ValueError:
+            log_info("Error: wrong edit_event identifier (%s)" % request.args.get('id'))
             flash(u"Napaka: edit_event - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
@@ -211,6 +212,7 @@ def delete():
         try:
             ident = int(request.args.get('id'))
         except ValueError:
+            log_info("Error: wrong delete identifier (%s)" % request.args.get('id'))
             flash(u"Napaka: delete - napačen identifikator.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
@@ -243,7 +245,7 @@ def correct():
             fname = request.args.get('f')
             next_pg = request.args.get('next')
         except (ValueError, TypeError) as e:
-            log_info("ERROR: %s" % str(e))
+            log_info("Error: %s" % str(e))
             flash(u"Napaka: correct - napačen parameter.")
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
@@ -282,7 +284,7 @@ def tennis_main():
             show_stat = request.args.get('s')
         except ValueError:
             year = TennisEvent.Years[0]
-            log_info("Error: GET / - setting year to %s" % year)
+            log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
     elif request.method == 'POST':
         select_player = request.form['select_player']
         event_filter = request.form['event_filter']
@@ -325,7 +327,7 @@ def list_files():
     if request.method == 'GET':
         year = request.args.get('y') or TennisEvent.Years[0]
         search = request.args.get('s', '')
-        try:  # ToDo: correct all try's like this; + ValueError as e; errno, strerror
+        try:
             files_filter = re.compile(r"%s" % search) if search else None
             log_info("SEARCH pattern %s" % str(files_filter))
         except re.error:
@@ -549,6 +551,7 @@ def edit_user():
             try:
                 iden = int(request.args.get('id'))
             except ValueError:
+                log_info("Error: wrong edit_user identifier (%s)" % request.args.get('id'))
                 flash(u"Napaka: edit_user - napačen identifikator.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
 

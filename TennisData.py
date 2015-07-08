@@ -90,7 +90,7 @@ class TennisEvent:
                 log_info("ERROR: Bad filename " + unicode(os.path.join(files_dir, year+"/"+att)))
                 return "err_"+att
         except:
-            log_info("ERROR: unknown error %s" % sys.exc_info()[0])
+            log_info("Error: %s" % sys.exc_info()[0])
 
     @classmethod
     def date2user(cls, date):
