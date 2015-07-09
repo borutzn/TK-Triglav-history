@@ -126,7 +126,7 @@ class TennisEvent:
                 
         return "1900/01/01"
 
-    def put(self):
+    def put(self, fetch=True):
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
@@ -141,7 +141,8 @@ class TennisEvent:
                         "Att4": self.att4, "Source": self.source})
         connection.commit()
         # self.clear_data()
-        self.fetch_data(force=True, sources=False)
+        if fetch:
+            self.fetch_data(force=True, sources=False)
         return cursor.lastrowid
 
     def update(self, iden):
@@ -244,6 +245,9 @@ class TennisEvent:
 
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
+            # ToDo: izgleda kot da bi bil val NULL?
+            if not val:
+                    log_info("NULL: %d" % idx)
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
