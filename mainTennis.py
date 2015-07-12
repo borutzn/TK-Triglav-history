@@ -160,6 +160,7 @@ def add_event(step):
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
+            log_info("Before put1 ev=" % str(ev))
             ev.put(fetch=False)
             log_info("Put1")
             for p in range(2, 7):
@@ -167,8 +168,9 @@ def add_event(step):
                     ev.category = request.form["category%d" % p]
                     ev.result = request.form["result%d" % p]
                     ev.player = request.form["player%d" % p]
+                    log_info("Before put ev=" % str(ev))
                     ev.put(fetch=False)
-                    log_info("Put%d" % p)
+                    log_info("After put%d" % p)
             TennisEvent.fetch_data(force=True, sources=False)
             return redirect(url_for("tennis_main", y=ev.date[-4:]))
     return redirect(request.args.get("next") or url_for("tennis_main"))
