@@ -52,6 +52,12 @@ class TennisEvent:
         self.created = datetime.datetime.now()
         self.last_modified = self.created
 
+    def __str__(self):
+        return("TennisEvent [date=%s, event=%s, place=%s, category=%s, result=%s, player=%s, comment=%s,\
+                att1=%s, att2=%s, att3=%s, att4=%s, source=%s, created=%s, modified=%s]" %
+               (self.date, self.event, self.place, self.category, self.result, self.player, self.comment,
+                self.att1, self.att2, self.att3, self.att4, self.source, self.created, self.last_modified))
+
     @classmethod
     def result_value(cls, v):
         if v.isnumeric():
@@ -247,7 +253,7 @@ class TennisEvent:
         for idx, val in enumerate(cls.EventsCache):
             # ToDo: izgleda kot da bi bil val NULL?
             if not val:
-                    log_info("NULL: %d" % idx)
+                log_info("NULL: %d" % idx)
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
