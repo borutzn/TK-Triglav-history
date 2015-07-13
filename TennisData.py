@@ -52,7 +52,7 @@ class TennisEvent:
         self.created = datetime.datetime.now()
         self.last_modified = self.created
 
-    def __str__(self):
+    def __unicode__(self):
         return("TennisEvent [date=%s, event=%s, place=%s, category=%s, result=%s, player=%s, comment=%s,\
                 att1=%s, att2=%s, att3=%s, att4=%s, source=%s, created=%s, modified=%s]" %
                (self.date, self.event, self.place, self.category, self.result, self.player, self.comment,
