@@ -83,9 +83,9 @@ class TennisEvent:
                 '''
                 if att != att_sec: # correction of all unsecured attachments
                     TennisEvent.update_all_atts(year, att, att_sec)
-                    log_info("ERROR: Unsecured filename %s" % att_path)
+                    log_info("Error: Unsecured filename %s" % att_path)
                     if not os.path.exists(att_path_sec):
-                        log_info("AUDIT: rename file %s/%s to %s" % (year, att, att_path_sec))
+                        log_info("Audit: rename file %s/%s to %s" % (year, att, att_path_sec))
                         os.rename(att_path, att_path_sec)
                 '''
                 return att_sec
@@ -93,14 +93,13 @@ class TennisEvent:
                 TennisEvent.update_all_atts(year, att, att_sec)
                 return att_sec
             else:  # or os.path.exists(att_path_sec):
-                log_info("ERROR: Bad filename " + unicode(os.path.join(files_dir, year+"/"+att)))
+                log_info("Error: Bad filename " + unicode(os.path.join(files_dir, year+"/"+att)))
                 return "err_"+att
         except:
             log_info("Error: %s" % sys.exc_info()[0])
 
     @classmethod
     def date2user(cls, date):
-        # log_info( "date2user from : "+str(type(date))+", "+str(date) )
         match = re.search(r"(\d{4})/(\d{0,2})/?(\d{0,2})", date)
         if match:
             (d, m, y) = (int(match.group(3)), int(match.group(2)), int(match.group(1)))
@@ -117,17 +116,14 @@ class TennisEvent:
         match = re.search(r"(\d{1,2})\.(\d{1,2})\.(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(3)), int(match.group(2)), int(match.group(1)))
-            # log_info("date2Db to: "+str(d))
             return d
         match = re.search(r"(\d{1,2})\.(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(2)), int(match.group(1)), 0)
-            # log_info("date2Db to: "+str(d))
             return d
         match = re.search(r"(\d{4})", d)
         if match:
             d = "%04d/%02d/%02d" % (int(match.group(1)), 0, 0)
-            # log_info("date2Db to: "+str(d))
             return d
                 
         return "1900/01/01"
@@ -136,7 +132,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("AUDIT: New event put by %s" % (str(current_user.username)))
+        log_info("Audit: New event put by %s" % (str(current_user.username)))
         cursor.execute("""INSERT INTO TennisEvents
                        (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Source,Created,LastModified)
                         VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
@@ -155,7 +151,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("AUDIT: Event %s update by %s." % (iden, str(current_user.username)))
+        log_info("Audit: Event %s update by %s." % (iden, str(current_user.username)))
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Category=:Category,
                         Result=:Result, Player=:Player, Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3,
                         Att4=:Att4, Source=:Source, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
@@ -184,7 +180,7 @@ class TennisEvent:
 
         if type(att) != type(str):
             att = str(att)
-        log_info("AUDIT: Event %s attachment update by %s." % (iden, str(current_user.username)))
+        log_info("Audit: Event %s attachment update by %s." % (iden, str(current_user.username)))
         if att == "1":
             curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                          {'fname': fname, 'Id': iden})
@@ -206,16 +202,16 @@ class TennisEvent:
             if ev['Date'][:4] != old_year:
                 continue
             if ev['Att1'] == old_att:
-                log_info("CHANGE ATT1 id=%d, %s -> %s" % (ev['Id'], ev['Att1'], new_att))
+                log_info("Temp: CHANGE ATT1 id=%d, %s -> %s" % (ev['Id'], ev['Att1'], new_att))
                 cls.update_att(ev['Id'], "1", new_att)
             if ev['Att2'] == old_att:
-                log_info("CHANGE ATT2 id=%d, %s -> %s" % (ev['Id'], ev['Att2'], new_att))
+                log_info("Temp: CHANGE ATT2 id=%d, %s -> %s" % (ev['Id'], ev['Att2'], new_att))
                 cls.update_att(ev['Id'], "2", new_att)
             if ev['Att3'] == old_att:
-                log_info("CHANGE ATT3 id=%d, %s -> %s" % (ev['Id'], ev['Att3'], new_att))
+                log_info("Temp: CHANGE ATT3 id=%d, %s -> %s" % (ev['Id'], ev['Att3'], new_att))
                 cls.update_att(ev['Id'], "3", new_att)
             if ev['Att4'] == old_att:
-                log_info("CHANGE ATT4 id=%d, %s -> %s" % (ev['Id'], ev['Att4'], new_att))
+                log_info("Temp: CHANGE ATT4 id=%d, %s -> %s" % (ev['Id'], ev['Att4'], new_att))
                 cls.update_att(ev['Id'], "4", new_att)
         return
 
@@ -224,7 +220,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("AUDIT: Event %s deleted by %s." % (iden, str(current_user.username)))
+        log_info("Audit: Event %s deleted by %s." % (iden, str(current_user.username)))
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         connection.commit()
         # cls.clear_data()
@@ -237,7 +233,7 @@ class TennisEvent:
         if cls.EventsCache is not None:
             return
 
-        log_info("AUDIT: Event cache reloaded start.")
+        log_info("Audit: Event cache reloaded start.")
         connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
@@ -253,7 +249,7 @@ class TennisEvent:
         for idx, val in enumerate(cls.EventsCache):
             # ToDo: izgleda kot da bi bil val NULL?
             if not val:
-                log_info("NULL: %d" % idx)
+                log_info("Temp: NULL: %d" % idx)
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
@@ -264,7 +260,7 @@ class TennisEvent:
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
-        log_info("AUDIT: Event cache reloaded cache.")
+        log_info("Audit: Event cache reloaded cache.")
 
         if players:
             p = dict()  # move collection to the upper for loop?
@@ -282,7 +278,7 @@ class TennisEvent:
             cls.players.sort()
             cls.top_players.sort(key=lambda player: player[1], reverse=True)
             cls.top_players = cls.top_players[:20]
-            log_info("AUDIT: Event cache reloaded players.")
+            log_info("Audit: Event cache reloaded players.")
 
         if sources:
             cls.sources = list()
@@ -301,9 +297,9 @@ class TennisEvent:
                 pass
 
             cls.sources.sort()
-            log_info("AUDIT: Event cache reloaded sources.")
+            log_info("Audit: Event cache reloaded sources.")
 
-        log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
+        log_info("Audit: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
 #    @classmethod
@@ -333,7 +329,7 @@ class TennisEvent:
 
         if event_filter != "":
             search = 1 if event_filter.isalnum() else 2
-            log_info("SEARCH=" + str(search))
+            log_info("Temp: Search=" + str(search))
         try:
             search_pattern = re.compile(r"%s" % event_filter)
         except re.error:
@@ -351,7 +347,7 @@ class TennisEvent:
 
     @classmethod
     def get_events_by_year(cls, year, event_filter=""):
-        log_info("GET_BY_YEAR "+str(year)+", "+event_filter)
+        log_info("Temp: GET_BY_YEAR "+str(year)+", "+event_filter)
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(year)
@@ -359,7 +355,7 @@ class TennisEvent:
 
         if event_filter != "":
             search = 1 if event_filter.isalnum() else 2
-            log_info("SEARCH=" + str(search))
+            log_info("Temp: Search=" + str(search))
         try:
             search_pattern = re.compile(r"%s" % event_filter)
         except re.error:
@@ -376,7 +372,6 @@ class TennisEvent:
                 pos += 1
                 continue
             events.append(cls.EventsCache[pos])
-            # log_info("add event: %d %s, %s" % (pos, cls.EventsCache[pos]['Date'], cls.EventsCache[pos]['Event']))
             pos += 1
         return events
 
@@ -475,7 +470,7 @@ class TennisPlayer:
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx
 
-        log_info("AUDIT: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
+        log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
     def clear_data(cls):
@@ -494,7 +489,7 @@ class TennisPlayer:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
-        log_info("AUDIT: Player %s update by %s." % (self.Name, str(current_user.username)))
+        log_info("Audit: Player %s update by %s." % (self.Name, str(current_user.username)))
         curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
                      Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
         curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
@@ -543,4 +538,4 @@ class EventSource:
         for idx, val in enumerate(cls.SourcesCache):
             cls.SourcesIndex[val['file_name']] = idx
 
-        log_info("AUDIT: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
+        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))

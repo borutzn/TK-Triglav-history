@@ -52,8 +52,6 @@ def show_player():
     if request.method == 'POST':
         search = request.form['search']
 
-    # log_info( "search: " + str(search) )
-    # log_info( "players: " + str(TennisEvent.players) )
     if search == "":
         players = list(TennisEvent.players)
     else:
@@ -77,10 +75,8 @@ def edit_player():
             iden = None
         if iden is not None:
             player = TennisPlayer.get(iden)
-            # log_info( "GOT " + unicode(player) )
             if player is None:
                 player = TennisPlayer(name=iden)
-                # log_info( "GOT " + unicode(player.Name) )
             return render_template("editPlayer.html", player=player, ident=iden)
 
     elif request.method == 'POST':
@@ -112,7 +108,6 @@ def edit_comment():
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
-        log_info("Com: " + str(event))
         return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['Date']))
 
     elif request.method == 'POST':
@@ -142,7 +137,7 @@ def add_event(step):
             return render_template("addEvent-S2.html", date=TennisEvent.date2user(date), atts=atts)
 
     elif request.method == 'POST' and step == 1:
-        log_info("ADD step1: "+str(request.form))
+        log_info("Temp: ADD step1: "+str(request.form))
         date = TennisEvent.date2db(request.form["date"])
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_picture", y=date[:4],
@@ -151,7 +146,7 @@ def add_event(step):
             return redirect(url_for("add_event2", d=date, next=url_for("add_event1", d=date)))
 
     elif request.method == 'POST' and step == 2:
-        log_info("ADD: "+str(request.form))
+        log_info("Temp: ADD: "+str(request.form))
         if request.form["Status"] == "Shrani":
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category1"],
@@ -159,17 +154,15 @@ def add_event(step):
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
-            log_info("Before put1 ev=%s" % unicode(ev))
+            log_info("Temp: put1 %s" % unicode(ev))
             ev.put(fetch=False)
-            log_info("Put1")
             for p in range(2, 7):
                 if request.form["player%d" % p] != "":
                     ev.category = request.form["category%d" % p]
                     ev.result = request.form["result%d" % p]
                     ev.player = request.form["player%d" % p]
-                    log_info("Before put ev=%s" % unicode(ev))
+                    log_info("Temp: put%d ev=%s" % (p, unicode(ev)))
                     ev.put(fetch=False)
-                    log_info("After put%d" % p)
             TennisEvent.fetch_data(force=True, sources=False)
             return redirect(url_for("tennis_main", y=ev.date[-4:]))
     return redirect(request.args.get("next") or url_for("tennis_main"))
@@ -220,7 +213,7 @@ def delete():
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
-        log_info("DELETE: " + str(event))
+        log_info("Delete: " + str(event))
         return render_template("delete.html", event=event, date=TennisEvent.date2user(event['Date']))
 
     elif request.method == 'POST':
@@ -312,8 +305,7 @@ def tennis_main():
     for src in TennisEvent.sources:
         if src[0] == year and allowed_image(src[1]):
             pictures.append(src)
-            # log_info("src:%s, %d" % (src[1], src[3]))
-    log_info("pictures: %s" % pictures)
+    log_info("Temp: pictures: %s" % pictures)
 
     year_len = len(TennisEvent.Years)
     year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
@@ -332,7 +324,7 @@ def list_files():
         search = request.args.get('s', '')
         try:
             files_filter = re.compile(r"%s" % search) if search else None
-            log_info("SEARCH pattern %s" % str(files_filter))
+            log_info("Search pattern %s" % str(files_filter))
         except re.error:
             log_info("Error: re.error in list_files/re.compile")
             flash("Napaka pri nizu za iskanje")
@@ -344,7 +336,7 @@ def list_files():
         files = []
         for (y, fname, fsize, refs) in TennisEvent.sources:
             if files_filter and files_filter.match(fname):
-                log_info("FOUND: %s" % fname)
+                log_info("Temp: Found: %s" % fname)
             if (not files_filter and (y == year)) or (files_filter and files_filter.match(fname)):
                 files.append((y, fname, fsize, refs))
         try:
@@ -381,11 +373,11 @@ def edit_file():
         new_att = os.path.join(files_dir, new_year, new_fname)
 
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
-            log_info("AUDIT: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            log_info("Audit: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             os.rename(old_att, new_att)
             TennisEvent.update_all_atts(old_year, old_fname, new_fname)
         elif request.form["Status"][:5] == unicode("Kopiraj"[:5]):
-            log_info("AUDIT: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            log_info("Audit: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             shutil.copyfile(old_att, new_att)
 
         return redirect(request.args.get("next") or url_for("tennis_main"))
@@ -421,7 +413,7 @@ def upload_picture():
                 flash(u"NAPAKA: Nastavi le Obstoječe ime ALI Spremeni ime.")
                 return redirect(url_for("upload_picture"))
             else:
-                log_info("UPLOAD %s, %s, %s" % (upload_file.filename, select_name, new_name))
+                log_info("Temp: Upload %s, %s, %s" % (upload_file.filename, select_name, new_name))
                 picture_dir = os.path.join(files_dir, secure_filename(year))
                 if not os.path.exists(picture_dir):
                     log_info("Audit: directory %s created." % picture_dir)
@@ -432,7 +424,7 @@ def upload_picture():
                     save_name = secure_filename(new_name)
                 else:
                     save_name = secure_filename(upload_file.filename)
-                log_info("Saving file: %s" % save_name)
+                log_info("Temp: Saving file: %s" % save_name)
                 picture = os.path.join(picture_dir, save_name)
                 upload_file.save(picture)
                 log_info("Audit: picture %s uploaded." % picture)
@@ -487,7 +479,7 @@ def login():
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
                 session['user'] = user.username
-                log_info("AUDIT: User %s login." % user.username)
+                log_info("Audit: User %s login." % user.username)
                 flash(u"Prijava uspešna.")
                 return redirect(request.args.get("next") or url_for("tennis_main"))
         
@@ -531,7 +523,7 @@ def signup():
         user.put()
         login_user(user)
         session['user'] = None
-        log_info("AUDIT: New user %s created." % user.username)
+        log_info("Audit: New user %s created." % user.username)
         flash(u"Kreiran in prijavljen nov uporabnik.")
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
@@ -539,7 +531,7 @@ def signup():
 @app.route("/logout")
 @login_required
 def logout():
-    log_info("AUDIT: User %s logout." % str(current_user.username))
+    log_info("Audit: User %s logout." % str(current_user.username))
     logout_user()
     session.pop('user', None)
     flash(u"Odjava uspešna.")
@@ -580,7 +572,7 @@ def edit_user():
 @login_required
 def export(action, fmt):
     if request.method == 'GET':
-        log_info("AUDIT: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
+        log_info("Audit: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
         if action == 'events':
             if fmt == "json":
                 return TennisEvent.export('J')
@@ -620,12 +612,12 @@ def audit():
 @login_required
 def shutdown():
     if request.method == 'GET':
-        log_info("AUDIT: System shutdown requested by %s." % str(current_user.username))
+        log_info("Audit: System shutdown requested by %s." % str(current_user.username))
         return render_template("shutdown.html")
             
     elif request.method == 'POST':
         if request.form["Status"] == "Ugasni":
-            log_info("AUDIT: System shutdown confirmed and executed")
+            log_info("Audit: System shutdown confirmed and executed")
             os.system("sudo shutdown -h 0")
         flash(u"Če je bilo ugašanje uspešno, stran ne bo več dosegljiva. :-)")
         return redirect(request.args.get("next") or url_for("tennis_main"))
@@ -633,13 +625,13 @@ def shutdown():
 
 if __name__ == "__main__":
     if Production:
-        log_info(appname + ": start standalone production")
+        log_info("Audit: %s - start standalone production" % appname)
         app.run(host='127.0.0.1', port=8080, debug=False)
     else:        
-        log_info(appname + ": start standalone development")
+        log_info("Audit: %s - start standalone development" % appname)
         app.run(host='127.0.0.1', port=80, debug=True)
 else:
-    log_info(appname + ": start")
+    log_info("Audit: %s - start" % appname)
 
 # running 4 times, if max-procs=4 in fastcgi
 TennisEvent.fetch_data()
