@@ -126,9 +126,7 @@
         {% set prev_comment = "" %}
         {% for event in events %}
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
-
             {% if prev_comment != "" and not duplicate %}
-
                 {% set prev_comment = "" %}
             {% endif %}
             {% if year != event.Date[:4] %}
@@ -163,16 +161,13 @@
                     </div>
                 </div>
             </div>
-
             {% set prev_date = event.Date %}
             {% set prev_event = event.Event %}
             {% set prev_place = event.Place %}
             {% set prev_comment = event.Comment %}
         {% endfor %}
     {% endif %}
-    <div style="height:30px;"></div>
     </div>
-
 
     <div class="container">
         <div class="page-header">
