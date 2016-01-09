@@ -193,6 +193,7 @@
             {% endif %}
 
             {% set prev_event = event %}
+            p:{{ prev_event.Date }}, {{ prev_event.Place }}, {{ group_from }}
         {% endfor %}
 
         <!-- manage last entry separatly -->
