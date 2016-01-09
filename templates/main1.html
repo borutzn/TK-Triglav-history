@@ -121,9 +121,7 @@
     <div class="container">
     {% if events %}
         {% set year = 0 %}
-        {% set prev_date = events[0].Date %}
-        {% set prev_event = events[0].Event %}
-        {% set prev_place = events[0].Place %}
+        {% set prev_event = events[0] %}
         {% set group_from = -1 %}
         {% for event in events[1:] %}
             {% if year != event.Date[:4] %}
@@ -133,7 +131,7 @@
                 {% set year = event.Date[:4] %}
             {% endif %}
 
-            {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
+            {% set duplicate = prev_event.Date == event.Date and prev_event.Event == event.Event and prev_event.Place == event.Place %}
             {% if duplicate and group_from == -1 %} <!-- begin new group -->
                 {% set group_from = loop.index0 %}
                 group from {{  group_from }}
@@ -150,33 +148,28 @@
                     <div class="panel-heading">
                         <div class="row panel-title">
                             <div class="col-sm-2">
-                                {% if event.Date[4:] == "/00/00" %}
-                                    {{ event.Date[:4] }}
-                                {% elif event.Date[7:] == "/00" %}
-                                    {{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% if prev_event.Date[4:] == "/00/00" %}
+                                    {{ prev_event.Date[:4] }}
+                                {% elif prev_event.Date[7:] == "/00" %}
+                                    {{ prev_event.Date[5:7] }}.{{ prev_event.Date[:4] }}
                                 {% else %}
-                                    {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                    {{ prev_event.Date[8:] }}.{{ prev_event.Date[5:7] }}.{{ prev_event.Date[:4] }}
                                 {% endif %}
                             </div>
-                            <div class="col-sm-3"><b>{{ event.Event }}</b></div>
-                            <div class="col-sm-2">{{ event.Place }}</div>
+                            <div class="col-sm-3"><b>{{ prev_event.Event }}</b></div>
+                            <div class="col-sm-2">{{ prev_event.Place }}</div>
                             <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
+
                         <div class="row">
                             <div class="col-sm-7"></div>
-                            <div class="col-sm-1">M mix</div>
-                            <div class="col-sm-1">5.-8.</div>
-                            <div class="col-sm-3">Davor Žnidar</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-7"></div>
-                            <div class="col-sm-1">{{ event.Category }}</div>
-                            <div class="col-sm-1">{{ event.Result }}</div>
-                            <div class="col-sm-3">{{ event.Result }}</div>
+                            <div class="col-sm-1">{{ prev_event.Category }}</div>
+                            <div class="col-sm-1">{{ prev_event.Result }}</div>
+                            <div class="col-sm-3">{{ prev_event.Result }}</div>
                         </div>
                     </div>
                 </div>
@@ -202,8 +195,9 @@
                         </div>
                     </div>
                 </div>
-             {% endif %}
+            {% endif %}
 
+            {% set prev_event = event %}
         {% endfor %}
     {% endif %}
     </div>
