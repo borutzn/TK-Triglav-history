@@ -140,7 +140,8 @@
             {% elif duplicate %} <!-- continue group -->
                 continue
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
-                group from {{  group_from }} to {{ loop.index0 }}
+                {%  set group_len = loop.index0 - group_from %}
+                group {{ group_len }}x from {{  group_from }} to {{ loop.index0 }}
                 {% set group_from = -1 %}
             {%  else %}
                 single
