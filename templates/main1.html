@@ -194,10 +194,10 @@
 
             {% if loop.index == events|length - 1 %} <!-- manage last entry separatly -->
                 last iteration<br>
-                a:{{ event.Date }}, {{ event.Place }}, {{ group_from }}
                 {% if group_from > -1 %} <!-- end group -->
                     {% set group_len = events|length - group_from + 1 %}
                     {% set group_to = events|length + 1 %}
+                    a:{{ event.Date }}, {{ event.Place }}, {{ group_from }}, {{ group_to }}, {{ group_len }}
                     {% if event.Date[4:] == "/00/00" %}
                         {%  set date = event.Date[:4] %}
                     {% elif event.Date[7:] == "/00" %}
