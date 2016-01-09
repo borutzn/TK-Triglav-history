@@ -127,9 +127,7 @@
         {% for event in events %}
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
             {% if prev_comment != "" and not duplicate %}
-                <tr><td class="main-table-comment" style="border-top: thin dotted #16377A;"
-                        colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
-                    {{ prev_comment }}</td></tr>
+
                 {% set prev_comment = "" %}
             {% endif %}
             {% if year != event.Date[:4] %}
@@ -138,25 +136,24 @@
                 </div>
                 {% set year = event.Date[:4] %}
             {% endif %}
-            {% if duplicate %}
-
-            {% else %}
-
-            {% endif %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-sm-2 panel-title">
-                            {% if event.Date[4:] == "/00/00" %}
-                                {{ event.Date[:4] }}
-                            {% elif event.Date[7:] == "/00" %}
-                                {{ event.Date[5:7] }}.{{ event.Date[:4] }}
-                            {% else %}
-                                {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
-                        <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                        {% if duplicate %}
+
+                        {% else %}
+                            <div class="col-sm-2 panel-title">
+                                {% if event.Date[4:] == "/00/00" %}
+                                    {{ event.Date[:4] }}
+                                {% elif event.Date[7:] == "/00" %}
+                                    {{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% else %}
+                                    {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
+                            <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                        {% endif %}
                         <div class="col-sm-1">{{ event.Category }}</div>
                         <div class="col-sm-1">{{ event.Result }}</div>
                         <div class="col-sm-3">{{ event.Player }}</div>
