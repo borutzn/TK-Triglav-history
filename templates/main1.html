@@ -126,7 +126,7 @@
         {% set prev_comment = "" %}
         {% for event in events %}
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
-            {{ duplicate }}
+
             {% if prev_comment != "" and not duplicate %}
 
                 {% set prev_comment = "" %}
@@ -141,7 +141,9 @@
                 <div class="panel-heading">
                     <div class="row">
                         {% if duplicate %}
-
+                            <div class="col-sm-2 panel-title"></div>
+                            <div class="col-sm-3 panel-title"></div>
+                            <div class="col-sm-2 panel-title"></div>
                         {% else %}
                             <div class="col-sm-2 panel-title">
                                 {% if event.Date[4:] == "/00/00" %}
