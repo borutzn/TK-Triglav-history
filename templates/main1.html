@@ -125,6 +125,7 @@
         {% set prev_event = events[0] %}
         {% set group_from = -1 %}
         {% for event in events[1:] %}
+            [{{ event.Date }}, {{ event.Place }}]
             {% if year != event.Date[:4] %}
                 <div class="page-header">
                     <a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
