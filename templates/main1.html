@@ -134,10 +134,8 @@
             {% set duplicate = prev_event.Date == event.Date and prev_event.Event == event.Event and prev_event.Place == event.Place %}
             {% if duplicate and group_from == -1 %} <!-- begin new group -->
                 {% set group_from = loop.index0 %}
-                group from {{  group_from }}
 
             {% elif duplicate %} <!-- continue group -->
-                continue
 
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
                 {%  set group_len = loop.index0 - group_from + 1 %}
@@ -168,9 +166,9 @@
                         {% for e in events[group_from:group_to] %}
                             <div class="row">
                                 <div class="col-sm-7"></div>
-                                <div class="col-sm-1">{{ event.Category }}</div>
-                                <div class="col-sm-1">{{ event.Result }}</div>
-                                <div class="col-sm-3">{{ event.Result }}</div>
+                                <div class="col-sm-1">{{ e.Category }}</div>
+                                <div class="col-sm-1">{{ e.Result }}</div>
+                                <div class="col-sm-3">{{ e.Result }}</div>
                             </div>
                         {% endfor %}
                     </div>
