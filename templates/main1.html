@@ -164,13 +164,15 @@
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
-
-                        <div class="row">
-                            <div class="col-sm-7"></div>
-                            <div class="col-sm-1">{{ prev_event.Category }}</div>
-                            <div class="col-sm-1">{{ prev_event.Result }}</div>
-                            <div class="col-sm-3">{{ prev_event.Result }}</div>
-                        </div>
+                        {% set group_to = loop.index0 %}
+                        {% for e in events[group_from:group_to] %}
+                            <div class="row">
+                                <div class="col-sm-7"></div>
+                                <div class="col-sm-1">{{ event.Category }}</div>
+                                <div class="col-sm-1">{{ event.Result }}</div>
+                                <div class="col-sm-3">{{ event.Result }}</div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
 
