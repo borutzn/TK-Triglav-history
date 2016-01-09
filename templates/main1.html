@@ -123,17 +123,26 @@
         {% set year = 0 %}
         {% set prev_date = "" %}
         {% set prev_event = "" %}
-        {% set prev_comment = "" %}
+        {% set prev_place = "" %}
+        {% set group_from = -1 %}
         {% for event in events %}
-            {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
-            {% if prev_comment != "" and not duplicate %}
-                {% set prev_comment = "" %}
-            {% endif %}
             {% if year != event.Date[:4] %}
                 <div class="page-header">
                     <a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                 </div>
                 {% set year = event.Date[:4] %}
+            {% endif %}
+
+            {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
+            {% if duplicate and group_from == -1 %} <!-- begin new group -->
+                {% set group_from = loop.index %}
+                group from {{  group_from }}
+            {% elif duplicate %} <!-- continue group -->
+                continue
+            {% elif not duplicate and group_from > -1 %} <!-- end group -->
+                group from {{  group_from }} to {{ loop.index }}
+            {%  else %}
+                single
             {% endif %}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -164,7 +173,6 @@
             {% set prev_date = event.Date %}
             {% set prev_event = event.Event %}
             {% set prev_place = event.Place %}
-            {% set prev_comment = event.Comment %}
         {% endfor %}
     {% endif %}
     </div>
