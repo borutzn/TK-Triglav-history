@@ -126,6 +126,7 @@
         {% set prev_comment = "" %}
         {% for event in events %}
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
+            {{ duplicate }}
             {% if prev_comment != "" and not duplicate %}
 
                 {% set prev_comment = "" %}
