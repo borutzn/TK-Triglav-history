@@ -121,11 +121,11 @@
     <div class="container">
     {% if events %}
         {% set year = 0 %}
-        {% set prev_date = "" %}
-        {% set prev_event = "" %}
-        {% set prev_place = "" %}
+        {% set prev_date = event.Date[0] %}
+        {% set prev_event = event.Event[0] %}
+        {% set prev_place = event.Place[0] %}
         {% set group_from = -1 %}
-        {% for event in events %}
+        {% for event in events[1:] %}
             {% if year != event.Date[:4] %}
                 <div class="page-header">
                     <a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
@@ -137,15 +137,73 @@
             {% if duplicate and group_from == -1 %} <!-- begin new group -->
                 {% set group_from = loop.index0 %}
                 group from {{  group_from }}
+
             {% elif duplicate %} <!-- continue group -->
                 continue
+
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
-                {%  set group_len = loop.index0 - group_from %}
+                {%  set group_len = loop.index0 - group_from + 1 %}
                 group {{ group_len }}x from {{  group_from }} to {{ loop.index0 }}
                 {% set group_from = -1 %}
-            {%  else %}
-                single
-            {% endif %}
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row panel-title">
+                            <div class="col-sm-2">
+                                {% if event.Date[4:] == "/00/00" %}
+                                    {{ event.Date[:4] }}
+                                {% elif event.Date[7:] == "/00" %}
+                                    {{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% else %}
+                                    {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-3"><b>{{ event.Event }}</b></div>
+                            <div class="col-sm-2">{{ event.Place }}</div>
+                            <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
+                            <span class="pull-right clickable panel-collapsed">
+                                <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-collapse collapse">
+                        <div class="row">
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-1">M mix</div>
+                            <div class="col-sm-1">5.-8.</div>
+                            <div class="col-sm-3">Davor Žnidar</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-1">{{ event.Category }}</div>
+                            <div class="col-sm-1">{{ event.Result }}</div>
+                            <div class="col-sm-3">{{ event.Result }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            {%  else %} <!-- single entry -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-2 panel-title">
+                                {% if event.Date[4:] == "/00/00" %}
+                                    {{ event.Date[:4] }}
+                                {% elif event.Date[7:] == "/00" %}
+                                    {{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% else %}
+                                    {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
+                            <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                            <div class="col-sm-1">{{ event.Category }}</div>
+                            <div class="col-sm-1">{{ event.Result }}</div>
+                            <div class="col-sm-3">{{ event.Player }}</div>
+                        </div>
+                    </div>
+                </div>
+             {% endif %}
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
