@@ -192,13 +192,16 @@
 
             {% endif %}
 
+            {% if loop.index == events|length %}
+                last iteration<br>
+            {% endif %}
             {% set prev_event = event %}
             n:{{ prev_event.Date }}, {{ prev_event.Place }}, {{ group_from }}<br>
         {% endfor %}
 
         <!-- manage last entry separatly -->
         {% set event = events[-1] %}
-        [{{ event.Date }}, {{ event.Place }}, {{ group_from }}]
+        a:{{ event.Date }}, {{ event.Place }}, {{ group_from }}
         {% if group_from > -1 %} <!-- end group -->
             {% set group_len = events|length - group_from + 1 %}
             {% set group_to = events|length + 1 %}
