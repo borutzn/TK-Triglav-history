@@ -139,8 +139,8 @@
 
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
                 {%  set group_len = loop.index0 - group_from + 1 %}
-                group {{ group_len }}x from {{  group_from }} to {{ loop.index0 }}
-                {% set group_from = -1 %}
+                {% set group_to = loop.index0 %}
+                group {{ group_len }}x from {{  group_from }} to {{ group_to }}
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -162,7 +162,6 @@
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
-                        {% set group_to = loop.index0 %}
                         {% for e in events[group_from:group_to] %}
                             <div class="row">
                                 <div class="col-sm-7"></div>
@@ -173,6 +172,7 @@
                         {% endfor %}
                     </div>
                 </div>
+                {% set group_from = -1 %}
 
             {%  else %} <!-- single entry -->
                 <div class="panel panel-default">
