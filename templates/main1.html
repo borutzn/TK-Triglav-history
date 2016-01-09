@@ -140,6 +140,7 @@
             {% elif duplicate %} <!-- continue group -->
                continue<br>
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
+                end<br>
                 {% set group_len = loop.index0 - group_from + 1 %}
                 {% set group_to = loop.index0 + 1 %}
                 {% if prev_event.Date[4:] == "/00/00" %}
@@ -173,8 +174,9 @@
                     </div>
                 </div>
                 {% set group_from = -1 %}
-                end<br>
+
             {%  else %} <!-- single entry -->
+                single<br>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -187,13 +189,14 @@
                         </div>
                     </div>
                 </div>
-                single<br>
+
             {% endif %}
 
             {% set prev_event = event %}
         {% endfor %}
 
         <!-- manage last entry separatly -->
+        [{{ prev_event.Date }}, {{ prev_event.Place }}, {{ group_from }}]
         {% if group_from > -1 %} <!-- end group -->
             {% set group_len = events|length - group_from + 1 %}
             {% set group_to = events|length + 1 %}
