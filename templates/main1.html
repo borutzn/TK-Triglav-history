@@ -197,23 +197,24 @@
         {% endfor %}
 
         <!-- manage last entry separatly -->
-        [{{ prev_event.Date }}, {{ prev_event.Place }}, {{ group_from }}]
+        {% set event = events[-1] %}
+        [{{ event.Date }}, {{ event.Place }}, {{ group_from }}]
         {% if group_from > -1 %} <!-- end group -->
             {% set group_len = events|length - group_from + 1 %}
             {% set group_to = events|length + 1 %}
-            {% if prev_event.Date[4:] == "/00/00" %}
-                {%  set prev_date = prev_event.Date[:4] %}
-            {% elif prev_event.Date[7:] == "/00" %}
-                {% set prev_date = prev_event.Date[5:7] + "." + prev_event.Date[:4] %}
+            {% if event.Date[4:] == "/00/00" %}
+                {%  set date = event.Date[:4] %}
+            {% elif event.Date[7:] == "/00" %}
+                {% set date = event.Date[5:7] + "." + event.Date[:4] %}
             {% else %}
-                {% set prev_date = prev_event.Date[8:] + "." +  prev_event.Date[5:7] + "." + prev_event.Date[:4] %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + event.Date[:4] %}
             {% endif %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row panel-title">
-                        <div class="col-sm-2">{{ prev_date }}</div>
-                        <div class="col-sm-3"><b>{{ prev_event.Event }}</b></div>
-                        <div class="col-sm-2">{{ prev_event.Place }}</div>
+                        <div class="col-sm-2">{{ date }}</div>
+                        <div class="col-sm-3"><b>{{ event.Event }}</b></div>
+                        <div class="col-sm-2">{{ event.Place }}</div>
                         <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
                         <span class="pull-right clickable panel-collapsed">
                             <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
@@ -234,12 +235,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-sm-2 panel-title">{{ prev_date }}</div>
-                        <div class="col-sm-3 panel-title"><b>{{ prev_event.Event }}</b></div>
-                        <div class="col-sm-2 panel-title">{{ prev_event.Place }}</div>
-                        <div class="col-sm-1">{{ prev_event.Category }}</div>
-                        <div class="col-sm-1">{{ prev_event.Result }}</div>
-                        <div class="col-sm-3">{{ prev_event.Player }}</div>
+                        <div class="col-sm-2 panel-title">{{ date }}</div>
+                        <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
+                        <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                        <div class="col-sm-1">{{ event.Category }}</div>
+                        <div class="col-sm-1">{{ event.Result }}</div>
+                        <div class="col-sm-3">{{ event.Player }}</div>
                     </div>
                 </div>
             </div>
