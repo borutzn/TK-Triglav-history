@@ -1,0 +1,459 @@
+<!--# -*- coding: utf-8 -*- -->
+
+{% extends "base.html" %}
+
+{% block next %}/{% endblock %}
+{% block content %}
+
+
+	<style>
+        .navbar-brand {
+            float: left;
+            height: 40px;
+            padding: 5px 20px;
+            line-height: 40px;
+            width: 80px;
+        }
+	</style>
+
+
+    <h3>TK Triglav zgodovina</h3>
+
+    <nav class="navbar navbar-default">
+          <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#"><img alt="TK Triglav logo" src="{{ url_for('static', filename='TH1.jpg') }}"></a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <form class="navbar-form navbar-left" role="search">
+                      <div class="form-group">
+                        <input type="text" class="form-control" placeholder="dogodek">
+                      </div>
+                    </form>
+
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span> </button>
+
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    leto <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">1948</a></li>
+                                    <li><a href="#">1951</a></li>
+                                    <li><a href="#">1953</a></li>
+                                    <li><a href="#">1955</a></li>
+                                </ul>
+                            </div>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span> </button>
+                        </div>
+                    </form>
+
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            igralec <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#">Davor Znidar</a></li>
+                                <li><a href="#">Vesna Znidar</a></li>
+                                <li><a href="#">Davor Znidar</a></li>
+                                <li><a href="#">Vesna Žnidar</a></li>
+                                <li><a href="#">Davor Žnidar</a></li>
+                                <li><a href="#">Vesna Žnidar</a></li>
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </form>
+
+               <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#">Registracija</a></li>
+                  <li class="dropdown">
+                     <a href="http://www.jquery2dotnet.com" class="dropdown-toggle" data-toggle="dropdown">Prijava <b class="caret"></b></a>
+                     <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
+                        <li>
+                           <div class="row">
+                              <div class="col-md-12">
+                                 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+                                    <div class="form-group">
+                                       <label class="sr-only" for="exampleInputEmail2">uporabniško ime</label>
+                                       <input type="email" class="form-control" id="exampleInputEmail2" placeholder="uporabniško ime" required>
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="sr-only" for="exampleInputPassword2">geslo</label>
+                                       <input type="password" class="form-control" id="exampleInputPassword2" placeholder="geslo" required>
+                                    </div>
+                                    <div class="checkbox">
+                                       <label>
+                                       <input type="checkbox"> Zapomni si prijavo
+                                       </label>
+                                    </div>
+                                    <div class="form-group">
+                                       <button type="submit" class="btn btn-success btn-block">Prijavi me</button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </li>
+                     </ul>
+                  </li>
+               </ul>
+
+                </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+    </nav>
+
+
+    <!-- Begin page content -->
+    <div class="container">
+        <div class="page-header">
+            <h2><b>1971</b></h2>
+        </div>
+
+        <div class="panel-group" id="results">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-2 panel-title">2.9.1949</div>
+                        <div class="col-sm-3 panel-title"><b>Mednarodno prvenstvo Maribora</b></div>
+                        <div class="col-sm-2 panel-title">Maribor</div>
+                        <div class="col-sm-1">Ž 18</div>
+                        <div class="col-sm-1">2.</div>
+                        <div class="col-sm-3">Vesna Žnidar</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row panel-title">
+                        <div class="col-sm-2">1.8.1949</div>
+                        <div class="col-sm-3"><b>Državno prvenstvo mladinci</b></div>
+                        <div class="col-sm-2">Kranj</div>
+                        <div class="col-sm-4"><span class="pull-right"><i>2 igralca</i></span></div>
+                        <span class="pull-right clickable panel-collapsed">
+                            <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                    </div>
+                </div>
+                <div class="panel-body panel-collapse collapse">
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-1">M mix</div>
+                        <div class="col-sm-1">5.-8.</div>
+                        <div class="col-sm-3">Davor Žnidar</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-1">M mix</div>
+                        <div class="col-sm-1">5.-8.</div>
+                        <div class="col-sm-3">Davor Žnidar</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row panel-title">
+                        <div class="col-sm-2">12.8.1949</div>
+                        <div class="col-sm-3"><b>Odprto prvenstvo Kamnika</b></div>
+                        <div class="col-sm-2">Ljubljana</div>
+                        <div class="col-sm-4"><span class="pull-right"><i>3 igralci</i></span></div>
+                        <span class="pull-right clickable panel-collapsed">
+                            <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                    </div>
+                </div>
+                <div class="panel-body panel-collapse collapse">
+                    <div class="row">
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-1">M</div>
+                            <div class="col-sm-1">1.</div>
+                            <div class="col-sm-3">Davor Žnidar</div>
+                    </div>
+                    <div class="row">
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-1">Ž</div>
+                            <div class="col-sm-1">2.</div>
+                            <div class="col-sm-3">Vesna Žnidar</div>
+                    </div>
+                    <div class="row">
+                            <div class="col-sm-7"></div>
+                            <div class="col-sm-1">M</div>
+                            <div class="col-sm-1">1.</div>
+                            <div class="col-sm-3">Davor Žnidar</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row panel-title">
+                        <div class="col-sm-2">2.9.1949</div>
+                        <div class="col-sm-3"><b>Mednarodno prvenstvo Maribora</b></div>
+                        <div class="col-sm-2">Maribor</div>
+                        <div class="col-sm-1">Ž 18</div>
+                        <div class="col-sm-1">2.</div>
+                        <div class="col-sm-3">Vesna Žnidar</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row panel-title">
+                        <div class="col-sm-2">1.8.1949</div>
+                        <div class="col-sm-3"><b>Državno prvenstvo mladinci</b></div>
+                        <div class="col-sm-2">Kranj</div>
+                        <div class="col-sm-4"><span class="pull-right"><i>2 igralca</i></span></div>
+                        <span class="pull-right clickable panel-collapsed">
+                            <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                    </div>
+                </div>
+                <div class="panel-body panel-collapse collapse">
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-1">M mix</div>
+                        <div class="col-sm-1">5.-8.</div>
+                        <div class="col-sm-3">Davor Žnidar</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-1">M mix</div>
+                        <div class="col-sm-1">5.-8.</div>
+                        <div class="col-sm-3">Davor Žnidar</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+        $(document).on('click', '.panel-heading span.clickable', function(e){
+            var $this = $(this);
+            if(!$this.hasClass('panel-collapsed')) {
+                $this.parents('.panel').find('.panel-body').slideUp();
+                $this.addClass('panel-collapsed');
+                $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+            } else {
+                $this.parents('.panel').find('.panel-body').slideDown();
+                $this.removeClass('panel-collapsed');
+                $this.find('i').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+            }
+        });
+
+        $(document).ready(function(){
+            //Handles menu drop down
+            $('.dropdown-menu').find('form').click(function (e) {
+                e.stopPropagation();
+            });
+        });
+      </script>
+
+
+
+
+
+    <div style="position:relative; height:35px;">
+        <div style="float:left; width:90%;">
+            <form method="post">
+                &nbsp;&nbsp;
+                <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{{ url_for('tennis_main',y=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
+                &nbsp;&nbsp;
+                <a href="{{ url_for('tennis_main',y=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
+                     <option value=""></option>
+                    {% for player in players %}
+                        {%  if player|length > 1 %}
+                            <option value="{{ player }}">{{ player }}</option>
+                        {%  endif %}
+                    {% endfor %}
+                </select></label>
+
+                &nbsp;&nbsp;dogodek: <label>
+                <input type="text" name="event_filter" size="10" placeholder="išči dogodek" value="{{ event_filter }}">
+                </label>
+
+                &nbsp;&nbsp;leto: <label><select name="select_year">
+                    {% for year in years %}
+                        <option value="{{ year }}"
+                            {% if year == events[0].Date[:4] %} selected {%  endif %}
+                        >{{ year }}</option>
+                    {% endfor %}
+                </select></label>
+                <input type="submit" value="Izberi">
+
+                {% if current_user.is_authenticated() %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('add_event1',next=request.url) }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
+                {% endif %}
+                {% if current_user.utype >= 4 %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('edit_user',next=request.url) }}"><img src="{{ url_for('static',filename='group-32.png') }}" title="Uredi uporabnike"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('list_files') }}"><img src="{{ url_for('static',filename='files-32.png') }}" title="Urejanje virov"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('data_reload',next=request.url) }}"><img src="{{ url_for('static',filename='sync-32.png') }}" title="Ponovno naloži podatke"></a>
+                {% endif %}
+                {% if current_user.utype >= 5 %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
+                {% endif %}
+            </form>
+        </div>
+        <div style="float:left; width:30%; text-align:right; color:red;">
+            {% if not production %} <b>Razvojno okolje</b> {% endif %}
+        </div>
+    </div>
+    <div style="clear:both;"></div>
+
+    <div style="clear:both; float:left; width:80%;">
+    {% if events %}
+        {% set year = 0 %}
+        {% set prev_date = "" %}
+        {% set prev_event = "" %}
+        {% set prev_comment = "" %}
+        {% for event in events %}
+            {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
+            {% if prev_comment != "" and not duplicate %}
+                <tr><td class="main-table-comment" style="border-top: thin dotted #16377A;"
+                        colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
+                    {{ prev_comment }}</td></tr>
+                {% set prev_comment = "" %}
+            {% endif %}
+            {% if year != event.Date[:4] %}
+                {% if year != 0 %}
+                    <tr><td style="border-right-style: none;"
+                            colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
+                    </td></tr>
+                    </table>
+                {% endif %}
+                <br><a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                {% set year = event.Date[:4] %}
+                <table class="main-table" style="width:95%">
+                    <tr><th style="width:80px;">datum</th><th>dogodek</th>
+                        <th style="width:140px;">kraj</th>
+                        <th style="width:80px;">kategorija</th><th style="width:40px;">uvrstitev</th>
+                        <th style="width:150px;">igralec</th><th style="width:80px;"></th>
+                        {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
+            {% endif %}
+            <tr>
+            {% if duplicate %}
+                <td style="border-top-style: none;"></td><td style="border-top-style: none;"></td>
+                <td style="border-top-style: none;"></td>
+            {% else %}
+                <td style="">
+                {% if event.Date[4:] == "/00/00" %}
+                    {{ event.Date[:4] }}
+                {% elif event.Date[7:] == "/00" %}
+                    {{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                {% else %}
+                    {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
+                {% endif %}
+                </td>
+                <td style=""> {{ event.Event }} </td>
+                <td style=""> {{ event.Place }} </td>
+            {% endif %}
+            <td style=""> {{ event.Category }} </td>
+            <td style=""> {{ event.Result }} </td>
+            <td style=""> 
+                {% if event.Player != "" %}
+                    <a href="{{ url_for('show_player', n=event.Player, next=request.url) }}">{{ event.Player }}</a>
+                {% endif %}
+            </td>
+            <td style="">
+            {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att1) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
+            {% elif event.Att1 != "" and event.Att1[:4] == "err_" and current_user.is_authenticated() %}
+                <a href="{{ url_for('correct', next=request.url, id=event.Id, att=1, d=year, f=event.Att1[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+            {% endif %}
+            {% if event.Att2 != "" and event.Att2[:4] != "err_"%}
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att2) }}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
+            {% elif event.Att2 != "" and event.Att2[:4] == "err_" and current_user.is_authenticated() %}
+                <a href="{{ url_for('correct', next=request.url, id=event.Id, att=2, d=year, f=event.Att2[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+            {% endif %}
+            {% if event.Att3 != "" and event.Att3[:4] != "err_"%}
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att3) }}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
+            {% elif event.Att3 != "" and event.Att3[:4] == "err_" and current_user.is_authenticated() %}
+                <a href="{{ url_for('correct', next=request.url, id=event.Id, att=3, d=year, f=event.Att3[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+            {% endif %}
+            {% if event.Att4 != "" and event.Att4[:4] != "err_"%}
+                <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att4) }}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
+            {% elif event.Att4 != "" and event.Att4[:4] == "err_" and current_user.is_authenticated() %}
+                <a href="{{ url_for('correct', next=request.url, id=event.Id, att=4, d=year, f=event.Att4[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
+            {% endif %}
+            </td>
+            {% if current_user.is_authenticated() %}
+                <td style="text-align:right;">
+                {% if current_user.utype >= 1 %}
+                    <a href="{{ url_for('edit_comment', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
+                {% endif %}
+                {% if current_user.utype >= 3 %}
+                    <a href="{{ url_for('edit_event', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
+                    <a href="{{ url_for('duplicate', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                    <a href="{{ url_for('delete', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
+                {% endif %}
+                </td>
+            {% endif %}
+            </tr>
+            {% set prev_date = event.Date %}
+            {% set prev_event = event.Event %}
+            {% set prev_place = event.Place %}
+            {% set prev_comment = event.Comment %}
+        {% endfor %}
+        {% if prev_comment != "" %}
+            <tr><td class="main-table-comment"
+                    colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">{{ prev_comment }}</td></tr>
+        {% endif %}
+        <tr><td style="border-right-style: none;"
+                colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}"></td></tr>
+        </table>
+    {% endif %}
+    <div style="height:30px;"></div>
+    </div>
+
+    {% if showStat == "1" %}
+        <div style="float:right; background:#94BEFA; padding:15px;">
+        {% if players %}
+            <br>Najpogostejši igralci:<br style="line-height:30px;">
+            <table>
+            {% for player in top_players %}
+                <tr>{% if player[0] != "" %}
+                    <td><a href="{{ url_for('show_player', n=player[0], next=request.url)}}">{{ player[0] }}</a>
+                        <label style="font-size:10pt;">{{player[1]}}x</label></td>
+                {% endif %}</tr>
+            {% endfor %}
+            </table><br>
+            <a href="{{ url_for('show_player', next=request.url) }}">vsi igralci</a><br>
+            <br>
+        {% endif %}
+        </div>
+    {%  endif %}
+
+{% endblock %}		

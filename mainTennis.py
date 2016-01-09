@@ -10,8 +10,6 @@ program by Borut Žnidar on 2.1.2015
 check syntactic errors with: "python mainTennis.py runserver -d"
 """
 
-appname = "TK-Triglav-History"
-
 from config import Production, LOG_FILE
 
 import os
@@ -33,6 +31,8 @@ from TennisData import TennisEvent, TennisPlayer
 from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, allowed_image, files_dir
 
 from User import User, Anonymous
+
+appname = "TK-Triglav-History"
 
 
 @app.route("/player", methods=['GET', 'POST'])
@@ -314,6 +314,33 @@ def tennis_main():
                            prevPage=TennisEvent.Years[max(year_idx-1, 0)],
                            nextPage=TennisEvent.Years[min(year_idx+1, year_len-1)],
                            count=TennisEvent.count(), showStat=show_stat)
+
+
+@app.route("/main", methods=['GET'])
+def tennis_main1():
+    event_filter = ""
+    if request.method == 'GET':
+        try:
+            year = request.args.get('y')
+            if year not in TennisEvent.Years:
+                year = TennisEvent.Years[0]
+        except ValueError:
+            year = TennisEvent.Years[0]
+            log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+
+    events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
+    if len(events) == 0:
+        flash(u"Noben dogodek ne ustreza.")
+        log_info("Error: GET / - no event")
+        return redirect(request.args.get("next") or url_for("tennis_main1"))
+
+    year_len = len(TennisEvent.Years)
+    year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
+    return render_template("main1.html", events=events, production=Production,
+                           players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
+                           prevPage=TennisEvent.Years[max(year_idx-1, 0)],
+                           nextPage=TennisEvent.Years[min(year_idx+1, year_len-1)],
+                           count=TennisEvent.count())
 
 
 @app.route("/files", methods=['GET', 'POST'])
