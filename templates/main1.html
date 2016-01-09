@@ -193,8 +193,8 @@
 
         <!-- manage last entry separatly -->
         {% if group_from > -1 %} <!-- end group -->
-            {% set group_len = loop.index0 - group_from + 1 %}
-            {% set group_to = loop.index0 + 1 %}
+            {% set group_len = events|length - group_from + 1 %}
+            {% set group_to = events|length + 1 %}
             {% if prev_event.Date[4:] == "/00/00" %}
                 {%  set prev_date = prev_event.Date[:4] %}
             {% elif prev_event.Date[7:] == "/00" %}
