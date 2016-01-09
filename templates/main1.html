@@ -135,12 +135,13 @@
 
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
             {% if duplicate and group_from == -1 %} <!-- begin new group -->
-                {% set group_from = loop.index %}
+                {% set group_from = loop.index0 %}
                 group from {{  group_from }}
             {% elif duplicate %} <!-- continue group -->
                 continue
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
-                group from {{  group_from }} to {{ loop.index }}
+                group from {{  group_from }} to {{ loop.index0 }}
+                {% set group_from = -1 %}
             {%  else %}
                 single
             {% endif %}
