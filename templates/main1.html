@@ -125,7 +125,6 @@
         {% set prev_event = events[0] %}
         {% set group_from = -1 %}
         {% for event in events[1:] %}
-            [{{ event.Date }}, {{ event.Place }}, {{ group_from }}]
             {% if year != event.Date[:4] %}
                 <div class="page-header">
                     <a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
@@ -136,11 +135,10 @@
             {% set duplicate = prev_event.Date == event.Date and prev_event.Event == event.Event and prev_event.Place == event.Place %}
             {% if duplicate and group_from == -1 %} <!-- begin new group -->
                 {% set group_from = loop.index0 %}
-                begin<br>
+
             {% elif duplicate %} <!-- continue group -->
-               continue<br>
+
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
-                end<br>
                 {% set group_len = loop.index0 - group_from + 1 %}
                 {% set group_to = loop.index0 + 1 %}
                 {% if prev_event.Date[4:] == "/00/00" %}
@@ -176,7 +174,6 @@
                 {% set group_from = -1 %}
 
             {%  else %} <!-- single entry -->
-                single<br>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
@@ -193,11 +190,9 @@
             {% endif %}
 
             {% if loop.index == events|length - 1 %} <!-- manage last entry separatly -->
-                last iteration<br>
                 {% if group_from > -1 %} <!-- end group -->
                     {% set group_len = events|length - group_from %}
                     {% set group_to = events|length %}
-                    a:{{ event.Date }}, {{ event.Place }}, {{ group_from }}, {{ group_to }}, {{ group_len }}
                     {% if event.Date[4:] == "/00/00" %}
                         {%  set date = event.Date[:4] %}
                     {% elif event.Date[7:] == "/00" %}
@@ -244,64 +239,13 @@
             {% endif %}
 
             {% set prev_event = event %}
-            n:{{ prev_event.Date }}, {{ prev_event.Place }}, {{ group_from }}<br>
         {% endfor %}
-
 
     {% endif %}
     </div>
     </div>
 
 
-
-
-    <div class="container">
-        <div class="page-header">
-            <h2><b>1971</b></h2>
-        </div>
-
-        <div class="panel-group" id="results">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-sm-2 panel-title">2.9.1949</div>
-                        <div class="col-sm-3 panel-title"><b>Mednarodno prvenstvo Maribora</b></div>
-                        <div class="col-sm-2 panel-title">Maribor</div>
-                        <div class="col-sm-1">Ž 18</div>
-                        <div class="col-sm-1">2.</div>
-                        <div class="col-sm-3">Vesna Žnidar</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row panel-title">
-                        <div class="col-sm-2">1.8.1949</div>
-                        <div class="col-sm-3"><b>Državno prvenstvo mladinci</b></div>
-                        <div class="col-sm-2">Kranj</div>
-                        <div class="col-sm-4"><span class="pull-right"><i>2 igralca</i></span></div>
-                        <span class="pull-right clickable panel-collapsed">
-                            <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                    </div>
-                </div>
-                <div class="panel-body panel-collapse collapse">
-                    <div class="row">
-                        <div class="col-sm-7"></div>
-                        <div class="col-sm-1">M mix</div>
-                        <div class="col-sm-1">5.-8.</div>
-                        <div class="col-sm-3">Davor Žnidar</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-7"></div>
-                        <div class="col-sm-1">M mix</div>
-                        <div class="col-sm-1">5.-8.</div>
-                        <div class="col-sm-3">Davor Žnidar</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
