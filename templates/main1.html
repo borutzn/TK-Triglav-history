@@ -136,9 +136,9 @@
             {% set duplicate = prev_event.Date == event.Date and prev_event.Event == event.Event and prev_event.Place == event.Place %}
             {% if duplicate and group_from == -1 %} <!-- begin new group -->
                 {% set group_from = loop.index0 %}
-
+                begin<br>
             {% elif duplicate %} <!-- continue group -->
-
+               continue<br>
             {% elif not duplicate and group_from > -1 %} <!-- end group -->
                 {% set group_len = loop.index0 - group_from + 1 %}
                 {% set group_to = loop.index0 + 1 %}
@@ -173,7 +173,7 @@
                     </div>
                 </div>
                 {% set group_from = -1 %}
-
+                end<br>
             {%  else %} <!-- single entry -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -187,6 +187,7 @@
                         </div>
                     </div>
                 </div>
+                single<br>
             {% endif %}
 
             {% set prev_event = event %}
