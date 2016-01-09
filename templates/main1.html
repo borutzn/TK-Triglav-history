@@ -121,9 +121,9 @@
     <div class="container">
     {% if events %}
         {% set year = 0 %}
-        {% set prev_date = event.Date[0] %}
-        {% set prev_event = event.Event[0] %}
-        {% set prev_place = event.Place[0] %}
+        {% set prev_date = events[0].Date %}
+        {% set prev_event = events[0].Event %}
+        {% set prev_place = events[0].Place %}
         {% set group_from = -1 %}
         {% for event in events[1:] %}
             {% if year != event.Date[:4] %}
