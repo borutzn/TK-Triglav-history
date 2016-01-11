@@ -188,8 +188,8 @@
         {% set group_from = -1 %}
         {% for event in events[1:] %}
             {% if year != event.Date[:4] %}
-                <div class="page-header">
-                    <a href="{{ url_for('tennis_main1',y=event.Date[:4]) }}" class="year followMeBar">{{ event.Date[:4] }}</a>
+                <div class="page-header followMeBar">
+                    <a href="{{ url_for('tennis_main1',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                 </div>
                 {% set year = event.Date[:4] %}
             {% endif %}
