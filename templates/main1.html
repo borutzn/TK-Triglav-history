@@ -129,6 +129,7 @@
             {% if year != event.Date[:4] %}
                 <div class="page-header">
                     <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                    ({{ events|length }})
                 </div>
                 {% set year = event.Date[:4] %}
             {% endif %}
