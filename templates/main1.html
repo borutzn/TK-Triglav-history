@@ -124,76 +124,73 @@
     {% if events %}
         {% set year = 0 %}
         {% set group_from = -1 %}
+        {% set prev_event = [events[0]] %}
         {% for event in events %}
-            {% if loop.index == 0 %} <!-- manage first entry separatly -->
-                {% set prev_event = event %}
+            {% if year != event.Date[:4] %}
+                <div class="page-header">
+                    <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                </div>
+                {% set year = event.Date[:4] %}
+            {% endif %}
 
-            {% elif loop.index < events|length - 1 %}
-                {% if year != event.Date[:4] %}
-                    <div class="page-header">
-                        <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
-                    </div>
-                    {% set year = event.Date[:4] %}
+            {% set duplicate = prev_event[0].Date == event.Date and prev_event[0].Event == event.Event and prev_event[0].Place == event.Place %}
+            {% if duplicate and group_from == -1 %} <!-- begin new group -->
+                {% set group_from = loop.index0 %}
+
+            {% elif duplicate %} <!-- continue group -->
+
+            {% elif not duplicate and group_from > -1 %} <!-- end group -->
+                {% set group_len = loop.index0 - group_from + 1 %}
+                {% set group_to = loop.index0 + 1 %}
+                {% if prev_event[0].Date[4:] == "/00/00" %}
+                    {%  set prev_date = prev_event[0].Date[:4] %}
+                {% elif prev_event[0].Date[7:] == "/00" %}
+                    {% set prev_date = prev_event[0].Date[5:7] + "." + prev_event[0].Date[:4] %}
+                {% else %}
+                    {% set prev_date = prev_event[0].Date[8:] + "." +  prev_event[0].Date[5:7] + "." + prev_event[0].Date[:4] %}
                 {% endif %}
 
-                {% set duplicate = prev_event.Date == event.Date and prev_event.Event == event.Event and prev_event.Place == event.Place %}
-                {% if duplicate and group_from == -1 %} <!-- begin new group -->
-                    {% set group_from = loop.index0 %}
-
-                {% elif duplicate %} <!-- continue group -->
-
-                {% elif not duplicate and group_from > -1 %} <!-- end group -->
-                    {% set group_len = loop.index0 - group_from + 1 %}
-                    {% set group_to = loop.index0 + 1 %}
-                    {% if prev_event.Date[4:] == "/00/00" %}
-                        {%  set prev_date = prev_event.Date[:4] %}
-                    {% elif prev_event.Date[7:] == "/00" %}
-                        {% set prev_date = prev_event.Date[5:7] + "." + prev_event.Date[:4] %}
-                    {% else %}
-                        {% set prev_date = prev_event.Date[8:] + "." +  prev_event.Date[5:7] + "." + prev_event.Date[:4] %}
-                    {% endif %}
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row panel-title">
-                                <div class="col-sm-2">{{ prev_date }}</div>
-                                <div class="col-sm-3"><b>{{ prev_event.Event }}</b></div>
-                                <div class="col-sm-2">{{ prev_event.Place }}</div>
-                                <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
-                                <span class="pull-right clickable panel-collapsed">
-                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                            </div>
-                        </div>
-                        <div class="panel-body panel-collapse collapse">
-                            {% for e in events[group_from:group_to] %}
-                                <div class="row">
-                                    <div class="col-sm-7"></div>
-                                    <div class="col-sm-1">{{ e.Category }}</div>
-                                    <div class="col-sm-1">{{ e.Result }}</div>
-                                    <div class="col-sm-3">{{ e.Player }}</div>
-                                </div>
-                            {% endfor %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row panel-title">
+                            <div class="col-sm-2">{{ prev_date }}</div>
+                            <div class="col-sm-3"><b>{{ prev_event[0].Event }}</b></div>
+                            <div class="col-sm-2">{{ prev_event[0].Place }}</div>
+                            <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
+                            <span class="pull-right clickable panel-collapsed">
+                                <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                         </div>
                     </div>
-                    {% set group_from = -1 %}
-
-                {%  else %} <!-- single entry -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="panel-body panel-collapse collapse">
+                        {% for e in events[group_from:group_to] %}
                             <div class="row">
-                                <div class="col-sm-2 panel-title">{{ prev_date }}</div>
-                                <div class="col-sm-3 panel-title"><b>{{ prev_event.Event }}</b></div>
-                                <div class="col-sm-2 panel-title">{{ prev_event.Place }}</div>
-                                <div class="col-sm-1">{{ prev_event.Category }}</div>
-                                <div class="col-sm-1">{{ prev_event.Result }}</div>
-                                <div class="col-sm-3">{{ prev_event.Player }}</div>
+                                <div class="col-sm-7"></div>
+                                <div class="col-sm-1">{{ e.Category }}</div>
+                                <div class="col-sm-1">{{ e.Result }}</div>
+                                <div class="col-sm-3">{{ e.Player }}</div>
                             </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% set group_from = -1 %}
+
+            {%  else %} <!-- single entry -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-2 panel-title">{{ prev_date }}</div>
+                            <div class="col-sm-3 panel-title"><b>{{ prev_event[0].Event }}</b></div>
+                            <div class="col-sm-2 panel-title">{{ prev_event[0].Place }}</div>
+                            <div class="col-sm-1">{{ prev_event[0].Category }}</div>
+                            <div class="col-sm-1">{{ prev_event[0].Result }}</div>
+                            <div class="col-sm-3">{{ prev_event[0].Player }}</div>
                         </div>
                     </div>
+                </div>
 
-                {% endif %}
+            {% endif %}
 
-            {% else %} <!-- manage last entry separatly -->
+            {% if loop.index == events|length - 1 %} <!-- manage last entry separatly -->
                 {% if group_from > -1 %} <!-- end group -->
                     {% set group_len = events|length - group_from %}
                     {% set group_to = events|length %}
@@ -242,7 +239,7 @@
                 {% endif %}
             {% endif %}
 
-            {% set prev_event = event %}
+            {% set prev_event = [event] %}
         {% endfor %}
 
     {% endif %}
