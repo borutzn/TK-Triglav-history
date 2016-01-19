@@ -196,21 +196,22 @@
         {% endfor %}
 
         <!-- manage last entry separatly -->
+        {% set event = events[-1] %}
         {% if group_from > -1 %} <!-- end group -->
             {% set group_len = events|length - group_from %}
-            {% if prev_event[0].Date[4:] == "/00/00" %}
-                {%  set date = prev_event[0].Date[:4] %}
-            {% elif prev_event[0].Date[7:] == "/00" %}
-                {% set date = prev_event[0].Date[5:7] + "." + prev_event[0].Date[:4] %}
+            {% if event.Date[4:] == "/00/00" %}
+                {%  set date = event.Date[:4] %}
+            {% elif event.Date[7:] == "/00" %}
+                {% set date = event.Date[5:7] + "." + event.Date[:4] %}
             {% else %}
-                {% set date = prev_event[0].Date[8:] + "." +  prev_event[0].Date[5:7] + "." + prev_event[0].Date[:4] %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + event.Date[:4] %}
             {% endif %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row panel-title">
                         <div class="col-sm-2">{{ date }}</div>
-                        <div class="col-sm-3"><b>{{ prev_event[0].Event }}</b></div>
-                        <div class="col-sm-2">{{ prev_event[0].Place }}</div>
+                        <div class="col-sm-3"><b>{{ event.Event }}</b></div>
+                        <div class="col-sm-2">{{ event.Place }}</div>
                         <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
                         <span class="pull-right clickable panel-collapsed">
                             <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
@@ -232,11 +233,11 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-sm-2 panel-title">{{ date }}</div>
-                        <div class="col-sm-3 panel-title"><b>{{ prev_event[0].Event }}</b></div>
-                        <div class="col-sm-2 panel-title">{{ prev_event[0].Place }}</div>
-                        <div class="col-sm-1">{{ prev_event[0].Category }}</div>
-                        <div class="col-sm-1">{{ prev_event[0].Result }}</div>
-                        <div class="col-sm-3">{{ prev_event[0].Player }}</div>
+                        <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
+                        <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                        <div class="col-sm-1">{{ event.Category }}</div>
+                        <div class="col-sm-1">{{ event.Result }}</div>
+                        <div class="col-sm-3">{{ event.Player }}</div>
                     </div>
                 </div>
             </div>
