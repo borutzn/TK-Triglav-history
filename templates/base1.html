@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+<head>
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{url_for('static',filename='css/sticky-footer-navbar.css') }}">
+
+	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='main.css') }}" />
+        <link rel="shortcut icon" href="{{ url_for('static', filename='tenis1.ico') }}">
+
+	<title>Dogodki in rezultati TK Triglav od l. 1949 dalje</title>
+</head>
+	
+<body>
+    <div style="clear:both; position:relative;">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <br>
+    <footer class="copyright" style="clear:both; position:fixed; bottom:0; left:0; right:0; height:16px">
+        Podatke zbral in obdelal <a href="mail:davor.znidar@siol.net">Davor Žnidar</a>, 2013&#8211;16.
+    </footer>
+
+</body>
+
+</html>
