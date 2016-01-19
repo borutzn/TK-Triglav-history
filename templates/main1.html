@@ -200,7 +200,7 @@
         {% if year[0] != event.Date[:4] %}
             <div class="page-header">
                 <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
-                ({{ events|length }})
+                ({{ events|length }}, {{ year }})
             </div>
         {% endif %}
         {% if group_from > -1 %} <!-- end group -->
