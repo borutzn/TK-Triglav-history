@@ -51,7 +51,6 @@
                                 <ul class="dropdown-menu">
                                     {% for year in years %}
                                         <li><a href="{{ url_for('tennis_events', y=year, next=request.url) }}">
-                                            {{  year }}</a></li>
                                     {% endfor %}
                                     <li><a href="#">1948</a></li>
                                     <li><a href="#">1951</a></li>
@@ -121,68 +120,6 @@
                 </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
     </nav>
-
-
-
-    <div style="position:relative; height:35px;">
-        <div style="float:left; width:90%;">
-            <form method="post">
-                &nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main',y=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
-                &nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main',y=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
-                     <option value=""></option>
-                    {% for player in players %}
-                        {%  if player|length > 1 %}
-                            <option value="{{ player }}">{{ player }}</option>
-                        {%  endif %}
-                    {% endfor %}
-                </select></label>
-
-                &nbsp;&nbsp;dogodek: <label>
-                <input type="text" name="event_filter" size="10" placeholder="išči dogodek" value="{{ event_filter }}">
-                </label>
-
-                &nbsp;&nbsp;leto: <label><select name="select_year">
-                    {% for year in years %}
-                        <option value="{{ year }}"
-                            {% if year == events[0].Date[:4] %} selected {%  endif %}
-                        >{{ year }}</option>
-                    {% endfor %}
-                </select></label>
-                <input type="submit" value="Izberi">
-
-                {% if current_user.is_authenticated() %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('add_event1',next=request.url) }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
-                {% endif %}
-                {% if current_user.utype >= 4 %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('edit_user',next=request.url) }}"><img src="{{ url_for('static',filename='group-32.png') }}" title="Uredi uporabnike"></a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('list_files') }}"><img src="{{ url_for('static',filename='files-32.png') }}" title="Urejanje virov"></a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('data_reload',next=request.url) }}"><img src="{{ url_for('static',filename='sync-32.png') }}" title="Ponovno naloži podatke"></a>
-                {% endif %}
-                {% if current_user.utype >= 5 %}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('events.csv',next=request.url) }}"><img src="{{ url_for('static',filename='download-32.png') }}" title="Prenesi events.csv"></a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('audit',next=request.url) }}"><img src="{{ url_for('static',filename='search-32.png') }}" title="Prikaži revizijske podatke"></a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{ url_for('shutdown',next=request.url) }}"><img src="{{ url_for('static',filename='power-32.png') }}" title="Ugasni strežnik"></a>
-                {% endif %}
-            </form>
-        </div>
-        <div style="float:left; width:30%; text-align:right; color:red;">
-            {% if not production %} <b>Razvojno okolje</b> {% endif %}
-        </div>
-    </div>
 
 
     <!-- Begin page content -->
