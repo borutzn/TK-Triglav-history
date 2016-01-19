@@ -122,16 +122,16 @@
     <div class="container">
     <div class="panel-group" id="results">
     {% if events %}
-        {% set year = 0 %}
+        {% set year = [0] %}
         {% set group_from = -1 %}
         {% set prev_event = [events[0]] %}
         {% for event in events[1:] %}
-            {% if year != event.Date[:4] %}
+            {% if year[0] != event.Date[:4] %}
                 <div class="page-header">
                     <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                     ({{ events|length }})
                 </div>
-                {% set year = event.Date[:4] %}
+                {% set year = [event.Date[:4]] %}
             {% endif %}
 
             {% set duplicate = prev_event[0].Date == event.Date and prev_event[0].Event == event.Event and prev_event[0].Place == event.Place %}
@@ -197,12 +197,11 @@
 
         <!-- manage last entry separatly -->
         {% set event = events[-1] %}
-        {% if year != event.Date[:4] %}
+        {% if year[0] != event.Date[:4] %}
             <div class="page-header">
                 <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                 ({{ events|length }})
             </div>
-            {% set year = event.Date[:4] %}
         {% endif %}
         {% if group_from > -1 %} <!-- end group -->
             {% set group_len = events|length - group_from %}
