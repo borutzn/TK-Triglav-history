@@ -49,6 +49,7 @@
                                 <ul class="dropdown-menu">
                                     {% for year in years %}
                                         <li><a href="{{ url_for('tennis_events', y=year, next=request.url) }}">
+                                            {{  year }}</a></li>
                                     {% endfor %}
                                     <li><a href="#">1948</a></li>
                                     <li><a href="#">1951</a></li>
