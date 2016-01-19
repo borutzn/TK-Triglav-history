@@ -316,8 +316,8 @@ def tennis_main():
                            count=TennisEvent.count(), showStat=show_stat)
 
 
-@app.route("/main", methods=['GET'])
-def tennis_main1():
+@app.route("/events", methods=['GET'])
+def tennis_events():
     event_filter = ""
     if request.method == 'GET':
         try:
@@ -327,6 +327,8 @@ def tennis_main1():
         except ValueError:
             year = TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+    else:
+        return
 
     events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
     if len(events) == 0:
