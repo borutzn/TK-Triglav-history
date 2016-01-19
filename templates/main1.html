@@ -197,6 +197,13 @@
 
         <!-- manage last entry separatly -->
         {% set event = events[-1] %}
+        {% if year != event.Date[:4] %}
+            <div class="page-header">
+                <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                ({{ events|length }})
+            </div>
+            {% set year = event.Date[:4] %}
+        {% endif %}
         {% if group_from > -1 %} <!-- end group -->
             {% set group_len = events|length - group_from %}
             {% if event.Date[4:] == "/00/00" %}
