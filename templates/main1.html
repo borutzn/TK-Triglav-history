@@ -130,7 +130,6 @@
         {% for event in events[1:] %}
             {% if year != event.Date[:4] %}
                 <div class="page-header">
-                    <!--a href="{{ url_for('tennis_main1',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a-->
                     <a href="" class="year">{{ event.Date[:4] }}</a>
                 </div>
                 {% set year = event.Date[:4] %}
