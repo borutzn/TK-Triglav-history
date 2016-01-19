@@ -126,7 +126,7 @@
         {% set group_from = -1 %}
         {% for event in events %}
             {% if loop.index == 0 %} <!-- manage first entry separatly -->
-                {% set prev_event = events[0] %}
+                {% set prev_event = event %}
 
             {% elif loop.index < events|length - 1 %}
                 {% if year != event.Date[:4] %}
