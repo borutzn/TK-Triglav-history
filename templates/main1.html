@@ -42,12 +42,6 @@
                         <div class="btn-group" role="group" aria-label="...">
                             <a href="{{ url_for('tennis_events',y=prevPage) }}" role="button"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                            <button type="submit" class="btn btn-default">
-                                <a href="{{ url_for('tennis_events',y=prevPage) }}">
-                                    <span class="glyphicon glyphicon-chevron-left"></span>
-                                </a>
-                            </button>
-
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     leto <span class="caret"></span>
@@ -57,17 +51,10 @@
                                         <li><a href="{{ url_for('tennis_events', y=year, next=request.url) }}">
                                             {{  year }}</a></li>
                                     {% endfor %}
-                                    <li><a href="#">1948</a></li>
-                                    <li><a href="#">1951</a></li>
-                                    <li><a href="#">1953</a></li>
-                                    <li><a href="#">1955</a></li>
                                 </ul>
                             </div>
-                            <button type="submit" class="btn btn-default">
-                                <a href="{{ url_for('tennis_events',y=nextPage) }}">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                </a>
-                            </button>
+                            <a href="{{ url_for('tennis_events',y=nextPage) }}" role="button"
+                               class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
                         </div>
                     </form>
 
