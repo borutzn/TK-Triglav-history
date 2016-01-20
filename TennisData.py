@@ -376,6 +376,64 @@ class TennisEvent:
         return events
 
     @classmethod
+    def get_events(cls, from_year, to_year=None, player=None, event_filter=""):
+        log_info("Temp: GET_EVENTS "+str(from_year)+"-"+str(to_year)+", "+player+", "+event_filter)
+        cls.fetch_data()
+        events = list()
+        pos = TennisEvent.get_year_pos(from_year)
+        search = 0  # 0-no search, 1-string, 2-regex
+
+        if not to_year:
+            to_year = from_year
+        if event_filter != "":
+            search = 1 if event_filter.isalnum() else 2
+            log_info("Temp: Search=" + str(search))
+        try:
+            search_pattern = re.compile(r"%s" % event_filter)
+        except re.error:
+            search, search_pattern = 1, event_filter
+            log_info("Error: re.error in get_events_page/re.compile - changed to string")
+
+        prev_entry, prev_group = None, False
+        while pos < len(cls.EventsCache):
+            year = cls.EventsCache[pos]['Date'][:4]
+            if to_year is not None and year > to_year:
+                break
+            if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
+                pos += 1
+                continue
+            if (search == 2) and not search_pattern.match(cls.EventsCache[pos]['Event']):
+                pos += 1
+                continue
+
+            # izračunati moramo, kateri entry pomeni na podlagi trenutnega in prejšnjega entrya
+            # - začetek grupe:
+            # - sredo grupe
+            # - konec grupe
+            entry = cls.EventsCache[pos]
+            curr = 0
+            if not prev_entry:  # the first entry
+                group = False
+            else:
+                group = prev_entry['Date'] == entry['Date'] and prev_entry['Event'] == entry['Event'] and \
+                        prev_entry['Place'] == entry['Place']
+                if not prev_group:  # ni še grupe
+                    if group:  # začetek grupe
+                        events[-2][0] = 1  # set previous entry to 'start group'
+                        curr = 2
+                else:  # nadaljevanje grupe
+                    if group:  # nadaljevanje grupe
+                        curr = 2
+                    else:  # konec grupe
+                        events[-2][0] = 3  # set previous entry to 'end group'
+
+            events.append((curr, entry))
+            prev_entry = entry
+            prev_group = group
+            pos += 1
+        return events
+
+    @classmethod
     def get_players_events(cls, player):
         cls.fetch_data()
         r = list()

@@ -330,19 +330,14 @@ def tennis_events():
     else:
         return
 
-    events = TennisEvent.get_events_by_year(year=year, event_filter=event_filter)
+    events = TennisEvent.get_events(from_year=year, to_year=year+5, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    year_len = len(TennisEvent.Years)
-    year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
-    return render_template("main1.html", events=events, production=Production,
-                           players=TennisEvent.players, years=TennisEvent.Years, top_players=TennisEvent.top_players,
-                           prevPage=TennisEvent.Years[max(year_idx-1, 0)],
-                           nextPage=TennisEvent.Years[min(year_idx+1, year_len-1)],
-                           count=TennisEvent.count())
+    log_info(events)
+    return render_template("main1.html", events=events, players=TennisEvent.players, years=TennisEvent.Years)
 
 
 @app.route("/files", methods=['GET', 'POST'])
