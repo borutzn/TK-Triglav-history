@@ -331,12 +331,12 @@ def tennis_events():
         return
 
     events = TennisEvent.get_events(from_year=year, to_year=year+5, event_filter=event_filter)
+    log_info(events)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    log_info(events)
     return render_template("main1.html", events=events, players=TennisEvent.players, years=TennisEvent.Years)
 
 
