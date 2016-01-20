@@ -419,7 +419,7 @@ class TennisEvent:
                         prev_entry['Place'] == entry['Place']
                 if not prev_group:  # ni še grupe
                     if group:  # začetek grupe
-                        events[-2][0] = 1  # set previous entry to 'start group'
+                        events[-1][0] = 1  # set previous entry to 'start group'
                         curr = 2
                 else:  # nadaljevanje grupe
                     if group:  # nadaljevanje grupe
