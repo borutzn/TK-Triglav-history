@@ -377,7 +377,7 @@ class TennisEvent:
 
     @classmethod
     def get_events(cls, from_year, to_year=None, player=None, event_filter=""):
-        log_info("Temp: GET_EVENTS "+str(from_year)+"-"+str(to_year)+", "+player+", "+event_filter)
+        log_info("Temp: GET_EVENTS "+str(from_year)+"-"+str(to_year)+", "+str(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(from_year)
