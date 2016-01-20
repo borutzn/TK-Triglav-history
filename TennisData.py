@@ -425,7 +425,7 @@ class TennisEvent:
                     if group:  # nadaljevanje grupe
                         curr = 2
                     else:  # konec grupe
-                        events[-2][0] = 3  # set previous entry to 'end group'
+                        events[-1][0] = 3  # set previous entry to 'end group'
 
             events.append([curr, entry])
             prev_entry = entry
