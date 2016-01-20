@@ -331,7 +331,6 @@ def tennis_events():
         return
 
     events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
-    log_info(events)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
