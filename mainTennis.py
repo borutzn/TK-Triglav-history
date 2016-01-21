@@ -336,7 +336,10 @@ def tennis_events():
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    return render_template("main1.html", events=events, players=TennisEvent.players, years=TennisEvent.Years)
+    i = year.index(year)
+    prev_y = year[i-1 if i > 0 else 0]
+    next_y = year[i+1 if i < year.len()-1 else 0]
+    return render_template("events.html", events=events, players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
 
 
 @app.route("/files", methods=['GET', 'POST'])

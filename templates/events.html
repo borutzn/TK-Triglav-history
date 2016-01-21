@@ -47,6 +47,13 @@
                                     leto <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
+                                    <li><a href="{{ url_for('tennis_events', y="1949") }}">1949-1959</a></li>
+                                    <li><a href="{{ url_for('tennis_events', y="1960") }}">1960-1969</a></li>
+                                    <li><a href="{{ url_for('tennis_events', y="1970") }}">1970-1979</a></li>
+                                    <li><a href="{{ url_for('tennis_events', y="1980") }}">1980-1989</a></li>
+                                    <li><a href="{{ url_for('tennis_events', y="1990") }}">1990-1999</a></li>
+                                    <li><a href="{{ url_for('tennis_events', y="2000") }}">2000-2009</a></li>
+                                    <li><a href="{{ url_for('tennis_events', y="2010") }}">2010-</a></li>
                                     {% for year in years %}
                                         <li><a href="{{ url_for('tennis_events', y=year, next=request.url) }}">
                                             {{  year }}</a></li>
@@ -162,7 +169,7 @@
                                 <div class="col-sm-2">{{ date }}</div>
                                 <div class="col-sm-3"><b>{{ event.Event }}</b></div>
                                 <div class="col-sm-2">{{ event.Place }}</div>
-                                <div class="col-sm-4"><span class="pull-right"><i>igralcev: {{ group_len}}</i></span></div>
+                                <div class="col-sm-4"><span class="pull-right"><i>igralci</i></span></div>
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                             </div>
