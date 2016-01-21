@@ -337,8 +337,8 @@ def tennis_events():
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
     i = TennisEvent.Years.index(year)
-    prev_y = year[i-1 if i > 0 else 0]
-    next_y = year[i+1 if i < len(TennisEvent.Years)-1 else 0]
+    prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
+    next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     return render_template("events.html", events=events, players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
 
 
