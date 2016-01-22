@@ -1,5 +1,6 @@
     <!-- Begin page content -->
     <div class="panel-group" id="results">
+    <p>({{ events|length }})</p>
     {% if events %}
         {% set year = [0] %}
         {% for (group,event) in events %}
