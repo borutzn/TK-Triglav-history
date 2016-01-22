@@ -348,7 +348,8 @@ def tennis_events_year():
     if request.method == 'GET':
         try:
             year = request.args.get('y')
-            log_info("1"+year)
+            log_info("1 %s" % str(request.args))
+            log_info("1 %s." % str(year))
             if year not in TennisEvent.Years:
                 year = TennisEvent.Years[0]
         except ValueError:
