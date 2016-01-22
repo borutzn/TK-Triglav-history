@@ -190,7 +190,7 @@
 
         {% endfor %}
 
-        <a class="next" href="events_year?{{ next_y }}">leto {{ next_y }}</a>
+        <a class="next" href="{{ url_for("events_year", y=next_y) }}">leto {{ next_y }}</a>
 
     {% endif %}
     </div>
