@@ -356,6 +356,7 @@ def tennis_events_year():
     else:
         return
 
+    year = "1972"
     events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")

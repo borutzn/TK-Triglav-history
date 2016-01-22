@@ -380,7 +380,6 @@ class TennisEvent:
         log_info("Temp: GET_EVENTS "+str(from_year)+"-"+str(to_year)+", "+str(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
-        from_year = "1972"
         pos = TennisEvent.get_year_pos(from_year)
         search = 0  # 0-no search, 1-string, 2-regex
 
