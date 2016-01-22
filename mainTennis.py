@@ -365,7 +365,7 @@ def tennis_events_year():
 
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    return render_template("events_year.html", events=events, next_y=next_y)
+    return render_template("events_year.html", events=events[:13], next_y=next_y)
 
 
 @app.route("/files", methods=['GET', 'POST'])
