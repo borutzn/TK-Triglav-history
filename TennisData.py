@@ -431,6 +431,7 @@ class TennisEvent:
             prev_entry = entry
             prev_group = group
             pos += 1
+            log_info("Temp: GET_EVENTS returning %d events." % len(events))
         return events
 
     @classmethod
