@@ -397,8 +397,6 @@ class TennisEvent:
 
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
-            if pos > 10:
-                break
             year = cls.EventsCache[pos]['Date'][:4]
             if to_year is not None and year > to_year:
                 break
@@ -434,6 +432,8 @@ class TennisEvent:
             prev_entry = entry
             prev_group = group
             pos += 1
+            if len(events) > 10:
+                break
         log_info("Temp: GET_EVENTS returning %d events." % len(events))
         return events
 
