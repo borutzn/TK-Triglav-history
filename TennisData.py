@@ -380,6 +380,7 @@ class TennisEvent:
         log_info("Temp: GET_EVENTS "+str(from_year)+"-"+str(to_year)+", "+str(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
+        from_year = "1972"
         pos = TennisEvent.get_year_pos(from_year)
         search = 0  # 0-no search, 1-string, 2-regex
 
@@ -396,6 +397,8 @@ class TennisEvent:
 
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
+            if pos > 10:
+                break
             year = cls.EventsCache[pos]['Date'][:4]
             if to_year is not None and year > to_year:
                 break
