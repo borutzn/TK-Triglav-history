@@ -190,7 +190,7 @@
 
         {% endfor %}
 
-        <div class="next"><a href="events_year.html?{{ next_y }}">next year</a></div>
+        <a class="next" href="events_year.html?{{ next_y }}">next year</a>
 
     {% endif %}
     </div>
@@ -219,6 +219,7 @@
 
             $('.scroll').jscroll({
                 autoTrigger: true,
+                nextSelector: 'a.next',
                 debug: true
             })
        });
