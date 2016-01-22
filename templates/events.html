@@ -126,7 +126,7 @@
 
 
     <!-- Begin page content -->
-    <div class="container">
+    <div class="container scroll">
     <div class="panel-group" id="results">
     {% if events %}
         {% set year = [0] %}
@@ -190,16 +190,13 @@
 
         {% endfor %}
 
+        <div class="next"><a href="events_year.html?{{ next_y }}">next year</a></div>
+
     {% endif %}
     </div>
     </div>
 
 
-
-
-
-    <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script>
         $(document).on('click', '.panel-heading span.clickable', function(e){
             var $this = $(this);
@@ -219,7 +216,12 @@
             $('.dropdown-menu').find('form').click(function (e) {
                 e.stopPropagation();
             });
-        });
+
+            $('.scroll').jscroll({
+                autoTrigger: true,
+                debug: true
+            })
+       });
     </script>
 
 
