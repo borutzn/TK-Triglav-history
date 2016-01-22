@@ -431,7 +431,7 @@ class TennisEvent:
             prev_entry = entry
             prev_group = group
             pos += 1
-            if curr == 0 and len(events) > 30:
+            if curr == 0 and len(events) > 20:
                 break
         log_info("Temp: GET_EVENTS returning %d events." % len(events))
         return events
