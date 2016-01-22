@@ -344,6 +344,7 @@ def tennis_events():
 
 @app.route("/events_year", methods=['GET'])
 def tennis_events_year():
+    log_info("1")
     event_filter = ""
     if request.method == 'GET':
         try:
@@ -356,14 +357,18 @@ def tennis_events_year():
     else:
         return
 
+    log_info("2")
     events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
+    log_info("3")
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
+    log_info("4")
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
+    log_info("5")
     return render_template("events_year.html", events=events, next_y=next_y)
 
 
