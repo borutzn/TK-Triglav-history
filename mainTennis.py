@@ -342,6 +342,31 @@ def tennis_events():
     return render_template("events.html", events=events, players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
 
 
+@app.route("/events_year", methods=['GET'])
+def tennis_events_year():
+    event_filter = ""
+    if request.method == 'GET':
+        try:
+            year = request.args.get('y')
+            if year not in TennisEvent.Years:
+                year = TennisEvent.Years[0]
+        except ValueError:
+            year = TennisEvent.Years[0]
+            log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+    else:
+        return
+
+    events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
+    if len(events) == 0:
+        flash(u"Noben dogodek ne ustreza.")
+        log_info("Error: GET / - no event")
+        return redirect(request.args.get("next") or url_for("tennis_main1"))
+
+    i = TennisEvent.Years.index(year)
+    next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
+    return render_template("events_year.html", events=events, next_y=next_y)
+
+
 @app.route("/files", methods=['GET', 'POST'])
 @login_required
 def list_files():
