@@ -356,13 +356,13 @@ def tennis_events_year():
     else:
         return
 
+    year = "1971"
     events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    year = "1972"
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     return render_template("events_year.html", events=events, next_y=next_y)
