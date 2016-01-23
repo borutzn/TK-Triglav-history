@@ -3,8 +3,6 @@
         {{ group }}, {{ event.Event }}<br>
     {% endfor %}
     <!-- Begin page content -->
-    <div class="panel-group">
-    <p>({{ events|length }})</p>
     {% if events %}
         {% set year = [0] %}
         {% for (group,event) in events %}
@@ -71,4 +69,3 @@
         <a class="next" href="{{ url_for("tennis_events_year", y=next_y) }}">leto {{ next_y }}</a>
 
     {% endif %}
-    </div>
