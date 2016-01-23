@@ -1,4 +1,7 @@
     <p>({{ events|length }})</p>
+    {% for (group,event) in events %}
+        {{ group }}, {{ event.Event }}<br>
+    {% endfor %}
     <!-- Begin page content -->
     <div class="panel-group">
     <p>({{ events|length }})</p>
