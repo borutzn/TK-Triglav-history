@@ -155,7 +155,9 @@
                             <div class="col-sm-2 panel-title">{{ event.Place }}</div>
                             <div class="col-sm-1">{{ event.Category }}</div>
                             <div class="col-sm-1">{{ event.Result }}</div>
-                            <div class="col-sm-3">{{ event.Player }}</div>
+                            <div class="col-sm-3">
+                                <a href="{{ url_for('show_player', n=event.Player) }}">{{ event.Player }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +181,9 @@
                                 <div class="col-sm-7"></div>
                                 <div class="col-sm-1">{{ event.Category }}</div>
                                 <div class="col-sm-1">{{ event.Result }}</div>
-                                <div class="col-sm-3">{{ event.Player }}</div>
+                                <div class="col-sm-3">
+                                    <a href="{{ url_for('show_player', n=event.Player) }}">{{ event.Player }}</a>
+                                </div>
                             </div>
                 {% if group == 3 %} <!-- end group -->
                         </div>
