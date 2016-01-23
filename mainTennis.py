@@ -339,7 +339,7 @@ def tennis_events():
     i = TennisEvent.Years.index(year)
     prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    return render_template("events.html", events=events, players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
+    return render_template("events.html", events=events[:7], players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
 
 
 @app.route("/events_year", methods=['GET'])
@@ -365,7 +365,7 @@ def tennis_events_year():
 
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    return render_template("events_year.html", events=events[:6], next_y=next_y)
+    return render_template("events_year.html", events=events[:7], next_y=next_y)
 
 
 @app.route("/files", methods=['GET', 'POST'])
