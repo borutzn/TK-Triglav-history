@@ -71,7 +71,7 @@ input {
     text-decoration: none;
 }
 
-th {
+.header {
     background:#94BEFA;
     border-top: thin solid #16377A;
     text-align:left;

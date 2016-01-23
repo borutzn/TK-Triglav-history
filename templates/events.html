@@ -136,6 +136,14 @@
                     <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                 </div>
                 {% set year = [event.Date[:4]] %}
+                <div class="row header">
+                    <div class="col-sm-2 panel-title">datum</div>
+                    <div class="col-sm-3 panel-title">dogodek</div>
+                    <div class="col-sm-2 panel-title">kraj</div>
+                    <div class="col-sm-1">kategorija</div>
+                    <div class="col-sm-1">rezultat</div>
+                    <div class="col-sm-3">igralec</div>
+                </div>
             {% endif %}
 
             {% if event.Date[4:] == "/00/00" %}
