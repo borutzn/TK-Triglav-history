@@ -380,6 +380,7 @@ class TennisEvent:
         if not year and player:  # find start year of the player
             log_info("search players event " + str(TennisEvent.get_players_events(player, no_records=1)))
             year = TennisEvent.get_players_events(player, no_records=1)[0]['Date'][:4]
+            log_info("year= " + year)
 
         log_info("Temp: GET_EVENTS "+str(year)+", "+str(player)+", "+str(event_filter))
         cls.fetch_data()
@@ -398,6 +399,7 @@ class TennisEvent:
 
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
+            log_info("found " + str(cls.EventsCache[pos]))
             if cls.EventsCache[pos]['Date'][:4] > year: break
 
             if player and cls.EventsCache[pos]['Player'] == player:
