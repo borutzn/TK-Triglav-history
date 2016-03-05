@@ -30,7 +30,7 @@
         <div style="clear:both;"></div>
 
         {% set year = 0 %}
-        {% for event in events %}
+        {% for (group,event) in events %}
             {% if year != event.Date[:4] %}
                 {% if year != 0 %}
                     </table>
