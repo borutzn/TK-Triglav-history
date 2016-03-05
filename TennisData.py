@@ -378,9 +378,9 @@ class TennisEvent:
     @classmethod
     def get_events(cls, year=None, player=None, event_filter=""):
         if not year and player:  # find start year of the player
-            log_info("search players event " + unicode(TennisEvent.get_players_events(player, no_records=1)))
+            # log_info("search players event " + unicode(TennisEvent.get_players_events(player, no_records=1)))
             year = TennisEvent.get_players_events(player, no_records=1)[0]['Date'][:4]
-            log_info("year= " + year)
+            # log_info("year= " + year)
 
         log_info("Temp: GET_EVENTS "+str(year)+", "+str(player)+", "+str(event_filter))
         cls.fetch_data()
