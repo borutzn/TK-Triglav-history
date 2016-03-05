@@ -377,8 +377,13 @@ def tennis_players():
         if player_name is not None:
             player = TennisPlayer.get(player_name)
             events = TennisEvent.get_oneyear_events(year=None, player=player_name)
+            log_info("1:",unicode(events[0]))
+            log_info("2:",unicode(events[0][0]))
+            i = TennisEvent.Years.index(events[0][0]['Date'][:4])
+            log_info("i=",i)
+            next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
             log_info(unicode(events))
-            return render_template("players.html", events=events, playername=player_name, player=player)
+            return render_template("players.html", events=events, playername=player_name, player=player, next_y=next_y)
 
     search = request.form['search'] if request.method == 'POST' else ""
 
