@@ -345,6 +345,7 @@ def tennis_events():
 @app.route("/events_year", methods=['GET'])
 def tennis_events_year():
     event_filter = ""
+    player = None
     if request.method == 'GET':
         try:
             year = request.args.get('y')
@@ -364,7 +365,7 @@ def tennis_events_year():
 
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    return render_template("events_year.html", events=events, next_y=next_y)
+    return render_template("events_year.html", events=events, player=player, next_y=next_y)
 
 
 @app.route("/players", methods=['GET'])
@@ -378,8 +379,8 @@ def tennis_players():
             player = TennisPlayer.get(player_name)
             events = TennisEvent.get_oneyear_events(year=None, player=player_name)
             log_info("1:"+unicode(events[0]))
-            log_info("2:"+unicode(events[0][0]))
-            i = TennisEvent.Years.index(events[0][0]['Date'][:4])
+            log_info("2:"+unicode(events[0][1]))
+            i = TennisEvent.Years.index(events[0][1]['Date'][:4])
             log_info("i="+i)
             next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
             log_info(unicode(events))
