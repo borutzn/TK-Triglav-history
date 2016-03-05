@@ -382,7 +382,7 @@ class TennisEvent:
             year = TennisEvent.get_players_events(player, no_records=1)[0]['Date'][:4]
             # log_info("year= " + year)
 
-        log_info("Temp: GET_EVENTS "+str(year)+", "+str(player)+", "+str(event_filter))
+        log_info("Temp: GET_EVENTS "+str(year)+", "+unicode(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(year)
