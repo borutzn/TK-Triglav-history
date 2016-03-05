@@ -381,7 +381,7 @@ def tennis_players():
             log_info("1:"+unicode(events[0]))
             log_info("2:"+unicode(events[0][1]))
             i = TennisEvent.Years.index(events[0][1]['Date'][:4])
-            log_info("i="+i)
+            log_info("i="+str(i))
             next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
             log_info(unicode(events))
             return render_template("players.html", events=events, playername=player_name, player=player, next_y=next_y)
