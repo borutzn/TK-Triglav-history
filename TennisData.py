@@ -414,25 +414,24 @@ class TennisEvent:
 
             entry = cls.EventsCache[pos]
             curr_grp = 0
-            if not player:
-                # izračunati moramo, kateri entry pomeni na podlagi trenutnega in prejšnjega entrya
-                # - začetek grupe:
-                # - sredina grupe
-                # - konec grupe
-                if not prev_entry:  # the first entry
-                    group = False
-                else:
-                    group = prev_entry['Date'] == entry['Date'] and prev_entry['Event'] == entry['Event'] and \
-                            prev_entry['Place'] == entry['Place']
-                    if not prev_group:  # ni še grupe
-                        if group:  # začetek grupe
-                            events[-1][0] = 1  # set previous entry to 'start group'
-                            curr_grp = 2
-                    else:  # nadaljevanje grupe
-                        if group:  # nadaljevanje grupe
-                            curr_grp = 2
-                        else:  # konec grupe
-                            events[-1][0] = 3  # set previous entry to 'end group'
+            # izračunati moramo, kateri entry pomeni na podlagi trenutnega in prejšnjega entrya
+            # - začetek grupe:
+            # - sredina grupe
+            # - konec grupe
+            if not prev_entry:  # the first entry
+                group = False
+            else:
+                group = prev_entry['Date'] == entry['Date'] and prev_entry['Event'] == entry['Event'] and \
+                        prev_entry['Place'] == entry['Place']
+                if not prev_group:  # ni še grupe
+                    if group:  # začetek grupe
+                        events[-1][0] = 1  # set previous entry to 'start group'
+                        curr_grp = 2
+                else:  # nadaljevanje grupe
+                    if group:  # nadaljevanje grupe
+                        curr_grp = 2
+                    else:  # konec grupe
+                        events[-1][0] = 3  # set previous entry to 'end group'
 
             events.append([curr_grp, entry])
             prev_entry = entry
