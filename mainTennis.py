@@ -346,16 +346,25 @@ def tennis_events():
 def tennis_events_year():
     event_filter = ""
     player = None
-    if request.method == 'GET':
-        try:
-            year = request.args.get('y')
-            if year not in TennisEvent.Years:
-                year = TennisEvent.Years[0]
-        except ValueError:
+    if request.method <> 'GET': return
+
+    try:
+        year = request.args.get('y')
+        if year not in TennisEvent.Years:
             year = TennisEvent.Years[0]
-            log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
-    else:
-        return
+    except ValueError:
+        year = TennisEvent.Years[0]
+        log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+    try:
+        player = request.args.get('p')
+    except ValueError:
+        player = None
+        log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player))
+    try:
+        filter = request.args.get('f')
+    except ValueError:
+        filter = ""
+        log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
 
     events = TennisEvent.get_oneyear_events(year=year, event_filter=event_filter)
     if len(events) == 0:
@@ -372,16 +381,13 @@ def tennis_events_year():
 def tennis_players():
     if request.method == 'GET':
         try:
-            player_name = request.args.get('n')
+            player_name = request.args.get('p')
         except ValueError:
             player_name = None
         if player_name is not None:
             player = TennisPlayer.get(player_name)
             events = TennisEvent.get_oneyear_events(year=None, player=player_name)
-            log_info("1:"+unicode(events[0]))
-            log_info("2:"+unicode(events[0][1]))
             i = TennisEvent.Years.index(events[0][1]['Date'][:4])
-            log_info("i="+str(i))
             next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
             log_info(unicode(events))
             return render_template("players.html", events=events, playername=player_name, player=player, next_y=next_y)
