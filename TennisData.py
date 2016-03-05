@@ -402,7 +402,7 @@ class TennisEvent:
             log_info("found " + str(cls.EventsCache[pos]))
             if cls.EventsCache[pos]['Date'][:4] > year: break
 
-            if player and cls.EventsCache[pos]['Player'] == player:
+            if player and (cls.EventsCache[pos]['Player'] <> player):
                 pos += 1
                 continue
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
