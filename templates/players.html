@@ -1,29 +1,95 @@
+<!--# -*- coding: utf-8 -*- -->
+
 {% extends "base.html" %}
 
 {% block content %}
 
-    <form method="post">
-        &nbsp;&nbsp;
-        <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Išči: <label>
-        <input type="text" name="search" value="{{ search }}">
-    </label>
-    </form><br> 
 
-    {% if players %}
-        <table>
-        {% for player in players %}
-            {% if (loop.index % 6 == 1) %}
-                <tr>
+    {% if events %}
+        <div style="float:left; width:25%">
+            {% if player %}
+                {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}{{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
             {% endif %}
-            <td><a href="{{ url_for('show_player',n=player) }}">{{ player }}</a></td>
-            {% if (loop.index % 6 == 0) %}
-                </tr>
+        </div>
+        <div style="float:left; width:45%;">
+            <div class="player_name">{{ playername }}</div>
+            {% if player %}
+            <div class="player_data">
+                {% if player.Born %}r. {{ player.Born }}<br>{% endif %}
+                {% if player.Died %}u. {{ player.Died }}<br>{% endif %}
+                {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
+            </div>
+            {% endif %}
+        </div>
+        <div style="float:left; width:30%;">
+            &nbsp;&nbsp;<a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+            {% if current_user.is_authenticated() %}
+                &nbsp;&nbsp;<a href="{{ url_for('edit_player',next=request.url,id=playername) }}"><img src="{{ url_for('static',filename='edit-32.png') }}" title="Urejanje igralca"></a>
+            {% endif %}
+        </div>
+        <div style="clear:both;"></div>
+
+        {% set year = 0 %}
+        {% for event in events %}
+            {% if year != event.Date[:4] %}
+                {% if year != 0 %}
+                    </table>
+                {% endif %}
+                <br><a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                {% set year = event.Date[:4] %}
+                <table class="main-table" style="width:95%">
+                   <tr><th style="width:80px;">datum</th><th>dogodek</th><th style="width:140px;">kraj</th>
+                        <th style="width:80px;">kategorija</th><th style="width:40px;">uvrstitev</th>
+                        <th style="width:60px;"></th>
+                        {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
+            {% endif %}
+            <tr><td>
+            {% if event.Date[4:] == "/00/00" %}
+                {{ event.Date[:4] }}
+            {% elif event.Date[7:] == "/00" %}
+                {{ event.Date[5:7] }}.{{ event.Date[:4] }}
+            {% else %}
+                {{ event.Date[8:] }}.{{ event.Date[5:7] }}.{{ event.Date[:4] }}
+            {% endif %}
+            </td>
+            <td> {{ event.Event }} </td>
+            <td> {{ event.Place }} </td>
+            <td> {{ event.Category }} </td>
+            <td> {{ event.Result }} </td>
+            <td>
+                {% if event.Att1 != "" %}
+                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att1) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
+                {% endif %}
+                {% if event.Att2 != "" %}
+                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att2) }}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
+                {% endif %}
+                {% if event.Att3 != "" %}
+                    <a href="s{{ url_for('static',filename='files/'+year+'/'+event.Att3) }}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
+                {% endif %}
+                {% if event.Att4 != "" %}
+                    <a href="{{ url_for('static',filename='files/'+year+'/'+event.Att4) }}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
+                {% endif %}
+            </td>
+            {% if current_user.is_authenticated() %}
+            <td style="text-align:right;" {% if event.Comment != "" %}rowspan="2"{% endif %}>
+            {% endif %}
+                {% if current_user.utype >= 3 %}
+                    <a href="{{ url_for('edit_event',next=request.url,id=event.Id) }}"><img src="{{ url_for('static',filename='edit-24.png') }}" title="Popravi dogodek"></a>
+                {% endif %}
+                {% if current_user.utype >= 1 %}
+                    <a href="{{ url_for('edit_comment',next=request.url,id=event.Id) }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
+                {% endif %}
+            	{% if current_user.is_authenticated() %}
+                        <a href="{{ url_for('duplicate',next=request.url,id=event.Id) }}"><img src="{{ url_for('static',filename='add-24.png') }}" title="Podvoji dogodek"></a>
+                        <a href="{{ url_for('delete',next=request.url,id=event.Id) }}"><img src="{{ url_for('static',filename='delete-24.png') }}" title="Briši dogodek"></a>
+                {% endif %}
+            {% if current_user.is_authenticated() %}</td>{% endif %}
+            </tr>
+            {% if event.Comment != "" %}
+                <tr><td class="main-table-comment" colspan="5">{{ event.Comment }}<td></tr>
             {% endif %}
         {% endfor %}
-        </tr></table>
+        </table>
     {% endif %}
-    
 
 {% endblock %}		

@@ -376,15 +376,17 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_events(cls, from_year, to_year=None, player=None, event_filter=""):
-        log_info("Temp: GET_EVENTS "+str(from_year)+"-"+str(to_year)+", "+str(player)+", "+str(event_filter))
+    def get_events(cls, year=None, player=None, event_filter=""):
+        if not year and player:  # find start year of the player
+            log_info("search players event " + str(TennisEvent.get_players_events(player, no_records=1)))
+            year = TennisEvent.get_players_events(player, no_records=1)[0]['Date'][:4]
+
+        log_info("Temp: GET_EVENTS "+str(year)+", "+str(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
-        pos = TennisEvent.get_year_pos(from_year)
+        pos = TennisEvent.get_year_pos(year)
         search = 0  # 0-no search, 1-string, 2-regex
 
-        if not to_year:
-            to_year = from_year
         if event_filter != "":
             search = 1 if event_filter.isalnum() else 2
             log_info("Temp: Search=" + str(search))
@@ -396,9 +398,11 @@ class TennisEvent:
 
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
-            year = cls.EventsCache[pos]['Date'][:4]
-            if to_year is not None and year > to_year:
-                break
+            if cls.EventsCache[pos]['Date'][:4] > year: break
+
+            if player and cls.EventsCache[pos]['Player'] == player:
+                pos += 1
+                continue
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
                 pos += 1
                 continue
@@ -435,12 +439,13 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_players_events(cls, player):
+    def get_players_events(cls, player, no_records=None):
         cls.fetch_data()
         r = list()
         for ev in cls.EventsCache:
             if ev['Player'] == player:
                 r.append(ev)
+                if no_records and (no_records >= len(r)): break
         return r
 
     @classmethod

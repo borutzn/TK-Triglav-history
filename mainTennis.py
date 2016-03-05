@@ -62,7 +62,7 @@ def show_player():
                 players.append(p)
         # app.logger.info( "players: " + str(players) )
 
-    return render_template("players.html", players=players, search=search)
+    return render_template("players_list.html", players=players, search=search)
 
 
 @app.route("/editPlayer", methods=['GET', 'POST'])
@@ -330,7 +330,7 @@ def tennis_events():
     else:
         return
 
-    events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
+    events = TennisEvent.get_events(year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
@@ -356,7 +356,7 @@ def tennis_events_year():
     else:
         return
 
-    events = TennisEvent.get_events(from_year=year, to_year=year, event_filter=event_filter)
+    events = TennisEvent.get_events(year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
@@ -365,6 +365,31 @@ def tennis_events_year():
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     return render_template("events_year.html", events=events, next_y=next_y)
+
+
+@app.route("/players", methods=['GET'])
+def tennis_players():
+    if request.method == 'GET':
+        try:
+            player_name = request.args.get('n')
+        except ValueError:
+            player_name = None
+        if player_name is not None:
+            player = TennisPlayer.get(player_name)
+            events = TennisEvent.get_events(year=year, player=player_name)
+            return render_template("players.html", events=events, playername=player_name, player=player)
+
+    search = request.form['search'] if request.method == 'POST' else ""
+
+    if search == "":
+        players = list(TennisEvent.players)
+    else:
+        players = list()
+        for p in TennisEvent.players:
+            if search in p[0]:
+                players.append(p)
+
+    return render_template("players_list.html", players=players, search=search)
 
 
 @app.route("/files", methods=['GET', 'POST'])
