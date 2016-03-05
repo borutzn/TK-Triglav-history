@@ -330,7 +330,7 @@ def tennis_events():
     else:
         return
 
-    events = TennisEvent.get_events(year=year, event_filter=event_filter)
+    events = TennisEvent.get_oneyear_events(year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
@@ -356,7 +356,7 @@ def tennis_events_year():
     else:
         return
 
-    events = TennisEvent.get_events(year=year, event_filter=event_filter)
+    events = TennisEvent.get_oneyear_events(year=year, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
@@ -376,7 +376,7 @@ def tennis_players():
             player_name = None
         if player_name is not None:
             player = TennisPlayer.get(player_name)
-            events = TennisEvent.get_events(year=None, player=player_name)
+            events = TennisEvent.get_oneyear_events(year=None, player=player_name)
             log_info(unicode(events))
             return render_template("players.html", events=events, playername=player_name, player=player)
 

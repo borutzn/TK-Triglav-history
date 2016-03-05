@@ -314,6 +314,7 @@ class TennisEvent:
 
     @classmethod
     def get_year_pos(cls, year):
+        if not year: return 0
         cls.fetch_data()
         for idx, val in enumerate(cls.EventsCache):
             if val['Date'][:4] == year:
@@ -376,12 +377,7 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_events(cls, year=None, player=None, event_filter=""):
-        if not year and player:  # find start year of the player
-            # log_info("search players event " + unicode(TennisEvent.get_players_events(player, no_records=1)))
-            year = TennisEvent.get_players_events(player, no_records=1)[0]['Date'][:4]
-            # log_info("year= " + year)
-
+    def get_oneyear_events(cls, year=None, player=None, event_filter=""):
         log_info("Temp: GET_EVENTS "+str(year)+", "+unicode(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
@@ -397,10 +393,11 @@ class TennisEvent:
             search, search_pattern = 1, event_filter
             log_info("Error: re.error in get_events_page/re.compile - changed to string")
 
+        to_year = None
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
             log_info("found " + str(cls.EventsCache[pos]))
-            if cls.EventsCache[pos]['Date'][:4] > year: break
+            if to_year and (cls.EventsCache[pos]['Date'][:4] > to_year): break
 
             if player and (cls.EventsCache[pos]['Player'] <> player):
                 pos += 1
@@ -434,6 +431,7 @@ class TennisEvent:
                         events[-1][0] = 3  # set previous entry to 'end group'
 
             events.append([curr_grp, entry])
+            if not to_year: to_year = entry['Date'][:4]
             prev_entry = entry
             prev_group = group
             pos += 1
