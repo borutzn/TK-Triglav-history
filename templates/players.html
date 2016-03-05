@@ -90,6 +90,45 @@
             {% endif %}
         {% endfor %}
         </table>
+
+
+        </div>
+            <a class="next" href="{{ url_for("tennis_events_year", y=next_y) }}">leto {{ next_y }}</a>
+        </div>
     {% endif %}
 
-{% endblock %}		
+
+    <script>
+        $(document).on('click', '.panel-heading span.clickable', function(e){
+            var $this = $(this);
+            if(!$this.hasClass('panel-collapsed')) {
+                $this.parents('.panel').find('.panel-body').slideUp();
+                $this.addClass('panel-collapsed');
+                $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+            } else {
+                $this.parents('.panel').find('.panel-body').slideDown();
+                $this.removeClass('panel-collapsed');
+                $this.find('i').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+            }
+        });
+
+        $(document).ready(function(){
+            //Handles menu drop down
+            $('.dropdown-menu').find('form').click(function (e) {
+                e.stopPropagation();
+            });
+
+            $('.scroll').jscroll({
+                autoTrigger: true,
+                nextSelector: 'a.next:last',
+                contentSelector: '',
+                debug: true
+            })
+       });
+    </script>
+
+
+    <div style="clear:both;"></div>
+
+
+{% endblock %}
