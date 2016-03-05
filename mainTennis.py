@@ -376,7 +376,7 @@ def tennis_players():
             player_name = None
         if player_name is not None:
             player = TennisPlayer.get(player_name)
-            events = TennisEvent.get_events(year=year, player=player_name)
+            events = TennisEvent.get_events(year=None, player=player_name)
             return render_template("players.html", events=events, playername=player_name, player=player)
 
     search = request.form['search'] if request.method == 'POST' else ""
