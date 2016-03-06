@@ -412,9 +412,9 @@ class TennisEvent:
             entry = cls.EventsCache[pos]
             curr_grp = 0
             # izračunati moramo, kateri entry pomeni na podlagi trenutnega in prejšnjega entrya
-            # - začetek grupe:
-            # - sredina grupe
-            # - konec grupe
+            # 1 - začetek grupe:
+            # 2 - sredina grupe
+            # 3 - konec grupe
             if not prev_entry:  # the first entry
                 group = False
             else:
@@ -435,6 +435,9 @@ class TennisEvent:
             prev_entry = entry
             prev_group = group
             pos += 1
+
+        if events[-1][0] == 2: # last element = mid-group --> end-group
+            events[-1][0] = 3
         log_info("Temp: GET_EVENTS returning %d events." % len(events))
         return events
 
