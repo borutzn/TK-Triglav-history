@@ -1,0 +1,64 @@
+    <!-- Begin page content -->
+    {% if events %}
+        {% set year = [0] %}
+        {% for (group,event) in events %}
+            {% if year[0] != event.Date[:4] %}
+                <div class="page-header">
+                    <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                </div>
+                {% set year = [event.Date[:4]] %}
+            {% endif %}
+
+            {% if event.Date[4:] == "/00/00" %}
+                {%  set date = event.Date[:4] %}
+            {% elif event.Date[7:] == "/00" %}
+                {% set date = event.Date[5:7] + "." + event.Date[:4] %}
+            {% else %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + event.Date[:4] %}
+            {% endif %}
+
+            {% if group == 0 %} <!-- single entry -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-2 panel-title">{{ date }}</div>
+                            <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
+                            <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                            <div class="col-sm-1">{{ event.Category }}</div>
+                            <div class="col-sm-1">{{ event.Result }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            {% elif group > 0 %} <!-- group -->
+                {% if group == 1 %} <!-- start group -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row panel-title">
+                                <div class="col-sm-2">{{ date }}</div>
+                                <div class="col-sm-3"><b>{{ event.Event }}</b></div>
+                                <div class="col-sm-2">{{ event.Place }}</div>
+                                <div class="col-sm-2"><span class="pull-right"></span></div>
+                                <span class="pull-right clickable panel-collapsed">
+                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                            </div>
+                        </div>
+                        <div class="panel-body panel-collapse collapse">
+                {% endif %}
+                            <div class="row">
+                                <div class="col-sm-7"></div>
+                                <div class="col-sm-1">{{ event.Category }}</div>
+                                <div class="col-sm-1">{{ event.Result }}</div>
+                            </div>
+                {% if group == 3 %} <!-- end group -->
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+        {% endfor %}
+
+        <a class="next" href="{{ url_for("tennis_events_year", y=next_y) }}">leto {{ next_y }}</a>
+
+    {% endif %}
