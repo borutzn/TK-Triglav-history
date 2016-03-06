@@ -210,7 +210,7 @@
         {% endfor %}
 
         </div>
-            <a class="next" href="{{ url_for("players_year", y=next_y, p=playername, f=event_filter) }}">
+            <a class="next" href="{{ url_for("players_year", y=next_y, p=player_name, f=event_filter) }}">
                 leto {{ next_y }}</a>
         </div>
     {% endif %}

@@ -357,27 +357,27 @@ def tennis_events_year(one_player):
         year = TennisEvent.Years[0]
         log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
     try:
-        player = request.args.get('p')
+        player_name = request.args.get('p')
     except ValueError:
-        player = None
-        log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player))
+        player_name = None
+        log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player_name))
     try:
         event_filter = request.args.get('f') or ""
     except ValueError:
         event_filter = ""
         log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
 
-    log_info("year_events %s, %s, %s, %s" % (one_player, player, year, event_filter))
-    events = TennisEvent.get_oneyear_events(year=year, player=player, event_filter=event_filter)
+    log_info("year_events %s, %s, %s, %s" % (one_player, player_name, year, event_filter))
+    events = TennisEvent.get_oneyear_events(year=year, player=player_name, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    i = TennisEvent.Years.index(year)
+    i = TennisEvent.Years.index(events[0][1]['Date'][:4])
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     return render_template("players_year.html" if one_player else "events_year.html",
-                           events=events, player=player, next_y=next_y, event_filter=event_filter)
+                           events=events, player_name=player_name, next_y=next_y, event_filter=event_filter)
 
 
 @app.route("/players", methods=['GET'])
@@ -400,7 +400,7 @@ def tennis_players():
             next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
             log_info(unicode(events))
             return render_template("players.html", events=events, player=player,
-                                   playername=player_name, next_y=next_y, event_filter=event_filter)
+                                   player_name=player_name, next_y=next_y, event_filter=event_filter)
 
     search = request.form['search'] if request.method == 'POST' else ""
 
