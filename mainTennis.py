@@ -374,7 +374,7 @@ def tennis_events_year(player):
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     return render_template("players_year.html" if player else "events_year.html",
-                           events=events, player=player, next_y=next_y)
+                           events=events, player=player, next_y=next_y, event_filter=event_filter)
 
 
 @app.route("/players", methods=['GET'])
@@ -384,13 +384,20 @@ def tennis_players():
             player_name = request.args.get('p')
         except ValueError:
             player_name = None
+        try:
+            event_filter = request.args.get('f') or ""
+        except ValueError:
+            event_filter = ""
+            log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
+
         if player_name is not None:
             player = TennisPlayer.get(player_name)
             events = TennisEvent.get_oneyear_events(year=None, player=player_name)
             i = TennisEvent.Years.index(events[0][1]['Date'][:4])
             next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
             log_info(unicode(events))
-            return render_template("players.html", events=events, playername=player_name, player=player, next_y=next_y)
+            return render_template("players.html", events=events, player=player,
+                                   playername=player_name, next_y=next_y, event_filter=event_filter)
 
     search = request.form['search'] if request.method == 'POST' else ""
 
