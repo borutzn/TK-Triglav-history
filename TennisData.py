@@ -396,7 +396,7 @@ class TennisEvent:
         to_year = None
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
-            log_info("found " + str(cls.EventsCache[pos]))
+            # log_info("found " + str(cls.EventsCache[pos]['Event']))
             if to_year and (cls.EventsCache[pos]['Date'][:4] > to_year): break
 
             if player and (cls.EventsCache[pos]['Player'] <> player):
