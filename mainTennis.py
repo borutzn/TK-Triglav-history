@@ -365,7 +365,7 @@ def tennis_events_year(player):
         event_filter = ""
         log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
 
-    events = TennisEvent.get_oneyear_events(year=year, event_filter=event_filter)
+    events = TennisEvent.get_oneyear_events(year=year, player=player, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
