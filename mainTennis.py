@@ -360,7 +360,7 @@ def tennis_events_year(player):
         player = None
         log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player))
     try:
-        event_filter = request.args.get('f')
+        event_filter = request.args.get('f') or ""
     except ValueError:
         event_filter = ""
         log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
