@@ -436,7 +436,7 @@ class TennisEvent:
             prev_group = group
             pos += 1
 
-        if events[-1][0] == 2: # last element = mid-group --> end-group
+        if events and events[-1][0] == 2: # last element = mid-group --> end-group
             events[-1][0] = 3
         log_info("Temp: GET_EVENTS returning %d events." % len(events))
         return events
