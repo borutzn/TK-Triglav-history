@@ -124,6 +124,23 @@
     </nav>
 
 
+    <div style="float:left; width:25%">
+        {% if player %}
+            {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}{{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
+        {% endif %}
+    </div>
+    <div style="float:left; width:45%;">
+        <div class="player_name">{{ playername }}</div>
+        {% if player %}
+        <div class="player_data">
+            {% if player.Born %}r. {{ player.Born }}<br>{% endif %}
+            {% if player.Died %}u. {{ player.Died }}<br>{% endif %}
+            {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+
     <!-- Begin page content -->
     <div class="container scroll">
     <div class="panel-group" id="results">
@@ -198,7 +215,7 @@
         {% endfor %}
 
         </div>
-            <a class="next" href="{{ url_for("tennis_events_year", y=next_y) }}">leto {{ next_y }}</a>
+            <a class="next" href="{{ url_for("players_year", y=next_y, p=playername) }}">leto {{ next_y }}</a>
         </div>
     {% endif %}
 
