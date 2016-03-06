@@ -370,12 +370,10 @@ def tennis_events_year(one_player):
     log_info("year_events %s, %s, %s, %s" % (one_player, player_name, year, event_filter))
     events = TennisEvent.get_oneyear_events(year=year, player=player_name, event_filter=event_filter)
     if len(events) == 0:
-        flash(u"Noben dogodek ne ustreza.")
-        log_info("Error: GET / - no event")
-        return redirect(request.args.get("next") or url_for("tennis_main1"))
-
-    i = TennisEvent.Years.index(events[0][1]['Date'][:4])
-    next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
+        i = TennisEvent.Years.index(events[0][1]['Date'][:4])
+        next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
+    else:
+        next_y = None
     return render_template("players_year.html" if one_player else "events_year.html",
                            events=events, player_name=player_name, next_y=next_y, event_filter=event_filter)
 
