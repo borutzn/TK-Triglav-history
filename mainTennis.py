@@ -342,9 +342,9 @@ def tennis_events():
     return render_template("events.html", events=events, players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
 
 
-@app.route("/events_year", methods=['GET'], endpoint='events_year', defaults={'player': False})
-@app.route("/players_year", methods=['GET'], endpoint='players_year', defaults={'player': True})
-def tennis_events_year(player):
+@app.route("/events_year", methods=['GET'], endpoint='events_year', defaults={'one_player': False})
+@app.route("/players_year", methods=['GET'], endpoint='players_year', defaults={'one_player': True})
+def tennis_events_year(one_player):
     if request.method != 'GET': return
 
     try:
@@ -365,6 +365,7 @@ def tennis_events_year(player):
         event_filter = ""
         log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
 
+    log_info("year_events %s, %s, %s, %s" % (one_player, player, year, event_filter))
     events = TennisEvent.get_oneyear_events(year=year, player=player, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
@@ -373,7 +374,7 @@ def tennis_events_year(player):
 
     i = TennisEvent.Years.index(year)
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    return render_template("players_year.html" if player else "events_year.html",
+    return render_template("players_year.html" if one_player else "events_year.html",
                            events=events, player=player, next_y=next_y, event_filter=event_filter)
 
 
