@@ -72,7 +72,7 @@
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                 {% for player in players %}
                                     {%  if player|length > 1 %}
-                                        <li><a href="{{ url_for("tennis_players", p=playername, f=event_filter) }}">
+                                        <li><a href="{{ url_for("tennis_players", p=player_name, f=event_filter) }}">
                                             {{ player }}</a></li>
                                     {%  endif %}
                                 {% endfor %}
@@ -125,7 +125,7 @@
         {% endif %}
     </div>
     <div style="float:left; width:45%;">
-        <div class="player_name">{{ playername }}</div>
+        <div class="player_name">{{ player_name }}</div>
         {% if player %}
         <div class="player_data">
             {% if player.Born %}r. {{ player.Born }}<br>{% endif %}
