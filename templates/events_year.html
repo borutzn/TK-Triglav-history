@@ -46,7 +46,7 @@
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <img data-toggle="modal" data-target="#Att1-{{y}}{{loop.index}}"
                                              src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="80">
-                                        <div class="modal fade" id="Att1-{{y}}{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal fade" id="Att1-{{y}}{{loop.index}}" tabindex="0" role="dialog">
                                             <div class="modal-dialog" role="document"><div class="modal-content">
                                               <div class="modal-body">
                                                   <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}">
@@ -55,9 +55,9 @@
                                         </div>
                                     {% endif %}
                                     {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
-                                        <img class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Att2-{{y}}{{loop.index}}"
+                                        <img data-toggle="modal" data-target="#Att2-{{y}}{{loop.index}}"
                                              src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" height="80">
-                                        <div class="modal fade" id="Att2-{{y}}{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal fade" id="Att2-{{y}}{{loop.index}}" tabindex="0" role="dialog">
                                             <div class="modal-dialog" role="document"><div class="modal-content">
                                               <div class="modal-body">
                                                   <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}">
@@ -66,9 +66,9 @@
                                         </div>
                                     {% endif %}
                                     {% if event.Att3 != "" and event.Att3[:4] != "err_" %}
-                                        <img class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Att3-{{y}}{{loop.index}}"
+                                        <img data-toggle="modal" data-target="#Att3-{{y}}{{loop.index}}"
                                              src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" height="80">
-                                        <div class="modal fade" id="Att3-{{y}}{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal fade" id="Att3-{{y}}{{loop.index}}" tabindex="0" role="dialog">
                                             <div class="modal-dialog" role="document"><div class="modal-content">
                                               <div class="modal-body">
                                                   <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}">
@@ -77,9 +77,9 @@
                                         </div>
                                     {% endif %}
                                     {% if event.Att4 != "" and event.Att4[:4] != "err_" %}
-                                        <img class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Att4-{{y}}{{loop.index}}"
+                                        <img data-toggle="modal" data-target="#Att4-{{y}}{{loop.index}}"
                                              src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" height="80">
-                                        <div class="modal fade" id="Att4-{{y}}{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal fade" id="Att4-{{y}}{{loop.index}}" tabindex="0" role="dialog">
                                             <div class="modal-dialog" role="document"><div class="modal-content">
                                               <div class="modal-body">
                                                   <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}">
