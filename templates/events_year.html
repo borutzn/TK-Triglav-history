@@ -69,10 +69,6 @@
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" target="_blank">
                                             <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" height="50"></a>
                                     {% endif %}
-                                    {% if event.Att5 != "" and event.Att5[:4] != "err_" %}
-                                        <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att5) }}" target="_blank">
-                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att5) }}" height="50"></a>
-                                    {% endif %}
                                     </div>
                                 </div>
                             {% endif %}
