@@ -374,7 +374,6 @@ def tennis_events_year(one_player):
     else:
         i = TennisEvent.Years.index(events[0][1]['Date'][:4])
         next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    log_info("got %d events, next=%s" % (len(events), next_y))
     return render_template("players_year.html" if one_player else "events_year.html",
                            events=events, player_name=player_name, next_y=next_y, event_filter=event_filter)
 
