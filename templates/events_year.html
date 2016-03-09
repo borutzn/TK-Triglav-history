@@ -18,14 +18,9 @@
                 {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
             {% endif %}
 
-            {%  set show_comm = False %}
-            {% if event.Comment != "" %}
-                {%  set show_comm = True %}
-                KOMENTAR
-            {% endif %}
             {%  set show_more = False %}
-            {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                {%  set show_att = True %}
+            {% if event.Comment != "" or event.Att1 != ""%}
+                {%  set show_comm = True %}
             {% endif %}
 
             {% if group == 0 %} <!-- single entry -->
@@ -40,19 +35,12 @@
                             <div class="col-sm-2">
                                 <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
                             </div>
-                            {% if show_att %}
+                            {% if show_more %}
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                            {% endif %}
-                            {% if show_comm %}
-                                </div> <div class="row">
-                                    <div class="col-sm-5"></div>
-                                    <div class="col-sm-7"> {{ event.Comment }}</div>
-                            {% endif %}
-                            {% if show_att %}
                                 </div> <div class="row">
                                 <div class="panel-body panel-collapse collapse">
-                                    <div class="col-sm-5"></div>
+                                    <div class="col-sm-5"> {{ event.Comment }}</div>
                                     <div class="col-sm-7">
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
