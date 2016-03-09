@@ -65,7 +65,7 @@
                                             </div></div>
                                         </div>
                                     {% endif %}
-                                    {% if event.Att3 != "" and event.Att3[:4] != "err_" %}
+                                    {% if event.Att3 != "" and event.Att3[:4] != "err_"  %}
                                         <img class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Att3-{{loop.index}}"
                                              src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" height="80">
                                         <div class="modal fade" id="Att3-{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
