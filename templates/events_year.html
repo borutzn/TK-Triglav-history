@@ -22,6 +22,12 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
+                            {%  set show_more = False %}
+                            {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                                {%  set show_more = True %}
+                            {% elif event.Att2 != "" and event.Att2[:4] != "err_" %}
+                                {%  set show_more = True %}
+                            {% endif %}
                             <div class="col-sm-2 panel-title">{{ date }}</div>
                             <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
                             <div class="col-sm-2 panel-title">{{ event.Place }}</div>
@@ -30,18 +36,10 @@
                             <div class="col-sm-2">
                                 <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
                             </div>
-                            {%  set show_more = False %}
-                            {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                                {%  set show_more = True %}
-                            {% elif event.Att2 != "" and event.Att2[:4] != "err_" %}
-                                {%  set show_more = True %}
-                            {% endif %}
-                            <div class="col-sm-1">
                                 {% if show_more %}
                                     <span class="pull-right clickable panel-collapsed">
                                         <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                                 {% endif %}
-                            </div>
                             {% if show_more %}
                                 <div class="panel-body panel-collapse collapse">
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
