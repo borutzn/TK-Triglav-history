@@ -54,10 +54,6 @@
                                     <li><a href="{{ url_for('tennis_events', y="1990") }}">1990-1999</a></li>
                                     <li><a href="{{ url_for('tennis_events', y="2000") }}">2000-2009</a></li>
                                     <li><a href="{{ url_for('tennis_events', y="2010") }}">2010-</a></li>
-                                    {% for year in years %}
-                                        <li><a href="{{ url_for('tennis_events', y=year, next=request.url) }}">
-                                            {{  year }}</a></li>
-                                    {% endfor %}
                                 </ul>
                             </div>
                             <a href="{{ url_for('tennis_events',y=next_y) }}" role="button"
@@ -146,13 +142,13 @@
                 </div>
             {% endif %}
 
-            {% set year = event.Date[:4] %}
+            {% set y = event.Date[:4] %}
             {% if event.Date[4:] == "/00/00" %}
-                {%  set date = year %}
+                {%  set date = y %}
             {% elif event.Date[7:] == "/00" %}
-                {% set date = event.Date[5:7] + "." + year %}
+                {% set date = event.Date[5:7] + "." + y %}
             {% else %}
-                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + year %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
             {% endif %}
 
             {% if group == 0 %} <!-- single entry -->
@@ -169,7 +165,7 @@
                             </div>
                             <div class="col-sm-1">
                                 {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                                    <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att1) }}" target="_blank">
+                                    <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
                                         <img src="{{ url_for('static',filename='1.png') }}"></a>
                                 {% endif %}
                             </div>

@@ -9,13 +9,13 @@
                 {% set year = [event.Date[:4]] %}
             {% endif %}
 
-            {% set year = event.Date[:4] %}
+            {% set y = event.Date[:4] %}
             {% if event.Date[4:] == "/00/00" %}
-                {%  set date = year %}
+                {%  set date = y %}
             {% elif event.Date[7:] == "/00" %}
-                {% set date = event.Date[5:7] + "." + year %}
+                {% set date = event.Date[5:7] + "." + y %}
             {% else %}
-                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + year %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
             {% endif %}
 
             {% if group == 0 %} <!-- single entry -->
@@ -30,12 +30,29 @@
                             <div class="col-sm-2">
                                 <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
                             </div>
+                            {%  set show_more = False %}
+                            {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                                {%  set show_more = True %}
+                            {% elif event.Att2 != "" and event.Att2[:4] != "err_" %}
+                                {%  set show_more = True %}
+                            {% endif %}
                             <div class="col-sm-1">
-                                {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                                    <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att1) }}" target="_blank">
-                                        <img src="{{ url_for('static',filename='1.png') }}"></a>
+                                {% if show_more %}
+                                    <span class="pull-right clickable panel-collapsed">
+                                        <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                                 {% endif %}
                             </div>
+                            {% if show_more %}
+                                <div class="panel-body panel-collapse collapse">
+                                {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                                    <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
+                                        <img src="{{ url_for('static',filename='1.png') }}"></a>
+                                {% endif %}
+                                {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
+                                    <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" target="_blank">
+                                        <img src="{{ url_for('static',filename='2.png') }}"></a>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
