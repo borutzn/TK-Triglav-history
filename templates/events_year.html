@@ -40,7 +40,7 @@
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                                 </div> <div class="row">
                                 <div class="panel-body panel-collapse collapse">
-                                    <div class="col-sm-5"> KK: {{ event.Comment }}| </div>
+                                    <div class="col-sm-5"> KK: {{ event.Comment }}. </div>
                                     <div class="col-sm-7">
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
