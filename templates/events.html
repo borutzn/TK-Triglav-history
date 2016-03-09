@@ -153,6 +153,7 @@
             {% else %}
                 {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + event.Date[:4] %}
             {% endif %}
+            {% set year = event.Date[:4] %}
 
             {% if group == 0 %} <!-- single entry -->
                 <div class="panel panel-default">
