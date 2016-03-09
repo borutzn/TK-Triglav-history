@@ -9,12 +9,13 @@
                 {% set year = [event.Date[:4]] %}
             {% endif %}
 
+            {% set year = event.Date[:4] %}
             {% if event.Date[4:] == "/00/00" %}
-                {%  set date = event.Date[:4] %}
+                {%  set date = year %}
             {% elif event.Date[7:] == "/00" %}
-                {% set date = event.Date[5:7] + "." + event.Date[:4] %}
+                {% set date = event.Date[5:7] + "." + year %}
             {% else %}
-                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + event.Date[:4] %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + year %}
             {% endif %}
 
             {% if group == 0 %} <!-- single entry -->
@@ -26,8 +27,14 @@
                             <div class="col-sm-2 panel-title">{{ event.Place }}</div>
                             <div class="col-sm-1">{{ event.Category }}</div>
                             <div class="col-sm-1">{{ event.Result }}</div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
+                            </div>
+                            <div class="col-sm-1">
+                                {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                                    <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att1) }}" target="_blank">
+                                        <img src="{{ url_for('static',filename='1.png') }}"></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
