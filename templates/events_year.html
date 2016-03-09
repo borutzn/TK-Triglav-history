@@ -37,9 +37,10 @@
                                 <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
                             </div>
                             {% if show_more %}
-                                </div> <div class="row">
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                         /div> <div class="row">
+                                <div class="col-sm-2 panel-title"></div>
                                 <div class="panel-body panel-collapse collapse">
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
