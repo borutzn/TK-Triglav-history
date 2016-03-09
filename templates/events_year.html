@@ -20,7 +20,7 @@
 
             {%  set show_more = False %}
             {% if event.Comment != "" or event.Att1 != "" %}
-                {%  set show_comm = True %}
+                {%  set show_more = True %}
             {% endif %}
 
             {% if group == 0 %} <!-- single entry -->
