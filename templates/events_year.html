@@ -40,23 +40,24 @@
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                                 </div> <div class="row">
                                 <div class="panel-body panel-collapse collapse">
-                                    <div class="col-sm-5"> KK: {{ event.Comment }}. </div>
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-5"> {{ event.Comment }}. </div>
+                                    <div class="col-sm-5">
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
-                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="50"></a>
+                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="80"></a>
                                     {% endif %}
                                     {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" target="_blank">
-                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" height="50"></a>
+                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" height="80"></a>
                                     {% endif %}
                                     {% if event.Att3 != "" and event.Att3[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" target="_blank">
-                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" height="50"></a>
+                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" height="80"></a>
                                     {% endif %}
                                     {% if event.Att4 != "" and event.Att4[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" target="_blank">
-                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" height="50"></a>
+                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" height="80"></a>
                                     {% endif %}
                                     </div>
                                 </div>
