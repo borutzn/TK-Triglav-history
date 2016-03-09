@@ -44,7 +44,7 @@
                                 <div class="panel-body panel-collapse collapse">
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
-                                            <img src="{{ url_for('static',filename='1.png') }}"></a>
+                                            <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="50"></a>
                                     {% endif %}
                                     {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" target="_blank">
