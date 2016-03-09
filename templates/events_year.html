@@ -40,8 +40,8 @@
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                          </div> <div class="row">
-                                <div class="col-sm-2 panel-title"></div>
                                 <div class="panel-body panel-collapse collapse">
+                                    <div class="col-sm-2"></div>
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
                                             <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="50"></a>
