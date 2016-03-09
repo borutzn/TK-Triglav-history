@@ -44,14 +44,15 @@
                             </div>
                             {% if show_more %}
                                 <div class="panel-body panel-collapse collapse">
-                                {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                                    <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
-                                        <img src="{{ url_for('static',filename='1.png') }}"></a>
-                                {% endif %}
-                                {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
-                                    <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" target="_blank">
-                                        <img src="{{ url_for('static',filename='2.png') }}"></a>
-                                {% endif %}
+                                    {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                                        <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
+                                            <img src="{{ url_for('static',filename='1.png') }}"></a>
+                                    {% endif %}
+                                    {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
+                                        <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" target="_blank">
+                                            <img src="{{ url_for('static',filename='2.png') }}"></a>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         </div>
                     </div>
