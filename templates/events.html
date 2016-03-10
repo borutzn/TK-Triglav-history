@@ -151,6 +151,11 @@
                 {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
             {% endif %}
 
+            {%  set show_more = False %}
+            {% if event.Comment != "" or event.Att1 != "" %}
+                {%  set show_more = True %}
+            {% endif %}
+
             {% if group == 0 %} <!-- single entry -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -163,12 +168,61 @@
                             <div class="col-sm-2">
                                 <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
                             </div>
-                            <div class="col-sm-1">
-                                {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                                    <a href="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" target="_blank">
-                                        <img src="{{ url_for('static',filename='1.png') }}"></a>
-                                {% endif %}
-                            </div>
+                            {% if show_more %}
+                                <span class="pull-right clickable panel-collapsed">
+                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                                </div> <div class="row">
+                                <div class="panel-body panel-collapse collapse">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-5"> {{ event.Comment }}. </div>
+                                    <div class="col-sm-5">
+                                    {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
+                                        <img data-toggle="modal" data-target="#Att1-{{y}}{{loop.index}}"
+                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="80">
+                                        <div class="modal fade" id="Att1-{{y}}{{loop.index}}" tabindex="0" role="dialog">
+                                            <div class="modal-dialog" role="document"><div class="modal-content">
+                                              <div class="modal-body">
+                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}">
+                                              </div>
+                                            </div></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
+                                        <img data-toggle="modal" data-target="#Att2-{{y}}{{loop.index}}"
+                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" height="80">
+                                        <div class="modal fade" id="Att2-{{y}}{{loop.index}}" tabindex="0" role="dialog">
+                                            <div class="modal-dialog" role="document"><div class="modal-content">
+                                              <div class="modal-body">
+                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}">
+                                              </div>
+                                            </div></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if event.Att3 != "" and event.Att3[:4] != "err_" %}
+                                        <img data-toggle="modal" data-target="#Att3-{{y}}{{loop.index}}"
+                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" height="80">
+                                        <div class="modal fade" id="Att3-{{y}}{{loop.index}}" tabindex="0" role="dialog">
+                                            <div class="modal-dialog" role="document"><div class="modal-content">
+                                              <div class="modal-body">
+                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}">
+                                              </div>
+                                            </div></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if event.Att4 != "" and event.Att4[:4] != "err_" %}
+                                        <img data-toggle="modal" data-target="#Att4-{{y}}{{loop.index}}"
+                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" height="80">
+                                        <div class="modal fade" id="Att4-{{y}}{{loop.index}}" tabindex="0" role="dialog">
+                                            <div class="modal-dialog" role="document"><div class="modal-content">
+                                              <div class="modal-body">
+                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}">
+                                              </div>
+                                            </div></div>
+                                        </div>
+                                    {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
