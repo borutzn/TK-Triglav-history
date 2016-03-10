@@ -9,12 +9,18 @@
                 {% set year = [event.Date[:4]] %}
             {% endif %}
 
+            {% set y = event.Date[:4] %}
             {% if event.Date[4:] == "/00/00" %}
-                {%  set date = event.Date[:4] %}
+                {%  set date = y %}
             {% elif event.Date[7:] == "/00" %}
-                {% set date = event.Date[5:7] + "." + event.Date[:4] %}
+                {% set date = event.Date[5:7] + "." + y %}
             {% else %}
-                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + event.Date[:4] %}
+                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
+            {% endif %}
+
+            {%  set show_more = False %}
+            {% if event.Comment != "" or event.Att1 != "" %}
+                {%  set show_more = True %}
             {% endif %}
 
             {% if group == 0 %} <!-- single entry -->
