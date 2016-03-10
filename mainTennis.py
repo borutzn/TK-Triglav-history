@@ -318,7 +318,6 @@ def tennis_main():
 
 @app.route("/events", methods=['GET'])
 def tennis_events():
-    event_filter = ""
     if request.method == 'GET':
         try:
             year = request.args.get('y')
@@ -327,27 +326,42 @@ def tennis_events():
         except ValueError:
             year = TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+        try:
+            player_name = request.args.get('p')
+        except ValueError:
+            player_name = None
+            log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player_name))
+        try:
+            event_filter = request.args.get('f') or ""
+        except ValueError:
+            event_filter = ""
+            log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
     else:
-        return
+        return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    events = TennisEvent.get_oneyear_events(year=year, event_filter=event_filter)
+    events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    for e in events[-6:]:
-        log_info("event: %s" % (unicode(e)))
     i = TennisEvent.Years.index(year)
     prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    return render_template("events.html", events=events, players=TennisEvent.players, prev_y=prev_y, next_y=next_y)
+    if player_name:
+        player = TennisPlayer.get(player_name)
+        return render_template("players.html", events=events, players=TennisEvent.players, player=player,
+                               player_name=player_name, event_filter=event_filter, prev_y=prev_y, next_y=next_y)
+    else:
+        return render_template("events.html", events=events, players=TennisEvent.players,
+                               player_name=player_name, event_filter=event_filter, prev_y=prev_y, next_y=next_y)
 
 
 @app.route("/events_year", methods=['GET'], endpoint='events_year', defaults={'one_player': False})
 @app.route("/players_year", methods=['GET'], endpoint='players_year', defaults={'one_player': True})
 def tennis_events_year(one_player):
-    if request.method != 'GET': return
+    if request.method != 'GET':
+        return
 
     try:
         year = request.args.get('y')
