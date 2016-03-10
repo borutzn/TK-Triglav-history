@@ -33,7 +33,7 @@
                             <div class="col-sm-1">{{ event.Category }}</div>
                             <div class="col-sm-1">{{ event.Result }}</div>
                             <div class="col-sm-2">
-                                <a href="{{ url_for('tennis_players', p=event.Player) }}">{{ event.Player }}</a>
+                                <a href="{{ url_for('tennis_events', p=event.Player) }}">{{ event.Player }}</a>
                             </div>
                             {% if show_more %}
                                 <span class="pull-right clickable panel-collapsed">
