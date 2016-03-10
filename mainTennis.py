@@ -352,10 +352,10 @@ def tennis_events():
     if player_name:
         player = TennisPlayer.get(player_name)
         return render_template("players.html", events=events, players=TennisEvent.players, player=player,
-                               player_name=player_name, event_filter=event_filter, prev_y=prev_y, next_y=next_y)
+                               event_filter=event_filter, prev_y=prev_y, next_y=next_y, player_name=player_name)
     else:
         return render_template("events.html", events=events, players=TennisEvent.players,
-                               player_name=player_name, event_filter=event_filter, prev_y=prev_y, next_y=next_y)
+                               event_filter=event_filter, prev_y=prev_y, next_y=next_y)
 
 
 @app.route("/events_year", methods=['GET'], endpoint='events_year', defaults={'one_player': False})

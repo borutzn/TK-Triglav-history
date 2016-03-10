@@ -39,7 +39,7 @@
 
                     <form class="navbar-form navbar-left" role="search">
                         <div class="btn-group" role="group" aria-label="...">
-                            <a href="{{ url_for('tennis_events',y=prev_y) }}" role="button"
+                            <a href="{{ url_for('tennis_events', p=player_name, f=event_filter) }}" role="button"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,12 +54,12 @@
                                     <li><a href="{{ url_for('tennis_events', y="2000") }}">2000-2009</a></li>
                                     <li><a href="{{ url_for('tennis_events', y="2010") }}">2010-</a></li>
                                     {% for year in years %}
-                                        <li><a href="{{ url_for('tennis_events', y=year, next=request.url) }}">
+                                        <li><a href="{{ url_for('tennis_events', y=year, p=player_name, f=event_filter) }}">
                                             {{  year }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </div>
-                            <a href="{{ url_for('tennis_events',y=next_y) }}" role="button"
+                            <a href="{{ url_for('tennis_events',y=next_y, p=player_name, f=event_filter) }}" role="button"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
                         </div>
                     </form>
@@ -144,7 +144,8 @@
         {% for (group,event) in events %}
             {% if year[0] != event.Date[:4] %}
                 <div class="page-header">
-                    <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                    <a href="{{ url_for('tennis_events',y=event.Date[:4], p=player_name, f=event_filter) }}"
+                       class="year">{{ event.Date[:4] }}</a>
                 </div>
                 {% set year = [event.Date[:4]] %}
                 <div class="panel panel-default">
