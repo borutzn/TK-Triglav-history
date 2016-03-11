@@ -17,6 +17,21 @@
 	</style>
 
 
+    {%  macro show_att(y, att, att_no, loop_no) -%}
+        {% if att != "" and att[:4] != "err_" %}
+            <img data-toggle="modal" data-target="#Att{{att_no}}-{{y}}{{loop_no}}"
+                 src="{{ url_for('static',filename='/files/'+y+'/'+att) }}" height="80">
+            <div class="modal fade" id="Att{{att_no}}-{{y}}{{loop_no}}" tabindex="0" role="dialog">
+                <div class="modal-dialog" role="document"><div class="modal-content">
+                  <div class="modal-body">
+                      <img src="{{ url_for('static',filename='/files/'+y+'/'+att) }}">
+                  </div>
+                </div></div>
+            </div>
+        {% endif %}
+    {%- endmacro %}
+
+
     <nav class="navbar navbar-default">
           <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -177,6 +192,7 @@
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-5"> {{ event.Comment }}. </div>
                                     <div class="col-sm-5">
+                                    {{ show_att(y, event.Att1, 1, loop.index) }}
                                     {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                                         <img data-toggle="modal" data-target="#Att1-{{y}}{{loop.index}}"
                                              src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="80">
