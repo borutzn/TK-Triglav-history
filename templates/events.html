@@ -21,7 +21,7 @@
         {% if att != "" and att[:4] != "err_" %}
             {% if att[-4:] == ".pdf" %}
                 <a href="{{ url_for('static',filename='/files/'+y+'/'+att) }}" target="_blank">
-                    <img src="{{ url_for('static',filename='1.png') }}"></a>
+                    <img src="{{ url_for('static',filename='pdf.png') }}"></a>
             {% else %}
                 <img data-toggle="modal" data-target="#Att{{att_no}}-{{y}}{{loop_no}}"
                      src="{{ url_for('static',filename='/files/'+y+'/'+att) }}" height="80">
