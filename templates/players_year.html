@@ -1,86 +1,88 @@
-    <!-- Begin page content -->
-    {% if events %}
-        {% set year = [0] %}
-        {% for (group,event) in events %}
-            {% if year[0] != event.Date[:4] %}
-                <div class="page-header">
-                    <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+{% include "defs.html" %}
+
+<!-- Begin page content -->
+{% if events %}
+    {% set year = [0] %}
+    {% for (group,event) in events %}
+        {% if year[0] != event.Date[:4] %}
+            <div class="page-header">
+                <a href="{{ url_for('tennis_events',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+            </div>
+            {% set year = [event.Date[:4]] %}
+        {% endif %}
+
+        {% set y = event.Date[:4] %}
+        {% if event.Date[4:] == "/00/00" %}
+            {%  set date = y %}
+        {% elif event.Date[7:] == "/00" %}
+            {% set date = event.Date[5:7] + "." + y %}
+        {% else %}
+            {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
+        {% endif %}
+
+        {%  set show_more = False %}
+        {% if event.Comment != "" or event.Att1 != "" %}
+            {%  set show_more = True %}
+        {% endif %}
+
+        {% if group == 0 %} <!-- single entry -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-2 panel-title">{{ date }}</div>
+                        <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
+                        <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                        <div class="col-sm-1">{{ event.Category }}</div>
+                        <div class="col-sm-1">{{ event.Result }}</div>
+                        {% if show_more %}
+                            <span class="pull-right clickable panel-collapsed">
+                                <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                            </div> <div class="row">
+                            <div class="panel-body panel-collapse collapse">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-5"> {{ event.Comment }}. </div>
+                                <div class="col-sm-5">
+                                    {{ show_att(y, event.Att1, 1, loop.index) }}
+                                    {{ show_att(y, event.Att2, 2, loop.index) }}
+                                    {{ show_att(y, event.Att3, 3, loop.index) }}
+                                    {{ show_att(y, event.Att4, 4, loop.index) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% set year = [event.Date[:4]] %}
-            {% endif %}
+            </div>
 
-            {% set y = event.Date[:4] %}
-            {% if event.Date[4:] == "/00/00" %}
-                {%  set date = y %}
-            {% elif event.Date[7:] == "/00" %}
-                {% set date = event.Date[5:7] + "." + y %}
-            {% else %}
-                {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
-            {% endif %}
-
-            {%  set show_more = False %}
-            {% if event.Comment != "" or event.Att1 != "" %}
-                {%  set show_more = True %}
-            {% endif %}
-
-            {% if group == 0 %} <!-- single entry -->
+        {% elif group > 0 %} <!-- group -->
+            {% if group == 1 %} <!-- start group -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
+                        <div class="row panel-title">
+                            <div class="col-sm-2">{{ date }}</div>
+                            <div class="col-sm-3"><b>{{ event.Event }}</b></div>
+                            <div class="col-sm-2">{{ event.Place }}</div>
+                            <div class="col-sm-2"><span class="pull-right"></span></div>
+                            <span class="pull-right clickable panel-collapsed">
+                                <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                        </div>
+                    </div>
+                    <div class="panel-body panel-collapse collapse">
+            {% endif %}
                         <div class="row">
-                            <div class="col-sm-2 panel-title">{{ date }}</div>
-                            <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
-                            <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                            <div class="col-sm-7"></div>
                             <div class="col-sm-1">{{ event.Category }}</div>
                             <div class="col-sm-1">{{ event.Result }}</div>
-                            {% if show_more %}
-                                <span class="pull-right clickable panel-collapsed">
-                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                                </div> <div class="row">
-                                <div class="panel-body panel-collapse collapse">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-5"> {{ event.Comment }}. </div>
-                                    <div class="col-sm-5">
-                                        {{ show_att(y, event.Att1, 1, loop.index) }}
-                                        {{ show_att(y, event.Att2, 2, loop.index) }}
-                                        {{ show_att(y, event.Att3, 3, loop.index) }}
-                                        {{ show_att(y, event.Att4, 4, loop.index) }}
-                                    </div>
-                                </div>
-                            {% endif %}
                         </div>
+            {% if group == 3 %} <!-- end group -->
                     </div>
                 </div>
-
-            {% elif group > 0 %} <!-- group -->
-                {% if group == 1 %} <!-- start group -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row panel-title">
-                                <div class="col-sm-2">{{ date }}</div>
-                                <div class="col-sm-3"><b>{{ event.Event }}</b></div>
-                                <div class="col-sm-2">{{ event.Place }}</div>
-                                <div class="col-sm-2"><span class="pull-right"></span></div>
-                                <span class="pull-right clickable panel-collapsed">
-                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                            </div>
-                        </div>
-                        <div class="panel-body panel-collapse collapse">
-                {% endif %}
-                            <div class="row">
-                                <div class="col-sm-7"></div>
-                                <div class="col-sm-1">{{ event.Category }}</div>
-                                <div class="col-sm-1">{{ event.Result }}</div>
-                            </div>
-                {% if group == 3 %} <!-- end group -->
-                        </div>
-                    </div>
-                {% endif %}
-
             {% endif %}
 
-        {% endfor %}
+        {% endif %}
 
-        <a class="next" href="{{ url_for("players_year", y=next_y, p=player_name, f=event_filter) }}">
-            leto {{ next_y }}</a>
+    {% endfor %}
 
-    {% endif %}
+    <a class="next" href="{{ url_for("players_year", y=next_y, p=player_name, f=event_filter) }}">
+        leto {{ next_y }}</a>
+
+{% endif %}

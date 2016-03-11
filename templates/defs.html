@@ -1,0 +1,24 @@
+{%  macro show_att(y, att, att_no, loop_no) -%}
+    {% if att != "" and att[:4] != "err_" %}
+        {% if att[-4:] == ".pdf" %}
+            <a href="{{ url_for('static',filename='/files/'+y+'/'+att) }}" target="_blank">
+                <img src="{{ url_for('static',filename='pdf.png') }}"></a>
+        {% else %}
+            <img data-toggle="modal" data-target="#Att{{att_no}}-{{y}}{{loop_no}}"
+                 src="{{ url_for('static',filename='/files/'+y+'/'+att) }}" height="80">
+            <div class="modal fade" id="Att{{att_no}}-{{y}}{{loop_no}}" tabindex="0" role="dialog">
+                <div class="modal-dialog" role="document"><div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{ y }}: {{ att }}</h4>
+                  </div>
+                  <div class="modal-body">
+                      <img src="{{ url_for('static',filename='/files/'+y+'/'+att) }}">
+                  </div>
+                </div></div>
+            </div>
+        {% endif %}
+    {% endif %}
+{%- endmacro %}
+
+
