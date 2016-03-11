@@ -59,50 +59,9 @@
                                     <div class="col-sm-5"> {{ event.Comment }}. </div>
                                     <div class="col-sm-5">
                                     {{ show_att(y, event.Att1, 1, loop.index) }}
-                                    {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
-                                        <img data-toggle="modal" data-target="#Att1-{{y}}{{loop.index}}"
-                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}" height="80">
-                                        <div class="modal fade" id="Att1-{{y}}{{loop.index}}" tabindex="0" role="dialog">
-                                            <div class="modal-dialog" role="document"><div class="modal-content">
-                                              <div class="modal-body">
-                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att1) }}">
-                                              </div>
-                                            </div></div>
-                                        </div>
-                                    {% endif %}
-                                    {% if event.Att2 != "" and event.Att2[:4] != "err_" %}
-                                        <img data-toggle="modal" data-target="#Att2-{{y}}{{loop.index}}"
-                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}" height="80">
-                                        <div class="modal fade" id="Att2-{{y}}{{loop.index}}" tabindex="0" role="dialog">
-                                            <div class="modal-dialog" role="document"><div class="modal-content">
-                                              <div class="modal-body">
-                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att2) }}">
-                                              </div>
-                                            </div></div>
-                                        </div>
-                                    {% endif %}
-                                    {% if event.Att3 != "" and event.Att3[:4] != "err_" %}
-                                        <img data-toggle="modal" data-target="#Att3-{{y}}{{loop.index}}"
-                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}" height="80">
-                                        <div class="modal fade" id="Att3-{{y}}{{loop.index}}" tabindex="0" role="dialog">
-                                            <div class="modal-dialog" role="document"><div class="modal-content">
-                                              <div class="modal-body">
-                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att3) }}">
-                                              </div>
-                                            </div></div>
-                                        </div>
-                                    {% endif %}
-                                    {% if event.Att4 != "" and event.Att4[:4] != "err_" %}
-                                        <img data-toggle="modal" data-target="#Att4-{{y}}{{loop.index}}"
-                                             src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}" height="80">
-                                        <div class="modal fade" id="Att4-{{y}}{{loop.index}}" tabindex="0" role="dialog">
-                                            <div class="modal-dialog" role="document"><div class="modal-content">
-                                              <div class="modal-body">
-                                                  <img src="{{ url_for('static',filename='/files/'+y+'/'+event.Att4) }}">
-                                              </div>
-                                            </div></div>
-                                        </div>
-                                    {% endif %}
+                                    {{ show_att(y, event.Att2, 2, loop.index) }}
+                                    {{ show_att(y, event.Att3, 3, loop.index) }}
+                                    {{ show_att(y, event.Att4, 4, loop.index) }}
                                     </div>
                                 </div>
                             {% endif %}
