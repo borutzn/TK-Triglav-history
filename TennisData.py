@@ -431,10 +431,8 @@ class TennisEvent:
                 else:  # nadaljevanje grupe
                     if group:  # nadaljevanje grupe
                         curr_grp = 2
-                        events[gr_start][1]['atts'].add(prev_entry['Att1'])
-                        events[gr_start][1]['atts'].add(prev_entry['Att2'])
-                        events[gr_start][1]['atts'].add(prev_entry['Att3'])
-                        events[gr_start][1]['atts'].add(prev_entry['Att4'])
+                        events[gr_start][1]['atts'].update(
+                            {prev_entry['Att1'], prev_entry['Att2'], prev_entry['Att3'], prev_entry['Att4']})
                     else:  # konec grupe
                         events[-1][0] = 3  # set previous entry to 'end group'
 
