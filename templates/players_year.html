@@ -40,13 +40,13 @@
                             </div> <div class="row">
                             <div class="panel-body panel-collapse collapse">
                                 <div class="col-sm-2"></div>
-                                <div class="col-sm-5"> {{ event.Comment }}. </div>
                                 <div class="col-sm-5">
                                     {{ d.show_att(y, event.Att1, 1, loop.index) }}
                                     {{ d.show_att(y, event.Att2, 2, loop.index) }}
                                     {{ d.show_att(y, event.Att3, 3, loop.index) }}
                                     {{ d.show_att(y, event.Att4, 4, loop.index) }}
                                 </div>
+                                <div class="col-sm-5"> {{ event.Comment }}. </div>
                             </div>
                         {% endif %}
                     </div>
@@ -67,13 +67,24 @@
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
-            {% endif %}
                         <div class="row">
-                            <div class="col-sm-7"></div>
-                            <div class="col-sm-1">{{ event.Category }}</div>
-                            <div class="col-sm-1">{{ event.Result }}</div>
-                        </div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-5">
+                                {% set id = loop.index %}
+                                {% for a in event.atts %}
+                                    {{ d.show_att(y, a, loop.index, id) }}
+                                {% endfor %}
+                            </div>
+                            <div class="col-sm-5">
+            {% endif %}
+                                <div class="row">
+                                    <div class="col-sm-2">{{ event.Category }}</div>
+                                    <div class="col-sm-2">{{ event.Result }}</div>
+                                    <div class="col-sm-6"></div>
+                                </div>
             {% if group == 3 %} <!-- end group -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             {% endif %}
