@@ -425,7 +425,7 @@ class TennisEvent:
                     if group:  # začetek grupe
                         gr_start = len(events)-1
                         events[gr_start][0] = 1  # set previous entry to 'start group'
-                        events[gr_start][1]['atts'] = { prev_entry['Att1'] }
+                        events[gr_start][1]['atts'] = { prev_entry['Att1'], prev_entry['Att2'] }
                         curr_grp = 2
                 else:  # nadaljevanje grupe
                     if group:  # nadaljevanje grupe
