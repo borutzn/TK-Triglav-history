@@ -13,11 +13,11 @@
 
         {% set y = event.Date[:4] %}
         {% if event.Date[4:] == "/00/00" %}
-            {%  set date = y %}
+            {%  set date = "" %}
         {% elif event.Date[7:] == "/00" %}
-            {% set date = event.Date[5:7] + "." + y %}
+            {% set date = event.Date[5:7] %}
         {% else %}
-            {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
+            {% set date = event.Date[8:] + "." +  event.Date[5:7] %}
         {% endif %}
 
         {%  set show_more = False %}
