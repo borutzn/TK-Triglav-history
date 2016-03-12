@@ -392,6 +392,7 @@ def tennis_events_year(one_player):
                            events=events, player_name=player_name, next_y=next_y, event_filter=event_filter)
 
 
+""" ToDo: to delete?
 @app.route("/players", methods=['GET'])
 def tennis_players():
     if request.method == 'GET':
@@ -425,6 +426,7 @@ def tennis_players():
                 players.append(p)
 
     return render_template("players_list.html", players=players, search=search)
+"""
 
 
 @app.route("/files", methods=['GET', 'POST'])

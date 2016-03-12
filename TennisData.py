@@ -314,7 +314,8 @@ class TennisEvent:
 
     @classmethod
     def get_year_pos(cls, year):
-        if not year: return 0
+        if not year:
+            return 0
         cls.fetch_data()
         for idx, val in enumerate(cls.EventsCache):
             if val['Date'][:4] == year:
@@ -397,9 +398,10 @@ class TennisEvent:
         prev_entry, prev_group = None, False
         while pos < len(cls.EventsCache):
             # log_info("found " + str(cls.EventsCache[pos]['Event']))
-            if to_year and (cls.EventsCache[pos]['Date'][:4] > to_year): break
+            if to_year and (cls.EventsCache[pos]['Date'][:4] > to_year):
+                break
 
-            if player and (cls.EventsCache[pos]['Player'] <> player):
+            if player and (cls.EventsCache[pos]['Player'] != player):
                 pos += 1
                 continue
             if (search == 1) and (event_filter not in cls.EventsCache[pos]['Event']):
@@ -412,9 +414,7 @@ class TennisEvent:
             entry = cls.EventsCache[pos]
             curr_grp = 0
             # izračunati moramo, kateri entry pomeni na podlagi trenutnega in prejšnjega entrya
-            # 1 - začetek grupe:
-            # 2 - sredina grupe
-            # 3 - konec grupe
+            # 1 - začetek grupe,  2 - sredina grupe,  3 - konec grupe
             if not prev_entry:  # the first entry
                 group = False
             else:
@@ -422,7 +422,9 @@ class TennisEvent:
                         prev_entry['Place'] == entry['Place']
                 if not prev_group:  # ni še grupe
                     if group:  # začetek grupe
-                        events[-1][0] = 1  # set previous entry to 'start group'
+                        gr_start = len(events)
+                        events[gr_start][0] = 1  # set previous entry to 'start group'
+                        events[gr_start][1].atts = { "atts" }
                         curr_grp = 2
                 else:  # nadaljevanje grupe
                     if group:  # nadaljevanje grupe
