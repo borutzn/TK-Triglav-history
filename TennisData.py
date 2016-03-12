@@ -426,23 +426,26 @@ class TennisEvent:
                         gr_start = len(events)-1
                         events[gr_start][0] = 1  # set previous entry to 'start group'
                         events[gr_start][1]['atts'] = \
-                            { prev_entry['Att1'], prev_entry['Att2'], prev_entry['Att3'], prev_entry['Att4'] }
+                            {prev_entry['Att1'], prev_entry['Att2'], prev_entry['Att3'], prev_entry['Att4']}
                         curr_grp = 2
                 else:  # nadaljevanje grupe
                     if group:  # nadaljevanje grupe
                         curr_grp = 2
-                        events[gr_start][1]['atts'].append(
-                            { prev_entry['Att1'], prev_entry['Att2'], prev_entry['Att3'], prev_entry['Att4'] } )
+                        events[gr_start][1]['atts'].add(prev_entry['Att1'])
+                        events[gr_start][1]['atts'].add(prev_entry['Att2'])
+                        events[gr_start][1]['atts'].add(prev_entry['Att3'])
+                        events[gr_start][1]['atts'].add(prev_entry['Att4'])
                     else:  # konec grupe
                         events[-1][0] = 3  # set previous entry to 'end group'
 
             events.append([curr_grp, entry])
-            if not to_year: to_year = entry['Date'][:4]
+            if not to_year:
+                to_year = entry['Date'][:4]
             prev_entry = entry
             prev_group = group
             pos += 1
 
-        if events and events[-1][0] == 2: # last element = mid-group --> end-group
+        if events and events[-1][0] == 2:  # last element = mid-group --> end-group
             events[-1][0] = 3
         log_info("Temp: GET_EVENTS returning %d events." % len(events))
         return events
@@ -454,7 +457,8 @@ class TennisEvent:
         for ev in cls.EventsCache:
             if ev['Player'] == player:
                 r.append(ev)
-                if no_records and (no_records >= len(r)): break
+                if no_records and (no_records >= len(r)):
+                    break
         return r
 
     @classmethod
