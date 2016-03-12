@@ -64,13 +64,12 @@
                             <div class="col-sm-2">{{ date }}</div>
                             <div class="col-sm-3"><b>{{ event.Event }}</b></div>
                             <div class="col-sm-2">{{ event.Place }}</div>
-                            <div class="col-sm-4"><span class="pull-right"><i>igralci</i></span></div>
+                            <div class="col-sm-4"><span class="pull-right"><i>igralci</i>::{{ event.atts }}::</span></div>
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
-                            ::{{ event.atts }}::
             {% endif %}
                         <div class="row">
                             <div class="col-sm-2"></div>
