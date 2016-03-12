@@ -2,7 +2,6 @@
 
 {% extends "base1.html" %}
 
-::import::
 {% import "defs.html" as d %}
 
 {% block next %}/{% endblock %}
@@ -179,10 +178,10 @@
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-5"> {{ event.Comment }}. </div>
                                     <div class="col-sm-5">
-                                    {{ d.show_att(y, event.Att1, 1, loop.index) }}
-                                    {{ d.show_att(y, event.Att2, 2, loop.index) }}
-                                    {{ d.show_att(y, event.Att3, 3, loop.index) }}
-                                    {{ d.show_att(y, event.Att4, 4, loop.index) }}
+                                        {{ d.show_att(y, event.Att1, 1, loop.index) }}
+                                        {{ d.show_att(y, event.Att2, 2, loop.index) }}
+                                        {{ d.show_att(y, event.Att3, 3, loop.index) }}
+                                        {{ d.show_att(y, event.Att4, 4, loop.index) }}
                                     </div>
                                 </div>
                             {% endif %}
