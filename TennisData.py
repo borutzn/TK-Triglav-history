@@ -44,6 +44,7 @@ class TennisEvent:
         self.result = result
         self.player = player
         self.comment = comment
+        self.atts = {}
         self.att1 = att1
         self.att2 = att2
         self.att3 = att3
