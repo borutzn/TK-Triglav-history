@@ -13,11 +13,11 @@
 
         {% set y = event.Date[:4] %}
         {% if event.Date[4:] == "/00/00" %}
-            {%  set date = y %}
+            {%  set date = "" %}
         {% elif event.Date[7:] == "/00" %}
-            {% set date = event.Date[5:7] + "." + y %}
+            {% set date = event.Date[5:7] %}
         {% else %}
-            {% set date = event.Date[8:] + "." +  event.Date[5:7] + "." + y %}
+            {% set date = event.Date[8:] + "." +  event.Date[5:7] %}
         {% endif %}
 
         {%  set show_more = False %}
@@ -70,7 +70,6 @@
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
-            {% endif %}
                         <div class="row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-5">
@@ -79,13 +78,18 @@
                                     {{ d.show_att(y, a, loop.index, id) }}
                                 {% endfor %}
                             </div>
-                            <div class="col-sm-1">{{ event.Category }}</div>
-                            <div class="col-sm-1">{{ event.Result }}</div>
-                            <div class="col-sm-3">
-                                <a href="{{ url_for('show_player', n=event.Player) }}">{{ event.Player }}</a>
+                            <div class="col-sm-5">
+            {% endif %}
+                                <div class="row">
+                                    <div class="col-sm-2">{{ event.Category }}</div>
+                                    <div class="col-sm-2">{{ event.Result }}</div>
+                                    <div class="col-sm-6">
+                                        <a href="{{ url_for('tennis_events', p=event.Player) }}">{{ event.Player }}</a>
+                                    </div>
+                                </div>
+            {% if group == 3 %} <!-- end group -->
                             </div>
                         </div>
-            {% if group == 3 %} <!-- end group -->
                     </div>
                 </div>
             {% endif %}
