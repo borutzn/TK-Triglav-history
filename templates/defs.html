@@ -1,7 +1,7 @@
 {%  macro show_att(y, att, att_no, loop_no) -%}
     {% if att != "" and att[:4] != "err_" %}
         ::def::
-        {% if att[-4:] == ".pdf" %}
+        {% if att[-4:] == ".pdf" or if att[-4:] == ".PDF" %}
             <a href="{{ url_for('static',filename='/files/'+y+'/'+att) }}" target="_blank">
                 <img src="{{ url_for('static',filename='pdf.png') }}"></a>
         {% else %}
