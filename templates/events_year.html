@@ -64,7 +64,7 @@
                             <div class="col-sm-2">{{ date }}</div>
                             <div class="col-sm-3"><b>{{ event.Event }}</b></div>
                             <div class="col-sm-2">{{ event.Place }}</div>
-                            <div class="col-sm-4"><span class="pull-right"><i>igralci</i>::{{ event.atts }}::</span></div>
+                            <div class="col-sm-4"><span class="pull-right"><i>igralci</i></span></div>
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                         </div>
@@ -74,10 +74,10 @@
                         <div class="row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-5">
-                                {{ d.show_att(y, event.Att1, 1, loop.index) }}
-                                {{ d.show_att(y, event.Att2, 2, loop.index) }}
-                                {{ d.show_att(y, event.Att3, 3, loop.index) }}
-                                {{ d.show_att(y, event.Att4, 4, loop.index) }}
+                                {% set id = loo.index %}
+                                {% for a in event.atts %}
+                                    {{ d.show_att(y, a, loop.index, id) }}
+                                {% endfor %}
                             </div>
                             <div class="col-sm-1">{{ event.Category }}</div>
                             <div class="col-sm-1">{{ event.Result }}</div>
