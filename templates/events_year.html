@@ -2,6 +2,7 @@
 
 <!-- Begin page content -->
 {% if events %}
+    <div class="panel-group">
     {% set year = [0] %}
     {% for (group,event) in events %}
         {% if year[0] != event.Date[:4] %}
@@ -102,4 +103,5 @@
         leto {{ next_y }}</a>
 
 
+    </div>
 {% endif %}
