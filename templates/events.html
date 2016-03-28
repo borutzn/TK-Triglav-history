@@ -177,8 +177,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row header">
-                            {{ d.event("datum", "dogodek", "kraj") }}
-                            {{ d.result_line1("kategorija", "rezultat", "igralec", "") }}
+                            {{ event("datum", "dogodek", "kraj") }}
+                            {{ result_line1("kategorija", "rezultat", "igralec", "") }}
                         </div>
                     </div>
                 </div>
@@ -202,8 +202,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            {{ d.event(date, event.Event, event.Place) }}
-                            {{ d.result_line1(event.Category, event.Result, event.Player, event.Player) }}
+                            {{ event(date, event.Event, event.Place) }}
+                            {{ result_line1(event.Category, event.Result, event.Player, event.Player) }}
                             {% if show_more %}
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
@@ -211,10 +211,10 @@
                                 <div class="panel-body panel-collapse collapse">
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-5">
-                                        {{ d.show_att(y, event.Att1, 1, loop.index) }}
-                                        {{ d.show_att(y, event.Att2, 2, loop.index) }}
-                                        {{ d.show_att(y, event.Att3, 3, loop.index) }}
-                                        {{ d.show_att(y, event.Att4, 4, loop.index) }}
+                                        {{ show_att(y, event.Att1, 1, loop.index) }}
+                                        {{ show_att(y, event.Att2, 2, loop.index) }}
+                                        {{ show_att(y, event.Att3, 3, loop.index) }}
+                                        {{ show_att(y, event.Att4, 4, loop.index) }}
                                     </div>
                                     <div class="col-sm-5"> {{ event.Comment }}. </div>
                                 </div>
@@ -228,7 +228,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="row panel-title">
-                                {{ d.event(date, event.Event, event.Place) }}
+                                {{ event(date, event.Event, event.Place) }}
                                 <div class="col-sm-4"><span class="pull-right"><i>igralci</i></span></div>
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
@@ -240,7 +240,7 @@
                                 <div class="col-sm-5">
                                     {% set id = loop.index %}
                                     {% for a in event.atts %}
-                                        {{ d.show_att(y, a, loop.index, id) }}
+                                        {{ show_att(y, a, loop.index, id) }}
                                     {% endfor %}
                                 </div>
                                 <div class="col-sm-5">
