@@ -119,7 +119,7 @@
 
 
     <!-- Begin page content -->
-    <div class="container-fluid scroll">
+    <div class="container scroll">
     <div class="panel-group" id="results">
     {% if events %}
         {% set year = [0] %}
@@ -133,8 +133,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row header">
-                            {{ d.event_front("datum", "dogodek", "kraj") }}
-                            {{ d.event_end("kategorijy", "rezultat", "igralec") }}
+                            {{ d.event("datum", "dogodek", "kraj") }}
+                            {{ d.result_line1("kategorija", "rezultat", "igralec") }}
                         </div>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            {{ d.event_front(date, event.Event, event.Place) }}
+                            {{ d.event(date, event.Event, event.Place) }}
                             <div class="col-sm-1">{{ event.Category }}</div>
                             <div class="col-sm-1">{{ event.Result }}</div>
                             <div class="col-sm-2">

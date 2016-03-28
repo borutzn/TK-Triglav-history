@@ -29,9 +29,7 @@
             <div class="panel panel-default" style="margin-top: 5px; margin-bottom: 0;">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-sm-2 panel-title">{{ date }}</div>
-                        <div class="col-sm-3 panel-title"><b>{{ event.Event }}</b></div>
-                        <div class="col-sm-2 panel-title">{{ event.Place }}</div>
+                        {{ d.event(date, event.Event, event.Place) }}
                         <div class="col-sm-1">{{ event.Category }}</div>
                         <div class="col-sm-1">{{ event.Result }}</div>
                         {% if show_more %}
@@ -58,9 +56,7 @@
                 <div class="panel panel-default" style="margin-top: 5px; margin-bottom: 0;">
                     <div class="panel-heading">
                         <div class="row panel-title">
-                            <div class="col-sm-2">{{ date }}</div>
-                            <div class="col-sm-3"><b>{{ event.Event }}</b></div>
-                            <div class="col-sm-2">{{ event.Place }}</div>
+                            {{ d.event(date, event.Event, event.Place) }}
                             <div class="col-sm-2"><span class="pull-right"></span></div>
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
