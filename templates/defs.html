@@ -1,4 +1,18 @@
-{%  macro show_att(y, att, att_no, loop_no) -%}
+{% macro event_front(date, name, place) -%}
+    <div class="col-sm-2 panel-title">{{ date }}</div>
+    <div class="col-sm-3 panel-title"><b>{{ name }}</b></div>
+    <div class="col-sm-2 panel-title">{{ place }}</div>
+{%- endmacro %}
+
+
+{% macro event_end(category, result, player) -%}
+    <div class="col-sm-1">{{ category }}</div>
+    <div class="col-sm-1">{{ result }}</div>
+    <div class="col-sm-3">{{ player }}</div>
+{%- endmacro %}
+
+
+{% macro show_att(y, att, att_no, loop_no) -%}
     {% if att != "" and att[:4] != "err_" %}
         {% if att[-4:] == ".pdf" or att[-4:] == ".PDF" %}
             <a href="{{ url_for('static',filename='/files/'+y+'/'+att) }}" target="_blank">
