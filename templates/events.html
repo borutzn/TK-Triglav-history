@@ -2,50 +2,6 @@
 
 {% extends "base1.html" %}
 
-
-
-{% macro show_event(date, name, place) -%}
-    <div class="col-sm-2 panel-title">{{ date }}</div>
-    <div class="col-sm-3 panel-title"><b>{{ name }}</b></div>
-    <div class="col-sm-2 panel-title">{{ place }}</div>
-{%- endmacro %}
-
-
-{% macro show_result_line1(category, result, player, link_player) -%}
-    <div class="col-sm-1">{{ category }}</div>
-    <div class="col-sm-1">{{ result }}</div>
-    <div class="col-sm-3">
-        <a href="{{ url_for('tennis_events', p=link_player) }}">{{ player }}</a>
-    </div>
-{%- endmacro %}
-
-
-{% macro show_att(y, att, att_no, loop_no) -%}
-    {% if att != "" and att[:4] != "err_" %}
-        {% if att[-4:] == ".pdf" or att[-4:] == ".PDF" %}
-            <a href="{{ url_for('static',filename='/files/'+y+'/'+att) }}" target="_blank">
-                <img src="{{ url_for('static',filename='pdf.png') }}"></a>
-        {% else %}
-            <img data-toggle="modal" data-target="#Att{{att_no}}-{{y}}{{loop_no}}"
-                 src="{{ url_for('static',filename='/files/'+y+'/'+att) }}" height="80">
-            <div class="modal fade" id="Att{{att_no}}-{{y}}{{loop_no}}" tabindex="0" role="dialog">
-                <div class="modal-dialog" role="document"><div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">{{ y }}: {{ att }}</h4>
-                  </div>
-                  <div class="modal-body">
-                      <img src="{{ url_for('static',filename='/files/'+y+'/'+att) }}">
-                  </div>
-                </div></div>
-            </div>
-        {% endif %}
-    {% endif %}
-{%- endmacro %}
-
-
-
-
 {% block next %}/{% endblock %}
 {% block content %}
 
