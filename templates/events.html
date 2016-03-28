@@ -4,14 +4,14 @@
 
 
 
-{% macro event(date, name, place) -%}
+{% macro show_event(date, name, place) -%}
     <div class="col-sm-2 panel-title">{{ date }}</div>
     <div class="col-sm-3 panel-title"><b>{{ name }}</b></div>
     <div class="col-sm-2 panel-title">{{ place }}</div>
 {%- endmacro %}
 
 
-{% macro result_line1(category, result, player, link_player) -%}
+{% macro show_result_line1(category, result, player, link_player) -%}
     <div class="col-sm-1">{{ category }}</div>
     <div class="col-sm-1">{{ result }}</div>
     <div class="col-sm-3">
@@ -202,8 +202,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            {{ event(date, event.Event, event.Place) }}
-                            {{ result_line1(event.Category, event.Result, event.Player, event.Player) }}
+                            {{ show_event(date, event.Event, event.Place) }}
+                            {{ show_result_line1(event.Category, event.Result, event.Player, event.Player) }}
                             {% if show_more %}
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
@@ -228,7 +228,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="row panel-title">
-                                {{ event(date, event.Event, event.Place) }}
+                                {{ show_event(date, event.Event, event.Place) }}
                                 <div class="col-sm-4"><span class="pull-right"><i>igralci</i></span></div>
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
