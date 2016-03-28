@@ -33,13 +33,13 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <form class="navbar-form navbar-left" role="search">
+                    <form class="navbar-form navbar-left">
                       <div class="form-group">
                         <input type="text" class="form-control" placeholder="dogodek">
                       </div>
                     </form>
 
-                    <form class="navbar-form navbar-left" role="search">
+                    <form class="navbar-form navbar-left">
                         <div class="btn-group" role="group" aria-label="...">
                             <a href="{{ url_for('tennis_events',y=prev_y, p=player_name, f=event_filter) }}" role="button"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
@@ -62,7 +62,7 @@
                         </div>
                     </form>
 
-                    <form class="navbar-form navbar-left" role="search">
+                    <form class="navbar-form navbar-left">
                         <div class="dropdown">
                             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             igralec <span class="caret"></span>
@@ -133,8 +133,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row header">
-                            {{ d.event("datum11111", "dogodek", "kraj") }}
-                            {{ d.result_line1("kategorija", "rezultat", "igralec") }}
+                            {{ d.event("datum", "dogodek", "kraj") }}
+                            {{ d.result_line1("kategorija", "rezultat", "igralec", "") }}
                         </div>
                     </div>
                 </div>
@@ -159,11 +159,7 @@
                     <div class="panel-heading">
                         <div class="row">
                             {{ d.event(date, event.Event, event.Place) }}
-                            <div class="col-sm-1">{{ event.Category }}</div>
-                            <div class="col-sm-1">{{ event.Result }}</div>
-                            <div class="col-sm-2">
-                                <a href="{{ url_for('tennis_events', p=event.Player) }}">{{ event.Player }}</a>
-                            </div>
+                            {{ d.result_line1(event.Category, event.Result, event.Player, event.Player) }}
                             {% if show_more %}
                                 <span class="pull-right clickable panel-collapsed">
                                     <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
