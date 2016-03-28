@@ -345,6 +345,9 @@ def tennis_events():
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
+    for e in events:
+        log_info("--> %d, %s, %s" % (e[0], e[1]['Date'], e[1]['Event']))
+
     i = TennisEvent.Years.index(events[0][1]['Date'][:4])
     prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
