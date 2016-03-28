@@ -162,109 +162,12 @@
 
     <!-- Begin page content -->
     <div class="container scroll">
-    <div class="panel-group" id="results">
-            <div class="page-header"><div class="row">EVENTS</div></div>
     {% if events %}
-        {% set year = [0] %}
-        {% for (group,event) in events %}
-            <div class="page-header">{{group}}, {{event.Date}}, {{event.Event}}</div>
-            {% if year[0] != event.Date[:4] %}
-                <div class="page-header">
-                    <a href="{{ url_for('tennis_events',y=event.Date[:4], p=player_name, f=event_filter) }}"
-                       class="year">{{ event.Date[:4] }}</a>
-                </div>
-                {% set year = [event.Date[:4]] %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row header">
-                            {{ show_event("datum", "dogodek", "kraj") }}
-                            {{ show_result_line1("kategorija", "rezultat", "igralec", "") }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
 
-            {% set y = event.Date[:4] %}
-            {% if event.Date[4:] == "/00/00" %}
-                {%  set date = "" %}
-            {% elif event.Date[7:] == "/00" %}
-                {% set date = event.Date[5:7] %}
-            {% else %}
-                {% set date = event.Date[8:] + "." +  event.Date[5:7] %}
-            {% endif %}
+        {% set year = events[1].Date[:4] %}
 
-            {%  set show_more = False %}
-            {% if event.Comment != "" or event.Att1 != "" %}
-                {%  set show_more = True %}
-            {% endif %}
-
-            {% if group == 0 %} <!-- single entry -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            {{ show_event(date, event.Event, event.Place) }}
-                            {{ show_result_line1(event.Category, event.Result, event.Player, event.Player) }}
-                            {% if show_more %}
-                                <span class="pull-right clickable panel-collapsed">
-                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                                </div> <div class="row">
-                                <div class="panel-body panel-collapse collapse">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-5">
-                                        {{ show_att(y, event.Att1, 1, loop.index) }}
-                                        {{ show_att(y, event.Att2, 2, loop.index) }}
-                                        {{ show_att(y, event.Att3, 3, loop.index) }}
-                                        {{ show_att(y, event.Att4, 4, loop.index) }}
-                                    </div>
-                                    <div class="col-sm-5"> {{ event.Comment }}. </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-            {% elif group > 0 %} <!-- group -->
-                {% if group == 1 %} <!-- start group -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row panel-title">
-                                {{ show_event(date, event.Event, event.Place) }}
-                                <div class="col-sm-4"><span class="pull-right"><i>igralci</i></span></div>
-                                <span class="pull-right clickable panel-collapsed">
-                                    <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
-                            </div>
-                        </div>
-                        <div class="panel-body panel-collapse collapse">
-                            <div class="row">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-5">
-                                    {% set id = loop.index %}
-                                    {% for a in event.atts %}
-                                        {{ show_att(y, a, loop.index, id) }}
-                                    {% endfor %}
-                                </div>
-                                <div class="col-sm-5">
-                {% endif %}
-                                    <div class="row">
-                                        <div class="col-sm-2">{{ event.Category }}</div>
-                                        <div class="col-sm-2">{{ event.Result }}</div>
-                                        <div class="col-sm-6">
-                                            <a href="{{ url_for('tennis_events', p=event.Player) }}">{{ event.Player }}</a>
-                                        </div>
-                                    </div>
-                {% if group == 3 %} <!-- end group -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
-            {% endif %}
-
-        {% endfor %}
-
-        <a class="next" href="{{ url_for("events_year", y=next_y, p=player_name, f=event_filter) }}">
-            leto {{ next_y }}</a>
+        <a class="next" href="{{ url_for("events_year", y=year, p=player_name, f=event_filter) }}">
+            leto {{ zear }}</a>
     {% endif %}
     </div>
     </div>
