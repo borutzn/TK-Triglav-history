@@ -120,26 +120,25 @@
     </nav>
 
 
-    <div style="float:left; width:25%">
-        {% if player %}
-            {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}{{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
-        {% endif %}
-    </div>
-    <div style="float:left; width:45%;">
-        <div class="player_name">{{ player_name }}</div>
-        {% if player %}
-        <div class="player_data">
-            {% if player.Born %}r. {{ player.Born }}<br>{% endif %}
-            {% if player.Died %}u. {{ player.Died }}<br>{% endif %}
-            {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
-        </div>
-        {% endif %}
-    </div>
-
-
     <!-- Begin page content -->
     <div class="container scroll">
     <div class="panel-group" id="results">
+        <div style="float:left; width:25%">
+            {% if player %}
+                {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}{{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
+            {% endif %}
+        </div>
+        <div style="float:left; width:45%;">
+            <div class="player_name">{{ player_name }}</div>
+            {% if player %}
+            <div class="player_data">
+                {% if player.Born %}r. {{ player.Born }}<br>{% endif %}
+                {% if player.Died %}u. {{ player.Died }}<br>{% endif %}
+                {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
+            </div>
+            {% endif %}
+        </div>
+
     {% if events %}
         {% set year = [0] %}
         {% for (group,event) in events %}
@@ -152,7 +151,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row header">
-                            {{ d.event("datum11111", "dogodek", "kraj") }}
+                            {{ d.event("datum", "dogodek", "kraj") }}
                             <div class="col-sm-1">kategorija</div>
                             <div class="col-sm-1">rezultat</div>
                         </div>
