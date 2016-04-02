@@ -10,11 +10,11 @@
     <div class="col-sm-1">{{ result }}</div>
     {%  if link_player == "" %}
         <div class="col-sm-2">
-            <a href="{{ url_for('tennis_events', p=link_player) }}">{{ player }}</a>
+            {{ player }}
         </div>
     {% else %}
         <div class="col-sm-2">
-            {{ player }}
+            <a href="{{ url_for('tennis_events', p=link_player) }}">{{ player }}</a>
         </div>
     {% endif %}
 {%- endmacro %}
