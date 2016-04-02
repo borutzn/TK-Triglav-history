@@ -282,6 +282,7 @@ class TennisEvent:
             log_info("Audit: Event cache reloaded players.")
 
         if sources:
+            # ToDo: check https://www.python.org/dev/peps/pep-0471/ for speed advances
             cls.sources = list()
             year_pattern = re.compile(r"^/\d{4}$")
             dir_len = len(files_dir)
@@ -301,7 +302,7 @@ class TennisEvent:
             log_info("Audit: Event cache reloaded sources.")
 
         log_info("Audit: Event cache reloaded (%d entries, %d players, %d sources)." %
-                 (len(cls.EventsCache), len(cls.players), len(cls.sources)))
+                 (cls.EventsCache.size(), len(cls.players), len(cls.sources)))
 
 #    @classmethod
 #    def clear_data(cls):
@@ -545,7 +546,7 @@ class TennisPlayer:
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx
 
-        log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
+        log_info("Audit: Players cache reloaded (%d entries)." % cls.PlayersCache.size())
 
     @classmethod
     def clear_data(cls):
@@ -613,4 +614,4 @@ class EventSource:
         for idx, val in enumerate(cls.SourcesCache):
             cls.SourcesIndex[val['file_name']] = idx
 
-        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
+        log_info("Audit: Sources cache reloaded (%d entries)." % cls.SourcesCache.size())

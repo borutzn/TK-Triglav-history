@@ -109,6 +109,7 @@ def ip_to_country(ip):
     if ip not in ip_cache:
         ip_cache[ip] = "/"
         try:
+            # ToDo: get another ipgeoloc
             # response = urllib.urlopen("http://freegeoip.net/json/%s" % ip, 5).read()
             # result = json.loads(response.decode('utf8')).get('country_name', '/')
             response = requests.get("http://freegeoip.net/json/%s" % ip, timeout=10)
