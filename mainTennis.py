@@ -747,7 +747,9 @@ if __name__ == "__main__":
         log_info("Audit: %s - start standalone development" % appname)
         app.run(host='127.0.0.1', port=80, debug=True)
 else:
-    log_info("Audit: %s - start" % appname)
+    log_info("Audit: %s - Start" % appname)
 
 # running 4 times, if max-procs=4 in fastcgi
 TennisEvent.fetch_data()
+
+log_info("Audit: %s - Initialized" % appname)
