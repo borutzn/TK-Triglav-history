@@ -703,6 +703,7 @@ def export(action, fmt):
 
 @app.route("/stat", methods=['GET'])
 def stat():
+    log_info("STAT")
     out = "Dogodkov: %d,\nIgralcev: %d\n, Virov: %d" % (len(TennisEvent.EventsCache), len(TennisEvent.players), 0)
     return Response(out, mimetype='text/plain')
 
