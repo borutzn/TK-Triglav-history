@@ -287,6 +287,7 @@ class TennisEvent:
             dir_len = len(files_dir)
             try:
                 for root, dirs, fnames in os.walk(files_dir):
+                    log_info("Walk: %s, %s" % (root, dirs))
                     year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
                     if year_pattern.match(year):
                         for fname in fnames:
