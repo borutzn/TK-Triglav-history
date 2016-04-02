@@ -17,10 +17,10 @@
 {% macro atts_line2(y, att1, att2, att3, att4, loop_no) -%}
     <div class="col-sm-2"></div>
     <div class="col-sm-5">
-        {{ d.show_att(y, att1, 1, loop_no) }}
-        {{ d.show_att(y, att2, 2, loop_no) }}
-        {{ d.show_att(y, att3, 3, loop_no) }}
-        {{ d.show_att(y, att4, 4, loop_no) }}
+        {{ show_att(y, att1, 1, loop_no) }}
+        {{ show_att(y, att2, 2, loop_no) }}
+        {{ show_att(y, att3, 3, loop_no) }}
+        {{ show_att(y, att4, 4, loop_no) }}
     </div>
 {%- endmacro %}
 
