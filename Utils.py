@@ -110,8 +110,10 @@ def ip_to_country(ip):
         ip_cache[ip] = "/"
         try:
             # response = urllib.urlopen("http://freegeoip.net/json/%s" % ip, 5).read()
-            response = requests.get("http://freegeoip.net/json/%s" % ip, 5).read()
-            result = json.loads(response.decode('utf8')).get('country_name', '/')
+            # result = json.loads(response.decode('utf8')).get('country_name', '/')
+            response = requests.get("http://freegeoip.net/json/%s" % ip, timeout=5)
+            result = json.loads(response.text)
+            log_info(result)
         except IOError:
             log_info("Error: freegeoip service error")
             result = ""
