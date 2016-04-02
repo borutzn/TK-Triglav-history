@@ -8,10 +8,10 @@ import csv
 import json
 import codecs
 import cStringIO
-import urllib
+# import urllib
+import requests
 
 import jinja2
-
 
 from flask import Flask, request, session
 from flask_login import current_user
@@ -101,14 +101,16 @@ ip_cache = {}
 '''
     url = "http://api.hostip.info/get_html.php?ip=%s&position=true" % ip
 
-    import requests
     resp = requests.get('http://www.mywebsite.com/user')
 '''
+
+
 def ip_to_country(ip):
     if ip not in ip_cache:
         ip_cache[ip] = "/"
         try:
-            response = urllib.urlopen("http://freegeoip.net/json/%s" % ip, 5).read()
+            # response = urllib.urlopen("http://freegeoip.net/json/%s" % ip, 5).read()
+            response = requests.get("http://freegeoip.net/json/%s" % ip, 5).read()
             result = json.loads(response.decode('utf8')).get('country_name', '/')
         except IOError:
             log_info("Error: freegeoip service error")
