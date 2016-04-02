@@ -13,14 +13,15 @@ import urllib
 import jinja2
 
 
+from flask import Flask, request, session
+from flask_login import current_user
+
+
 base_dir = os.path.dirname(__file__)
 files_dir = os.path.join(base_dir, 'static', 'files')
 template_dir = os.path.join(base_dir, 'template')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 
-
-from flask import Flask, request, session
-from flask_login import current_user
 app = Flask(__name__)
 app.secret_key = os.urandom(30)
 
@@ -100,11 +101,12 @@ ip_cache = {}
 def ip_to_country(ip):
     if ip not in ip_cache:
         ip_cache[ip] = "/"
-        '''ToDo: check why it doesn't work
-        response = urllib.urlopen("http://freegeoip.net/json/%s" % ip).read()
-        result = json.loads(response.decode('utf8')).get('country_name', '/')
+        try:
+            response = urllib.urlopen("http://freegeoip.net/json/%s" % ip).read()
+            result = json.loads(response.decode('utf8')).get('country_name', '/')
+        except IOError:
+            result = ""
         ip_cache[ip] = result if result != "" else "/"
-        '''
     return ip_cache[ip]
 
 
