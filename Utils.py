@@ -111,7 +111,7 @@ def ip_to_country(ip):
         try:
             # response = urllib.urlopen("http://freegeoip.net/json/%s" % ip, 5).read()
             # result = json.loads(response.decode('utf8')).get('country_name', '/')
-            response = requests.get("http://freegeoip.net/json/%s" % ip, timeout=5)
+            response = requests.get("http://freegeoip.net/json/%s" % ip, timeout=10)
             result = json.loads(response.text)
             log_info(result)
         except IOError:

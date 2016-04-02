@@ -119,7 +119,6 @@
     <!-- Begin page content -->
     <div class="container scroll">
     {% if events %}
-
         {% set year = events[0][1].Date[:4] %}
 
         <a class="next" href="{{ url_for("events_year", y=year, p=player_name, f=event_filter) }}">
