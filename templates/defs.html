@@ -8,9 +8,15 @@
 {% macro result_line1(category, result, player, link_player) -%}
     <div class="col-sm-1">{{ category }}</div>
     <div class="col-sm-1">{{ result }}</div>
-    <div class="col-sm-2">
-        <a href="{{ url_for('tennis_events', p=link_player) }}">{{ player }}</a>
-    </div>
+    {%  if link_player == "" %}
+        <div class="col-sm-2">
+            <a href="{{ url_for('tennis_events', p=link_player) }}">{{ player }}</a>
+        </div>
+    {% else %}
+        <div class="col-sm-2">
+            {{ player }}
+        </div>
+    {% endif %}
 {%- endmacro %}
 
 
