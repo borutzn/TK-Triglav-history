@@ -340,7 +340,7 @@ def tennis_events():
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
     else:
         return redirect(request.args.get("next") or url_for("tennis_main1"))
-    log_info("PARAMS %s" % request.args())
+    log_info("PARAMS %s" % str(request.args.getlist()))
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
