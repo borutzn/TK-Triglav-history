@@ -318,7 +318,7 @@ def tennis_main():
 
 @app.route("/events", methods=['GET'])
 def tennis_events():
-    print(request.method)
+    print("METHOD: %s" % request.method)
     for key in request.args:
         print("  Key '%s': '%s'." % (str(key), ""))
     if request.method == 'GET':
