@@ -340,7 +340,7 @@ def tennis_events():
             event_filter = ""
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
     else:
-        return redirect(request.args.get("next") or url_for("tennis_main1"))
+        return redirect(request.args.get("next") or url_for("tennis_events"))
 
     if year not in TennisEvent.Years:
         year = TennisEvent.Years[0]
