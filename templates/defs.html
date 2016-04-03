@@ -6,9 +6,9 @@
 
 
 {% macro result_line1(category, result, player, link_player) -%}
-    <div class="col-md-1 col-xs-2">{{ category }}</div>
-    <div class="col-md-1 col-xs-2">{{ result }}</div>
-    <div class="col-md-2 col-xs-5">
+    <div class="col-md-1 col-xs-3">{{ category }}</div>
+    <div class="col-md-1 col-xs-3">{{ result }}</div>
+    <div class="col-md-2 col-xs-6">
         {%  if link_player == "" %}
             <span class='pull-right'><i>{{ player }}</i></span>
         {% else %}
