@@ -30,20 +30,13 @@
                 <div class="panel-heading">
                     <div class="row">
                         {{ d.event(date, event.Event, event.Place) }}
-                        <div class="col-sm-1">{{ event.Category }}</div>
-                        <div class="col-sm-1">{{ event.Result }}</div>
+                        {{ d.result_line1(event.Category, event.Result, "", "") }}
                         {% if show_more %}
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
                             </div> <div class="row">
                             <div class="panel-body panel-collapse collapse">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-5">
-                                    {{ d.show_att(y, event.Att1, 1, loop.index) }}
-                                    {{ d.show_att(y, event.Att2, 2, loop.index) }}
-                                    {{ d.show_att(y, event.Att3, 3, loop.index) }}
-                                    {{ d.show_att(y, event.Att4, 4, loop.index) }}
-                                </div>
+                                {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index) }}
                                 <div class="col-sm-5"> {{ event.Comment }}. </div>
                             </div>
                         {% endif %}
@@ -64,13 +57,7 @@
                     </div>
                     <div class="panel-body panel-collapse collapse">
                         <div class="row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-5">
-                                {% set id = loop.index %}
-                                {% for a in event.atts %}
-                                    {{ d.show_att(y, a, loop.index, id) }}
-                                {% endfor %}
-                            </div>
+                            {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index) }}
                             <div class="col-sm-5">
             {% endif %}
                                 <div class="row">
