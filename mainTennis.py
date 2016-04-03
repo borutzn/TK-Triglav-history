@@ -351,7 +351,7 @@ def tennis_events():
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
-        return redirect(request.args.get("next") or url_for("tennis_main1"))
+        return redirect(request.args.get("next") or url_for("tennis_events"))
 
     year = events[0][1]['Date'][:4]
     i = TennisEvent.Years.index(year)
