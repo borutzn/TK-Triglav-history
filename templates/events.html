@@ -17,99 +17,97 @@
 
 
     <nav class="navbar navbar-default">
-          <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#"><img alt="TK Triglav logo" src="{{ url_for('static', filename='TH1.jpg') }}"></a>
-                </div>
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img alt="TK Triglav logo" src="{{ url_for('static', filename='TH1.jpg') }}"></a>
+            </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <form class="navbar-form navbar-left">
-                        <div class="input-group">
-                            <input type="text" name="f" class="form-control" placeholder="{{ event_filter }}">
-                        </div>
-                        <span id="filterclear" class="glyphicon glyphicon-remove-circle"></span>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" name="f" class="form-control" placeholder="{{ event_filter }}">
+                    </div>
 
-                        <div class="btn-group" role="group" aria-label="...">
-                            <a href="{{ url_for('tennis_events',y=prev_y, p=player_name, f=event_filter) }}" role="button"
-                               class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    leto <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ url_for('tennis_events', y="1949", f=event_filter) }}">1949-1959</a></li>
-                                    <li><a href="{{ url_for('tennis_events', y="1960", f=event_filter) }}">1960-1969</a></li>
-                                    <li><a href="{{ url_for('tennis_events', y="1970", f=event_filter) }}">1970-1979</a></li>
-                                    <li><a href="{{ url_for('tennis_events', y="1980", f=event_filter) }}">1980-1989</a></li>
-                                    <li><a href="{{ url_for('tennis_events', y="1990", f=event_filter) }}">1990-1999</a></li>
-                                    <li><a href="{{ url_for('tennis_events', y="2000", f=event_filter) }}">2000-2009</a></li>
-                                    <li><a href="{{ url_for('tennis_events', y="2010", f=event_filter) }}">2010-</a></li>
-                                </ul>
-                            </div>
-                            <a href="{{ url_for('tennis_events',y=next_y, p=player_name, f=event_filter) }}" role="button"
-                               class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                        </div>
-
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            igralec <span class="caret"></span>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <a href="{{ url_for('tennis_events',y=prev_y, p=player_name, f=event_filter) }}" role="button"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                leto <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                {% for player in players %}
-                                    {%  if player|length > 1 %}
-                                        <li><a href="{{ url_for('tennis_events', p=player, f=event_filter) }}">
-                                            {{ player }}</a></li>
-                                    {%  endif %}
-                                {% endfor %}
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('tennis_events', y="1949", f=event_filter) }}">1949-1959</a></li>
+                                <li><a href="{{ url_for('tennis_events', y="1960", f=event_filter) }}">1960-1969</a></li>
+                                <li><a href="{{ url_for('tennis_events', y="1970", f=event_filter) }}">1970-1979</a></li>
+                                <li><a href="{{ url_for('tennis_events', y="1980", f=event_filter) }}">1980-1989</a></li>
+                                <li><a href="{{ url_for('tennis_events', y="1990", f=event_filter) }}">1990-1999</a></li>
+                                <li><a href="{{ url_for('tennis_events', y="2000", f=event_filter) }}">2000-2009</a></li>
+                                <li><a href="{{ url_for('tennis_events', y="2010", f=event_filter) }}">2010-</a></li>
                             </ul>
                         </div>
-                    </form>
+                        <a href="{{ url_for('tennis_events',y=next_y, p=player_name, f=event_filter) }}" role="button"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                    </div>
 
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        igralec <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            {% for player in players %}
+                                {%  if player|length > 1 %}
+                                    <li><a href="{{ url_for('tennis_events', p=player, f=event_filter) }}">
+                                        {{ player }}</a></li>
+                                {%  endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>
 
-               <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#">Registracija</a></li>
-                  <li class="dropdown">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Registracija</a></li>
+                    <li class="dropdown">
                      <a href="http://www.jquery2dotnet.com" class="dropdown-toggle" data-toggle="dropdown">
                          Prijava <b class="caret"></b></a>
                      <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
-                        <li>
-                           <div class="row">
-                              <div class="col-md-12">
-                                 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
-                                    <div class="form-group">
-                                       <label class="sr-only" for="exampleInputEmail2">uporabniško ime</label>
-                                       <input type="email" class="form-control" id="exampleInputEmail2" placeholder="uporabniško ime" required>
-                                    </div>
-                                    <div class="form-group">
-                                       <label class="sr-only" for="exampleInputPassword2">geslo</label>
-                                       <input type="password" class="form-control" id="exampleInputPassword2" placeholder="geslo" required>
-                                    </div>
-                                    <div class="checkbox">
-                                       <label>
-                                       <input type="checkbox"> Zapomni si prijavo
-                                       </label>
-                                    </div>
-                                    <div class="form-group">
-                                       <button type="submit" class="btn btn-success btn-block">Prijavi me</button>
-                                    </div>
-                                 </form>
+                          <li>
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+                                          <div class="form-group">
+                                              <label class="sr-only" for="exampleInputEmail2">uporabniško ime</label>
+                                              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="uporabniško ime" required>
+                                          </div>
+                                          <div class="form-group">
+                                              <label class="sr-only" for="exampleInputPassword2">geslo</label>
+                                              <input type="password" class="form-control" id="exampleInputPassword2" placeholder="geslo" required>
+                                          </div>
+                                          <div class="checkbox">
+                                              <label>
+                                              <input type="checkbox"> Zapomni si prijavo
+                                              </label>
+                                          </div>
+                                              <div class="form-group">
+                                              <button type="submit" class="btn btn-success btn-block">Prijavi me</button>
+                                          </div>
+                                      </form>
+                                  </div>
                               </div>
-                           </div>
-                        </li>
+                          </li>
                      </ul>
-                  </li>
-               </ul>
+                    </li>
+                </ul>
 
-                </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
     </nav>
 
 
