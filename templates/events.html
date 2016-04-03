@@ -67,7 +67,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         {% for player in players %}
                             {%  if player|length > 1 %}
-                                <li><a href="{{ url_for('tennis_events', p=player, f=event_filter) }}">
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y=year, p=player) }}">
                                     {{ player }}</a></li>
                             {%  endif %}
                         {% endfor %}
