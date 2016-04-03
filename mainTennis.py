@@ -342,9 +342,8 @@ def tennis_events():
         return redirect(request.args.get("next") or url_for("tennis_main1"))
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
     log_info("PARAMS (%d) %s" % (len(request.args), str(request.args)))
-    multi_dict = request.args
-    for key in multi_dict:
-        print("  Key '%s': '%s'." % (multi_dict.get(key, multi_dict.getlist(key))))
+    for key in request.args:
+        print("  Key '%s': '%s'." % (str(key), ""))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
