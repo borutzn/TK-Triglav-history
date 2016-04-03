@@ -324,8 +324,6 @@ def tennis_events():
     if request.method == 'GET':
         try:
             year = request.args.get('y')
-            if year not in TennisEvent.Years:
-                year = TennisEvent.Years[0]
         except ValueError:
             year = TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
@@ -342,9 +340,13 @@ def tennis_events():
             event_filter = ""
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
     elif request.method == 'POST':
+        year = request.form['y']
 
     else:
             return redirect(request.args.get("next") or url_for("tennis_main1"))
+
+    if year not in TennisEvent.Years:
+        year = TennisEvent.Years[0]
 
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
     log_info("PARAMS (%d) %s" % (len(request.args), str(request.args)))
