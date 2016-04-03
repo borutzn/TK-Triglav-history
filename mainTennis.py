@@ -338,15 +338,13 @@ def tennis_events():
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
     else:
         return redirect(request.args.get("next") or url_for("tennis_main1"))
+    log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
-
-    for e in events:
-        log_info("--> %d, %s, %s" % (e[0], e[1]['Date'], e[1]['Event']))
 
     i = TennisEvent.Years.index(events[0][1]['Date'][:4])
     prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
