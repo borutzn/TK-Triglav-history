@@ -122,11 +122,11 @@
 
     <!-- Begin page content -->
     <div class="container scroll">
-    <div class="panel-group" id="results">
         <div class="panel panel-default">
             <div style="float:left; width:25%">
                 {% if player %}
-                    {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}{{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
+                    {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}
+                        {{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
                 {% endif %}
             </div>
             <div style="float:left; width:45%;">
@@ -144,7 +144,8 @@
         {% if events %}
             {% set year = events[0][1].Date[:4] %}
 
-            <a class="next" href="{{ url_for("players_year", y=year, p=player_name, f=event_filter) }}">leto {{ year }}</a>
+            <a class="next" href="{{ url_for("players_year", y=year, p=player_name, f=event_filter) }}">
+                leto {{ year }}</a>
         {% endif %}
     </div>
 
