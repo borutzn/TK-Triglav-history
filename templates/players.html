@@ -141,11 +141,12 @@
             </div>
         </div>
 
-    {% if events %}
-        {% set year = events[0][1].Date[:4] %}
+        {% if events %}
+            {% set year = events[0][1].Date[:4] %}
 
-        <a class="next" href="{{ url_for("players_year", y=year, p=player_name, f=event_filter) }}">leto {{ year }}</a>
-    {% endif %}
+            <a class="next" href="{{ url_for("players_year", y=year, p=player_name, f=event_filter) }}">leto {{ year }}</a>
+        {% endif %}
+    </div>
 
 
     <script>
