@@ -357,6 +357,7 @@ def tennis_events():
     i = TennisEvent.Years.index(year)
     prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
+    log_info("%d--%d--%d--%d" % (year, i, prev_y, next_y))
     if player_name:
         player = TennisPlayer.get(player_name)
         return render_template("players.html", events=events, players=TennisEvent.players,
