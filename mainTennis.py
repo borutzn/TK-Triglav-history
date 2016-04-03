@@ -318,9 +318,9 @@ def tennis_main():
 
 @app.route("/events", methods=['GET'])
 def tennis_events():
-    print("METHOD: %s" % request.method)
+    log_info("METHOD: %s" % request.method)
     for key in request.args:
-        print("  Key '%s': '%s'." % (str(key), ""))
+        log_info("  Key '%s': '%s'." % (str(key), ""))
     if request.method == 'GET':
         try:
             year = request.args.get('y')
@@ -341,12 +341,15 @@ def tennis_events():
         except ValueError:
             event_filter = ""
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
+    elif request.method == 'POST':
+
     else:
-        return redirect(request.args.get("next") or url_for("tennis_main1"))
+            return redirect(request.args.get("next") or url_for("tennis_main1"))
+
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
     log_info("PARAMS (%d) %s" % (len(request.args), str(request.args)))
     for key in request.args:
-        print("  Key '%s': '%s'." % (str(key), ""))
+        log_info("  Key '%s': '%s'." % (str(key), ""))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
