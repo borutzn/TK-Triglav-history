@@ -326,11 +326,13 @@ def tennis_events():
         except ValueError:
             year = TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+
         try:
             player_name = request.args.get('p')
         except ValueError:
             player_name = None
             log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player_name))
+
         try:
             event_filter = request.args.get('f') or ""
         except ValueError:
@@ -338,7 +340,7 @@ def tennis_events():
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
     else:
         return redirect(request.args.get("next") or url_for("tennis_main1"))
-    log_info("PARAMS")
+    log_info("PARAMS %s" % request.args())
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
