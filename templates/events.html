@@ -32,10 +32,10 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <form class="navbar-form navbar-left">
-                        <div class="btn-group">
+                        <div class="input-group">
                             <input type="text" name="f" class="form-control" placeholder="{{ event_filter }}">
-                            <span id="filterclear" class="glyphicon glyphicon-remove-circle"></span>
                         </div>
+                        <span id="filterclear" class="glyphicon glyphicon-remove-circle"></span>
 
                         <div class="btn-group" role="group" aria-label="...">
                             <a href="{{ url_for('tennis_events',y=prev_y, p=player_name, f=event_filter) }}" role="button"
