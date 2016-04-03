@@ -319,8 +319,7 @@ def tennis_main():
 @app.route("/events", methods=['GET'])
 def tennis_events():
     log_info("METHOD: %s" % request.method)
-    for key in request.args:
-        log_info("  Key '%s': '%s'." % (str(key), ""))
+    log_info("PARAMS (%d) %s" % (len(request.args), str(request.args)))
     if request.method == 'GET':
         try:
             year = request.args.get('y')
@@ -343,15 +342,12 @@ def tennis_events():
         year = request.form['y']
 
     else:
-            return redirect(request.args.get("next") or url_for("tennis_main1"))
+        return redirect(request.args.get("next") or url_for("tennis_main1"))
 
     if year not in TennisEvent.Years:
         year = TennisEvent.Years[0]
 
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
-    log_info("PARAMS (%d) %s" % (len(request.args), str(request.args)))
-    for key in request.args:
-        log_info("  Key '%s': '%s'." % (str(key), ""))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
