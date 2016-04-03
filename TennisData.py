@@ -302,7 +302,7 @@ class TennisEvent:
             log_info("Audit: Event cache reloaded sources.")
 
         log_info("Audit: Event cache reloaded (%d entries, %d players, %d sources)." %
-                 (cls.EventsCache.size(), len(cls.players), len(cls.sources)))
+                 (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
 #    @classmethod
 #    def clear_data(cls):
@@ -546,7 +546,7 @@ class TennisPlayer:
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx
 
-        log_info("Audit: Players cache reloaded (%d entries)." % cls.PlayersCache.size())
+        log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
     def clear_data(cls):
@@ -614,4 +614,4 @@ class EventSource:
         for idx, val in enumerate(cls.SourcesCache):
             cls.SourcesIndex[val['file_name']] = idx
 
-        log_info("Audit: Sources cache reloaded (%d entries)." % cls.SourcesCache.size())
+        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
