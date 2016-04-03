@@ -234,7 +234,7 @@ class TennisEvent:
         if cls.EventsCache is not None:
             return
 
-        log_info("Audit: Event cache reloaded start.")
+        log_info("Audit: Event cache - events reload started.")
         connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
@@ -248,9 +248,6 @@ class TennisEvent:
 
         cls.years = []
         for idx, val in enumerate(cls.EventsCache):
-            # ToDo: izgleda kot da bi bil val NULL?
-            if not val:
-                log_info("Temp: NULL: %d" % idx)
             cls.EventsCache[idx]['LocalDate'] = cls.date2user(val['Date'])
             cls.EventsCache[idx]['Att1'] = cls.correct_att(val['Date'][:4], val['Att1'])
             cls.EventsCache[idx]['Att2'] = cls.correct_att(val['Date'][:4], val['Att2'])
@@ -261,8 +258,9 @@ class TennisEvent:
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
-        log_info("Audit: Event cache reloaded cache.")
+        log_info("Audit: Event cache - events reloaded.")
 
+        log_info("Audit: Event cache - players reload started.")
         if players:
             p = dict()  # move collection to the upper for loop?
             for i in cls.EventsCache:
@@ -279,10 +277,11 @@ class TennisEvent:
             cls.players.sort()
             cls.top_players.sort(key=lambda player: player[1], reverse=True)
             cls.top_players = cls.top_players[:20]
-            log_info("Audit: Event cache reloaded players.")
+            log_info("Audit: Event cache - players reloaded.")
 
+        log_info("Audit: Event cache - sources reload started.")
         if sources:
-            # ToDo: check https://www.python.org/dev/peps/pep-0471/ for speed advances
+            # ToDo: implement with os.scandir, when switching to Python 3
             cls.sources = list()
             year_pattern = re.compile(r"^/\d{4}$")
             dir_len = len(files_dir)
@@ -299,7 +298,7 @@ class TennisEvent:
                 pass
 
             cls.sources.sort()
-            log_info("Audit: Event cache reloaded sources.")
+            log_info("Audit: Event cache - sources reloaded.")
 
         log_info("Audit: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
