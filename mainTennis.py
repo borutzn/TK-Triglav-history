@@ -323,13 +323,13 @@ def tennis_events():
     log_info("Form (%d) %s" % (len(request.form), str(request.form)))
     if request.method == 'GET':
         try:
-            year = request.args.get('y')
+            year = request.args.get('y') or TennisEvent.Years[0]
         except ValueError:
             year = TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
 
         try:
-            player_name = request.args.get('p')
+            player_name = request.args.get('p') or ""
         except ValueError:
             player_name = None
             log_info("Error: wrong player (%s) -> setting %s" % (request.args.get('p'), player_name))
@@ -357,7 +357,6 @@ def tennis_events():
     i = TennisEvent.Years.index(year)
     prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-    log_info("%s--%d--%s--%s" % (year, i, prev_y, next_y))
     if player_name:
         player = TennisPlayer.get(player_name)
         return render_template("players.html", events=events, players=TennisEvent.players,
