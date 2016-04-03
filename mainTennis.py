@@ -339,9 +339,6 @@ def tennis_events():
         except ValueError:
             event_filter = ""
             log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
-    elif request.method == 'POST':
-        year = request.form['y']
-
     else:
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
@@ -356,16 +353,18 @@ def tennis_events():
         log_info("Error: GET / - no event")
         return redirect(request.args.get("next") or url_for("tennis_main1"))
 
-    i = TennisEvent.Years.index(events[0][1]['Date'][:4])
-    prev_y = TennisEvent.Years[i-1 if i > 0 else 0]
-    next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
+    year = TennisEvent.Years.index(events[0][1]['Date'][:4])
+    prev_y = TennisEvent.Years[year-1 if year > 0 else 0]
+    next_y = TennisEvent.Years[year+1 if year < len(TennisEvent.Years)-1 else 0]
     if player_name:
         player = TennisPlayer.get(player_name)
-        return render_template("players.html", events=events, players=TennisEvent.players, player=player,
-                               event_filter=event_filter, prev_y=prev_y, next_y=next_y, player_name=player_name)
+        return render_template("players.html", events=events, players=TennisEvent.players,
+                               event_filter=event_filter, year=year, player_name=player_name,
+                               prev_y=prev_y, next_y=next_y)
     else:
         return render_template("events.html", events=events, players=TennisEvent.players,
-                               event_filter=event_filter, prev_y=prev_y, next_y=next_y)
+                               event_filter=event_filter, year=year, player_name=player_name,
+                               prev_y=prev_y, next_y=next_y)
 
 
 @app.route("/events_year", methods=['GET'], endpoint='events_year', defaults={'one_player': False})

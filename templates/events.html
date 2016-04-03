@@ -34,6 +34,8 @@
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
                         <input type="text" name="f" class="form-control" placeholder="{{ event_filter }}">
+                        <input type="hidden" name="y" value="{{ year }}">
+                        <input type="hidden" name="p" value="{{ player_name }}">
                     </div>
                 </form>
 
@@ -114,8 +116,6 @@
     <!-- Begin page content -->
     <div class="container scroll">
         {% if events %}
-            {% set year = events[0][1].Date[:4] %}
-
             <a class="next" href="{{ url_for("events_year", y=year, p=player_name, f=event_filter) }}">
                 leto {{ zear }}</a>
         {% endif %}
