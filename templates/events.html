@@ -42,10 +42,10 @@
                 <ul class="nav navbar-nav navbar-left">
                     <!--div class="btn-group" role="group"-->
                         <li><a href="{{ url_for('tennis_events', f=event_filter, y=prev_y, p=player_name) }}" role="button" class="btn btn-default">
-                            <span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                            <span class="glyphicon glyphicon-chevron-left"></span></a>
                         <!--div class="btn-group" role="group"-->
-                            <li><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                leto <span class="caret"></span>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                leto <span class="caret"></span></a>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url_for('tennis_events', f=event_filter, y="1949") }}">1949-1959</a></li>
@@ -56,15 +56,15 @@
                                 <li><a href="{{ url_for('tennis_events', f=event_filter, y="2000") }}">2000-2009</a></li>
                                 <li><a href="{{ url_for('tennis_events', f=event_filter, y="2010") }}">2010-</a></li>
                             </ul>
-                            </li>
+
                         <!--/div-->
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y=next_y, p=player_name) }}" role="button"
+                        <a href="{{ url_for('tennis_events', f=event_filter, y=next_y, p=player_name) }}" role="button"
                            class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
                     <!--/div-->
 
                     <li class="dropdown-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            leto <span class="caret"></span></a>
+                            igralec <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             {% for player in players %}
                                 {%  if player|length > 1 %}
