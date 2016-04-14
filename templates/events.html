@@ -64,14 +64,12 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-left">
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        {% for player in players %}
-                            {%  if player|length > 1 %}
-                                <li><a href="{{ url_for('tennis_events', f="", y="", p=player) }}">
-                                    {{ player }}</a></li>
-                            {%  endif %}
-                        {% endfor %}
-                    </ul>
+                    {% for player in players %}
+                        {%  if player|length > 1 %}
+                            <li><a href="{{ url_for('tennis_events', f="", y="", p=player) }}">
+                                {{ player }}</a></li>
+                        {%  endif %}
+                    {% endfor %}
                 </ul>
 
                 <!--ul class="nav navbar-nav navbar-left">
