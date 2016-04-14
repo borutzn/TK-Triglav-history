@@ -40,7 +40,7 @@
                 </form>
 
                 <ul class="nav navbar-nav navbar-left">
-                    <div class="btn-group" role="group">
+                    <!--div class="btn-group" role="group"-->
                         <li><a href="{{ url_for('tennis_events', f=event_filter, y=prev_y, p=player_name) }}" role="button" class="btn btn-default">
                             <span class="glyphicon glyphicon-chevron-left"></span></a></li>
                         <!--div class="btn-group" role="group"-->
@@ -60,18 +60,20 @@
                         <!--/div-->
                         <li><a href="{{ url_for('tennis_events', f=event_filter, y=next_y, p=player_name) }}" role="button"
                            class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                    </div>
-                </ul>
+                    <!--/div-->
 
-                <ul class="nav navbar-nav navbar-left">
-                    <ul class="dropdown-menu">
-                        {% for player in players %}
-                            {%  if player|length > 1 %}
-                                <li><a href="{{ url_for('tennis_events', f="", y="", p=player) }}">
-                                    {{ player }}</a></li>
-                            {%  endif %}
-                        {% endfor %}
-                    </ul>
+                    <li class="dropdown-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            leto <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {% for player in players %}
+                                {%  if player|length > 1 %}
+                                    <li><a href="{{ url_for('tennis_events', f="", y="", p=player) }}">
+                                        {{ player }}</a></li>
+                                {%  endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
                 </ul>
 
                 <!--ul class="nav navbar-nav navbar-left">
