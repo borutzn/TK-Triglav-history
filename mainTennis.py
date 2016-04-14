@@ -320,7 +320,6 @@ def tennis_main():
 def tennis_events():
     log_info("METHOD: %s" % request.method)
     log_info("Args (%d) %s" % (len(request.args), str(request.args)))
-    log_info("Form (%d) %s" % (len(request.form), str(request.form)))
     if request.method == 'GET':
         try:
             year = request.args.get('y') or TennisEvent.Years[0]
