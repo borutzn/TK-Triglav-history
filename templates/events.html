@@ -40,35 +40,31 @@
                 </form>
 
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="{{ url_for('tennis_events', f=event_filter, y=prev_y, p=player_name) }}" role="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                    <li><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        leto <span class="caret"></span>
-                    </button></li>
-                    <li><ul class="dropdown-menu">
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="1949") }}">1949-1959</a></li>
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="1960") }}">1960-1969</a></li>
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="1970") }}">1970-1979</a></li>
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="1980") }}">1980-1989</a></li>
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="1990") }}">1990-1999</a></li>
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="2000") }}">2000-2009</a></li>
-                        <li><a href="{{ url_for('tennis_events', f=event_filter, y="2010") }}">2010-</a></li>
-                    </ul></li>
-                    <li><a href="{{ url_for('tennis_events', f=event_filter, y=next_y, p=player_name) }}" role="button"
-                       class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                    </li>
+                    <!--div class="btn-group" role="group"-->
+                        <li><a href="{{ url_for('tennis_events', f=event_filter, y=prev_y, p=player_name) }}" role="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                        <!--div class="btn-group" role="group"-->
+                            <li><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                leto <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="1949") }}">1949-1959</a></li>
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="1960") }}">1960-1969</a></li>
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="1970") }}">1970-1979</a></li>
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="1980") }}">1980-1989</a></li>
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="1990") }}">1990-1999</a></li>
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="2000") }}">2000-2009</a></li>
+                                <li><a href="{{ url_for('tennis_events', f=event_filter, y="2010") }}">2010-</a></li>
+                            </ul>
+                            </li>
+                        <!--/div-->
+                        <li><a href="{{ url_for('tennis_events', f=event_filter, y=next_y, p=player_name) }}" role="button"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+                    <!--/div-->
                 </ul>
 
-                <ul class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown <b class="caret"></b></a>
+                <ul class="nav navbar-nav navbar-left">
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                    </ul>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-left dropdown">
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         {% for player in players %}
                             {%  if player|length > 1 %}
                                 <li><a href="{{ url_for('tennis_events', f="", y="", p=player) }}">
