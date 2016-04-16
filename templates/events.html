@@ -59,9 +59,7 @@
                            class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
                      </div></li>
 
-                    <li class="dropdown-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            igralec <span class="caret"></span></a>
+                    <li><div class="btn-group navbar-btn">
                         <ul class="dropdown-menu">
                             {% for player in players %}
                                 {%  if player|length > 1 %}
@@ -70,6 +68,7 @@
                                 {%  endif %}
                             {% endfor %}
                         </ul>
+                        <button data-toggle="dropdown" class="btn dropdown-toggle">igralec <span class="caret"></span></button>
                     </li>
                 </ul>
 
