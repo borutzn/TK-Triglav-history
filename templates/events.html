@@ -59,7 +59,7 @@
                 </form>
 
                 <form class="navbar-form navbar-left">
-                    <li><div class="btn-group navbar-btn">
+                    <div class="btn-group navbar-btn">
                         <ul class="dropdown-menu" style="max-height:300px; overflow-y: scroll;">
                             {% for player in players %}
                                 {%  if player|length > 1 %}
@@ -69,7 +69,7 @@
                             {% endfor %}
                         </ul>
                         <button data-toggle="dropdown" class="btn dropdown-toggle">igralec <span class="caret"></span></button>
-                    </div></li>
+                    </div>
                 </form>
 
 
