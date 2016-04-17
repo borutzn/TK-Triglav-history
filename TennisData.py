@@ -449,8 +449,8 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_oneyear_pictures(cls, year=None, player=None, event_filter="", limit_size=7):
-        log_info("Temp: GET_PICTURES " + str(year) + ", " + unicode(player) + ", " + str(event_filter))
+    def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
+        log_info("Temp: GET_PICTURES " + str(year) + ", " + str(event_filter))
         cls.fetch_data()
         pictures = list()
 
@@ -464,6 +464,37 @@ class TennisEvent:
             del pictures[r]
             no_pics -= 1
         random.shuffle(pictures)
+
+        log_info("Temp: GET_PICTURES returning %d pictures." % len(pictures))
+        return pictures
+
+    @classmethod
+    def get_oneplayer_pictures(cls, player="", event_filter="", limit_size=7):
+        log_info("Temp: GET_PICTURES " + player + ", " + str(event_filter))
+        cls.fetch_data()
+        pictures = set()
+
+        for entry in cls.EventsCache:
+            if entry['Player'] != player:
+                continue
+            year = entry['Date'][:4]
+            if entry['Att1'] and entry['Att1'][:4] != "err_":
+                pictures.add((os.path.join(files_dir_web, year, entry['Att1']), entry['Att1']))
+            if entry['Att2'] and entry['Att2'][:4] != "err_":
+                pictures.add((os.path.join(files_dir_web, year, entry['Att2']), entry['Att2']))
+            if entry['Att3'] and entry['Att3'][:4] != "err_":
+                pictures.add((os.path.join(files_dir_web, year, entry['Att3']), entry['Att3']))
+            if entry['Att4'] and entry['Att4'][:4] != "err_":
+                pictures.add((os.path.join(files_dir_web, year, entry['Att4']), entry['Att4']))
+        pictures = list(pictures)
+
+        no_pics = len(pictures)
+        for _ in range(no_pics - limit_size):
+            r = random.randrange(0, no_pics)
+            del pictures[r]
+            no_pics -= 1
+        random.shuffle(pictures)
+        log_info(pictures)
 
         log_info("Temp: GET_PICTURES returning %d pictures." % len(pictures))
         return pictures

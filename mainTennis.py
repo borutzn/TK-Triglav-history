@@ -347,7 +347,6 @@ def tennis_events():
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
-    pictures = TennisEvent.get_oneyear_pictures(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
@@ -359,10 +358,12 @@ def tennis_events():
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     if player_name:
         player = TennisPlayer.get(player_name)
+        pictures = TennisEvent.get_oneplayer_pictures(player=player_name, event_filter=event_filter)
         return render_template("players.html", events=events, players=TennisEvent.players, pictures=pictures,
                                event_filter=event_filter, year=year, player_name=player_name,
                                player=player, prev_y=prev_y, next_y=next_y)
     else:
+        pictures = TennisEvent.get_oneyear_pictures(year=year, event_filter=event_filter)
         return render_template("events.html", events=events, players=TennisEvent.players, pictures=pictures,
                                event_filter=event_filter, year=year, player_name=player_name,
                                prev_y=prev_y, next_y=next_y)
