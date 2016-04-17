@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import math
+import random
 import zipfile
 
 import sqlite3
@@ -16,8 +17,7 @@ from flask import url_for, Response, make_response, send_file
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 
-from Utils import log_info, base_dir, files_dir, UnicodeCsvWriter
-
+from Utils import log_info, base_dir, files_dir_os, files_dir_web, UnicodeCsvWriter, allowed_image
 
 class TennisEvent:
     """
@@ -77,9 +77,9 @@ class TennisEvent:
         s = list(att)
         att = "".join(s)
         try:
-            att_path = os.path.join(files_dir, year, att)
+            att_path = os.path.join(files_dir_os, year, att)
             att_sec = secure_filename(att)
-            att_path_sec = os.path.join(files_dir, year, att_sec)
+            att_path_sec = os.path.join(files_dir_os, year, att_sec)
             if os.path.exists(att_path):  # or os.path.exists(att_path_sec):
                 '''
                 if att != att_sec: # correction of all unsecured attachments
@@ -94,7 +94,7 @@ class TennisEvent:
                 TennisEvent.update_all_atts(year, att, att_sec)
                 return att_sec
             else:  # or os.path.exists(att_path_sec):
-                log_info("Error: Bad filename " + unicode(os.path.join(files_dir, year+"/"+att)))
+                log_info("Error: Bad filename " + unicode(os.path.join(files_dir_os, year + "/" + att)))
                 return "err_"+att
         except:
             log_info("Error: %s" % sys.exc_info()[0])
@@ -283,14 +283,14 @@ class TennisEvent:
         if sources:
             # ToDo: implement with os.scandir, when switching to Python 3
             cls.sources = list()
-            year_pattern = re.compile(r"^/\d{4}$")
-            dir_len = len(files_dir)
+            year_pattern = re.compile(r"^[/\\]\d{4}$")
+            dir_len = len(files_dir_os)
             try:
-                for root, dirs, fnames in os.walk(files_dir):
+                for root, dirs, fnames in os.walk(files_dir_os):
                     year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
                     if year_pattern.match(year):
                         for fname in fnames:
-                            fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, year[1:], fname))/1024)
+                            fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir_os, year[1:], fname)) / 1024)
                             no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:], fname)))
                             cls.sources.append((year[1:], fname, fsize, no_events))
             except ValueError:  # No files in directory - nothing to select from
@@ -449,6 +449,26 @@ class TennisEvent:
         return events
 
     @classmethod
+    def get_oneyear_pictures(cls, year=None, player=None, event_filter="", limit_size=7):
+        log_info("Temp: GET_PICTURES " + str(year) + ", " + unicode(player) + ", " + str(event_filter))
+        cls.fetch_data()
+        pictures = list()
+
+        for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
+            if (references > 0) and (fyear == year) and allowed_image(fname):
+                pictures.append((os.path.join(files_dir_web, fyear, fname), fname))
+        no_pics = len(pictures)
+        for _ in range(no_pics-limit_size):
+            r = random.randrange(0, no_pics)
+            log_info(str(no_pics) + "-" + str(r) + "-" + str(pictures[r]))
+            del pictures[r]
+            no_pics -= 1
+        random.shuffle(pictures)
+
+        log_info("Temp: GET_PICTURES returning %d pictures." % len(pictures))
+        return pictures
+
+    @classmethod
     def get_players_events(cls, player, no_records=None):
         cls.fetch_data()
         r = list()
@@ -500,7 +520,7 @@ class TennisEvent:
             zip_file = zipfile.ZipFile(os.path.join(base_dir, zip_name), 'w')
             zip_file.write(os.path.join(base_dir, "TennisHistory.db"), "TennisHistory.db")
             try:
-                for root, dirs, fnames in os.walk(files_dir):
+                for root, dirs, fnames in os.walk(files_dir_os):
                     for f in fnames:
                         zip_file.write(os.path.join(root, f), os.path.join(root[len(base_dir):], f))
             except ValueError:

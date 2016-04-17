@@ -17,7 +17,7 @@ import sqlite3
 
 from TennisData import TennisEvent, TennisPlayer
 
-from Utils import log_info, files_dir
+from Utils import log_info, files_dir_os
 
 
 # files_basedir = os.path.join(os.path.dirname(__file__), 'static', 'files')
@@ -141,7 +141,7 @@ def check_file(file_root, file_name):
 
 def get_best_filename(y, att):
     best_filename, fit = "", 0.0
-    for f in os.listdir(files_dir+"/"+y):
+    for f in os.listdir(files_dir_os+ "/"+y):
         newfit = difflib.SequenceMatcher(None, att, f).ratio()
         if newfit > fit:
             best_filename, fit = f, newfit
@@ -152,7 +152,7 @@ def get_best_filename(y, att):
 def check_att(y, att):
     if att == "":
         return False
-    if os.path.exists(os.path.join(files_dir, y, att)):
+    if os.path.exists(os.path.join(files_dir_os, y, att)):
         return False
     return True
 
@@ -247,7 +247,7 @@ print
 print("STEP 3: Translating filenames from Windows-1250 to UTF-8")
 changed_files = 0
 try:
-    for root, directory, files in os.walk(files_dir):
+    for root, directory, files in os.walk(files_dir_os):
         print("DIR: " + str(root))
         for fname in files:
             if check_file(root, fname):
@@ -284,7 +284,7 @@ print("STEP 5: resizing oversized pictures")
 mogrify = raw_input("Mogrify the pictures (y/n)? ")
 if delete == "y":
     for ext in ATT_EXT:
-        cmd = "mogrify -resize %d %s/*/*%s" % (PIC_RESIZE, files_dir, ext)
+        cmd = "mogrify -resize %d %s/*/*%s" % (PIC_RESIZE, files_dir_os, ext)
         print("  run: %s" % cmd)
         os.system(cmd)
 

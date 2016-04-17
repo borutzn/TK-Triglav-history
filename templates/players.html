@@ -1,6 +1,6 @@
 <!--# -*- coding: utf-8 -*- -->
 
-{% extends "base1.html" %}
+{% extends "base_new.html" %}
 
 {% import "defs.html" as d %}
 
@@ -39,7 +39,7 @@
                     </form>
 
                     <form class="navbar-form navbar-left">
-                        <div class="btn-group" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
                             <a href="{{ url_for('tennis_events', p=player_name, f=event_filter) }}" role="button"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
                             <div class="btn-group" role="group">

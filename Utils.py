@@ -18,7 +18,8 @@ from flask_login import current_user
 
 
 base_dir = os.path.dirname(__file__)
-files_dir = os.path.join(base_dir, 'static', 'files')
+files_dir_os = os.path.join(base_dir, 'static', 'files')
+files_dir_web = os.path.join('', 'static', 'files')
 template_dir = os.path.join(base_dir, 'template')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), autoescape=True)
 

@@ -28,7 +28,7 @@ from werkzeug.utils import secure_filename
 
 from TennisData import TennisEvent, TennisPlayer
 
-from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, allowed_image, files_dir
+from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, allowed_image, files_dir_os
 
 from User import User, Anonymous
 
@@ -89,7 +89,7 @@ def edit_player():
             upload_file = request.files['upload']
             if upload_file and allowed_file(upload_file.filename):
                 picture = os.path.join("players", secure_filename(upload_file.filename))
-                filename = os.path.join(files_dir, picture)
+                filename = os.path.join(files_dir_os, picture)
                 upload_file.save(os.path.join(filename))
             p = TennisPlayer(name=name, born=born, died=died, comment=comment, picture=picture)
             p.update()
@@ -128,7 +128,7 @@ def add_event(step):
         if step == 1:
             return render_template("addEvent-S1.html", date=TennisEvent.date2user(date) if date != "" else "")
         elif step == 2:
-            atts_dir = os.path.join(files_dir, secure_filename(date[:4]))
+            atts_dir = os.path.join(files_dir_os, secure_filename(date[:4]))
             try:
                 atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
             except OSError:
@@ -181,7 +181,7 @@ def edit_event(update):
             return redirect(request.args.get("next") or url_for("tennis_main"))
 
         event = TennisEvent.get(ident)
-        atts_dir = os.path.join(files_dir, secure_filename(event["Date"][:4]))
+        atts_dir = os.path.join(files_dir_os, secure_filename(event["Date"][:4]))
         atts = [""] + [f for f in os.listdir(atts_dir) if allowed_file(f)]
         atts.sort()
         return render_template("editEvent.html", event=event, atts=atts)
@@ -247,7 +247,7 @@ def correct():
 
         fnames = []
         try:
-            for f in os.listdir(os.path.join(files_dir, secure_filename(fdir))):
+            for f in os.listdir(os.path.join(files_dir_os, secure_filename(fdir))):
                 s = list(f)
                 f = "".join(s)
                 fnames.append({'fname': f, 'fit': ("%d%%" % (100.0*difflib.SequenceMatcher(None, fname, f).ratio()))})
@@ -347,6 +347,7 @@ def tennis_events():
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
 
     events = TennisEvent.get_oneyear_events(year=year,  player=player_name, event_filter=event_filter)
+    pictures = TennisEvent.get_oneyear_pictures(year=year,  player=player_name, event_filter=event_filter)
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
@@ -358,11 +359,11 @@ def tennis_events():
     next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
     if player_name:
         player = TennisPlayer.get(player_name)
-        return render_template("players.html", events=events, players=TennisEvent.players,
+        return render_template("players.html", events=events, players=TennisEvent.players, pictures=pictures,
                                event_filter=event_filter, year=year, player_name=player_name,
                                player=player, prev_y=prev_y, next_y=next_y)
     else:
-        return render_template("events.html", events=events, players=TennisEvent.players,
+        return render_template("events.html", events=events, players=TennisEvent.players, pictures=pictures,
                                event_filter=event_filter, year=year, player_name=player_name,
                                prev_y=prev_y, next_y=next_y)
 
@@ -484,7 +485,7 @@ def list_files():
 def edit_file():
     if request.method == 'GET':
         fname = request.args.get('n')
-        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir, fname))/1024)
+        fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir_os, fname)) / 1024)
         events = TennisEvent.get_events_with_att(fname)
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events)
@@ -492,8 +493,8 @@ def edit_file():
         old_year, old_fname = request.form['old_year'], request.form['old_fname']
         new_year = secure_filename(request.form.get('new_year') or old_year)
         new_fname = secure_filename(request.form['new_fname'])
-        old_att = os.path.join(files_dir, old_year, old_fname)
-        new_att = os.path.join(files_dir, new_year, new_fname)
+        old_att = os.path.join(files_dir_os, old_year, old_fname)
+        new_att = os.path.join(files_dir_os, new_year, new_fname)
 
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
             log_info("Audit: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
@@ -513,7 +514,7 @@ def upload_picture():
         years = [request.args.get('y')] if request.args.get('y') else TennisEvent.Years
         files = []
         if len(years) == 1:
-            dir_files = os.path.join(files_dir, secure_filename(years[0]))
+            dir_files = os.path.join(files_dir_os, secure_filename(years[0]))
             try:
                 files = [f for f in os.listdir(dir_files) if allowed_file(f)]
             except OSError:
@@ -537,7 +538,7 @@ def upload_picture():
                 return redirect(url_for("upload_picture"))
             else:
                 log_info("Temp: Upload %s, %s, %s" % (upload_file.filename, select_name, new_name))
-                picture_dir = os.path.join(files_dir, secure_filename(year))
+                picture_dir = os.path.join(files_dir_os, secure_filename(year))
                 if not os.path.exists(picture_dir):
                     log_info("Audit: directory %s created." % picture_dir)
                     os.makedirs(picture_dir)
@@ -565,7 +566,7 @@ def delete_file():
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             fname = os.path.join(secure_filename(request.form['Year']), secure_filename(request.form['Fname']))
             log_info("Audit: delete file %s" % fname)
-            os.remove(os.path.join(files_dir, fname))
+            os.remove(os.path.join(files_dir_os, fname))
         return redirect(request.args.get("next") or url_for("tennis_main"))
 
 
@@ -750,6 +751,7 @@ def shutdown():
 if __name__ == "__main__":
     if Production:
         log_info("Audit: %s - start standalone production" % appname)
+        TennisEvent.fetch_data()
         app.run(host='127.0.0.1', port=8080, debug=False)
     else:        
         log_info("Audit: %s - start standalone development" % appname)
