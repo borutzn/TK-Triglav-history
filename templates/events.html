@@ -16,6 +16,7 @@
 	</style>
 
 
+    <!-- Navigation bar -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -109,7 +110,7 @@
         </div><!-- /.container -->
     </nav>
 
-    <!-- Pictures -->
+    <!-- Pictures in Carousel -->
     {% if pictures %}
         <div class="container scroll">
             <div id="carousel-top" class="carousel slide" data-ride="carousel">
@@ -126,7 +127,7 @@
                     {% for picture in pictures %}
                         <div class="item {% if loop.index == 1 %}active{% endif %}">
                             <img class="img-responsive center-block" data-toggle="modal" data-target="#Att{{ loop.index }}"
-                                 style="width: auto; height: 300px; max-height: 300px;"
+                                 style="width: auto; height: 300px; max-height: 250px;"
                                  src="{{ picture[0] }}" alt="{{ picture[1] }}"/>
                             <div class="carousel-caption"> {{ picture[1] }}</div>
                         </div>
