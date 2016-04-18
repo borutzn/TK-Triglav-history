@@ -78,8 +78,10 @@
 
     {% endfor %}
 
-    <a class="next" href="{{ url_for("events_year", y=next_y, p=player_name, f=event_filter) }}">
-        leto {{ next_y }}</a>
+    {% if next_y != "0" %}
+        <a class="next" href="{{ url_for("events_year", y=next_y, p=player_name, f=event_filter) }}">
+            leto {{ next_y }}</a>
 
+    {% endif %}
 
 {% endif %}

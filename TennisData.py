@@ -380,7 +380,6 @@ class TennisEvent:
 
     @classmethod
     def get_oneyear_events(cls, year=None, player=None, event_filter=""):
-        log_info("Temp: GET_EVENTS "+str(year)+", "+unicode(player)+", "+str(event_filter))
         cls.fetch_data()
         events = list()
         pos = TennisEvent.get_year_pos(year)
@@ -450,14 +449,19 @@ class TennisEvent:
 
     @classmethod
     def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
-        log_info("Temp: GET_PICTURES " + str(year) + ", " + str(event_filter))
         cls.fetch_data()
         pictures = list()
 
-        for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
-            if (references > 0) and (fyear == year) and allowed_image(fname):
-                pictures.append((os.path.join(files_dir_web, fyear, fname), fname))
-        no_pics = len(pictures)
+        for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
+            for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
+                if (references > 0) and (fyear == year) and allowed_image(fname):
+                    pictures.append((os.path.join(files_dir_web, fyear, fname), fname))
+            no_pics = len(pictures)
+            i = TennisEvent.Years.index(year)
+            if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
+                break
+            year = TennisEvent.Years[i+1]
+
         for _ in range(no_pics-limit_size):
             r = random.randrange(0, no_pics)
             log_info(str(no_pics) + "-" + str(r) + "-" + str(pictures[r]))
@@ -470,7 +474,6 @@ class TennisEvent:
 
     @classmethod
     def get_oneplayer_pictures(cls, player="", event_filter="", limit_size=7):
-        log_info("Temp: GET_PICTURES " + player + ", " + str(event_filter))
         cls.fetch_data()
         pictures = set()
 

@@ -137,7 +137,8 @@
                 <div class="carousel-inner" role="listbox">
                     {% for picture in pictures %}
                         <div class="item {% if loop.index == 1 %}active{% endif %}">
-                            <img class="img-responsive center-block" data-toggle="modal" data-target="#Att{{ loop.index }}"
+                            <img class="img-responsive center-block"
+                                 data-toggle="modal" data-target="#slide{{ loop.index }}"
                                  style="width: auto; height: 300px; max-height: 250px;"
                                  src="{{ picture[0] }}" alt="{{ picture[1] }}"/>
                             <div class="carousel-caption"> {{ picture[1] }}</div>
