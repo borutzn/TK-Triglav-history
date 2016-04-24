@@ -13,7 +13,12 @@
             line-height: 40px;
             width: 80px;
         }
+        .carousel { overflow:hidden }
+        .carousel div { max-height: 300px; overflow: hidden; }
+        .carousel img { min-height: 300px; }
+        .carousel-caption { background: rgba(0,0,0,0.5); }
 	</style>
+    <!--.carousel-inner div img { width: auto; height: 300px; max-height: 250px; }-->
 
 
     <!-- Navigation bar -->
@@ -126,10 +131,9 @@
                 <div class="carousel-inner" role="listbox">
                     {% for picture in pictures %}
                         <div class="item {% if loop.index == 1 %}active{% endif %}">
-                            <img class="img-responsive center-block" data-toggle="modal" data-target="#Att{{ loop.index }}"
-                                 style="width: auto; height: 300px; max-height: 250px;"
-                                 src="{{ picture[0] }}" alt="{{ picture[1] }}"/>
-                            <div class="carousel-caption"> {{ picture[1] }}</div>
+                            <img class="img-responsive center-block" data-toggle="modal"
+                                 data-target="#Att{{ loop.index }}" src="{{ picture[0] }}" alt="{{ picture[1] }}"/>
+                            <div class="carousel-caption">{{ picture[1] }}</div>
                         </div>
                     {% endfor %}
 
