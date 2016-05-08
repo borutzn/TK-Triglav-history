@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_new.html" %}
 
 {% block content %}
 
@@ -6,30 +6,22 @@
     <div style="float:left; width:45%;">
         <p><div class="page-title">Registracija novega uporabnika</div>
     </div>
-    <div style="float:left; width:30%;">
-        &nbsp;&nbsp;<a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
-    </div>
     <div style="clear:both;"></div>
 	<table>
 		<tr>
-			<td style="text-align:right;">Uporabniško ime</td>
+			<td style="text-align:right;">Elektronska pošta </td>
 			<td><label>
                 <input type="text" name="username" value="{{username}}">
             </label></td>
 		</tr><tr>
-			<td style="text-align:right;">Geslo</td>
+			<td style="text-align:right;">Geslo </td>
 			<td><label>
                 <input type="password" name="password">
             </label></td>
 		</tr><tr>
-			<td style="text-align:right;">Ponovi geslo</td>
+			<td style="text-align:right;">Ponovi geslo </td>
 			<td><label>
                 <input type="password" name="verify">
-            </label></td>
-		</tr><tr>
-			<td style="text-align:right;">El. pošta (neobvezno)</td>
-			<td><label>
-                <input type="text" name="email" value="{{email}}">
             </label></td>
 		</tr>
 	</table>

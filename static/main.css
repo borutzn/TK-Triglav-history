@@ -18,11 +18,11 @@ Pallete:
 */
 
 .colors {
-    color: #94BEFA;
-    color: #6790D0;
-    color: #16377A;
-    color: #18151C;
-    color: #759252;
+    color: #94BEFA; /* Tennis Time */
+    color: #6790D0; /* US Open Tennis */
+    color: #16377A; /* US Open Blue */
+    color: #18151C; /* Enumerous Epiphany */
+    color: #759252; /* Arthur Ashe Stadium */
 }
 
 body {
@@ -84,6 +84,37 @@ input {
     background: #759252;
 }
 
+.tt-dropdown-menu {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.tt-menu {
+    min-width: 160px;
+    margin-top: 2px;
+    padding: 5px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .2);
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+}
+.tt-suggestion {
+    display: block;
+    padding: 3px 20px;
+}
+
+
+
 .main-table {
     padding: 2px;
 }
@@ -116,7 +147,7 @@ input {
 }
 
 .player_name {
-    font: bold 16pt Calibri, Helvetica, Arial, sans-serif;
+    font: bold 22pt Calibri, Helvetica, Arial, sans-serif;
     color:#16377A;
 }
 

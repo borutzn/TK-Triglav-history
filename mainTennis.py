@@ -105,7 +105,7 @@ def edit_comment():
         except ValueError:
             log_info("Error: wrong edit_comment identifier (%s)" % request.args.get('id'))
             flash(u"Napaka: comment - napačen identifikator.")
-            return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
         event = TennisEvent.get(ident)
         return render_template("editComment.html", event=event, date=TennisEvent.date2user(event['Date']))
@@ -117,7 +117,7 @@ def edit_comment():
                 comment += "; " + request.form["addcomment"]
             ev = TennisEvent(comment=comment)
             ev.update_comment(request.form["Id"])
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/addEvent1", methods=['GET', 'POST'], endpoint='add_event1', defaults={"step": 1})
@@ -164,8 +164,8 @@ def add_event(step):
                     log_info("Temp: put%d ev=%s" % (p, unicode(ev)))
                     ev.put(fetch=False)
             TennisEvent.fetch_data(force=True, sources=False)
-            return redirect(url_for("tennis_main", y=ev.date[-4:]))
-    return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(url_for("tennis_events_old", y=ev.date[-4:]))
+    return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/edit", methods=['GET', 'POST'], defaults={'update': True})
@@ -178,7 +178,7 @@ def edit_event(update):
         except ValueError:
             log_info("Error: wrong edit_event identifier (%s)" % request.args.get('id'))
             flash(u"Napaka: edit_event - napačen identifikator.")
-            return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
         event = TennisEvent.get(ident)
         atts_dir = os.path.join(files_dir_os, secure_filename(event["Date"][:4]))
@@ -198,7 +198,7 @@ def edit_event(update):
                 ev.update(request.form["Id"])
             else:
                 ev.put()
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/delete", methods=['GET', 'POST'])
@@ -210,7 +210,7 @@ def delete():
         except ValueError:
             log_info("Error: wrong delete identifier (%s)" % request.args.get('id'))
             flash(u"Napaka: delete - napačen identifikator.")
-            return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
         event = TennisEvent.get(ident)
         log_info("Delete: " + str(event))
@@ -219,7 +219,7 @@ def delete():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             TennisEvent.delete(request.form["Id"])
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/reload", methods=['GET'])
@@ -227,7 +227,7 @@ def delete():
 def data_reload():
     if request.method == 'GET':
         TennisEvent. fetch_data(force=True, players=True, sources=True)
-    return redirect(request.args.get("next") or url_for("tennis_main"))
+    return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/correct", methods=['GET', 'POST'])
@@ -243,7 +243,7 @@ def correct():
         except (ValueError, TypeError) as e:
             log_info("Error: %s" % str(e))
             flash(u"Napaka: correct - napačen parameter.")
-            return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
         fnames = []
         try:
@@ -254,7 +254,7 @@ def correct():
         except ValueError:
             # No files in directory - nothing to select from
             flash(u"Napaka: ni razpoložljivih datotek.")
-            return redirect(request.args.get("next") or url_for("tennis_main"))
+            return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
         fnames = sorted(fnames, key=lambda data: int(data['fit'][:-1]), reverse=True)
         if len(fnames) > 10:
@@ -265,11 +265,11 @@ def correct():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Shrani"[:5]):
             TennisEvent.update_att(request.form["ident"], request.form["att"], request.form["fname"])
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/", methods=['GET', 'POST'])
-def tennis_main():
+def tennis_events_old():
     event_filter = ""
     show_stat = "0"
     if request.method == 'GET':
@@ -290,7 +290,7 @@ def tennis_main():
         elif event_filter != "":
             year = None
         else:
-            return redirect(url_for("tennis_main") + "?y=" + select_year)
+            return redirect(url_for("tennis_events_old") + "?y=" + select_year)
             # year = select_year
     else:
         year = request.args.get('y')
@@ -299,7 +299,7 @@ def tennis_main():
     if len(events) == 0:
         flash(u"Noben dogodek ne ustreza.")
         log_info("Error: GET / - no event")
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
     pictures = []
     for src in TennisEvent.sources:
@@ -316,7 +316,7 @@ def tennis_main():
                            count=TennisEvent.count(), showStat=show_stat)
 
 
-@app.route("/events", methods=['GET'])
+@app.route("/new", methods=['GET'])
 def tennis_events():
     log_info("METHOD: %s" % request.method)
     log_info("Args (%d) %s" % (len(request.args), str(request.args)))
@@ -505,7 +505,7 @@ def edit_file():
             log_info("Audit: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             shutil.copyfile(old_att, new_att)
 
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/upload_file", methods=['GET', 'POST'])
@@ -554,7 +554,7 @@ def upload_picture():
                 upload_file.save(picture)
                 log_info("Audit: picture %s uploaded." % picture)
                 flash(u"Datoteka uspešno prenešena.")
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/deleteFile", methods=['GET', 'POST'])
@@ -568,7 +568,7 @@ def delete_file():
             fname = os.path.join(secure_filename(request.form['Year']), secure_filename(request.form['Fname']))
             log_info("Audit: delete file %s" % fname)
             os.remove(os.path.join(files_dir_os, fname))
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 # User functions
@@ -595,19 +595,25 @@ def login():
         return render_template("login.html", user_info="username")
     
     elif request.method == 'POST':
+        print("0 "+str(request.values))
         username = request.form['username']
         password = request.form['password']
         remember_me = ("1" in request.form.getlist('remember'))
         u = User.get_by_user(username)
         if u:
-            user = User(username=u['Username'], pw_hash=u['Pw_hash'], email=u['Email'], ident=u['Ident'])
+            user = User(username=u['Username'], pw_hash=u['Pw_hash'], ident=u['Ident'])
             if user and user.is_authenticated() and user.check_password(password):
+                print("4")
                 login_user(user, remember=remember_me)
+                print("5")
                 session['user'] = user.username
                 log_info("Audit: User %s login." % user.username)
                 flash(u"Prijava uspešna.")
-                return redirect(request.args.get("next") or url_for("tennis_main"))
-        
+                print("7")
+                print("7 - %s" % next)
+                return redirect(request.args.get('next') or url_for("tennis_events_old"))
+
+        print("8")
         session.pop('user', None)
         flash(u"Prijava neuspešna.")
         return render_template("login.html", username=username, password="")
@@ -622,9 +628,8 @@ def signup():
         username = request.form['username']
         pass1 = request.form['password']
         pass2 = request.form['verify']
-        email = request.form['email']
         failed = False
-        if not valid_username(username):
+        if not valid_email(username):
             failed = True
             flash(u"Neustrezno uporabniško ime.")
         if not valid_password(pass1):
@@ -633,24 +638,21 @@ def signup():
         if pass1 != pass2:
             failed = True
             flash(u"Geslo se ne ujema.")
-        if not valid_email(email):
-            failed = True
-            flash(u"Neustrezen poštni predal.")
         if not failed:
             user = User.get_by_user(username)
             if user is not None:
                 failed = True
                 flash(u"Uporabnik že obstaja.")
         if failed:
-            return render_template("signup.html", username=username, password=pass1, verify=pass2, email=email)
+            return render_template("signup.html", username=username, password=pass1, verify=pass2)
 
-        user = User(username=username, password=pass1, email=email)
+        user = User(username=username, password=pass1)
         user.put()
         login_user(user)
         session['user'] = None
         log_info("Audit: New user %s created." % user.username)
         flash(u"Kreiran in prijavljen nov uporabnik.")
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/logout")
@@ -660,7 +662,7 @@ def logout():
     logout_user()
     session.pop('user', None)
     flash(u"Odjava uspešna.")
-    return redirect(request.args.get("next") or url_for("tennis_main"))
+    return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 @app.route("/editUser", methods=['GET', 'POST'])
@@ -673,7 +675,7 @@ def edit_user():
             except ValueError:
                 log_info("Error: wrong edit_user identifier (%s)" % request.args.get('id'))
                 flash(u"Napaka: edit_user - napačen identifikator.")
-                return redirect(request.args.get("next") or url_for("tennis_main"))
+                return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
             user = User.get_by_id(iden)
             return render_template("editUser.html", user=user)
@@ -746,7 +748,7 @@ def shutdown():
             log_info("Audit: System shutdown confirmed and executed")
             os.system("sudo shutdown -h 0")
         flash(u"Če je bilo ugašanje uspešno, stran ne bo več dosegljiva. :-)")
-        return redirect(request.args.get("next") or url_for("tennis_main"))
+        return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
 if __name__ == "__main__":

@@ -8,7 +8,6 @@ import csv
 import json
 import codecs
 import cStringIO
-# import urllib
 import requests
 
 import jinja2

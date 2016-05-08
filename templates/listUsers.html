@@ -4,13 +4,13 @@
 
 {% block content %}
 
-    <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+    <a href="{{ url_for('tennis_events_old') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
  
     <p><div class="page-title">Pregled uporabnikov</div><br>
     {% if users %}
 	    <table>
-		<tr><th>uporabniško ime</th> <th  style="width:120px">pravice</th> <th>aktiven</th>
-            <th style="width:250px">el. pošta</th> <th></th></tr>
+		<tr><th style="width:200px">uporabniško ime</th> <th style="width:120px">pravice</th>
+            <th style="width:120px">aktiven</th> <th style="width:250px">el. pošta</th> <th></th></tr>
         {% for user in users %}
 			<tr>
 			<td>{{ user.username }}</td>

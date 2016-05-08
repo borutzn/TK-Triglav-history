@@ -10,11 +10,13 @@
         <div style="float:left; width:90%;">
             <form method="post">
                 &nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+                <a href="{{ url_for('tennis_events_old') }}"><img src="{{ url_for('static',filename='home-32.png') }}" title="Domov"></a>
+                &nbsp;
+                <a href="{{ url_for('tennis_events') }}">Novo</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main',y=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
+                <a href="{{ url_for('tennis_events_old',y=prevPage) }}"><img src="{{ url_for('static',filename='back_arrow-32.png') }}" title="Prejšnja stran"></a>
                 &nbsp;&nbsp;
-                <a href="{{ url_for('tennis_main',y=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
+                <a href="{{ url_for('tennis_events_old',y=nextPage) }}"><img src="{{ url_for('static',filename='next_arrow-32.png') }}" title="Naslednja stran"></a>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;igralec: <label><select name="select_player">
                      <option value=""></option>
@@ -88,7 +90,7 @@
                     </td></tr>
                     </table>
                 {% endif %}
-                <br><a href="{{ url_for('tennis_main',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
+                <br><a href="{{ url_for('tennis_events_old',y=event.Date[:4]) }}" class="year">{{ event.Date[:4] }}</a>
                 {% set year = event.Date[:4] %}
                 <table class="main-table" style="width:95%">
                     <tr><th style="width:80px;">datum</th><th>dogodek</th>

@@ -19,6 +19,7 @@ from werkzeug.utils import secure_filename
 
 from Utils import log_info, base_dir, files_dir_os, files_dir_web, UnicodeCsvWriter, allowed_image
 
+
 class TennisEvent:
     """
     DROP TABLE TennisEvents;
@@ -28,7 +29,7 @@ class TennisEvent:
     DELETE FROM TennisEvents;
     """
 
-    EventsCache = None
+    EventsCache = None  # type: list(dict)
     EventsIndex = {}
     Years = []
     players = list()
@@ -176,25 +177,25 @@ class TennisEvent:
 
     @classmethod
     def update_att(cls, iden, att, fname):
-        conn = sqlite3.connect(DB_NAME)
-        curs = conn.cursor()
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
 
         if type(att) != type(str):
             att = str(att)
         log_info("Audit: Event %s attachment update by %s." % (iden, str(current_user.username)))
         if att == "1":
-            curs.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': iden})
+            cursor.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                           {'fname': fname, 'Id': iden})
         elif att == "2":
-            curs.execute("""UPDATE TennisEvents SET Att2=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': iden})
+            cursor.execute("""UPDATE TennisEvents SET Att2=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                           {'fname': fname, 'Id': iden})
         elif att == "3":
-            curs.execute("""UPDATE TennisEvents SET Att3=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': iden})
+            cursor.execute("""UPDATE TennisEvents SET Att3=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                           {'fname': fname, 'Id': iden})
         elif att == "4":
-            curs.execute("""UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
-                         {'fname': fname, 'Id': iden})
-        conn.commit()
+            cursor.execute("""UPDATE TennisEvents SET Att4=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
+                           {'fname': fname, 'Id': iden})
+        connection.commit()
         # ToDo: popravi tako, da se raje spremeni v cache-u, namesto: self.clear_data() -- ta hip ni nič!!
                 
     @classmethod
@@ -290,7 +291,8 @@ class TennisEvent:
                     year = root[dir_len:]  # year includes '/' in pos 0, because of the regex search
                     if year_pattern.match(year):
                         for fname in fnames:
-                            fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir_os, year[1:], fname)) / 1024)
+                            fsize = "%d kB" % \
+                                    math.trunc(os.path.getsize(os.path.join(files_dir_os, year[1:], fname))/1024)
                             no_events = len(TennisEvent.get_events_with_att(os.path.join(year[1:], fname)))
                             cls.sources.append((year[1:], fname, fsize, no_events))
             except ValueError:  # No files in directory - nothing to select from
@@ -396,6 +398,7 @@ class TennisEvent:
 
         to_year = None
         prev_entry, prev_group = None, False
+        gr_start = 0  # should not be necessary, only because of the pycharm messages
         while pos < len(cls.EventsCache):
             # log_info("found " + str(cls.EventsCache[pos]['Event']))
             if to_year and (cls.EventsCache[pos]['Date'][:4] > to_year):
@@ -450,7 +453,7 @@ class TennisEvent:
     @classmethod
     def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
         cls.fetch_data()
-        pictures = list()
+        pictures, no_pics = list(), 0
 
         for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
             for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
@@ -571,7 +574,7 @@ class TennisPlayer:
     DELETE FROM TennisPlayer;
     """
 
-    PlayersCache = None
+    PlayersCache = None  # type: list(dict)
     PlayersIndex = {}
 
     def __init__(self, name, born="", died="", comment="", picture=""):
@@ -640,7 +643,7 @@ class EventSource:
     DELETE FROM EventSource;
     """
 
-    SourcesCache = None
+    SourcesCache = None  # type: list(dict)
     SourcesIndex = {}
 
     def __init__(self, year, file_name, desc="", players_on_picture=""):

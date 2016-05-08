@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <html>
 <head>
@@ -7,12 +8,13 @@
     <link type="text/css" rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css') }}">
     <link type="text/css" rel="stylesheet" href="{{url_for('static',filename='css/sticky-footer-navbar.css') }}">
 
-	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='main.css') }}" />
-        <link rel="shortcut icon" href="{{ url_for('static', filename='tenis1.ico') }}">
+	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='tenis1.ico') }}">
 
     <script src="{{ url_for('static',filename='js/jquery-1.11.3.min.js') }}"></script>
     <script src="{{ url_for('static',filename='js/jquery.jscroll.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/typeahead.jquery.js') }}"></script>
 
 	<style>
         .navbar-brand {
@@ -26,45 +28,36 @@
         .carousel div { max-height: 300px; overflow: hidden; }
         .carousel img { min-height: 300px; }
         .carousel-caption { background: rgba(0,0,0,0.5); }
-	</style>
+        .clear-button { position: absolute; right: 5px; top: 0; bottom: 0; height: 14px;
+            margin: auto; font-size: 14px; cursor: pointer; color: #ccc; }
+    </style>
 
     <title>Dogodki in rezultati TK Triglav od l. 1949 dalje</title>
 </head>
 	
 <body>
-    <div style="clear:both; position:relative;">
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-    </div>
-
     <!-- Navigation bar -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img alt="TK Triglav logo" src="{{ url_for('static', filename='TH1.jpg') }}"></a>
+                <a class="navbar-brand" href="{{ url_for('tennis_events') }}">
+                    <img alt="TK Triglav logo" src="{{ url_for('static', filename='TH1.jpg') }}"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" name="f" class="form-control" value="{{ event_filter }}" placeholder="izberi dogodke">
-                        <input type="hidden" name="y" value="{{ year }}">
-                        <input type="hidden" name="p" value="{{ player_name }}">
+                <form id="player-form" class="navbar-form navbar-left">
+                    <div class="btn-group">
+                        <input id="player-field" type="search" name="p" class="form-control typeahead"
+                               value="{{ player_name }}" placeholder="Izberi igralca">
+                        <span id="player-clear" class="clear-button glyphicon glyphicon-remove-circle"></span>
                     </div>
                 </form>
 
@@ -89,46 +82,44 @@
 
                 <form class="navbar-form navbar-left">
                     <div class="btn-group">
-                        <ul class="dropdown-menu" style="max-height:300px; overflow-y: scroll;">
-                            {% for player in players %}
-                                {%  if player|length > 1 %}
-                                    <li><a href="{{ url_for("tennis_events", y="", p=player, f=event_filter) }}">
-                                        {{ player }}</a></li>
-                                {%  endif %}
-                            {% endfor %}
-                        </ul>
-                        <button data-toggle="dropdown" class="btn dropdown-toggle">igralec <span class="caret"></span></button>
+                        <input id="event-field" type="search" name="f" class="form-control" value="{{ event_filter }}"
+                               placeholder="izberi dogodke">
+                        <span id="event-clear" class="clear-button glyphicon glyphicon-remove-circle"></span>
+                        <input type="hidden" name="y" value="{{ year }}">
+                        <input type="hidden" name="p" value="{{ player_name }}">
                     </div>
                 </form>
 
+                <div class="navbar-form navbar-left">
+                    <a class="btn btn-link" href="{{ url_for('tennis_events_old') }}">stara stran</a>
+                </div>
+
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Registracija</a></li>
+                    <li><a href="{{ url_for('signup', next=request.path+"?"+request.query_string) }}">
+                        Registracija</a></li>
                     <li class="dropdown">
-                        <a href="http://www.jquery2dotnet.com" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             Prijava <b class="caret"></b></a>
                         <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
-                            <li>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
-                                            <div class="form-group">
-                                                <label class="sr-only" for="exampleInputEmail2">uporabniško ime</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail2" placeholder="uporabniško ime" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="sr-only" for="exampleInputPassword2">geslo</label>
-                                                <input type="password" class="form-control" id="exampleInputPassword2" placeholder="geslo" required>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox"> Zapomni si prijavo</label>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-success btn-block">Prijavi me</button>
-                                            </div>
-                                        </form>
+                            <li><div class="row"><div class="col-md-12">
+                                <form class="form" role="form" method="post" id="login-nav" accept-charset="UTF-8"
+                                      action="{{ url_for('login', next=request.path+"?"+request.query_string) }}">
+                                    <div class="form-group">
+                                        <label class="sr-only" for="inputID">uporabniško ime</label>
+                                        <input type="email" class="form-control" name="username" placeholder="uporabniško ime" required>
                                     </div>
-                                </div>
-                            </li>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="inputPass">geslo</label>
+                                        <input type="password" class="form-control" name="password" placeholder="geslo" required>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="remember"> Zapomni si prijavo</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block">Prijavi me</button>
+                                    </div>
+                                </form>
+                            </div></div></li>
                         </ul>
                     </li>
                 </ul>
@@ -136,6 +127,18 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+
+    <div style="clear:both; position:relative;">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </div>
 
     <!-- Pictures in Carousel -->
     {% if pictures %}
@@ -193,6 +196,34 @@
         Podatke zbral in obdelal
         <a style="text-decoration: none; color:black;" href="mailto:davor.znidar@siol.net">Davor Žnidar</a>, 2013&#8211;16.
     </footer>
+
+
+    <script>
+        $(document).ready(function() {
+            var substringMatcher = function (strs) {
+                return function findMatches(q, cb) {
+                    var matches = [];
+                    var substrRegex = new RegExp(q, 'i');
+                    $.each(strs, function (i, str) { if (substrRegex.test(str)) { matches.push(str); } });
+                    cb(matches);
+                };
+            };
+
+            var players = [
+                {% for player in players %} {%  if player|length > 1 %} '{{ player }}', {% endif %} {% endfor %}
+            ];
+
+            $('#player-field').typeahead(
+                    { hint: true, highlight: true, minLength: 2 },
+                    { name: 'players', limit: 10, source: substringMatcher(players) });
+            $('.typeahead').bind('typeahead:select', function(evt, item) {
+                $('#player-form').submit();
+            });
+
+            $("#player-clear").click(function(){ $("#player-field").val(''); });
+            $("#event-clear").click(function(){ $("#event-field").val(''); });
+        });
+    </script>
 
 </body>
 
