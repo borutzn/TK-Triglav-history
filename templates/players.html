@@ -2,10 +2,7 @@
 
 {% extends "base_new.html" %}
 
-{% block next %}/{% endblock %}
-{% block content %}
-
-    <!-- Begin page content -->
+{% block content_top %}
     <div class="container scroll">
         <div class="panel">
             <div class="row">
@@ -27,7 +24,14 @@
                 </div>
             </div>
         </div>
+    </div>
+{% endblock %}
 
+
+{% block content %}
+
+    <!-- Begin page content -->
+    <div class="container scroll">
         {% if events %}
             <a class="next" href="{{ url_for("players_year", y=year, p=player_name, f=event_filter) }}">
                 leto {{ year }}</a>
