@@ -404,43 +404,6 @@ def tennis_events_year(one_player):
                            events=events, player_name=player_name, next_y=next_y, event_filter=event_filter)
 
 
-""" ToDo: to delete?
-@app.route("/players", methods=['GET'])
-def tennis_players():
-    if request.method == 'GET':
-        try:
-            player_name = request.args.get('p')
-        except ValueError:
-            player_name = None
-        try:
-            event_filter = request.args.get('f') or ""
-        except ValueError:
-            event_filter = ""
-            log_info("Error: wrong filter (%s) -> setting %s" % (request.args.get('f'), filter))
-
-        if player_name is not None:
-            player = TennisPlayer.get(player_name)
-            events = TennisEvent.get_oneyear_events(year=None, player=player_name)
-            i = TennisEvent.Years.index(events[0][1]['Date'][:4])
-            next_y = TennisEvent.Years[i+1 if i < len(TennisEvent.Years)-1 else 0]
-            log_info(unicode(events))
-            return render_template("players.html", events=events, player=player,
-                                   player_name=player_name, next_y=next_y, event_filter=event_filter)
-
-    search = request.form['search'] if request.method == 'POST' else ""
-
-    if search == "":
-        players = list(TennisEvent.players)
-    else:
-        players = list()
-        for p in TennisEvent.players:
-            if search in p[0]:
-                players.append(p)
-
-    return render_template("players_list.html", players=players, search=search)
-"""
-
-
 @app.route("/files", methods=['GET', 'POST'])
 @login_required
 def list_files():

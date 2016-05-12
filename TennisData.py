@@ -500,7 +500,6 @@ class TennisEvent:
             del pictures[r]
             no_pics -= 1
         random.shuffle(pictures)
-        log_info(pictures)
 
         log_info("Temp: GET_PICTURES returning %d pictures." % len(pictures))
         return pictures
