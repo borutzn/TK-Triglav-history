@@ -458,7 +458,6 @@ class TennisEvent:
         for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
             for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
                 if (references > 0) and (fyear == year) and allowed_image(fname):
-                    log_info("PIC: %s, %s" % (fname, str(allowed_image(fname))))
                     pictures.append((os.path.join(files_dir_web, fyear, fname), fname))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
@@ -485,13 +484,13 @@ class TennisEvent:
             if entry['Player'] != player:
                 continue
             year = entry['Date'][:4]
-            if entry['Att1'] and entry['Att1'][:4] != "err_":
+            if entry['Att1'] and entry['Att1'][:4] != "err_" and allowed_image(entry['Att1']):
                 pictures.add((os.path.join(files_dir_web, year, entry['Att1']), entry['Att1']))
-            if entry['Att2'] and entry['Att2'][:4] != "err_":
+            if entry['Att2'] and entry['Att2'][:4] != "err_" and allowed_image(entry['Att2']):
                 pictures.add((os.path.join(files_dir_web, year, entry['Att2']), entry['Att2']))
-            if entry['Att3'] and entry['Att3'][:4] != "err_":
+            if entry['Att3'] and entry['Att3'][:4] != "err_" and allowed_image(entry['Att3']):
                 pictures.add((os.path.join(files_dir_web, year, entry['Att3']), entry['Att3']))
-            if entry['Att4'] and entry['Att4'][:4] != "err_":
+            if entry['Att4'] and entry['Att4'][:4] != "err_" and allowed_image(entry['Att4']):
                 pictures.add((os.path.join(files_dir_web, year, entry['Att4']), entry['Att4']))
         pictures = list(pictures)
 

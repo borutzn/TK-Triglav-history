@@ -224,6 +224,9 @@
             $('input.typeahead').on('typeahead:selected', function(evt, item) {
                 $('#player-form').submit();
             });
+            $('input.typeahead').on('typeahead:select', function(evt, item) {
+                $('#player-form').submit();
+            });
 
             $("#player-clear").click(function(){
                 $("#player-field").val('');
