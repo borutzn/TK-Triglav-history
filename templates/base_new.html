@@ -61,7 +61,7 @@
                     </div>
                 </form>
 
-                <form class="navbar-form navbar-left">
+                <form id="event-form" class="navbar-form navbar-left">
                     <div class="btn-group" role="group">
                         <a href="{{ url_for('tennis_events', p=player_name, f=event_filter) }}" role="button"
                            class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
@@ -221,13 +221,15 @@
             $('#player-field').typeahead(
                     { hint: true, highlight: true, minLength: 2 },
                     { name: 'players', limit: 10, source: substringMatcher(players) });
-            $('.typeahead').bind('typeahead:select', function(evt, item) {
+            $('input.typeahead').on('typeahead:selected', function(evt, item) {
                 $('#player-form').submit();
             });
 
-            $("#player-clear").click(function(){ $("#player-field").val(''); });
-            $("#event-clear").click(function(){ $("#event-field").val(''); });
-        });
+            $("#player-clear").click(function(){
+                $("#player-field").val('');
+                $('#player-form').submit();
+            });
+            $("#event-clear").click(function(){ $("#event-field").val(''); }); });
     </script>
 
 </body>

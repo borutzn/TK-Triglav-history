@@ -458,6 +458,7 @@ class TennisEvent:
         for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
             for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
                 if (references > 0) and (fyear == year) and allowed_image(fname):
+                    log_info("PIC: %s, %s" % (fname, str(allowed_image(fname))))
                     pictures.append((os.path.join(files_dir_web, fyear, fname), fname))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
