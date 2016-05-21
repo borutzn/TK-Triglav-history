@@ -5,31 +5,44 @@
 {% block content %}
 
     <p><div class="page-title">Popravljanje virov</div><br>
-    <div style="float:left; width:40%;"><form method="post">
-        <table  id="player-table">
-		<tr><th style="width:100px">leto</th>
-            <td><label><select name="new_year" {% if events %}disabled{% endif %}>
-                {% for y in years %}
-                    <option value="{{ y }}"{% if y == year %} selected {%  endif %}>{{ y }}</option>
-                {% endfor %}
-            </select></label></td></tr>
-		<tr><th>vir</th>
-            <td><label><input style="width:350px" type="text" name="new_fname" value="{{ fname }}"></label></td></tr>
-        <tr><th>Velikost</th><td>{{ fsize }}</td></tr>
-        <tr><th>Dogodki</th>
-            <td>
-                {% for event in events %}
-                    {{ event }}<br>
-                {% endfor %}
-            </td></tr>
-	</table> <br>
-	<input type="hidden" name="old_year" value="{{ year }}">
-	<input type="hidden" name="old_fname" value="{{ fname }}">
-	<input type="Submit" name="Status" id="button" value="Popravi"  title="Popravi obstoječi vir">
-	<input type="Submit" name="Status" id="button" value="Kopiraj"  title="Kopiraj v nov vir">
-	<input type="Submit" name="Status" id="button" value="Prekliči">
-	<button type="Reset"               id="button" value="Reset">Obnovi</button>
-    </form><br><br></div>
+    <div style="float:left; width:40%;">
+        <form method="post">
+            <table  id="player-table">
+                <tr><th style="width:100px">leto</th>
+                    <td><label><select name="new_year" {% if events %}disabled{% endif %}>
+                        {% for y in years %}
+                            <option value="{{ y }}"{% if y == year %} selected {%  endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select></label></td></tr>
+                <tr><th>datoteka</th>
+                    <td><label><input style="width:350px" type="text" name="new_fname" value="{{ fname }}"></label></td></tr>
+                <tr><th>naslov</th>
+                    <td><label><input style="width:350px" type="text" name="new_title" value="{{ title }}"></label></td></tr>
+                <tr><th>igralci</th>
+                    <td><label><input style="width:350px" type="text" name="new_players" value="{{ players }}"></label></td></tr>
+                <tr><th>prikaz</th><td>
+                    <label><input type="radio" name="new_view" value="0" {% if view==0 %}checked{% endif %}/> ne prikaže,</label>
+                    <label><input type="radio" name="new_view" value="1" {% if view==1 %}checked{% endif %}/> prikaže</label>
+                </td></tr>
+                <tr><th>Velikost</th><td>{{ fsize }}</td></tr>
+                <tr><th>Dogodki</th>
+                    <td>
+                        {% for event in events %}
+                            {{ event }}<br>
+                        {% endfor %}
+                    </td></tr>
+            </table> <br>
+            <input type="hidden" name="old_year" value="{{ year }}">
+            <input type="hidden" name="old_fname" value="{{ fname }}">
+            <input type="hidden" name="old_title" value="{{ title }}">
+            <input type="hidden" name="old_view" value="{{ view }}">
+            <input type="hidden" name="old_players" value="{{ players }}">
+            <input type="Submit" name="Status" id="button" value="Popravi"  title="Popravi obstoječi vir">
+            <input type="Submit" name="Status" id="button" value="Kopiraj"  title="Kopiraj v nov vir">
+            <input type="Submit" name="Status" id="button" value="Prekliči">
+            <button type="Reset"               id="button" value="Reset">Obnovi</button>
+    </form><br><br>
+    </div>
 
     <div  style="float:left; width:60%;">
         <img src="{{ url_for('static',filename='/files/'+year+'/'+fname) }}" width="600"">

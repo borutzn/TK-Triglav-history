@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 
+'''
+SQLite commands
+
+.databases
+.schema TennisPlayer
+
+'''
+
+
 from config import DB_NAME, PAGELEN
 
 import datetime
@@ -60,16 +69,6 @@ class TennisEvent:
                (self.date, self.event, self.place, self.category, self.result, self.player, self.comment,
                 self.att1, self.att2, self.att3, self.att4, self.source, self.created, self.last_modified))
 
-    @classmethod
-    def result_value(cls, v):
-        if v.isnumeric():
-            return 4-int(v) if int(v) < 4 else 0
-        return 0
-        
-    @classmethod
-    def get_fname(cls, year, att):
-        return url_for('static', filename="files/" + year + "/" + year + "_" + att)
-        
     @classmethod
     def correct_att(cls, year, att):
         if att == "":
@@ -458,7 +457,9 @@ class TennisEvent:
         for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
             for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
                 if (references > 0) and (fyear == year) and allowed_image(fname):
-                    pictures.append((os.path.join(files_dir_web, fyear, fname), fname))
+                    pic_data = EventSource.get(os.path.join(fyear, fname))
+                    title = pic_data['desc'] if pic_data else fname
+                    pictures.append((os.path.join(files_dir_web, fyear, fname), title))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
@@ -467,7 +468,6 @@ class TennisEvent:
 
         for _ in range(no_pics-limit_size):
             r = random.randrange(0, no_pics)
-            log_info(str(no_pics) + "-" + str(r) + "-" + str(pictures[r]))
             del pictures[r]
             no_pics -= 1
         random.shuffle(pictures)
@@ -604,10 +604,6 @@ class TennisPlayer:
         log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
-    def clear_data(cls):
-        TennisPlayer.PlayersCache = None  # lazy approach - clear cache & reload again
-
-    @classmethod
     def get(cls, name):
         cls.fetch_data()
         if name in cls.PlayersIndex:
@@ -645,28 +641,71 @@ class EventSource:
     SourcesCache = None  # type: list(dict)
     SourcesIndex = {}
 
-    def __init__(self, year, file_name, desc="", players_on_picture=""):
-        self.year = year
+    def __init__(self, file_name, desc="", view=1, players_on_pic=""):
         self.file_name = file_name
         self.desc = desc
-        self.players_on_pic = players_on_picture
+        self.view = view
+        self.players_on_pic = players_on_pic
 
     @classmethod
-    def fetch_data(cls):
-        if cls.SourcesCache is not None:
+    def fetch_data(self):
+        if self.SourcesCache is not None:
             return
 
         connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
-            cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource( Ident INTEGER PRIMARY KEY,
-                              year, TEXT, file_name TEXT, desc TEXT, players_on_pic TEXT);""")
+            # cursor.execute("DROP TABLE EventSource")
+            cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
+                              file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
             cursor.execute("SELECT * FROM EventSource")
-            cls.SourcesCache = [dict(row) for row in cursor]
+            self.SourcesCache = [dict(row) for row in cursor]
             connection.commit()
 
-        for idx, val in enumerate(cls.SourcesCache):
-            cls.SourcesIndex[val['file_name']] = idx
+        for idx, val in enumerate(self.SourcesCache):
+            self.SourcesIndex[val['file_name']] = idx
 
-        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
+        log_info("Audit: Sources cache reloaded (%d entries)." % len(self.SourcesCache))
+
+    @classmethod
+    def clear_data(self):
+        EventSource.SourcesCache = None  # lazy approach - clear cache & reload again
+
+    @classmethod
+    def get(self, fname):
+        self.fetch_data()
+        if fname in self.SourcesIndex:
+            log_info("found %s in %s" % (fname, self.SourcesCache))
+            idx = self.SourcesIndex[fname]
+            log_info("found %d, %s" % (idx, self.SourcesCache[idx]))
+            return self.SourcesCache[idx]
+        else:
+            log_info("not found %s in %s" % (fname, self.SourcesCache))
+            return None
+
+    def update(self):
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+
+        log_info("Audit: Source %s update by %s." % (self.file_name, str(current_user.username)))
+        cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
+            file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
+        cursor.execute("""INSERT OR REPLACE INTO EventSource(file_name, desc, view, players_on_pic)
+                       VALUES (:File_name, :Desc, :View, :Players_on_pic)""", {"File_name": self.file_name,
+                        "Desc": self.desc, "View": self.view, "Players_on_pic": self.players_on_pic})
+        conn.commit()
+        self.clear_data()
+        return cursor.lastrowid
+
+    @classmethod
+    def delete(self, fname):
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+
+        log_info("Audit: Source %s deleted by %s." % (fname, str(current_user.username)))
+        cursor.execute("""DELETE FROM EventSource WHERE file_name=:Fname""", {'Fname': fname})
+        connection.commit()
+        self.clear_data()
+        self.fetch_data(force=True, sources=False)
+
