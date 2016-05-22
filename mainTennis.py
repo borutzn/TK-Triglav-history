@@ -137,7 +137,6 @@ def add_event(step):
             return render_template("addEvent-S2.html", date=TennisEvent.date2user(date), atts=atts)
 
     elif request.method == 'POST' and step == 1:
-        log_info("Temp: ADD step1: "+str(request.form))
         date = TennisEvent.date2db(request.form["date"])
         if request.form["Status"] == "Dodaj vir":
             return redirect(url_for("upload_picture", y=date[:4],
@@ -146,7 +145,6 @@ def add_event(step):
             return redirect(url_for("add_event2", d=date, next=url_for("add_event1", d=date)))
 
     elif request.method == 'POST' and step == 2:
-        log_info("Temp: ADD: "+str(request.form))
         if request.form["Status"] == "Shrani":
             ev = TennisEvent(date=request.form["date"], event=request.form["event"],
                              place=request.form["place"], category=request.form["category1"],
@@ -154,14 +152,12 @@ def add_event(step):
                              att1=request.form["att1"], att2=request.form["att2"],
                              att3=request.form["att3"], att4=request.form["att4"],
                              comment=request.form["comment"])
-            log_info("Temp: put1 %s" % unicode(ev))
             ev.put(fetch=False)
             for p in range(2, 7):
                 if request.form["player%d" % p] != "":
                     ev.category = request.form["category%d" % p]
                     ev.result = request.form["result%d" % p]
                     ev.player = request.form["player%d" % p]
-                    log_info("Temp: put%d ev=%s" % (p, unicode(ev)))
                     ev.put(fetch=False)
             TennisEvent.fetch_data(force=True, sources=False)
             return redirect(url_for("tennis_events_old", y=ev.date[-4:]))
@@ -305,7 +301,6 @@ def tennis_events_old():
     for src in TennisEvent.sources:
         if src[0] == year and allowed_image(src[1]):
             pictures.append(src)
-    log_info("Temp: pictures: %s" % pictures)
 
     year_len = len(TennisEvent.Years)
     year_idx = TennisEvent.Years.index(year if year else TennisEvent.Years[0])
@@ -421,8 +416,6 @@ def list_files():
 
         files = []
         for (y, fname, fsize, refs) in TennisEvent.sources:
-            if files_filter and files_filter.match(fname):
-                log_info("Temp: Found: %s" % fname)
             if (not files_filter and (y == year)) or (files_filter and files_filter.match(fname)):
                 files.append((y, fname, fsize, refs))
         try:

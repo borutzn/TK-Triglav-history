@@ -203,16 +203,12 @@ class TennisEvent:
             if ev['Date'][:4] != old_year:
                 continue
             if ev['Att1'] == old_att:
-                log_info("Temp: CHANGE ATT1 id=%d, %s -> %s" % (ev['Id'], ev['Att1'], new_att))
                 cls.update_att(ev['Id'], "1", new_att)
             if ev['Att2'] == old_att:
-                log_info("Temp: CHANGE ATT2 id=%d, %s -> %s" % (ev['Id'], ev['Att2'], new_att))
                 cls.update_att(ev['Id'], "2", new_att)
             if ev['Att3'] == old_att:
-                log_info("Temp: CHANGE ATT3 id=%d, %s -> %s" % (ev['Id'], ev['Att3'], new_att))
                 cls.update_att(ev['Id'], "3", new_att)
             if ev['Att4'] == old_att:
-                log_info("Temp: CHANGE ATT4 id=%d, %s -> %s" % (ev['Id'], ev['Att4'], new_att))
                 cls.update_att(ev['Id'], "4", new_att)
         return
 
@@ -455,11 +451,17 @@ class TennisEvent:
         pictures, no_pics = list(), 0
 
         for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
-            for (fyear, fname, fsize, references) in cls.sources:  # (year, fname, fsize, # references)
-                if (references > 0) and (fyear == year) and allowed_image(fname):
-                    pic_data = EventSource.get(os.path.join(fyear, fname))
-                    title = pic_data['desc'] if pic_data else fname
-                    pictures.append((os.path.join(files_dir_web, fyear, fname), title))
+            for (file_year, file_name, file_size, references) in cls.sources:
+                if (references > 0) and (file_year == year) and allowed_image(file_name):
+                    pic_data = EventSource.get(os.path.join(file_year, file_name))
+                    if pic_data:
+                        title = pic_data['desc']
+                        if pic_data['players_on_pic'] != '':
+                            title += ' (' + pic_data['players_on_pic'] + ')'
+                    else:
+                        title = file_name
+                    if not pic_data or (pic_data and pic_data['view'] != 0):
+                        pictures.append((os.path.join(files_dir_web, file_year, file_name), title))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
