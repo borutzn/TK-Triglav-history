@@ -95,11 +95,11 @@
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ url_for('signup', next=request.full_path) }}">
-                        Registracija{{ request.url }}</a></li>
+                    <li><a href="{{ url_for('signup', next=request.url) }}">
+                        Registracija</a></li>
                     {% if current_user.is_authenticated() %}
                         <li>
-                            <a href="{{ url_for('logout', next=request.full_path) }}">Odjava </a>
+                            <a href="{{ url_for('logout', next=request.url) }}">Odjava </a>
                         </li>
                     {% else %}
                         <li class="dropdown">
@@ -108,7 +108,7 @@
                             <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
                                 <li><div class="row"><div class="col-md-12">
                                     <form class="form" role="form" method="post" id="login-nav" accept-charset="UTF-8"
-                                          action="{{ url_for('login', next=request.full_path) }}">
+                                          action="{{ url_for('login', next=request.url) }}">
                                         <div class="form-group">
                                             <label class="sr-only" for="inputID">uporabniško ime</label>
                                             <input type="email" class="form-control" name="username" placeholder="uporabniško ime" required>
