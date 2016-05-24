@@ -96,7 +96,7 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url_for('signup', next=request.full_path) }}">
-                        Registracija{{ request.full_path }}</a></li>
+                        Registracija{{ request.url }}</a></li>
                     {% if current_user.is_authenticated() %}
                         <li>
                             <a href="{{ url_for('logout', next=request.full_path) }}">Odjava </a>
