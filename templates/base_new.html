@@ -32,7 +32,7 @@
             margin: auto; font-size: 14px; cursor: pointer; color: #ccc; }
     </style>
 
-    <title>Dogodki in rezultati TK Triglav od l. 1949 dalje</title>
+    <title>Dogodki in rezultati teniških igralcev Kranja od l. 1949 dalje</title>
 </head>
 	
 <body>
@@ -108,7 +108,7 @@
                             <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
                                 <li><div class="row"><div class="col-md-12">
                                     <form class="form" role="form" method="post" id="login-nav" accept-charset="UTF-8"
-                                          action="{{ url_for('login', next=request.path+"?"+request.query_string) }}">
+                                          action="{{ url_for('login', next=request.full_path) }}">
                                         <div class="form-group">
                                             <label class="sr-only" for="inputID">uporabniško ime</label>
                                             <input type="email" class="form-control" name="username" placeholder="uporabniško ime" required>
