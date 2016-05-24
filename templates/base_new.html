@@ -95,11 +95,11 @@
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ url_for('signup', next=request.path+"?"+request.query_string) }}">
+                    <li><a href="{{ url_for('signup', next=request.full_path) }}">
                         Registracija</a></li>
                     {% if current_user.is_authenticated() %}
                         <li>
-                            <a href="{{ url_for('logout', next=request.path+"?"+request.query_string) }}">Odjava </a>
+                            <a href="{{ url_for('logout', next=request.full_path) }}">Odjava </a>
                         </li>
                     {% else %}
                         <li class="dropdown">
