@@ -449,7 +449,7 @@ class TennisEvent:
     def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
         cls.fetch_data()
         pictures, no_pics = list(), 0
-        no_year = not year
+        no_year = not year or year==0
 
         if no_year:
             year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years))]

@@ -18,18 +18,18 @@
 {%- endmacro %}
 
 
-{% macro atts_line2(y, att1, att2, att3, att4, loop_no, current_user) -%}
+{% macro atts_line2(y, att1, att2, att3, att4, loop_no, current_user, ret_url) -%}
     <div class="col-sm-2"></div>
     <div class="col-sm-5">
-        {{ show_att(y, att1, 1, loop_no, current_user) }}
-        {{ show_att(y, att2, 2, loop_no, current_user) }}
-        {{ show_att(y, att3, 3, loop_no, current_user) }}
-        {{ show_att(y, att4, 4, loop_no, current_user) }}
+        {{ show_att(y, att1, 1, loop_no, current_user, ret_url) }}
+        {{ show_att(y, att2, 2, loop_no, current_user, ret_url) }}
+        {{ show_att(y, att3, 3, loop_no, current_user, ret_url) }}
+        {{ show_att(y, att4, 4, loop_no, current_user, ret_url) }}
     </div>
 {%- endmacro %}
 
 
-{% macro show_att(y, att, att_no, loop_no, current_user) -%}
+{% macro show_att(y, att, att_no, loop_no, current_user, ret_url) -%}
     {% if att != "" and att[:4] != "err_" %}
         {% if att[-4:] == ".pdf" or att[-4:] == ".PDF" %}
             <a href="{{ url_for('static',filename='/files/'+y+'/'+att) }}" target="_blank">
@@ -51,7 +51,7 @@
             </div>
         {% endif %}
         {% if current_user.utype >= 4 %}
-            <a href="{{ url_for('edit_file', next=request.url, n=y+'/'+att) }}">
+            <a href="{{ url_for('edit_file', next=ret_url, n=y+'/'+att) }}">
                 <span class="glyphicon glyphicon-picture">&nbsp;&nbsp;</span></a>
         {% endif %}
     {% endif %}
