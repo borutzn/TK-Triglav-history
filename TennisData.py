@@ -449,8 +449,13 @@ class TennisEvent:
     def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
         cls.fetch_data()
         pictures, no_pics = list(), 0
+        no_year = not year
 
-        for _ in range(10):  # check up to 10 consecutive years to fill the 'limit_size' pictures
+        if no_year:
+            year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years))]
+            print(len(TennisEvent.Years), year)
+        loops = 10 if no_year else 4
+        for _ in range(loops):  # check up to 'loops' consecutive years to fill the 'limit_size' pictures
             for (file_year, file_name, file_size, references) in cls.sources:
                 if (references > 0) and (file_year == year) and allowed_image(file_name):
                     pic_data = EventSource.get(os.path.join(file_year, file_name))
@@ -463,10 +468,15 @@ class TennisEvent:
                     if not pic_data or (pic_data and pic_data['view'] != 0):
                         pictures.append((os.path.join(files_dir_web, file_year, file_name), title))
             no_pics = len(pictures)
+            print("pics=", no_pics)
             i = TennisEvent.Years.index(year)
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
                 break
-            year = TennisEvent.Years[i+1]
+            if no_year:
+                year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years))]
+                print(len(TennisEvent.Years), year)
+            else:
+                year = TennisEvent.Years[i+1]
 
         for _ in range(no_pics-limit_size):
             r = random.randrange(0, no_pics)

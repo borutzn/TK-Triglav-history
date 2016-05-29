@@ -3,6 +3,7 @@
 <!-- Begin page content -->
 {% if events %}
     {% set year = [0] %}
+    {% set ret_url = url_for('tennis_events', y=year, p=player_name, f=event_filter) %}
     {% for (group,event) in events %}
         {% if year[0] != event.Date[:4] %}
             <div class="page-header">
@@ -34,9 +35,13 @@
                         {% if show_more %}
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                            {% if current_user.utype >= 4 %}
+                                <a href="{{ url_for('edit_event', id=event.Id, next=ret_url) }}">
+                                    <span class="pull-right glyphicon glyphicon-edit">&nbsp;</span></a>
+                            {% endif %}
                             </div> <div class="row">
                             <div class="panel-body panel-collapse collapse">
-                                {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index) }}
+                                {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index, current_user) }}
                                 <div class="col-sm-5"> {{ event.Comment }}. </div>
                             </div>
                         {% endif %}
@@ -53,11 +58,15 @@
                             {{ d.result_line1("", "", "igralci", "") }}
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                            {% if current_user.utype >= 4 %}
+                                <a href="{{ url_for('edit_event', id=event.Id, next=ret_url) }}">
+                                    <span class="pull-right glyphicon glyphicon-edit">&nbsp;</span></a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
                         <div class="row">
-                            {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index) }}
+                            {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index, current_user) }}
                             <div class="col-sm-5">
             {% endif %}
                                 <div class="row">

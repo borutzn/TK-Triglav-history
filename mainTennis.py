@@ -264,7 +264,7 @@ def correct():
         return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/old", methods=['GET', 'POST'])
 def tennis_events_old():
     event_filter = ""
     show_stat = "0"
@@ -311,11 +311,12 @@ def tennis_events_old():
                            count=TennisEvent.count(), showStat=show_stat)
 
 
-@app.route("/new", methods=['GET'])
+@app.route("/", methods=['GET'])
 def tennis_events():
     if request.method == 'GET':
         try:
-            year = request.args.get('y') or TennisEvent.Years[0]
+            year_param = request.args.get('y')
+            year = year_param or TennisEvent.Years[0]
         except ValueError:
             year = TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
@@ -356,7 +357,7 @@ def tennis_events():
                                event_filter=event_filter, year=year, player_name=player_name,
                                player=player, prev_y=prev_y, next_y=next_y)
     else:
-        pictures = TennisEvent.get_oneyear_pictures(year=year, event_filter=event_filter)
+        pictures = TennisEvent.get_oneyear_pictures(year=year_param, event_filter=event_filter)
         return render_template("events.html", events=events, players=TennisEvent.players, pictures=pictures,
                                event_filter=event_filter, year=year, player_name=player_name,
                                prev_y=prev_y, next_y=next_y)
