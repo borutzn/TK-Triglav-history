@@ -449,7 +449,7 @@ class TennisEvent:
     def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
         cls.fetch_data()
         pictures, no_pics = list(), 0
-        no_year = not year or year==0
+        no_year = not year or (year == 0)
 
         if no_year:
             year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years))]
@@ -468,7 +468,7 @@ class TennisEvent:
                     if not pic_data or (pic_data and pic_data['view'] != 0):
                         pictures.append((os.path.join(files_dir_web, file_year, file_name), title))
             no_pics = len(pictures)
-            print("pics=", no_pics)
+            log_info("pics= %d" % no_pics)
             i = TennisEvent.Years.index(year)
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
                 break
@@ -693,7 +693,8 @@ class EventSource:
             log_info("found %d, %s" % (idx, self.SourcesCache[idx]))
             return self.SourcesCache[idx]
         else:
-            log_info("not found %s in %s" % (fname, self.SourcesCache))
+            log_info("not found %s in %s" % fname)
+            # log_info("not found %s in %s" % (fname, self.SourcesCache))
             return None
 
     def update(self):

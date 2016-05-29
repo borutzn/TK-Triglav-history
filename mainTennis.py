@@ -336,6 +336,7 @@ def tennis_events():
         return redirect(request.args.get("next") or url_for("tennis_events"))
 
     if year not in TennisEvent.Years:
+        year_param = None
         year = TennisEvent.Years[0]
 
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
