@@ -16,8 +16,8 @@
                     <div class="player_name">{{ player_name }}</div>
                     {% if player %}
                     <div class="player_data">
-                        {% if player.Born %}rojen {{ player.Born }}<br>{% endif %}
-                        {% if player.Died %}umrl {{ player.Died }}<br>{% endif %}
+                        {% if player.Born %}leto rojstva {{ player.Born }}<br>{% endif %}
+                        {% if player.Died %}leto smrti {{ player.Died }}<br>{% endif %}
                         {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
                     </div>
                     {% endif %}
