@@ -693,7 +693,7 @@ class EventSource:
             log_info("found %d, %s" % (idx, self.SourcesCache[idx]))
             return self.SourcesCache[idx]
         else:
-            log_info("not found %s in %s" % fname)
+            log_info("not found %s" % fname)
             # log_info("not found %s in %s" % (fname, self.SourcesCache))
             return None
 
