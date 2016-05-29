@@ -8,6 +8,9 @@ data collected by Davor Žnidar
 program by Borut Žnidar on 2.1.2015
 
 check syntactic errors with: "python mainTennis.py runserver -d"
+
+    /var/log/lighttpd/
+    /etc/lighttpd
 """
 
 from config import Production, LOG_FILE
