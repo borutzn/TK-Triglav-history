@@ -31,7 +31,7 @@ from werkzeug.utils import secure_filename
 
 from TennisData import TennisEvent, TennisPlayer, EventSource
 
-from Utils import app, log_info, valid_username, valid_password, valid_email, allowed_file, allowed_image, files_dir_os
+from Utils import app, log_info, valid_email, valid_password, allowed_file, allowed_image, files_dir_os
 
 from User import User, Anonymous
 
@@ -321,7 +321,7 @@ def tennis_events():
             year_param = request.args.get('y')
             year = year_param or TennisEvent.Years[0]
         except ValueError:
-            year = TennisEvent.Years[0]
+            year_param, year = None, TennisEvent.Years[0]
             log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
 
         try:
@@ -339,8 +339,7 @@ def tennis_events():
         return redirect(request.args.get("next") or url_for("tennis_events"))
 
     if year not in TennisEvent.Years:
-        year_param = None
-        year = TennisEvent.Years[0]
+        year_param, year = None, TennisEvent.Years[0]
 
     log_info("PARAMS: %s, %s, %s" % (year, player_name, event_filter))
 
@@ -447,19 +446,20 @@ def edit_file():
         fname = request.args.get('n')
         fsize = "%d kB" % math.trunc(os.path.getsize(os.path.join(files_dir_os, fname)) / 1024)
         events = TennisEvent.get_events_with_att(fname)
-        src = EventSource.get(os.path.join(fname[:4],fname[5:]))  # Todo: od klicu sestavim z '/', ne glede na OS
+        src = EventSource.get(os.path.join(fname[:4], fname[5:]))  # Todo: od klicu sestavim z '/', ne glede na OS
         title = src['desc'] if src else ""
-        view = src['view'] if src and src in ['0','1'] else "1"
+        view = src['view'] if src and src in ['0', '1'] else "1"
         # log_info("view=%s." % view)
         players = src['players_on_pic'] if src else ""
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events, title=title, view=view, players=players)
     elif request.method == 'POST':
         old_year, old_fname = request.form['old_year'], request.form['old_fname']
-        old_title, old_view, old_players = request.form['old_title'], request.form['old_view'], request.form['old_players']
         new_year = secure_filename(request.form.get('new_year') or old_year)
         new_fname = secure_filename(request.form['new_fname'])
-        new_title, new_view, new_players = request.form['new_title'], request.form['new_view'], request.form['new_players']
+        old_title, new_title = request.form['old_title'], request.form['new_title']
+        old_view, new_view = request.form['old_view'], request.form['new_view']
+        old_players, new_players = request.form['old_players'], request.form['new_players']
         old_att = os.path.join(files_dir_os, old_year, old_fname)
         new_att = os.path.join(files_dir_os, new_year, new_fname)
 
