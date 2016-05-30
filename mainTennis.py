@@ -449,7 +449,8 @@ def edit_file():
         events = TennisEvent.get_events_with_att(fname)
         src = EventSource.get(os.path.join(fname[:4],fname[5:]))  # Todo: od klicu sestavim z '/', ne glede na OS
         title = src['desc'] if src else ""
-        view = src['view'] if src else "1"
+        view = src['view'] if src and src in ['0','1'] else "1"
+        # log_info("view=%s." % view)
         players = src['players_on_pic'] if src else ""
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events, title=title, view=view, players=players)
@@ -564,7 +565,6 @@ def login():
         return render_template("login.html", user_info="username")
     
     elif request.method == 'POST':
-        print("0 "+str(request.values))
         username = request.form['username']
         password = request.form['password']
         remember_me = ("1" in request.form.getlist('remember'))

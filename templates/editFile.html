@@ -22,8 +22,8 @@
                     <td><label><input style="width:350px" type="text" name="new_players" value="{{ players }}"></label></td></tr>
                 <tr><th>prikaz</th> <td><label>
                     <select name="new_view">
-                        <option value="0" {% if view==0 %}selected{% endif %}>ne prikaži v pregledu</option>
-                        <option value="1" {% if view==1 %}selected{% endif %}>prikaži v pregledu</option>
+                        <option value="0" {% if view=='0' %}selected{% endif %}>ne prikaži v pregledu</option>
+                        <option value="1" {% if view=='1' %}selected{% endif %}>prikaži v pregledu</option>
                     </select>
                 </label></td></tr>
                 <tr><th>Velikost</th><td>{{ fsize }}</td></tr>
