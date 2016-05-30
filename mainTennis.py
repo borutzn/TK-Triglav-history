@@ -449,7 +449,7 @@ def edit_file():
         events = TennisEvent.get_events_with_att(fname)
         src = EventSource.get(os.path.join(fname[:4],fname[5:]))  # Todo: od klicu sestavim z '/', ne glede na OS
         title = src['desc'] if src else ""
-        view = src['view'] if src else ""
+        view = src['view'] if src else "1"
         players = src['players_on_pic'] if src else ""
         return render_template("editFile.html", year=fname[:4], fname=fname[5:], fsize=fsize,
                                years=TennisEvent.Years, events=events, title=title, view=view, players=players)
