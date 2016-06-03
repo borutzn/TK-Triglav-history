@@ -473,8 +473,8 @@ class TennisEvent:
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
                 break
             if no_year:
-                year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years))]
-                print(len(TennisEvent.Years), year)
+                r = random.randint(0, len(TennisEvent.Years)-1)
+                year = TennisEvent.Years[r]
             else:
                 year = TennisEvent.Years[i+1]
 
