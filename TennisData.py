@@ -452,8 +452,7 @@ class TennisEvent:
         no_year = not year or (year == 0)
 
         if no_year:
-            year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years))]
-            print(len(TennisEvent.Years), year)
+            year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years)-1)]
         loops = 10 if no_year else 4
         for _ in range(loops):  # check up to 'loops' consecutive years to fill the 'limit_size' pictures
             for (file_year, file_name, file_size, references) in cls.sources:
@@ -468,7 +467,6 @@ class TennisEvent:
                     if not pic_data or (pic_data and pic_data['view'] != 0):
                         pictures.append((os.path.join(files_dir_web, file_year, file_name), title))
             no_pics = len(pictures)
-            # log_info("pics= %d" % no_pics)
             i = TennisEvent.Years.index(year)
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
                 break
