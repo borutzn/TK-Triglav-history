@@ -48,7 +48,6 @@ def show_player():
         if player_name is not None:
             player = TennisPlayer.get(player_name)
             events = TennisEvent.get_players_events(player_name)
-            # app.logger.info( "Player: " + str(player) )
             return render_template("player.html", events=events, playername=player_name, player=player)
 
     search = ""

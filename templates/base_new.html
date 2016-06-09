@@ -191,7 +191,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">{{ picture[1] }}</h4>
                         {% if current_user.utype >= 4 %}
-                            <a href="{{ url_for('edit_file', next=ret_url, n=picture[0]) }}">
+                            <a href="{{ url_for('edit_file', next=ret_url, n=picture[2]) }}">
                                 <span class="glyphicon glyphicon-picture">&nbsp;&nbsp;</span></a>
                         {% endif %}
                     </div>

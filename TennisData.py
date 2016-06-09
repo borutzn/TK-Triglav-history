@@ -465,7 +465,8 @@ class TennisEvent:
                     else:
                         title = file_name
                     if not pic_data or (pic_data and pic_data['view'] != 0):
-                        pictures.append((os.path.join(files_dir_web, file_year, file_name), title))
+                        pictures.append((os.path.join(files_dir_web, file_year, file_name), title,
+                                         os.path.join(file_year, file_name)))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
             if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
