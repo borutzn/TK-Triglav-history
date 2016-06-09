@@ -184,6 +184,7 @@
                     </a>
             </div>
         </div>
+        {% set ret_url = url_for('tennis_events', y=year, p=player_name, f=event_filter) %}
         {% for picture in pictures %}
             <div class="modal fade" id="Att{{loop.index}}" tabindex="0" role="dialog">
                 <div class="modal-dialog" role="document"><div class="modal-content">
