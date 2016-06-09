@@ -35,6 +35,10 @@
                         {% if show_more %}
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                            {% if current_user.utype >= 4 %}
+                                <a href="{{ url_for('edit_event', id=event.Id, next=ret_url) }}">
+                                    <span class="pull-right glyphicon glyphicon-edit">&nbsp;</span></a>
+                            {% endif %}
                             </div> <div class="row">
                             <div class="panel-body panel-collapse collapse">
                                 {{ d.atts_line2(y, event.Att1, event.Att2, event.Att3, event.Att4, loop.index, current_user, ret_url) }}
@@ -54,6 +58,10 @@
                             <div class="col-sm-2"><span class="pull-right"></span></div>
                             <span class="pull-right clickable panel-collapsed">
                                 <i class="text-primary glyphicon glyphicon-chevron-right">&nbsp;</i></span>
+                            {% if current_user.utype >= 4 %}
+                                <a href="{{ url_for('edit_event', id=event.Id, next=ret_url) }}">
+                                    <span class="pull-right glyphicon glyphicon-edit">&nbsp;</span></a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="panel-body panel-collapse collapse">
