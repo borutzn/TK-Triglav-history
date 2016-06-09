@@ -61,9 +61,7 @@ def show_player():
         players = list()
         for p in TennisEvent.players:
             if search in p[0]:
-                # app.logger.info( "found: (%s) in %s" %  (search, p[0]) )
                 players.append(p)
-        # app.logger.info( "players: " + str(players) )
 
     return render_template("players_list.html", players=players, search=search)
 
