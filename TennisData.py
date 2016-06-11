@@ -615,6 +615,10 @@ class TennisPlayer:
         log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
+    def clear_data(self):
+        TennisPlayer.SourcesCache = None  # lazy approach - clear cache & reload again
+
+    @classmethod
     def get(cls, name):
         cls.fetch_data()
         if name in cls.PlayersIndex:
