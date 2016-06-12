@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-'''
-SQLite commands
-
-.databases
-.schema TennisPlayer
-
-'''
+# SQLite commands
+#   .databases
+#   .schema TennisPlayer
 
 
 from config import DB_NAME, PAGELEN
@@ -22,7 +18,7 @@ import zipfile
 
 import sqlite3
 
-from flask import url_for, Response, make_response, send_file
+from flask import Response, make_response, send_file
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 
@@ -38,7 +34,7 @@ class TennisEvent:
     DELETE FROM TennisEvents;
     """
 
-    EventsCache = None  # type: list(dict)
+    EventsCache = []  # type: list(dict)
     EventsIndex = {}
     Years = []
     players = list()
@@ -96,8 +92,10 @@ class TennisEvent:
             else:  # or os.path.exists(att_path_sec):
                 log_info("Error: Bad filename " + unicode(os.path.join(files_dir_os, year + "/" + att)))
                 return "err_"+att
+        except (OSError, IOError) as e:
+            log_info("OS errror: %s" % str(e))
         except:
-            log_info("Error: %s" % sys.exc_info()[0])
+            log_info("error: %s" % sys.exc_info()[0])
 
     @classmethod
     def date2user(cls, date):
@@ -226,8 +224,8 @@ class TennisEvent:
     @classmethod
     def fetch_data(cls, force=False, players=True, sources=True):
         if force:
-            cls.EventsCache = None
-        if cls.EventsCache is not None:
+            cls.EventsCache = []
+        if cls.EventsCache:
             return
 
         log_info("Audit: Event cache - events reload started.")
@@ -302,7 +300,7 @@ class TennisEvent:
 
 #    @classmethod
 #    def clear_data(cls):
-#        TennisEvent.EventsCache = None  # lazy approach - clear cache & reload again
+#        TennisEvent.EventsCache = []  # lazy approach - clear cache & reload again
 
     @classmethod
     def get(cls, iden):
@@ -446,7 +444,7 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_oneyear_pictures(cls, year=None, event_filter="", limit_size=7):
+    def get_oneyear_pictures(cls, year=None, limit_size=7):
         cls.fetch_data()
         pictures, no_pics = list(), 0
         no_year = not year or (year == 0)
@@ -487,7 +485,7 @@ class TennisEvent:
         return pictures
 
     @classmethod
-    def get_oneplayer_pictures(cls, player="", event_filter="", limit_size=7):
+    def get_oneplayer_pictures(cls, player="", limit_size=7):
         cls.fetch_data()
         pictures = set()
 
@@ -584,7 +582,7 @@ class TennisPlayer:
     DELETE FROM TennisPlayer;
     """
 
-    PlayersCache = None  # type: list(dict)
+    PlayersCache = []  # type: list(dict) --- from None
     PlayersIndex = {}
 
     def __init__(self, name, born="", died="", comment="", picture=""):
@@ -594,9 +592,24 @@ class TennisPlayer:
         self.Comment = comment
         self.Picture = picture
 
+    def update(self):
+        conn = sqlite3.connect(DB_NAME)
+        curs = conn.cursor()
+
+        log_info("Audit: Player %s update by %s." % (self.Name, str(current_user.username)))
+        curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
+                     Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
+        curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
+                     VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
+                     {"Name": self.Name, "Born": self.Born, "Died": self.Died,
+                      "Comment": self.Comment, "Picture": self.Picture})
+        conn.commit()
+        self.clear_data()
+        return curs.lastrowid
+
     @classmethod
     def fetch_data(cls):
-        if cls.PlayersCache is not None:
+        if cls.PlayersCache:  # is not None
             return
             
         connection = sqlite3.connect(DB_NAME)
@@ -615,8 +628,8 @@ class TennisPlayer:
         log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
-    def clear_data(self):
-        TennisPlayer.SourcesCache = None  # lazy approach - clear cache & reload again
+    def clear_data(cls):
+        TennisPlayer.PlayersCache = []  # lazy approach - clear cache & reload again
 
     @classmethod
     def get(cls, name):
@@ -627,24 +640,9 @@ class TennisPlayer:
         else:
             return None
 
-    def update(self):
-        conn = sqlite3.connect(DB_NAME)
-        curs = conn.cursor()
-
-        log_info("Audit: Player %s update by %s." % (self.Name, str(current_user.username)))
-        curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
-                     Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
-        curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
-                     VALUES (:Name, :Born, :Died, :Comment, :Picture, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)""",
-                     {"Name": self.Name, "Born": self.Born, "Died": self.Died,
-                      "Comment": self.Comment, "Picture": self.Picture})
-        conn.commit()
-        self.clear_data()
-        return curs.lastrowid
-
     @classmethod
     def jsonify(cls):
-        return Response(json.dumps(cls.PlayersCache),  mimetype='application/json')
+        return Response(json.dumps(cls.PlayersCache), mimetype='application/json')
 
 
 class EventSource:
@@ -653,7 +651,7 @@ class EventSource:
     DELETE FROM EventSource;
     """
 
-    SourcesCache = None  # type: list(dict)
+    SourcesCache = []  # type: list(dict)
     SourcesIndex = {}
 
     def __init__(self, file_name, desc="", view=1, players_on_pic=""):
@@ -662,9 +660,24 @@ class EventSource:
         self.view = view
         self.players_on_pic = players_on_pic
 
+    def update(self):
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+
+        log_info("Audit: Source %s update by %s." % (self.file_name, str(current_user.username)))
+        cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
+                            file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
+        cursor.execute("""INSERT OR REPLACE INTO EventSource(file_name, desc, view, players_on_pic)
+                            VALUES (:File_name, :Desc, :View, :Players_on_pic)""",
+                       {"File_name": self.file_name, "Desc": self.desc, "View": self.view,
+                        "Players_on_pic": self.players_on_pic})
+        conn.commit()
+        self.clear_data()
+        return cursor.lastrowid
+
     @classmethod
-    def fetch_data(self):
-        if self.SourcesCache is not None:
+    def fetch_data(cls):
+        if cls.SourcesCache:
             return
 
         connection = sqlite3.connect(DB_NAME)
@@ -673,55 +686,39 @@ class EventSource:
             cursor = connection.cursor()
             # cursor.execute("DROP TABLE EventSource")
             cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
-                              file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
+                                file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
             cursor.execute("SELECT * FROM EventSource")
-            self.SourcesCache = [dict(row) for row in cursor]
+            cls.SourcesCache = [dict(row) for row in cursor]
             connection.commit()
 
-        for idx, val in enumerate(self.SourcesCache):
-            self.SourcesIndex[val['file_name']] = idx
+        for idx, val in enumerate(cls.SourcesCache):
+            cls.SourcesIndex[val['file_name']] = idx
 
-        log_info("Audit: Sources cache reloaded (%d entries)." % len(self.SourcesCache))
-
-    @classmethod
-    def clear_data(self):
-        EventSource.SourcesCache = None  # lazy approach - clear cache & reload again
+        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
 
     @classmethod
-    def get(self, fname):
-        self.fetch_data()
-        if fname in self.SourcesIndex:
-            log_info("found %s in %s" % (fname, self.SourcesCache))
-            idx = self.SourcesIndex[fname]
-            log_info("found %d, %s" % (idx, self.SourcesCache[idx]))
-            return self.SourcesCache[idx]
+    def clear_data(cls):
+        EventSource.SourcesCache = []  # lazy approach - clear cache & reload again
+
+    @classmethod
+    def get(cls, fname):
+        cls.fetch_data()
+        if fname in cls.SourcesIndex:
+            log_info("found %s in %s" % (fname, cls.SourcesCache))
+            idx = cls.SourcesIndex[fname]
+            log_info("found %d, %s" % (idx, cls.SourcesCache[idx]))
+            return cls.SourcesCache[idx]
         else:
             log_info("not found %s" % fname)
-            # log_info("not found %s in %s" % (fname, self.SourcesCache))
             return None
 
-    def update(self):
-        conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-
-        log_info("Audit: Source %s update by %s." % (self.file_name, str(current_user.username)))
-        cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
-            file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
-        cursor.execute("""INSERT OR REPLACE INTO EventSource(file_name, desc, view, players_on_pic)
-                       VALUES (:File_name, :Desc, :View, :Players_on_pic)""", {"File_name": self.file_name,
-                        "Desc": self.desc, "View": self.view, "Players_on_pic": self.players_on_pic})
-        conn.commit()
-        self.clear_data()
-        return cursor.lastrowid
-
     @classmethod
-    def delete(self, fname):
+    def delete(cls, fname):
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
         log_info("Audit: Source %s deleted by %s." % (fname, str(current_user.username)))
         cursor.execute("""DELETE FROM EventSource WHERE file_name=:Fname""", {'Fname': fname})
         connection.commit()
-        self.clear_data()
-        self.fetch_data(force=True, sources=False)
-
+        cls.clear_data()
+        cls.fetch_data()
