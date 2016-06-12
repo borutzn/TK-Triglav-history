@@ -8,18 +8,26 @@
             <div class="row">
                 <div style="float:left; width:25%">
                     {% if player %}
-                        {% if player.Picture %}<img src="{{ url_for('static',filename='files/')}}
-                            {{ player.Picture }}" alt="Players picture" width="200" height="200" style="">{% endif %}
+                        {% if player.Picture %}
+                            <img src="{{ url_for('static',filename='files/')}}
+                            {{ player.Picture }}" alt="Players picture" width="200" height="200" style="">
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div style="float:left; width:45%;">
-                    <div class="player_name">{{ player_name }}</div>
-                    {% if player %}
-                    <div class="player_data">
-                        {% if player.Born %}leto rojstva {{ player.Born }}<br>{% endif %}
-                        {% if player.Died %}leto smrti {{ player.Died }}<br>{% endif %}
-                        {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
+                    <div class="player_name">{{ player_name }}
+                        {% if current_user.utype >= 4 %}
+                            {% set ret_url = url_for('tennis_events', y=year, p=player_name, f=event_filter) %}
+                            <a href="{{ url_for('edit_player', id=player_name, next=ret_url) }}">
+                                <span class="pull-right glyphicon glyphicon-edit">&nbsp;</span></a>
+                        {% endif %}
                     </div>
+                    {% if player %}
+                        <div class="player_data">
+                            {% if player.Born %}leto rojstva {{ player.Born }}<br>{% endif %}
+                            {% if player.Died %}leto smrti {{ player.Died }}<br>{% endif %}
+                            {% if player.Comment %}{{ player.Comment }}<br>{% endif %}
+                        </div>
                     {% endif %}
                 </div>
             </div>
