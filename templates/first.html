@@ -1,0 +1,81 @@
+<!--# -*- coding: utf-8 -*- -->
+
+{% extends "base_new.html" %}
+
+{% block next %}/{% endblock %}
+{% block content %}
+
+    <!-- Begin page content -->
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default" style="margin-top: 5px; margin-bottom: 0;">
+            <div class="panel-heading">
+                <h2 class="panel-title">do l.1955: <strong>Začetki tenisa v Kranju</strong></h2>
+                Začetek organiziranega tenisa v Kranju sega v leto 1946. V tem letu je skupina teniških
+                navdušencev uredila igrišče pri "Guklerju".
+                <span class="pull-right clickable panel-collapsed text-primary glyphicon glyphicon-chevron-right"
+                    data-toggle="collapse" data-parent="accordion" data-target="#collapse1" href="#collapse1"> </span>
+            </div>
+            <div id="collapse1" class="panel-body panel-collapse collapse">
+                <a class="load" href="{{ url_for("events_year", y="1949", t="1954") }}"> leto 1949</a>
+                <a class="next" href="{{ url_for("events_year", y="1955", t="1964") }}"> leto 1955</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default" style="margin-top: 5px; margin-bottom: 0;">
+            <div class="panel-heading">
+                <h2 class="panel-title">1956 - 1964: <strong>Prvo organizirano delovanje</strong></h2>
+                V okviru kluba Železničar.
+                <span class="pull-right clickable panel-collapsed text-primary glyphicon glyphicon-chevron-right"
+                    data-toggle="collapse" data-parent="accordion"  data-target="#collapse2" href="#collapse2"> </span>
+            </div>
+            <div id="collapse2" class="panel-body panel-collapse collapse scroll">
+                <a class="load" href="{{ url_for("events_year", y="1955", t="1964") }}"> leto 1954</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).on('click', '.panel-heading span.clickable', function(e){
+            var $this = $(this);
+            var $body = $($this.attr('data-target'));
+            if($this.hasClass('panel-collapsed')) {
+                $body.find('a').each(function(){
+                    $(this).load( $(this).attr("href") );
+                    $(this).removeClass("load");
+                });
+                $body.css("height","")
+                //console.log($body.attr("style"));
+                $body.slideDown();
+                $this.removeClass('panel-collapsed');
+                $this.removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+            } else {
+                $body.slideUp();
+                $this.addClass('panel-collapsed');
+                $this.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+            }
+        });
+
+        $(document).ready(function(){
+            //Handles menu drop down
+            $('.dropdown-menu').find('form').click(function (e) {
+                e.stopPropagation();
+            });
+
+            $('.scroll').jscroll({
+                autoTrigger: false,
+                nextSelector: 'a.next:last',
+                padding: 20,
+                contentSelector: '',
+                loadingHtml: '<small>Počakaj...</small>',
+                debug: true
+            })
+       });
+    </script>
+
+
+    <div style="clear:both;"></div>
+
+
+{% endblock %}

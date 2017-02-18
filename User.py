@@ -1,6 +1,7 @@
 import sqlite3
 
-from flask.ext.login import UserMixin, AnonymousUserMixin
+# from flask.ext.login import UserMixin, AnonymousUserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
