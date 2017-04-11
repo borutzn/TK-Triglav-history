@@ -5,7 +5,7 @@
 Show Tenis history data of TK Triglav Kranj
 
 data collected by Davor Žnidar
-program by Borut Žnidar on 2.1.2015
+program by Borut Žnidar on 18.2.2017
 
 check syntactic errors with: "python mainTennis.py runserver -d"
 
