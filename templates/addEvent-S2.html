@@ -18,7 +18,17 @@
 		<tr><td></td> <td></td> <td>Kategorija</td> <td>Uvrstitev</td></tr>
         {%  for i in range(1,7) %}
     		<tr><td>Igralec {{ i }}</td>
-                <td><label><input type="text" name="player{{ i }}"></label></td>
+                <td><!--label><input type="text" name="player{{ i }}"></label-->
+                &nbsp;&nbsp;&nbsp;&nbsp;<label><select name="player{{ i }}">
+                        <option value=""></option>
+                        {% for player in players %}
+                            {%  if player|length > 1 %}
+                                <option value="{{ player }}">{{ player }}</option>
+                            {%  endif %}
+                        {% endfor %}
+                </select></label>
+
+                </td>
                 <td><label><input style="width:3cm" type="text" name="category{{ i }}"></label></td>
                 <td><label><input style="width:3cm" type="text" name="result{{ i }}"></label></td></tr>
         {%  endfor %}

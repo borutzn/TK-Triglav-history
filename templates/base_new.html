@@ -15,6 +15,7 @@
     <script src="{{ url_for('static',filename='js/jquery.jscroll.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/typeahead.jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/photo-gallery.js') }}"></script>
 
 	<style>
         .navbar-brand {
@@ -33,6 +34,10 @@
     </style>
 
     <title>Dogodki in rezultati teniških igralcev Kranja od l. 1949 dalje</title>
+
+    {% block header %}
+    {% endblock %}
+
 </head>
 	
 <body>

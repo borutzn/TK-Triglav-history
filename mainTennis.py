@@ -22,6 +22,7 @@ import glob
 import math
 import shutil
 import string
+import random
 import difflib
 
 from flask import render_template, request, redirect, url_for, session, flash, Response
@@ -134,7 +135,8 @@ def add_event(step):
             except OSError:
                 atts = []
             atts.sort()
-            return render_template("addEvent-S2.html", date=TennisEvent.date2user(date), atts=atts)
+            players = list(TennisEvent.players)
+            return render_template("addEvent-S2.html", date=TennisEvent.date2user(date), players=players, atts=atts)
 
     elif request.method == 'POST' and step == 1:
         date = TennisEvent.date2db(request.form["date"])
@@ -313,7 +315,7 @@ def tennis_events_old():
 
 @app.route("/first", methods=['GET'])
 def tennis_start():
-    pictures = TennisEvent.get_oneyear_pictures(year=TennisEvent.Years[0])
+    pictures = TennisEvent.get_oneyear_pictures(year=TennisEvent.Years[0], max_years=6)
     return render_template("first.html", pictures=pictures)
 
 
@@ -367,7 +369,7 @@ def tennis_events():
                                event_filter=event_filter, year=year, player_name=player_name,
                                player=player, prev_y=prev_y, next_y=next_y)
     else:
-        pictures = TennisEvent.get_oneyear_pictures(year=year_param)
+        pictures = TennisEvent.get_oneyear_pictures(year=year_param, max_years=6)
         return render_template("events.html", events=events, players=TennisEvent.players, pictures=pictures,
                                event_filter=event_filter, year=year, player_name=player_name,
                                prev_y=prev_y, next_y=next_y)
@@ -420,6 +422,53 @@ def tennis_events_year(one_player):
     return render_template("players_year.html" if one_player else "events_year.html",
                            events=events, next_y=next_y, to_y=to_year,
                            player_name=player_name, event_filter=event_filter)
+
+
+@app.route("/pictures", methods=['GET'])
+def tennis_pictures():
+    try:
+        year_param = request.args.get('y')
+        year = year_param or TennisEvent.Years[0]
+    except ValueError:
+        year_param, year = None, TennisEvent.Years[0]
+        log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+
+    # year = "1956"
+    if year not in TennisEvent.Years:
+        year_param, year = None, TennisEvent.Years[0]
+
+    pictures = None
+    next_y = year
+    while not pictures:
+        year = next_y
+        pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=20)
+        next_y = TennisEvent.Years[TennisEvent.Years.index(year)+1]
+
+    return render_template("pictures.html", pictures=pictures, year=year)
+
+
+@app.route("/pictures_year", methods=['GET'])
+def tennis_pictures_year():
+    if request.method != 'GET':
+        return
+
+    try:
+        year = request.args.get('y')
+        if year not in TennisEvent.Years:
+            year = TennisEvent.Years[0]
+    except ValueError:
+        year = TennisEvent.Years[0]
+        log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
+
+    log_info("get year_pictures %s" % (year))
+    pictures, next_y = None, year
+    while not pictures:
+        year = next_y
+        pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=20)
+        next_y = TennisEvent.Years[TennisEvent.Years.index(year)+1]
+        print(year, len(pictures), next_y)
+
+    return render_template("pictures_year.html", pictures=pictures, year=year, next_y=next_y)
 
 
 @app.route("/files", methods=['GET', 'POST'])

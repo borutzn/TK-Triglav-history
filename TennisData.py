@@ -444,15 +444,14 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_oneyear_pictures(cls, year=None, limit_size=7):
+    def get_oneyear_pictures(cls, year=None, max_pictures=7, max_years=1):
         cls.fetch_data()
         pictures, no_pics = list(), 0
         no_year = not year or (year == 0)
 
         if no_year:
             year = TennisEvent.Years[random.randint(0, len(TennisEvent.Years)-1)]
-        loops = 10 if no_year else 4
-        for _ in range(loops):  # check up to 'loops' consecutive years to fill the 'limit_size' pictures
+        for _ in range(max_years):  # check up to 'loops' consecutive years to fill the 'limit_size' pictures
             for (file_year, file_name, file_size, references) in cls.sources:
                 if (references > 0) and (file_year == year) and allowed_image(file_name):
                     pic_data = EventSource.get(os.path.join(file_year, file_name))
@@ -467,7 +466,7 @@ class TennisEvent:
                                          os.path.join(file_year, file_name)))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
-            if (no_pics >= limit_size) or (i >= len(TennisEvent.Years)-1):
+            if (no_pics >= max_pictures) or (i >= len(TennisEvent.Years)-1):
                 break
             if no_year:
                 r = random.randint(0, len(TennisEvent.Years)-1)
@@ -475,7 +474,7 @@ class TennisEvent:
             else:
                 year = TennisEvent.Years[i+1]
 
-        for _ in range(no_pics-limit_size):
+        for _ in range(no_pics-max_pictures):
             r = random.randrange(0, no_pics)
             del pictures[r]
             no_pics -= 1
@@ -582,7 +581,7 @@ class TennisPlayer:
     DELETE FROM TennisPlayer;
     """
 
-    PlayersCache = []  # type: list(dict) --- from None
+    PlayersCache = []  # type: list(dict)
     PlayersIndex = {}
 
     def __init__(self, name, born="", died="", comment="", picture=""):

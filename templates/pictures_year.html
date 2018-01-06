@@ -1,0 +1,22 @@
+{% import "defs.html" as d %}
+
+<!-- Begin page content -->
+{% if pictures %}
+    <h1>{{ year }}</h1>
+
+    {% set ret_url = url_for('tennis_events', y=year) %}
+
+    <ul class="row">
+    {% for picture in pictures %}
+        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            <img class="img-responsive img-rounded" src="{{ picture[0] }}">
+        </li>
+    {% endfor %}
+    </ul>
+
+
+    {% if next_y != "0" %}
+        <a class="next" href="{{ url_for("tennis_pictures_year", y=next_y) }}"> leto {{ next_y }} </a>
+    {% endif %}
+
+{% endif %}

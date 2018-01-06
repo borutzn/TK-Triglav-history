@@ -1,0 +1,45 @@
+<!--# -*- coding: utf-8 -*- -->
+
+{% extends "base_new.html" %}
+
+{% block next %}/{% endblock %}
+{% block content %}
+
+    <!--ul class="row">
+    {% for picture in pictures %}
+        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            <img class="img-responsive" src="{{ picture[0] }}">
+        </li>
+    {% endfor %}
+    </ul-->
+
+    <!-- Begin page content -->
+    <div class="container scroll">
+        {% if pictures %}
+            <a class="next" href="{{ url_for("tennis_pictures_year", y=year) }}"> leto {{ year }}</a>
+        {% endif %}
+    </div>
+
+
+    <script>
+        $(document).ready(function(){
+            //Handles menu drop down
+            $('.dropdown-menu').find('form').click(function (e) {
+                e.stopPropagation();
+            });
+
+            $('.scroll').jscroll({
+                autoTrigger: true,
+                nextSelector: 'a.next:last',
+                padding: 20,
+                contentSelector: '',
+                loadingHtml: '<small>Počakaj...</small>',
+                debug: false
+            })
+       });
+    </script>
+
+
+    <div style="clear:both;"></div>
+
+{% endblock %}		
