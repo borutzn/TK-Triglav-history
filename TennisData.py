@@ -82,7 +82,7 @@ class TennisEvent:
                     TennisEvent.update_all_atts(year, att, att_sec)
                     log_info("Error: Unsecured filename %s" % att_path)
                     if not os.path.exists(att_path_sec):
-                        log_info("Audit: rename file %s/%s to %s" % (year, att, att_path_sec))
+                        log_info("AUDIT: rename file %s/%s to %s" % (year, att, att_path_sec))
                         os.rename(att_path, att_path_sec)
                 '''
                 return att_sec
@@ -131,7 +131,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("Audit: New event put by %s" % (str(current_user.username)))
+        log_info("AUDIT: New event put by %s" % (str(current_user.username)))
         cursor.execute("""INSERT INTO TennisEvents
                        (Date,Event,Place,Category,Result,Player,Comment,Att1,Att2,Att3,Att4,Source,Created,LastModified)
                         VALUES (:Date, :Event, :Place, :Category, :Result, :Player, :Comment, :Att1, :Att2, :Att3,
@@ -150,7 +150,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("Audit: Event %s update by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Event %s update by %s." % (iden, str(current_user.username)))
         cursor.execute("""UPDATE TennisEvents SET Date=:Date, Event=:Event, Place=:Place, Category=:Category,
                         Result=:Result, Player=:Player, Comment=:Comment, Att1=:Att1, Att2=:Att2, Att3=:Att3,
                         Att4=:Att4, Source=:Source, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
@@ -179,7 +179,7 @@ class TennisEvent:
 
         if type(att) != type(str):
             att = str(att)
-        log_info("Audit: Event %s attachment update by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Event %s attachment update by %s." % (iden, str(current_user.username)))
         if att == "1":
             cursor.execute("""UPDATE TennisEvents SET Att1=:fname, LastModified=CURRENT_TIMESTAMP WHERE Id=:Id""",
                            {'fname': fname, 'Id': iden})
@@ -215,7 +215,7 @@ class TennisEvent:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("Audit: Event %s deleted by %s." % (iden, str(current_user.username)))
+        log_info("AUDIT: Event %s deleted by %s." % (iden, str(current_user.username)))
         cursor.execute("""DELETE FROM TennisEvents WHERE Id=:Id""", {'Id': iden})
         connection.commit()
         # cls.clear_data()
@@ -228,7 +228,7 @@ class TennisEvent:
         if cls.EventsCache:
             return
 
-        log_info("Audit: Event cache - events reload started.")
+        log_info("AUDIT: Event cache - events reload started.")
         connection = sqlite3.connect(DB_NAME)
         with connection:
             connection.row_factory = sqlite3.Row
@@ -252,9 +252,9 @@ class TennisEvent:
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
-        log_info("Audit: Event cache - events reloaded.")
+        log_info("AUDIT: Event cache - events reloaded.")
 
-        log_info("Audit: Event cache - players reload started.")
+        log_info("AUDIT: Event cache - players reload started.")
         if players:
             p = dict()  # move collection to the upper for loop?
             for i in cls.EventsCache:
@@ -271,9 +271,9 @@ class TennisEvent:
             cls.players.sort()
             cls.top_players.sort(key=lambda player: player[1], reverse=True)
             cls.top_players = cls.top_players[:20]
-            log_info("Audit: Event cache - players reloaded.")
+            log_info("AUDIT: Event cache - players reloaded.")
 
-        log_info("Audit: Event cache - sources reload started.")
+        log_info("AUDIT: Event cache - sources reload started.")
         if sources:
             # ToDo: implement with os.scandir, when switching to Python 3
             cls.sources = list()
@@ -293,9 +293,9 @@ class TennisEvent:
                 pass
 
             cls.sources.sort()
-            log_info("Audit: Event cache - sources reloaded.")
+            log_info("AUDIT: Event cache - sources reloaded.")
 
-        log_info("Audit: Event cache reloaded (%d entries, %d players, %d sources)." %
+        log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
 #    @classmethod
@@ -480,7 +480,7 @@ class TennisEvent:
             no_pics -= 1
         random.shuffle(pictures)
 
-        log_info("Temp: got {} pictures for {}.".format(len(pictures), year))
+        log_info("Temp: get_oneyear_pictures: got {} pictures for {}.".format(len(pictures), year))
         return pictures
 
     @classmethod
@@ -509,7 +509,7 @@ class TennisEvent:
             no_pics -= 1
         random.shuffle(pictures)
 
-        log_info("Temp: GET_PICTURES returning %d pictures." % len(pictures))
+        log_info("Temp: get_oneplayer_pictures: got %d pictures for {}.".format(len(pictures), player))
         return pictures
 
     @classmethod
@@ -595,7 +595,7 @@ class TennisPlayer:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
-        log_info("Audit: Player %s update by %s." % (self.Name, str(current_user.username)))
+        log_info("AUDIT: Player %s update by %s." % (self.Name, str(current_user.username)))
         curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
                      Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
         curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
@@ -624,7 +624,7 @@ class TennisPlayer:
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx
 
-        log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
+        log_info("AUDIT: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
     def clear_data(cls):
@@ -663,7 +663,7 @@ class EventSource:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
 
-        log_info("Audit: Source %s update by %s." % (self.file_name, str(current_user.username)))
+        log_info("AUDIT: Source %s update by %s." % (self.file_name, str(current_user.username)))
         cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
                             file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
         cursor.execute("""INSERT OR REPLACE INTO EventSource(file_name, desc, view, players_on_pic)
@@ -693,7 +693,7 @@ class EventSource:
         for idx, val in enumerate(cls.SourcesCache):
             cls.SourcesIndex[val['file_name']] = idx
 
-        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
+        log_info("AUDIT: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
 
     @classmethod
     def clear_data(cls):
@@ -708,7 +708,7 @@ class EventSource:
             # log_info("EventSrc: found %d, %s" % (idx, cls.SourcesCache[idx]))
             return cls.SourcesCache[idx]
         else:
-            log_info("EventSrc: {} not found".format(fname))
+            log_info("EventSrc.get: {} not found".format(fname))
             return None
 
     @classmethod
@@ -716,7 +716,7 @@ class EventSource:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("Audit: Source %s deleted by %s." % (fname, str(current_user.username)))
+        log_info("AUDIT: Source %s deleted by %s." % (fname, str(current_user.username)))
         cursor.execute("""DELETE FROM EventSource WHERE file_name=:Fname""", {'Fname': fname})
         connection.commit()
         cls.clear_data()
