@@ -55,8 +55,9 @@ def pre_request_settings():
         # https://www.kirsle.net/wizards/flask-session.py
         # app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
         # session.get("user", "/")
-        app.logger.info("AUDIT: %s/%s (%s: %s) requested %s" % (str(current_user.username), session.get("_id", "")[-5:],
-                        ip_to_country(request.remote_addr), request.remote_addr, request.endpoint))
+        app.logger.info("AUDIT: {}/{} requested {} ({}: {})".format(
+            str(current_user.username), session.get("_id", "")[-5:], request.endpoint,
+            ip_to_country(request.remote_addr), request.remote_addr, ))
 
 
 # @app.after_request
@@ -94,6 +95,7 @@ def allowed_file(filename):
 def allowed_image(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in IMG_EXT
+
 
 ip_cache = {}
 

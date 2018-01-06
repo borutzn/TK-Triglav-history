@@ -430,7 +430,6 @@ def tennis_events_year(one_player):
                 next_y = "0"
         else:
             next_y = "0"
-        print(len(events), len(TennisEvent.Years), next_y)
     return render_template("players_year.html" if one_player else "events_year.html",
                            events=events, next_y=next_y, to_y=to_year,
                            player_name=player_name, event_filter=event_filter)
@@ -472,13 +471,11 @@ def tennis_pictures_year():
         year = TennisEvent.Years[0]
         log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
 
-    log_info("get year_pictures {}".format(year))
     pictures, next_y = None, year
     while not pictures:
         year = next_y
         pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=20)
         next_y = TennisEvent.Years[TennisEvent.Years.index(year)+1]
-        print(year, len(pictures), next_y)
 
     return render_template("pictures_year.html", pictures=pictures, year=year, next_y=next_y)
 

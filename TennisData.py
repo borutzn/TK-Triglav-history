@@ -480,7 +480,7 @@ class TennisEvent:
             no_pics -= 1
         random.shuffle(pictures)
 
-        log_info("Temp: GET_PICTURES returning %d pictures." % len(pictures))
+        log_info("Temp: got {} pictures for {}.".format(len(pictures), year))
         return pictures
 
     @classmethod
