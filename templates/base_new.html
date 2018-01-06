@@ -95,9 +95,11 @@
                     </div>
                 </form>
 
-                <div class="navbar-form navbar-left">
-                    <a class="btn btn-link" href="{{ url_for('tennis_events_old') }}">stara stran</a>
-                </div>
+                {% if current_user.is_authenticated %}
+                    <div class="navbar-form navbar-left">
+                        <a class="btn btn-link" href="{{ url_for('tennis_events_old') }}">stara stran</a>
+                    </div>
+                {%  endif %}
 
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url_for('signup', next=request.url) }}">

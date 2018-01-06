@@ -7,6 +7,12 @@ Show Tenis history data of TK Triglav Kranj
 data collected by Davor Žnidar
 program by Borut Žnidar on 18.2.2017
 
+rPi config:
+
+1. screen as root
+
+2. console as apps
+
 check syntactic errors with: "python mainTennis.py runserver -d"
 
     /var/log/lighttpd/
@@ -460,7 +466,7 @@ def tennis_pictures_year():
         year = TennisEvent.Years[0]
         log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
 
-    log_info("get year_pictures %s" % (year))
+    log_info("get year_pictures {}".format(year))
     pictures, next_y = None, year
     while not pictures:
         year = next_y
