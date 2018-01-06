@@ -703,12 +703,12 @@ class EventSource:
     def get(cls, fname):
         cls.fetch_data()
         if fname in cls.SourcesIndex:
-            log_info("found %s in %s" % (fname, cls.SourcesCache))
+            # log_info("EventSrc: found %s in %s" % (fname, cls.SourcesCache))
             idx = cls.SourcesIndex[fname]
-            log_info("found %d, %s" % (idx, cls.SourcesCache[idx]))
+            # log_info("EventSrc: found %d, %s" % (idx, cls.SourcesCache[idx]))
             return cls.SourcesCache[idx]
         else:
-            log_info("not found %s" % fname)
+            log_info("EventSrc: not found %s" % fname)
             return None
 
     @classmethod
