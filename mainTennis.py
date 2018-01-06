@@ -9,9 +9,15 @@ program by Borut Žnidar on 18.2.2017
 
 rPi config:
 
-1. screen as root
+1. console as apps
+    su - apps
+    cd TKTriglavHistory
+    git pull origin
 
-2. console as apps
+2. console as pi
+    tail -f /tmp/TK.log &
+    sudo /etc/init.d/lighttpd restart
+
 
 check syntactic errors with: "python mainTennis.py runserver -d"
 
