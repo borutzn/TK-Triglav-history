@@ -252,9 +252,9 @@ class TennisEvent:
             if year not in cls.Years:
                 cls.Years.append(year)
         cls.Years.sort()
-        log_info("AUDIT: Event cache - events reloaded.")
+        log_info("Audit: Event cache - events reloaded.")
 
-        log_info("AUDIT: Event cache - players reload started.")
+        log_info("Audit: Event cache - players reload started.")
         if players:
             p = dict()  # move collection to the upper for loop?
             for i in cls.EventsCache:
@@ -271,9 +271,9 @@ class TennisEvent:
             cls.players.sort()
             cls.top_players.sort(key=lambda player: player[1], reverse=True)
             cls.top_players = cls.top_players[:20]
-            log_info("AUDIT: Event cache - players reloaded.")
+            log_info("Audit: Event cache - players reloaded.")
 
-        log_info("AUDIT: Event cache - sources reload started.")
+        log_info("Audit: Event cache - sources reload started.")
         if sources:
             # ToDo: implement with os.scandir, when switching to Python 3
             cls.sources = list()
@@ -293,9 +293,9 @@ class TennisEvent:
                 pass
 
             cls.sources.sort()
-            log_info("AUDIT: Event cache - sources reloaded.")
+            log_info("Audit: Event cache - sources reloaded.")
 
-        log_info("AUDIT: Event cache reloaded (%d entries, %d players, %d sources)." %
+        log_info("Audit: Event cache reloaded (%d entries, %d players, %d sources)." %
                  (len(cls.EventsCache), len(cls.players), len(cls.sources)))
 
 #    @classmethod
@@ -595,7 +595,7 @@ class TennisPlayer:
         conn = sqlite3.connect(DB_NAME)
         curs = conn.cursor()
 
-        log_info("AUDIT: Player %s update by %s." % (self.Name, str(current_user.username)))
+        log_info("Audit: Player %s update by %s." % (self.Name, str(current_user.username)))
         curs.execute("""CREATE TABLE IF NOT EXISTS TennisPlayer( Name TEXT PRIMARY KEY, Born INTEGER, Died INTEGER,
                      Comment TEXT, Picture TEXT, Created DATE, LastModified DATE )""")
         curs.execute("""INSERT OR REPLACE INTO TennisPlayer (Name, Born, Died, Comment, Picture, Created,LastModified)
@@ -624,7 +624,7 @@ class TennisPlayer:
         for idx, val in enumerate(cls.PlayersCache):
             cls.PlayersIndex[val['Name']] = idx
 
-        log_info("AUDIT: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
+        log_info("Audit: Players cache reloaded (%d entries)." % len(cls.PlayersCache))
 
     @classmethod
     def clear_data(cls):
@@ -663,7 +663,7 @@ class EventSource:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
 
-        log_info("AUDIT: Source %s update by %s." % (self.file_name, str(current_user.username)))
+        log_info("Audit: Source %s update by %s." % (self.file_name, str(current_user.username)))
         cursor.execute("""CREATE TABLE IF NOT EXISTS EventSource(
                             file_name TEXT PRIMARY KEY, desc TEXT, view INTEGER, players_on_pic TEXT);""")
         cursor.execute("""INSERT OR REPLACE INTO EventSource(file_name, desc, view, players_on_pic)
@@ -693,7 +693,7 @@ class EventSource:
         for idx, val in enumerate(cls.SourcesCache):
             cls.SourcesIndex[val['file_name']] = idx
 
-        log_info("AUDIT: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
+        log_info("Audit: Sources cache reloaded (%d entries)." % len(cls.SourcesCache))
 
     @classmethod
     def clear_data(cls):
@@ -716,7 +716,7 @@ class EventSource:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
-        log_info("AUDIT: Source %s deleted by %s." % (fname, str(current_user.username)))
+        log_info("Audit: Source %s deleted by %s." % (fname, str(current_user.username)))
         cursor.execute("""DELETE FROM EventSource WHERE file_name=:Fname""", {'Fname': fname})
         connection.commit()
         cls.clear_data()

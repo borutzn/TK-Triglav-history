@@ -543,7 +543,7 @@ def edit_file():
         new_att = os.path.join(files_dir_os, new_year, new_fname)
 
         if request.form["Status"][:5] == unicode("Popravi"[:5]):
-            log_info("AUDIT: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            log_info("Audit: rename file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             os.rename(old_att, new_att)
             TennisEvent.update_all_atts(old_year, old_fname, new_fname)
             # ToDo: delete old entry, if necessary (year | file_name changes)
@@ -551,7 +551,7 @@ def edit_file():
                             desc=new_title, view=new_view, players_on_pic=new_players)
             s.update()
         elif request.form["Status"][:5] == unicode("Kopiraj"[:5]):
-            log_info("AUDIT: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
+            log_info("Audit: copy file %s/%s to %s/%s" % (old_year, old_fname, new_year, new_fname))
             shutil.copyfile(old_att, new_att)
 
         return redirect(request.args.get("next") or url_for("tennis_events_old"))
@@ -590,7 +590,7 @@ def upload_picture():
                 log_info("Temp: Upload %s, %s, %s" % (upload_file.filename, select_name, new_name))
                 picture_dir = os.path.join(files_dir_os, secure_filename(year))
                 if not os.path.exists(picture_dir):
-                    log_info("AUDIT: directory %s created." % picture_dir)
+                    log_info("Audit: directory %s created." % picture_dir)
                     os.makedirs(picture_dir)
                 if select_name and select_name != "izberi":
                     save_name = secure_filename(select_name)
@@ -601,7 +601,7 @@ def upload_picture():
                 log_info("Temp: Saving file: %s" % save_name)
                 picture = os.path.join(picture_dir, save_name)
                 upload_file.save(picture)
-                log_info("AUDIT: picture %s uploaded." % picture)
+                log_info("Audit: picture %s uploaded." % picture)
                 flash(u"Datoteka uspešno prenešena.")
         return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
@@ -615,7 +615,7 @@ def delete_file():
     elif request.method == 'POST':
         if request.form["Status"][:5] == unicode("Izbriši"[:5]):
             fname = os.path.join(secure_filename(request.form['Year']), secure_filename(request.form['Fname']))
-            log_info("AUDIT: delete file %s" % fname)
+            log_info("Audit: delete file %s" % fname)
             os.remove(os.path.join(files_dir_os, fname))
         return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
@@ -653,7 +653,7 @@ def login():
             if user and user.is_authenticated() and user.check_password(password):
                 login_user(user, remember=remember_me)
                 session['user'] = user.username
-                log_info("AUDIT: User %s login." % user.username)
+                log_info("Audit: User %s login." % user.username)
                 flash(u"Prijava uspešna.")
                 return redirect(request.args.get('next') or url_for("tennis_events_old"))
 
@@ -693,7 +693,7 @@ def signup():
         user.put()
         login_user(user)
         session['user'] = None
-        log_info("AUDIT: New user %s created." % user.username)
+        log_info("Audit: New user %s created." % user.username)
         flash(u"Kreiran in prijavljen nov uporabnik.")
         return redirect(request.args.get("next") or url_for("tennis_events_old"))
 
@@ -701,7 +701,7 @@ def signup():
 @app.route("/logout")
 @login_required
 def logout():
-    log_info("AUDIT: User %s logout." % str(current_user.username))
+    log_info("Audit: User %s logout." % str(current_user.username))
     logout_user()
     session.pop('user', None)
     flash(u"Odjava uspešna.")
@@ -742,7 +742,7 @@ def edit_user():
 @login_required
 def export(action, fmt):
     if request.method == 'GET':
-        log_info("AUDIT: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
+        log_info("Audit: Data export (%s,%s) by %s." % (action, fmt, str(current_user.username)))
         if action == 'events':
             if fmt == "json":
                 return TennisEvent.export('J')
@@ -771,7 +771,7 @@ def audit():
         out += ("\r\nLOG_FILE: %s\r\n" % log_file)
         with open(log_file, 'r') as f:
             for l in f:
-                if l[30:37] != "AUDIT: ":
+                if l[30:37] != "Audit: ":
                     continue
                 p = string.find(l, ' [', 37)
                 out += "%s %s\r\n" % (l[:16], l[37:p])
@@ -783,12 +783,12 @@ def audit():
 @login_required
 def shutdown():
     if request.method == 'GET':
-        log_info("AUDIT: System shutdown requested by %s." % str(current_user.username))
+        log_info("Audit: System shutdown requested by %s." % str(current_user.username))
         return render_template("shutdown.html")
             
     elif request.method == 'POST':
         if request.form["Status"] == "Ugasni":
-            log_info("AUDIT: System shutdown confirmed and executed")
+            log_info("Audit: System shutdown confirmed and executed")
             os.system("sudo shutdown -h 0")
         flash(u"Če je bilo ugašanje uspešno, stran ne bo več dosegljiva. :-)")
         return redirect(request.args.get("next") or url_for("tennis_events_old"))
@@ -796,16 +796,16 @@ def shutdown():
 
 if __name__ == "__main__":
     if Production:
-        log_info("AUDIT: %s - start standalone production" % appname)
+        log_info("Audit: %s - start standalone production" % appname)
         TennisEvent.fetch_data()
         app.run(host='127.0.0.1', port=8080, debug=False)
     else:        
-        log_info("AUDIT: %s - start standalone development" % appname)
+        log_info("Audit: %s - start standalone development" % appname)
         app.run(host='127.0.0.1', port=80, debug=True)
 else:
-    log_info("AUDIT: %s - Start" % appname)
+    log_info("Audit: %s - Start" % appname)
 
 # running 4 times, if max-procs=4 in fastcgi
 TennisEvent.fetch_data()
 
-log_info("AUDIT: %s - Initialized" % appname)
+log_info("Audit: %s - Initialized" % appname)

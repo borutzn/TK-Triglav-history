@@ -55,7 +55,7 @@ def pre_request_settings():
         # https://www.kirsle.net/wizards/flask-session.py
         # app.logger.info("COOKIE: %s" % str(request.cookies))  # https://www.kirsle.net/wizards/flask-session.py
         # session.get("user", "/")
-        app.logger.info("AUDIT: {}/{} requested {} ({}: {})".format(
+        app.logger.info("Audit: {}/{} requested {} ({}: {})".format(
             str(current_user.username), session.get("_id", "")[-5:], request.endpoint,
             ip_to_country(request.remote_addr), request.remote_addr, ))
 
