@@ -708,7 +708,7 @@ class EventSource:
             # log_info("EventSrc: found %d, %s" % (idx, cls.SourcesCache[idx]))
             return cls.SourcesCache[idx]
         else:
-            log_info("EventSrc: not found %s" % fname)
+            log_info("EventSrc: {} not found".format(fname))
             return None
 
     @classmethod
