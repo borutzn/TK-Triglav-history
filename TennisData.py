@@ -444,7 +444,15 @@ class TennisEvent:
         return events
 
     @classmethod
-    def get_oneyear_pictures(cls, year=None, max_pictures=7, max_years=1):
+    def get_oneyear_pictures(cls, year=None, max_pictures=7, all_pictures=False, max_years=1):
+        """
+        Get pictures for one year
+        :param year: selected year; random year is selected, if not defined
+        :param max_pictures: maxsimum number of pictures to collect or all if <= 0
+        :param all_pictures: collect also do_not_show pictures, if True
+        :param max_years: maximum number of years to check, if starting year doesn't have enough pictures
+        :return: list of pictures in format (path, title, path, show)
+        """
         cls.fetch_data()
         pictures, no_pics = list(), 0
         no_year = not year or (year == 0)
@@ -461,9 +469,10 @@ class TennisEvent:
                             title += ' (' + pic_data['players_on_pic'] + ')'
                     else:
                         title = file_name
-                    if not pic_data or (pic_data and pic_data['view'] != 0):
+                    if all_pictures or not pic_data or (pic_data and pic_data['view'] != 0):
                         pictures.append((os.path.join(files_dir_web, file_year, file_name), title,
-                                         os.path.join(file_year, file_name)))
+                                         os.path.join(file_year, file_name),
+                                         pic_data['view'] if pic_data else 0))
             no_pics = len(pictures)
             i = TennisEvent.Years.index(year)
             if (no_pics >= max_pictures) or (i >= len(TennisEvent.Years)-1):
@@ -474,10 +483,11 @@ class TennisEvent:
             else:
                 year = TennisEvent.Years[i+1]
 
-        for _ in range(no_pics-max_pictures):
-            r = random.randrange(0, no_pics)
-            del pictures[r]
-            no_pics -= 1
+        if max_pictures > 0:
+            for _ in range(no_pics-max_pictures):
+                r = random.randrange(0, no_pics)
+                del pictures[r]
+                no_pics -= 1
         random.shuffle(pictures)
 
         log_info("Temp: get_oneyear_pictures: got {} pictures for {}.".format(len(pictures), year))
@@ -637,6 +647,7 @@ class TennisPlayer:
             idx = cls.PlayersIndex[name]
             return cls.PlayersCache[idx]
         else:
+            log_info("Error: TennisPlayer.get: {} not found".format(name))
             return None
 
     @classmethod
@@ -708,7 +719,9 @@ class EventSource:
             # log_info("EventSrc: found %d, %s" % (idx, cls.SourcesCache[idx]))
             return cls.SourcesCache[idx]
         else:
-            log_info("EventSrc.get: {} not found".format(fname))
+            # ToDo: attachments are inserted into DB only when title, view is changed.
+            # Maybe, I should automatically add them here?
+            log_info("Info: EventSrc.get: file {} not yet in DB".format(fname))
             return None
 
     @classmethod

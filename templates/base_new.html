@@ -95,7 +95,7 @@
                     </div>
                 </form>
 
-                {% if current_user.is_authenticated() %}
+                {% if current_user.is_authenticated %}
                     <div class="navbar-form navbar-left">
                         <a class="btn btn-link" href="{{ url_for('tennis_events_old') }}">stara stran</a>
                     </div>
@@ -104,7 +104,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url_for('signup', next=request.url) }}">
                         Registracija</a></li>
-                    {% if current_user.is_authenticated() %}
+                    {% if current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('logout', next=request.url) }}">Odjava </a>
                         </li>

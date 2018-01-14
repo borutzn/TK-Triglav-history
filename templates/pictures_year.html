@@ -4,19 +4,33 @@
 {% if pictures %}
     <h1>{{ year }}</h1>
 
-    {% set ret_url = url_for('tennis_events', y=year) %}
+    {% set ret_url = url_for('tennis_pictures ', y=year) %}
 
     <ul class="row">
     {% for picture in pictures %}
         <li class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <img class="img-responsive img-rounded" src="{{ picture[0] }}">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('edit_file', next=ret_url, n=picture[2]) }}">
+                    Edit <span class="glyphicon glyphicon-picture"></span></a>
+            {% endif %}
+            <img class="img-responsive img-thumbnail"
+                {% if picture[3] == '0' %} style="background-color: #7f0000;" {% endif %}
+                 src="{{ picture[0] }}">
+            <div style="background-color: #000000; bottom: 0; color: #fff; left: 0; opacity: 0.5; position: absolute; width: 100%;">
+                <p class="desc_content">{{ picture[1] }}</p>
+            </div>
         </li>
     {% endfor %}
     </ul>
 
-
     {% if next_y != "0" %}
-        <a class="next" href="{{ url_for("tennis_pictures_year", y=next_y) }}"> leto {{ next_y }} </a>
+        <a class="next" href="
+            {% if param_a %}
+                {{ url_for("tennis_pictures_year", y=next_y, m=param_m, a=1 ) }}
+            {% else %}
+                {{ url_for("tennis_pictures_year", y=next_y, m=param_m ) }}
+            {% endif %}
+            "> leto {{ next_y }} </a>
     {% endif %}
 
 {% endif %}

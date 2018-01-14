@@ -437,14 +437,26 @@ def tennis_events_year(one_player):
 
 @app.route("/pictures", methods=['GET'])
 def tennis_pictures():
-    try:
+    try:  # 'y' parameter - start year
         year_param = request.args.get('y')
         year = year_param or TennisEvent.Years[0]
     except ValueError:
         year_param, year = None, TennisEvent.Years[0]
         log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
 
-    # year = "1956"
+    try:  # 'm' parameter - max pictures; -1 for no limit
+        max_pictures = int(request.args.get('m')) or 20
+    except TypeError:
+        max_pictures = 0
+        log_info("Error: wrong max_pictures value (%s) -> setting %s" % (request.args.get('m'), max_pictures))
+    except ValueError:
+        max_pictures = 20
+        log_info("Error: wrong max_pictures value (%s) -> setting %s" % (request.args.get('m'), max_pictures))
+    param_m = request.args['m'] if 'm' in request.args else ''
+
+    # 'a' parameter - collect all pictures, including do_not_show ones
+    all_pictures = True if 'a' in request.args else False
+
     if year not in TennisEvent.Years:
         year_param, year = None, TennisEvent.Years[0]
 
@@ -452,10 +464,10 @@ def tennis_pictures():
     next_y = year
     while not pictures:
         year = next_y
-        pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=20)
+        pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=max_pictures, all_pictures=all_pictures)
         next_y = TennisEvent.Years[TennisEvent.Years.index(year)+1]
 
-    return render_template("pictures.html", pictures=pictures, year=year)
+    return render_template("pictures.html", pictures=pictures, year=year, param_m=param_m, param_a=all_pictures)
 
 
 @app.route("/pictures_year", methods=['GET'])
@@ -471,13 +483,27 @@ def tennis_pictures_year():
         year = TennisEvent.Years[0]
         log_info("Error: wrong main year (%s) -> setting %s" % (request.args.get('y'), year))
 
+    try:  # 'm' parameter - max pictures; -1 for no limit
+        max_pictures = int(request.args.get('m')) or 20
+    except TypeError:
+        max_pictures = 0
+        log_info("Error: wrong max_pictures value (%s) -> setting %s" % (request.args.get('m'), max_pictures))
+    except ValueError:
+        max_pictures = 20
+        log_info("Error: wrong max_pictures value (%s) -> setting %s" % (request.args.get('m'), max_pictures))
+    param_m = request.args['m'] if 'm' in request.args else ''
+
+    # 'a' parameter - collect all pictures, including do_not_show ones
+    all_pictures = True if 'a' in request.args else False
+
     pictures, next_y = None, year
     while not pictures:
         year = next_y
-        pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=20)
+        pictures = TennisEvent.get_oneyear_pictures(year=year, max_pictures=max_pictures, all_pictures=all_pictures)
         next_y = TennisEvent.Years[TennisEvent.Years.index(year)+1]
 
-    return render_template("pictures_year.html", pictures=pictures, year=year, next_y=next_y)
+    return render_template("pictures_year.html", pictures=pictures, year=year, next_y=next_y,
+                           param_m=param_m, param_a=all_pictures)
 
 
 @app.route("/files", methods=['GET', 'POST'])

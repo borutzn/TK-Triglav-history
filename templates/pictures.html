@@ -5,18 +5,16 @@
 {% block next %}/{% endblock %}
 {% block content %}
 
-    <!--ul class="row">
-    {% for picture in pictures %}
-        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <img class="img-responsive" src="{{ picture[0] }}">
-        </li>
-    {% endfor %}
-    </ul-->
-
     <!-- Begin page content -->
     <div class="container scroll">
         {% if pictures %}
-            <a class="next" href="{{ url_for("tennis_pictures_year", y=year) }}"> leto {{ year }}</a>
+            <a class="next" href="
+                {% if param_a %}
+                    {{ url_for("tennis_pictures_year", y=year, m=param_m, a=1) }}
+                {% else %}
+                    {{ url_for("tennis_pictures_year", y=year, m=param_m) }}
+                {% endif %}
+                "> leto {{ year }}</a>
         {% endif %}
     </div>
 
