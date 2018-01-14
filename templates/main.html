@@ -40,7 +40,7 @@
                 </select></label>
                 <input type="submit" value="Izberi">
 
-                {% if current_user.is_authenticated() %}
+                {% if current_user.is_authenticated %}
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{ url_for('add_event1',next=request.url) }}"><img src="{{ url_for('static',filename='add-32.png') }}" title="Dodaj nov dogodek"></a>
@@ -79,14 +79,14 @@
             {% set duplicate = prev_date == event.Date and prev_event == event.Event and prev_place == event.Place %}
             {% if prev_comment != "" and not duplicate %}
                 <tr><td class="main-table-comment" style="border-top: thin dotted #16377A;"
-                        colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
+                        colspan="{% if current_user.is_authenticated %}8{% else %}7{% endif %}">
                     {{ prev_comment }}</td></tr>
                 {% set prev_comment = "" %}
             {% endif %}
             {% if year != event.Date[:4] %}
                 {% if year != 0 %}
                     <tr><td style="border-right-style: none;"
-                            colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">
+                            colspan="{% if current_user.is_authenticated %}8{% else %}7{% endif %}">
                     </td></tr>
                     </table>
                 {% endif %}
@@ -97,7 +97,7 @@
                         <th style="width:140px;">kraj</th>
                         <th style="width:80px;">kategorija</th><th style="width:40px;">uvrstitev</th>
                         <th style="width:150px;">igralec</th><th style="width:80px;"></th>
-                        {% if current_user.is_authenticated() %}<th style="width:100px;"></th>{% endif %}</tr>
+                        {% if current_user.is_authenticated %}<th style="width:100px;"></th>{% endif %}</tr>
             {% endif %}
             <tr>
             {% if duplicate %}
@@ -126,26 +126,26 @@
             <td style="">
             {% if event.Att1 != "" and event.Att1[:4] != "err_" %}
                 <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att1) }}" target="_blank"><img src="{{ url_for('static',filename='1.png') }}"></a>
-            {% elif event.Att1 != "" and event.Att1[:4] == "err_" and current_user.is_authenticated() %}
+            {% elif event.Att1 != "" and event.Att1[:4] == "err_" and current_user.is_authenticated %}
                 <a href="{{ url_for('correct', next=request.url, id=event.Id, att=1, d=year, f=event.Att1[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att2 != "" and event.Att2[:4] != "err_"%}
                 <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att2) }}" target="_blank"><img src="{{ url_for('static',filename='2.png') }}"></a>
-            {% elif event.Att2 != "" and event.Att2[:4] == "err_" and current_user.is_authenticated() %}
+            {% elif event.Att2 != "" and event.Att2[:4] == "err_" and current_user.is_authenticated %}
                 <a href="{{ url_for('correct', next=request.url, id=event.Id, att=2, d=year, f=event.Att2[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att3 != "" and event.Att3[:4] != "err_"%}
                 <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att3) }}" target="_blank"><img src="{{ url_for('static',filename='3.png') }}"></a>
-            {% elif event.Att3 != "" and event.Att3[:4] == "err_" and current_user.is_authenticated() %}
+            {% elif event.Att3 != "" and event.Att3[:4] == "err_" and current_user.is_authenticated %}
                 <a href="{{ url_for('correct', next=request.url, id=event.Id, att=3, d=year, f=event.Att3[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             {% if event.Att4 != "" and event.Att4[:4] != "err_"%}
                 <a href="{{ url_for('static',filename='/files/'+year+'/'+event.Att4) }}" target="_blank"><img src="{{ url_for('static',filename='4.png') }}"></a>
-            {% elif event.Att4 != "" and event.Att4[:4] == "err_" and current_user.is_authenticated() %}
+            {% elif event.Att4 != "" and event.Att4[:4] == "err_" and current_user.is_authenticated %}
                 <a href="{{ url_for('correct', next=request.url, id=event.Id, att=4, d=year, f=event.Att4[4:]) }}"><img src="{{ url_for('static',filename='err_picture-24.png') }}"></a>
             {% endif %}
             </td>
-            {% if current_user.is_authenticated() %}
+            {% if current_user.is_authenticated %}
                 <td style="text-align:right;">
                 {% if current_user.utype >= 1 %}
                     <a href="{{ url_for('edit_comment', id=event.Id, next=request.url) }}"><img src="{{ url_for('static',filename='comment-24.png') }}" title="Komentiraj dogodek"></a>
@@ -165,10 +165,10 @@
         {% endfor %}
         {% if prev_comment != "" %}
             <tr><td class="main-table-comment"
-                    colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}">{{ prev_comment }}</td></tr>
+                    colspan="{% if current_user.is_authenticated %}8{% else %}7{% endif %}">{{ prev_comment }}</td></tr>
         {% endif %}
         <tr><td style="border-right-style: none;"
-                colspan="{% if current_user.is_authenticated() %}8{% else %}7{% endif %}"></td></tr>
+                colspan="{% if current_user.is_authenticated %}8{% else %}7{% endif %}"></td></tr>
         </table>
     {% endif %}
     <div style="height:30px;"></div>
