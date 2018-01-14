@@ -10,7 +10,7 @@
     {% for picture in pictures %}
         <li class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             {% if current_user.is_authenticated() %}
-                picture[3]
+                {{ picture[3] }}
                 <a href="{{ url_for('edit_file', next=ret_url, n=picture[2]) }}">
                     Edit <span class="glyphicon glyphicon-picture"></span></a>
             {% endif %}
