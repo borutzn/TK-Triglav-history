@@ -4,7 +4,7 @@
 {% if pictures %}
     <h1>{{ year }}</h1>
 
-    {% set ret_url = url_for('tennis_pictures ', y=year) %}
+    {% set ret_url = url_for('tennis_pictures', y=year) %}
 
     <ul class="row">
     {% for picture in pictures %}
