@@ -647,8 +647,8 @@ class TennisPlayer:
             idx = cls.PlayersIndex[name]
             return cls.PlayersCache[idx]
         else:
-            # ToDo: correct!! log_info("Error: TennisPlayer.get: {} not found".format(name))
-            log_info("Error: TennisPlayer.get: ?? not found")
+            log_info(u"Error: TennisPlayer.get: {} not found".format(name))
+            # # ToDo: correct!! log_info(u"Error: TennisPlayer.get: ?? not found")
             return None
 
     @classmethod
